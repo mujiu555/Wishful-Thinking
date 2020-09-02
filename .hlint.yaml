@@ -1,0 +1,20 @@
+# HLint configuration file
+##########################
+
+- functions:
+  - {name: head, within: []} # head can only appear in no modules
+  - {name: tail, within: []} 
+  - {name: Maybe.fromJust, within: []} 
+
+
+- ignore: {name: Use foldr}
+- ignore: {name: Use foldl}
+- ignore: {name: Use map}
+- ignore: {name: Avoid lambda} 
+- ignore: {name: Eta reduce}
+- ignore: {name: Use head}
+- ignore: {name: Use guards}
+- ignore: {name: Use tuple-section}
+
+
+

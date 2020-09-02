@@ -1,0 +1,18 @@
+name:                hw01
+version:             0.1.0.0
+license:             BSD3
+license-file:        LICENSE
+author:              Stephanie Weirich
+maintainer:          sweirich@cis.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+cabal-version:       >=1.10
+
+executable hw01
+  main-is:           Main.hs
+  build-depends:     base >=4.13 && <4.14, HUnit >=1.6, directory >=1.3.6 && <1.4
+  ghc-options:       -Wno-type-defaults -Wincomplete-patterns
+  default-language:  Haskell2010
+
+
+
