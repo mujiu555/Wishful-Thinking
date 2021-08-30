@@ -1,0 +1,101 @@
+000
+CXUS51 KPHI 010815
+CF6ABE
+PRELIMINARY LOCAL CLIMATOLOGICAL DATA (WS FORM: F-6)
+
+                                          STATION:   ALLENTOWN PA
+                                          MONTH:     JULY
+                                          YEAR:      2021
+                                          LATITUDE:   40 39 N
+                                          LONGITUDE:  75 26 W
+
+  TEMPERATURE IN F:       :PCPN:    SNOW:  WIND      :SUNSHINE: SKY     :PK WND
+================================================================================
+1   2   3   4   5  6A  6B    7    8   9   10  11  12  13   14  15   16   17  18
+                                     12Z  AVG MX 2MIN
+DY MAX MIN AVG DEP HDD CDD  WTR  SNW DPTH SPD SPD DIR MIN PSBL S-S WX    SPD DR
+================================================================================
+
+ 1  79  69  74  -1   0   9 0.41  0.0    0  3.8 14 310   M    M   5        18 320
+ 2  80  60  70  -5   0   5 0.26  0.0    0  3.7 22 290   M    M   5 3      27 290
+ 3  73  59  66  -9   0   1 0.31  0.0    0  4.9 17  40   M    M   8 3      20  40
+ 4  80  58  69  -6   0   4 0.00  0.0    0  3.0 12 320   M    M   5        17  20
+ 5  86  58  72  -3   0   7 0.00  0.0    0  5.2 15 220   M    M   1        23 180
+ 6  93  67  80   5   0  15 0.15  0.0    0  7.8 23 320   M    M   1 3      36 340
+ 7  93  68  81   5   0  16 0.00  0.0    0  5.7 17 230   M    M   2        21 220
+ 8  87  69  78   2   0  13 0.67  0.0    0  4.6 22 250   M    M   5 3      29 240
+ 9  86  66  76   0   0  11 0.18  0.0    0  6.6 21 320   M    M   7        31 310
+10  81  64  73  -3   0   8 0.00  0.0    0  5.5 14 360   M    M   3        17 360
+11  84  65  75  -1   0  10 0.55  0.0    0  5.6 15 310   M    M   3 138    20 320
+12  90  69  80   4   0  15 0.07  0.0    0  4.4 14 150   M    M   7 3      22 140
+13  80  70  75  -1   0  10 0.01  0.0    0    M 16 110   M    M  10        20 120
+14  87  70  79   3   0  14 0.03  0.0    0  5.5 16 110   M    M   6 1      20 120
+15  89  67  78   2   0  13 0.00  0.0    0  4.8 16 230   M    M   1        22 250
+16  91  69  80   4   0  15    T  0.0    0  5.0 17 320   M    M   2 3      27 320
+17  92  69  81   5   0  16 0.34  0.0    0  3.5 24 340   M    M   3 3      32 330
+18  76  69  73  -3   0   8    T  0.0    M  6.9 18 240   M    M   9        23 240
+19  86  63  75  -1   0  10 0.00  0.0    0  6.9 18 350   M    M   3        25 350
+20  86  65  76   0   0  11 0.00  0.0    0  3.9 10 260   M    M   0        12 260
+21  81  62  72  -4   0   7 0.38  0.0    0  5.3 16 340   M    M   2 3      22 340
+22  79  56  68  -8   0   3 0.00  0.0    0  4.8 13 320   M    M   1        17 310
+23  82  56  69  -7   0   4 0.00  0.0    0  4.1 12 310   M    M   1        17 360
+24  84  56  70  -6   0   5 0.01  0.0    0  4.7 14 180   M    M   3        21 220
+25  87  70  79   3   0  14    T  0.0    0  7.3 15 230   M    M   6        20 250
+26  90  67  79   3   0  14 0.00  0.0    0  3.0 12  30   M    M   1        17 290
+27  91  64  78   2   0  13 0.00  0.0    0  5.3 21  10   M    M   1 3      26  20
+28  84  61  73  -2   0   8 0.07  0.0    0  3.8 13 340   M    M   2 3      16 340
+29  78  61  70  -5   0   5 1.02  0.0    0  4.5 20 310   M    M   8 3      26 310
+30  83  60  72  -3   0   7 0.00  0.0    0  8.1 22 340   M    M   3        27 350
+31  77  50  64 -11   1   0 0.00  0.0    0  3.6 13 300   M    M   1        19 290
+================================================================================
+SM 2615 1977         1 291  4.46  0.0    151.8          M      115
+================================================================================
+AV 84.4 63.8                               5.1 FASTST   M    M   4    MAX(MPH)
+                                 MISC ---->    24 340                 36 340
+================================================================================
+NOTES:
+# LAST OF SEVERAL OCCURRENCES
+
+COLUMN 17 PEAK WIND IN M.P.H.
+
+PRELIMINARY LOCAL CLIMATOLOGICAL DATA (WS FORM: F-6) , PAGE 2
+
+                                          STATION:   ALLENTOWN PA
+                                          MONTH:     JULY
+                                          YEAR:      2021
+                                          LATITUDE:   40 39 N
+                                          LONGITUDE:  75 26 W
+
+[TEMPERATURE DATA]      [PRECIPITATION DATA]       SYMBOLS USED IN COLUMN 16
+
+AVERAGE MONTHLY: 74.1   TOTAL FOR MONTH:   4.46    1 = FOG OR MIST
+DPTR FM NORMAL:  -1.5   DPTR FM NORMAL:   -0.84    2 = FOG REDUCING VISIBILITY
+HIGHEST:    93 ON  7, 6  GRTST 24HR  1.02 ON 29-29      TO 1/4 MILE OR LESS
+LOWEST:     50 ON 31                               3 = THUNDER
+                        SNOW, ICE PELLETS, HAIL    4 = ICE PELLETS
+                        TOTAL MONTH:   0.0 INCH    5 = HAIL
+                        GRTST 24HR  0.0            6 = FREEZING RAIN OR DRIZZLE
+                        GRTST DEPTH:  0            7 = DUSTSTORM OR SANDSTORM:
+                                                       VSBY 1/2 MILE OR LESS
+                                                   8 = SMOKE OR HAZE
+[NO. OF DAYS WITH]      [WEATHER - DAYS WITH]      9 = BLOWING SNOW
+                                                   X = TORNADO
+MAX 32 OR BELOW:   0    0.01 INCH OR MORE:  15
+MAX 90 OR ABOVE:   7    0.10 INCH OR MORE:  10
+MIN 32 OR BELOW:   0    0.50 INCH OR MORE:   3
+MIN  0 OR BELOW:   0    1.00 INCH OR MORE:   1
+
+[HDD (BASE 65) ]
+TOTAL THIS MO.     1    CLEAR  (SCALE 0-3)  18
+DPTR FM NORMAL     0    PTCLDY (SCALE 4-7)  11
+TOTAL FM JUL 1     1    CLOUDY (SCALE 8-10)  2
+DPTR FM NORMAL     1
+
+[CDD (BASE 65) ]
+TOTAL THIS MO.   291
+DPTR FM NORMAL   -37    [PRESSURE DATA]
+TOTAL FM JAN 1   572    HIGHEST SLP 30.22 ON 13
+DPTR FM NORMAL   -20    LOWEST  SLP 29.68 ON  2
+
+[REMARKS]
+#FINAL-07-21#

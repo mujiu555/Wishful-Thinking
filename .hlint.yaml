@@ -5,6 +5,10 @@
   - {name: head, within: []} # head can only appear in no modules
   - {name: tail, within: []} 
   - {name: Maybe.fromJust, within: []} 
+  - {name: minimum, within: []} 
+  - {name: maximum, within: []} 
+  - {name: (!!), within: []} 
+  - {name: read, within: []} 
 
 
 - ignore: {name: Use foldr}
@@ -15,6 +19,6 @@
 - ignore: {name: Use head}
 - ignore: {name: Use guards}
 - ignore: {name: Use tuple-section}
-
+- ignore: {name: Replace case with fromMaybe}
 
 
