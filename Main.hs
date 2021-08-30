@@ -11,35 +11,17 @@ module, and completed the associated quiz, you should do that first.
 
 This page is a "literate" Haskell program, meaning that explanation is
 interspersed with actual Haskell code. To complete your assignment, access
-your private hw01 repo, edit `Main.hs` (this file contains *just* the code) and
-submit it through Canvas/Gradescope.
--}
--- If you are looking at this file in the github repo, make sure that
--- you also read the instructions at the website
--- https://www.cis.upenn.edu/~cis552/current/hw/hw01/Main.html
-{-
-The first line of actual code for this homework assignment is a pragma for GHC
-(these are specific instructions for the compiler). This option
--}
-{-# OPTIONS_GHC -fdefer-type-errors #-}
+your private hw01 repo, edit `Main.hs` and submit it through
+Canvas/Gradescope.
 
-{-
-turns *type* errors into warnings so that you can still run your code in ghci
-even if it doesn't type check. This flag doesn't defer all compile-time errors
-(such as errors for unbound variables) and you definitely should fix any type
-errors that it warns you about. However, having it in place helps make
-development more interactive. Of course, if you try to run the part of your
-code with a type error in it, it will fail.
-
-When you are finished with the assignment, you should add the option
-`-Werror`, which turns *all warnings* into errors, to the line
-above.
-
-Next, we declare that we are creating a module called `Main` and are using
-functions defined in the modules [`Prelude`](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/base-4.14.1.0/Prelude.html),
-[`Test.HUnit`](http://hackage.haskell.org/packages/archive/HUnit/1.6.0.0/doc/html/Test-HUnit.html),
-[`Data.List`](https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-List.html)
-and [`Data.Char`](https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Char.html).
+This file starts by first declaring that we
+ are creating a module called `Main` and are using functions defined in the
+ modules
+ [`Prelude`](https://downloads.haskell.org/~ghc/latest/docs/html/libraries/base-4.14.1.0/Prelude.html),
+ [`Test.HUnit`](http://hackage.haskell.org/packages/archive/HUnit/1.6.0.0/doc/html/Test-HUnit.html),
+ [`Data.List`](https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-List.html)
+ and
+ [`Data.Char`](https://hackage.haskell.org/package/base-4.14.1.0/docs/Data-Char.html).
 
 The `Prelude` line imports all except for the functions listed (which you will
 write). The module `Prelude` is special in that it is always imported by
@@ -134,10 +116,6 @@ abc x y z =
         else if (x && z) then True else False
     else False
 
-{-
->
--}
-
 tabc :: Test
 tabc =
   "abc"
@@ -169,10 +147,6 @@ arithmetic x1 x2 =
                             )
                           )
 
-{-
->
--}
-
 tarithmetic :: Test
 tarithmetic =
   "arithmetic"
@@ -189,10 +163,6 @@ reverse l = reverseAux l []
       if null l
         then acc
         else reverseAux (tail l) (head l : acc)
-
-{-
->
--}
 
 treverse :: Test
 treverse =
@@ -229,21 +199,19 @@ Define, debug and test the following functions. Some of these functions are
 part of the Haskell standard prelude or standard libraries like `Data.List`.
 Their solutions are readily available online. You should *not* google for this
 code: instead, implement them yourself.
+
+For each part of this problem, you should replace the testcase for that part
+based on the description in the comments.  Make sure to test with multiple
+inputs using `TestList`. We will be grading your test cases as well as the
+correctness and style of your solutions!  HINT: your testing code should
+include any tests that we give you in the the comments!
+
+Do *not* use any list library functions in this problem. This includes
+any function from the Prelude or from `Data.List` thats take arguments
+or returns a result with a list type. Note that `(:)` and `[]` are
+data constructors for the list type, not functions, so you are free
+to use them.
 -}
-
--- For each part of this problem, define the function and replace
--- the testcase for that part based on the description in the comments.
--- Make sure to test each of these functions with multiple inputs using
--- `TestList`. We will be grading your test cases as well as the
--- correctness and style of your solutions!
--- HINT: your testing code should absolutely include any tests in the
--- the comments!
-
--- Do *not* use any list library functions in this problem. This includes
--- any function from the Prelude or from `Data.List` thats take arguments
--- or returns a result with a list type. Note that `(:)` and `[]` are
--- data constructors for the list type, not functions, so you are free
--- to use them in your solutions.
 
 testLists :: Test
 testLists =
@@ -252,9 +220,6 @@ testLists =
       [tminimumMaybe, tstartsWith, tendsWith, ttranspose, tcountSub]
 
 -- Part One
-{-
->
--}
 
 -- | The 'minimumMaybe` function computes the mininum value of a
 -- nonempty list. If the list is empty, it returns Nothing.
@@ -263,25 +228,12 @@ testLists =
 -- Nothing
 -- >>> minumumMaybe [2,1,3]
 -- 1
-
-{-
->
--}
-
 minimumMaybe :: [Int] -> Maybe Int
 minimumMaybe = undefined
-
-{-
->
--}
 
 tminimumMaybe :: Test
 tminimumMaybe =
   "minimumMaybe" ~: (assertFailure "testcases for minimumMaybe" :: Assertion)
-
-{-
->
--}
 
 -- Part Two
 
@@ -293,20 +245,11 @@ tminimumMaybe =
 --
 -- >>> "Hello" `startsWith` "Wello Horld!"
 -- False
-
-{-
->
--}
-
 startsWith :: String -> String -> Bool
 startsWith = undefined
 
 tstartsWith :: Test
 tstartsWith = "startsWith" ~: (assertFailure "testcase for startsWith" :: Assertion)
-
-{-
->
--}
 
 -- Part Three
 
@@ -325,10 +268,6 @@ endsWith = undefined
 tendsWith :: Test
 tendsWith = "endsWith" ~: (assertFailure "testcase for endsWith" :: Assertion)
 
-{-
->
--}
-
 -- Part Four
 
 -- | The 'transpose' function transposes the rows and columns of its argument.
@@ -346,16 +285,7 @@ tendsWith = "endsWith" ~: (assertFailure "testcase for endsWith" :: Assertion)
 -- [[3],[4],[5]]
 -- >>> transpose [[1,2],[3,4,5]]
 -- [[1,3],[2,4]]
-
-{-
->
--}
-
 -- (WARNING: this one is tricky!)
-{-
->
--}
-
 transpose :: [[a]] -> [[a]]
 transpose = undefined
 
@@ -437,10 +367,6 @@ better approaches to error handling later in the semester.
 weather :: String -> Maybe String
 weather str = error "unimplemented"
 
-{-
->
--}
-
 weatherProgram :: IO ()
 weatherProgram = do
   str <- readFile "jul21.dat"
@@ -489,10 +415,6 @@ Your program should work with all similar input files (same columns, same info
 
 soccer :: String -> Maybe String
 soccer = error "unimplemented"
-
-{-
->
--}
 
 soccerProgram :: IO ()
 soccerProgram = do
