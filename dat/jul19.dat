@@ -1,0 +1,101 @@
+493
+CXUS51 KPHI 011500
+CF6PHL
+PRELIMINARY LOCAL CLIMATOLOGICAL DATA (WS FORM: F-6)
+
+                                          STATION:   PHILADELPHIA PA
+                                          MONTH:     JULY
+                                          YEAR:      2019
+                                          LATITUDE:   39 52 N
+                                          LONGITUDE:  75 15 W
+
+  TEMPERATURE IN F:       :PCPN:    SNOW:  WIND      :SUNSHINE: SKY     :PK WND
+================================================================================
+1   2   3   4   5  6A  6B    7    8   9   10  11  12  13   14  15   16   17  18
+                                     12Z  AVG MX 2MIN
+DY MAX MIN AVG DEP HDD CDD  WTR  SNW DPTH SPD SPD DIR MIN PSBL S-S WX    SPD DR
+================================================================================
+
+ 1  85  64  75  -2   0  10 0.00  0.0    0  7.6 14 250   M    M   3        23 200
+ 2  91  69  80   3   0  15 0.39  0.0    0 10.4 43 280   M    M   5 13     54 280
+ 3  90  74  82   5   0  17 0.14  0.0    0  4.6 21  80   M    M   7 38     25  80
+ 4  92  73  83   5   0  18    T  0.0    0  5.0 14 160   M    M   6 13     20 180
+ 5  91  73  82   4   0  17 0.33  0.0    0  4.4 20 150   M    M   8 13     26 150
+ 6  90  72  81   3   0  16 2.27  0.0    0  6.8 29 320   M    M   7 138    35 320
+ 7  87  72  80   2   0  15 0.00  0.0    0  7.5 13 120   M    M   8        20 350
+ 8  79  69  74  -4   0   9 0.10  0.0    0  6.1 14  70   M    M   8 1      19  80
+ 9  87  68  78   0   0  13 0.00  0.0    0  6.7 13 240   M    M   2        16 250
+10  90  72  81   3   0  16 0.00  0.0    0  8.4 14 180   M    M   5        21 180
+11  88  71  80   2   0  15 1.36  0.0    0  7.3 31 250   M    M   8 13     39 280
+12  89  73  81   3   0  16 0.00  0.0    0  9.8 18 290   M    M   5 1      27 260
+13  88  72  80   2   0  15 0.00  0.0    0  6.3 15 240   M    M   2        20 240
+14  91  74  83   5   0  18 0.00  0.0    0  8.5 18 260   M    M   4        24 290
+15  87  70  79   1   0  14 0.00  0.0    0  7.6 15 290   M    M   5        29 330
+16  93  70  82   4   0  17 0.05  0.0    0  5.8 15 330   M    M   6 3      20 250
+17  96  75  86   8   0  21 0.48  0.0    0 10.3 44 240   M    M   8 13     51 240
+18  89  75  82   4   0  17 0.02  0.0    0  2.9 21 260   M    M   8 13     23 260
+19  95  75  85   7   0  20 0.00  0.0    0  8.6 17 240   M    M   6 1      29 210
+20  97  80  89  10   0  24 0.00  0.0    0  9.4 15 230   M    M   5        19 240
+21  98  81  90  12   0  25    T  0.0    0 10.3 23 250   M    M   3 3      28 250
+22  94  74  84   6   0  19 0.37  0.0    0  8.1 44 260   M    M   6 138    59 250
+23  77  66  72  -6   0   7 0.50  0.0    0  7.5 24 320   M    M   8 1      29 330
+24  85  65  75  -3   0  10    T  0.0    0  7.6 15 340   M    M   5        24 340
+25  87  68  78   0   0  13 0.00  0.0    0  5.9 16 310   M    M   2        22 330
+26  88  68  78   0   0  13 0.00  0.0    0  4.0 10 160   M    M   2        14 330
+27  90  70  80   2   0  15 0.00  0.0    0  5.8 14 190   M    M   1        18 190
+28  91  72  82   4   0  17 0.00  0.0    0  9.3 16 230   M    M   2        21 230
+29  93  76  85   7   0  20 0.01  0.0    0  8.5 17 220   M    M   2        22 220
+30  96  76  86   8   0  21 0.00  0.0    0  8.8 17 230   M    M   2        22 240
+31  92  74  83   5   0  18 0.01  0.0    0  5.9 24 360   M    M   7 3      31 360
+================================================================================
+SM 2786 2231         0 501  6.03     0.0 225.7          M      156
+================================================================================
+AV 89.9 72.0                               7.3 FASTST   M    M   5    MAX(MPH)
+                                 MISC ---->  # 44 240               # 59  250
+================================================================================
+NOTES:
+# LAST OF SEVERAL OCCURRENCES
+
+COLUMN 17 PEAK WIND IN M.P.H.
+
+PRELIMINARY LOCAL CLIMATOLOGICAL DATA (WS FORM: F-6) , PAGE 2
+
+                                          STATION:  PHILADELPHIA PA
+                                          MONTH:    JULY
+                                          YEAR:     2019
+                                          LATITUDE:   39 52 N
+                                          LONGITUDE:  75 15 W
+
+[TEMPERATURE DATA]      [PRECIPITATION DATA]       SYMBOLS USED IN COLUMN 16
+
+AVERAGE MONTHLY: 80.9   TOTAL FOR MONTH:   6.03    1 = FOG OR MIST
+DPTR FM NORMAL:   2.8   DPTR FM NORMAL:    1.68    2 = FOG REDUCING VISIBILITY
+HIGHEST:    98 ON 21    GRTST 24HR  2.27 ON  6- 6      TO 1/4 MILE OR LESS
+LOWEST:     64 ON  1                               3 = THUNDER
+                        SNOW, ICE PELLETS, HAIL    4 = ICE PELLETS
+                        TOTAL MONTH:   0.0 INCH    5 = HAIL
+                        GRTST 24HR     0.0         6 = FREEZING RAIN OR DRIZZLE
+                        GRTST DEPTH:   0           7 = DUSTSTORM OR SANDSTORM:
+                                                       VSBY 1/2 MILE OR LESS
+                                                   8 = SMOKE OR HAZE
+[NO. OF DAYS WITH]      [WEATHER - DAYS WITH]      9 = BLOWING SNOW
+                                                   X = TORNADO
+MAX 32 OR BELOW:   0    0.01 INCH OR MORE:  13
+MAX 90 OR ABOVE:  18    0.10 INCH OR MORE:   9
+MIN 32 OR BELOW:   0    0.50 INCH OR MORE:   3
+MIN  0 OR BELOW:   0    1.00 INCH OR MORE:   2
+
+[HDD (BASE 65) ]
+TOTAL THIS MO.     0    CLEAR  (SCALE 0-3)   9
+DPTR FM NORMAL     0    PTCLDY (SCALE 4-7)  21
+TOTAL FM JUL 1     0    CLOUDY (SCALE 8-10)  1
+DPTR FM NORMAL     0
+
+[CDD (BASE 65) ]
+TOTAL THIS MO.   501
+DPTR FM NORMAL    93    [PRESSURE DATA]
+TOTAL FM JAN 1   928    HIGHEST SLP 30.29 ON 27
+DPTR FM NORMAL   171    LOWEST  SLP 29.69 ON 22
+
+[REMARKS]
+#FINAL-07-19#

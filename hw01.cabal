@@ -1,18 +1,71 @@
+cabal-version:       2.2
 name:                hw01
 version:             0.1.0.0
-license:             BSD3
+license:             BSD-3-Clause
 license-file:        LICENSE
 author:              Stephanie Weirich
-maintainer:          sweirich@cis.upenn.edu
+maintainer:          sweirich@seas.upenn.edu
 build-type:          Simple
 extra-source-files:  CHANGELOG.md
-cabal-version:       >=1.10
 
-executable hw01
-  main-is:           Main.hs
-  build-depends:     base >=4.14, HUnit >=1.6, directory >=1.3.6 && <1.4
+common common-stanza
+  build-depends:     
+      base >=4.14
+    , HUnit >=1.6
+    , directory >=1.3.6 && <1.4
   ghc-options:       -Wno-type-defaults -Wincomplete-patterns
   default-language:  Haskell2010
+  -- these extensions are enabled for GHC2021, turning them on now for 
+  -- future compatibility
+  default-extensions:
+    BangPatterns
+    BinaryLiterals
+    ConstrainedClassMethods
+    ConstraintKinds
+    DeriveDataTypeable
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveLift
+    DeriveTraversable
+    DoAndIfThenElse
+    EmptyCase
+    EmptyDataDecls
+    EmptyDataDeriving
+    ExistentialQuantification
+    ExplicitForAll
+    FlexibleContexts
+    FlexibleInstances
+    ForeignFunctionInterface
+    GADTSyntax
+    GeneralisedNewtypeDeriving
+    HexFloatLiterals
+    ImplicitPrelude
+    ImportQualifiedPost
+    InstanceSigs
+    KindSignatures
+    MonomorphismRestriction
+    MultiParamTypeClasses
+    NamedFieldPuns
+    NamedWildCards
+    NumericUnderscores
+    PatternGuards
+    PolyKinds
+    PostfixOperators
+    RankNTypes
+    RelaxedPolyRec
+    ScopedTypeVariables
+    StandaloneDeriving
+    StandaloneKindSignatures
+    StarIsType
+    TraditionalRecordSyntax
+    TupleSections
+    TypeApplications
+    TypeOperators
+    TypeSynonymInstances
 
-
-
+library 
+  import: common-stanza
+  hs-source-dirs: src
+  exposed-modules: HW01
+  
