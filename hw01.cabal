@@ -69,3 +69,9 @@ library
   hs-source-dirs: src
   exposed-modules: HW01
   
+executable hw01
+  import: common-stanza
+  hs-source-dirs: src
+  main-is: Main.hs
+  other-modules: HW01
+

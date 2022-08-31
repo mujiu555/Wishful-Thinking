@@ -15,22 +15,8 @@ import Test.HUnit
     (~=?),
     (~?=),
   )
-import qualified Text.Read as Read
+import Text.Read (readMaybe)
 import Prelude hiding (all, concat, reverse, takeWhile, zip, (++))
-
-main :: IO ()
-main = do
-  _ <-
-    runTestTT $
-      TestList
-        [ testStyle,
-          testLists,
-          testHO,
-          testFoldr,
-          testWeather,
-          testSoccer
-        ]
-  return ()
 
 --------------------------------------------------------------------------------
 -- Problem (Good Style)
@@ -118,7 +104,7 @@ tzip =
       ]
 
 --------------------------------------------------------------------------------
--- Problem (List library chops)
+-- Problem (List recursion)
 --------------------------------------------------------------------------------
 
 testLists :: Test
@@ -303,7 +289,8 @@ tconcat :: Test
 tconcat = "concat" ~: (assertFailure "testcase for concat" :: Assertion)
 
 -- | The 'startsWithHO' function takes two strings and returns 'True'
--- iff the first is a prefix of the second.
+-- iff the first is a prefix of the second. This is the same as `startsWith` above
+-- except this time you need to use `foldr` to define it.
 --
 -- >>> "Hello" `startsWithHO` "Hello World!"
 -- True
@@ -342,14 +329,14 @@ ttails =
         "tails2" ~: tails' "a" ~?= ["a", ""]
       ]
 
--- | The 'endsWith' function takes two lists and returns 'True' iff
+-- | The 'endsWithHO' function takes two lists and returns 'True' iff
 -- the first list is a suffix of the second. The second list must be
 -- finite.
 --
--- >>> "ld!" `endsWith` "Hello World!"
+-- >>> "ld!" `endsWithHO` "Hello World!"
 -- True
 --
--- >>> "World" `endsWith` "Hello World!"
+-- >>> "World" `endsWithHO` "Hello World!"
 -- False
 endsWithHO :: String -> String -> Bool
 endsWithHO = undefined
@@ -375,6 +362,9 @@ tcountSubHO = "countSubHO" ~: (assertFailure "testcase for countSubHO" :: Assert
 
 -- Part One: Weather
 
+-- >>> weatherProgram "dat/jul22.dat"
+-- "26"
+
 weather :: String -> Maybe String
 weather str = error "unimplemented"
 
@@ -389,13 +379,27 @@ weatherProgram file = do
 
 -- | Use this function to parse Ints
 readInt :: String -> Maybe Int
-readInt = Read.readMaybe
+readInt = readMaybe
 
 testWeather :: Test
 testWeather =
-  "weather" ~: do
-    str <- readFile "dat/jul22.dat"
-    weather str @?= Just "26"
+  TestList
+    [ "jul22" ~: do
+        str <- readFile "dat/jul22.dat"
+        weather str @?= Just "26",
+      "jul21" ~: do
+        str <- readFile "dat/jul21.dat"
+        weather str @?= Just "18",
+      "jul20" ~: do
+        str <- readFile "dat/jul20.dat"
+        weather str @?= Just "10",
+      "jul19" ~: do
+        str <- readFile "dat/jul19.dat"
+        weather str @?= Just "8"
+    ]
+
+-- >>> runTestTT testWeather
+-- Counts {cases = 4, tried = 4, errors = 0, failures = 0}
 
 -- Part Two: Soccer League Table
 
@@ -411,9 +415,23 @@ soccerProgram file = do
 
 testSoccer :: Test
 testSoccer =
-  "soccer" ~: do
-    str <- readFile "dat/soccer21.dat"
-    soccer str @?= Just "Leicester City"
+  TestList
+    [ "soccer21" ~: do
+        str <- readFile "dat/soccer21.dat"
+        soccer str @?= Just "Leicester City",
+      "soccer20" ~: do
+        str <- readFile "dat/soccer20.dat"
+        soccer str @?= Just "Aston Villa",
+      "soccer19" ~: do
+        str <- readFile "dat/soccer19.dat"
+        soccer str @?= Just "Burnley",
+      "soccer18" ~: do
+        str <- readFile "dat/soccer18.dat"
+        soccer str @?= Just "Everton"
+    ]
+
+-- >>> runTestTT testSoccer
+-- Counts {cases = 4, tried = 4, errors = 0, failures = 0}
 
 -- Part Three: DRY Fusion
 
