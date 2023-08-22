@@ -6,8 +6,9 @@ import Test.HUnit ( runTestTT, Test(TestList) )
 {-
 
 This module is the "entry point" for this assignment and runs the tests 
-for each homework problem. You should not edit this definition. 
-Instead, your goal is to complete each problem so that all of the tests pass. 
+for each homework problem. You should not edit this file. 
+Instead, your goal is to complete each problem in the HW01 module 
+so that all of the tests pass. 
 
 -}
 

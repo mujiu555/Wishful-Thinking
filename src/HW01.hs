@@ -141,6 +141,8 @@ startsWith = undefined
 tstartsWith :: Test
 tstartsWith = "startsWith" ~: (assertFailure "testcase for startsWith" :: Assertion)
 
+--
+
 -- | The 'endsWith' function takes two lists and returns 'True' iff
 -- the first list is a suffix of the second. The second list must be
 -- finite.
@@ -156,21 +158,27 @@ endsWith = undefined
 tendsWith :: Test
 tendsWith = "endsWith" ~: (assertFailure "testcase for endsWith" :: Assertion)
 
+lastn :: Int -> [a] -> (Int, [a])
+lastn n [] = (0, [])
+lastn n (x : xs) = case lastn n xs of
+  (m, ys) -> if n == m then (m, ys) else (m + 1, x : ys)
+
 -- | The 'transpose' function transposes the rows and columns of its argument.
 -- If the inner lists are not all the same length, then the extra elements
--- are ignored. Note, this is *not* the same behavior as the library version
--- of transpose (i.e. the version of transpose from Data.List).
---
+-- are ignored.
+-- You may assume that the input list is non-empty, and that each of the sublists
+-- is also non-empty.
+-- (i.e. we won't test your code on `transpose []` or `transpose [[]]`)
+-- Note, this function should *not* have the same behavior as the library version
+-- of transpose (i.e. the version of transpose from Data.List), which retains
+-- extra elements in the output.
 -- >>> transpose [[1,2,3],[4,5,6]]
 -- [[1,4],[2,5],[3,6]]
--- >>> transpose []
--- []
--- >>> transpose [[]]
--- []
 -- >>> transpose [[3,4,5]]
 -- [[3],[4],[5]]
 -- >>> transpose [[1,2],[3,4,5]]
 -- [[1,3],[2,4]]
+
 -- (WARNING: this one is tricky!)
 transpose :: [[a]] -> [[a]]
 transpose = undefined
@@ -362,8 +370,8 @@ tcountSubHO = "countSubHO" ~: (assertFailure "testcase for countSubHO" :: Assert
 
 -- Part One: Weather
 
--- >>> weatherProgram "dat/jul22.dat"
--- "26"
+-- >>> weatherProgram "dat/jul23.dat"
+-- "16"
 
 weather :: String -> Maybe String
 weather str = error "unimplemented"
@@ -384,7 +392,10 @@ readInt = readMaybe
 testWeather :: Test
 testWeather =
   TestList
-    [ "jul22" ~: do
+    [ "jul23" ~: do
+        str <- readFile "dat/jul23.dat"
+        weather str @?= Just "16",
+      "jul22" ~: do
         str <- readFile "dat/jul22.dat"
         weather str @?= Just "26",
       "jul21" ~: do
@@ -399,7 +410,7 @@ testWeather =
     ]
 
 -- >>> runTestTT testWeather
--- Counts {cases = 4, tried = 4, errors = 0, failures = 0}
+-- Counts {cases = 5, tried = 5, errors = 0, failures = 0}
 
 -- Part Two: Soccer League Table
 
@@ -416,7 +427,10 @@ soccerProgram file = do
 testSoccer :: Test
 testSoccer =
   TestList
-    [ "soccer21" ~: do
+    [ "soccer22" ~: do
+        str <- readFile "dat/soccer22.dat"
+        soccer str @?= Just "Fulham",
+      "soccer21" ~: do
         str <- readFile "dat/soccer21.dat"
         soccer str @?= Just "Leicester City",
       "soccer20" ~: do
