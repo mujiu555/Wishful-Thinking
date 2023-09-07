@@ -158,11 +158,6 @@ endsWith = undefined
 tendsWith :: Test
 tendsWith = "endsWith" ~: (assertFailure "testcase for endsWith" :: Assertion)
 
-lastn :: Int -> [a] -> (Int, [a])
-lastn n [] = (0, [])
-lastn n (x : xs) = case lastn n xs of
-  (m, ys) -> if n == m then (m, ys) else (m + 1, x : ys)
-
 -- | The 'transpose' function transposes the rows and columns of its argument.
 -- If the inner lists are not all the same length, then the extra elements
 -- are ignored.
