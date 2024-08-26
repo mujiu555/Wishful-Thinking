@@ -20,11 +20,12 @@ common common-stanza
 library 
   import: common-stanza
   hs-source-dirs: src
-  exposed-modules: HW01
+  exposed-modules: HW01, Kata
   
 executable hw01
   import: common-stanza
   hs-source-dirs: src
+  build-depends: doctest
   main-is: Main.hs
-  other-modules: HW01
+  other-modules: HW01, Kata
 
