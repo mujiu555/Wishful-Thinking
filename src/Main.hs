@@ -20,5 +20,5 @@ at the terminal.
 main :: IO ()
 main = do
     putStrLn "Running test cases ..."
-    DT.doctest ["-isrc"]
+    DT.doctest ["-isrc", "src/HW01.hs"]
     return ()
