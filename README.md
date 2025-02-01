@@ -5,6 +5,7 @@ This project aims to provide translation and solution(maybe) for SICP, in Chines
 ## Contents
 
 - [Background](#Background)
+- [Dependencies](#Dependencies)
 - [Install](#Install)
 - [Usage](#Usage)
 - [Stuff](#Stuff)
@@ -15,6 +16,16 @@ This project aims to provide translation and solution(maybe) for SICP, in Chines
 
 The major I took is ICS(Information and Compute Science), and it provide no program about compile principle.
 
+## Dependencies
+
+- Racket >= 8.0
+- latest sicp package
+  You may install it by
+   ``` sh
+   raco pkg install sicp
+   ```
+   or any GUI package manager for racket, (DrRacket or racket-mode list-racket-packages for emacs).
+   
 ## Install
 
 Not complete yet.
