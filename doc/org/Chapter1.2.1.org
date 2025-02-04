@@ -169,7 +169,7 @@ One reason that the distinction between process and procedure may be confusing i
 
     Consider the following procedures, where A is the procedure defined above:
 
-    对于以下函数, 哪个是上面定义的 A:
+    对于以下函数, A 定义如上:
 
     #+begin_src scheme
     (define (f n) (A 0 n))
