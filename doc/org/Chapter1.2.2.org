@@ -346,10 +346,33 @@ count-change 生成一个有类似第一版 fib 实现的冗余的树状递归�
 
 
 * Footnotes
+[fn:8] 函数调用的过程实际上需要通过汇编理解,
+1. 参数: 依据调用约定(如_stdcall, _cdecl, _fastcall, _thiscall, _naked, SysV AMD64 ABI Calling Convention, MS x64 calling convention (four argument fast call)...) (似乎其实好像没有必要写这么多? 好吧其实只是我个人掺杂私货罢了...), 将参数以顺序从右向左入栈(右侧参数在栈底)
+2. 调用: call 指令调用函数, 跳转到 "符号" 代指地址(jmp cs:ip 好吧实际上不长这样), 将跳转前地址(恢复地址)入栈
+3. 保留栈帧: push rbp 保存上一个函数调用栈帧的栈底, mov rbp, rsp 并将上一个函数调用栈帧的栈顶(附加了恢复地址版)作为当前栈帧的栈底
+4. 执行: pc(cs:ip)程序计数器从新地址读取指令, ir, mar, 保存解释执行指令
+5. 恢复栈帧: mov rsp, rbp 恢复栈顶, pop rbp 恢复栈底
+6. 返回值: mov rax, ... / xor rax, rax
+7. 返回: ret, 弹出返回地址, 并跳转
+8. 清理调用参数
+
+以上就是基本的汇编函数调用过程 (其实也是 c 的
 
 [fn:7] 即, 正好找完
 
 [fn:6] Challenge:
+迭代和递归实际上可以直接互相转化,
+因为递归的 "递" 和 "归" 表示,
+最初被调用的函数实际上是在最后完成求值的.
+这和"栈"的 先入后出 顺序完全一致.
+另一方面, 在现代计算机中, 函数的调用是在栈中进行的,
+每一次函数调用都会在 "调用栈" 中创建一个 "栈帧".
+那么就可以用如下方法理解递归:
+递: 当函数被调用时, 创建新栈帧
+归: 函数返回时, 移出旧栈帧[fn:8]
+于是, 可以用一个显式的栈模拟调用栈, 而将递归转化成为迭代 (参见: [[https://www.hello-algo.com/chapter_computational_complexity/iteration_and_recursion/#223][hello alog]] .)
+此处并不采用这种方式, 这题是一道经典的动态规划题目, 可以求出推导式(递推式)求解结果.
+# TODO
 
 [fn:5] The elements of Pascal’s triangle are called the binomial coefficients, because the n^th row consists of the coefficients of the terms in the expansion of ( x + y )^n . This pattern for computing the coefficients appeared in Blaise Pascal’s 1653 seminal work on probability theory, Traité du triangle arithmétique. According to [[file:References.org][Knuth (1973)]], the same pattern appears in the Szu-yuen Yü-chien (“The Precious Mirror of the Four Elements”), published by the Chinese mathematician Chu Shih-chieh in 1303, in the works of the twelfth-century Persian poet and mathematician Omar Khayyam, and in the works of the twelfth-century Hindu mathematician Bháscara Áchárya.
 [fn:5] 杨辉三角的元素被称作 "二项式", 因为第 n^th 行由形如 (x+y)^n (的公式)的展开式的系数组成. 这种计算系数的模式在 Blaise Pascal 1653 年半完成的概率论著作, Traité du triangle arithmétique, 中出现. 据 [[file:References.org][Knuth (1973)]], 同样的模式出现在了由中国数学家 Chu Shih-chieh 在 1303 年发表的 Szu-yuen Yü-chien (<<详解<九章算术>>>)中, 在十二世纪波斯诗人和数学家 Omar Khayyam 的著作中, 以及在十二世纪印度教数学家 Bháscara Áchárya 的著作中.
@@ -362,7 +385,7 @@ count-change 生成一个有类似第一版 fib 实现的冗余的树状递归�
 [fn:3] For example, work through in detail how the reduction rule applies to the problem of making change for 10 cents using pennies and nickels.
 [fn:3] 例如: 仔细思考化简规则是如何对 10 美分用几尼和 1 美分找零的.
 
-[fn:2] 即, 取一个第一种硬币, 余下的金额可以继续找零
+[fn:2] 即, 取用了一个第一种硬币的方法总和, 取一个第一种硬币, 余下的金额可以继续找零
 
 [fn:1] An example of this was hinted at in [[file:Chapter1.1.3.org][1.1.3]]. The interpreter itself evaluates expressions using a tree-recursive process.
 [fn:1] 一个这个的例子在 [[file:Chapter1.1.3.org][1.1.3]] . 一个解释器本身就用树状递归进程求值表达式
