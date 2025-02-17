@@ -176,8 +176,8 @@ fast-expt 只需要 14 次乘积[fn:4].
     powerful way to think about the design of
     iterative algorithms.)
 
-    设计一个对数步骤(产生)迭代指数进程的函数,
-    就像 fast-ept.
+    设计一个用逐次平方而(产生)需要对数步骤的迭代指数进程的函数,
+    就像 fast-expt.
     (提示: (b^{n/2})^2 = (b^2)^{n/2},
     需要维护, 指数 n, 基数 b,
     和一个额外的状态变量 a,
