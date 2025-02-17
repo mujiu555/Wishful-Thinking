@@ -176,6 +176,19 @@ fast-expt 只需要 14 次乘积[fn:4].
     powerful way to think about the design of
     iterative algorithms.)
 
+    设计一个对数步骤(产生)迭代指数进程的函数,
+    就像 fast-ept.
+    (提示: (b^{n/2})^2 = (b^2)^{n/2},
+    需要维护, 指数 n, 基数 b,
+    和一个额外的状态变量 a,
+    并且定义一个 ab^n
+    不会随状态改变而改变的转化过程.
+    在进程的一开始, a 是 1,
+    而答案是 a 在进程结束时的值.
+    普遍的,
+    这种定义一个保持在状态之间不变的 "常量"
+    的方法是一种思考如何设计迭代算法的有力途径)
+
 **** Exercise 1.17:
     The exponentiation algorithms in this
     section are based on performing
@@ -187,6 +200,8 @@ fast-expt 只需要 14 次乘积[fn:4].
     assumed that our language can only add,
     not multiply) is analogous to the *expt*
     procedure:
+
+    本节中的指数算法基于执行重复的乘方而计算指数的方法. 另一个相似的方法中, 可以通过重复相加实现整数乘法. 如下的乘法函数(假设我们的语言仅可以加合而无法乘方)是对于 expt 函数的模拟(模仿):
 
     #+begin_src scheme
     (define (* a b)
@@ -205,45 +220,53 @@ fast-expt 只需要 14 次乘积[fn:4].
     *fast-expt* that uses a logarithmic number
     of steps.
 
+    这个算法需要的步骤随 b 线性. 假设我们现在有加合, double, 翻倍整数, 和 halve, 将偶数除二. 通过这些, 设计一个乘法函数模拟只需要对数步骤的 fast-expt.
+
 **** Exercise 1.18:
-    Using the results of [[Exercise 1.16]] and [[
-    Exercise 1.17]], devise a procedure that
+    Using the results of [[Exercise 1.16]] and
+    [[Exercise 1.17]], devise a procedure that
     generates an iterative process for
     multiplying two integers in terms of
     adding, doubling, and halving and uses a
-    logarithmic number of steps[fn:40].
+    logarithmic number of steps[fn:6].
+
+    使用 [[Exercise 1.16]] 和 [[Exercise 1.17]] 中的结果, 用 adding, doubling 和 halving 设计一个产生计算两整数之积, 只需要对数步骤的迭代进程的函数[fn:6]
 
 **** Exercise 1.19:
-    There is a clever algorithm for computing
-    the Fibonacci numbers in a logarithmic
-    number of steps. Recall the
-    transformation of the state variables a
-    and b in the *fib-iter* process of [[file:Chapter1.2.2.org][1.2.2]]:
-    a ← a + b and b ← a . Call this
-    transformation T, and observe that
-    applying T over and over again n times,
-    starting with 1 and 0, produces the pair
-    Fib(n+1) and Fib(n). In other
-    words, the Fibonacci numbers are produced
-    by applying T^n , the n^th power of the
-    transformation T , starting with the pair
-    (1, 0). Now consider T to be the special
-    case of p = 0 and q = 1 in a family of
-    transformations T_pq , where T_pq
-    transforms the pair (a, b) according
-    to a ← bq + aq + ap and b ← bp + aq.
-    Show that if we apply such a
-    transformation T_pq twice, the effect is
-    the same as using a single transformation
-    T_p′q′ of the same form, and compute p′
-    and q′ in terms of p and q . This gives
-    us an explicit way to square these
-    transformations, and thus we can compute
-    T^n using successive squaring, as in the
-    *fast-expt* procedure. Put this all
-    together to complete the following
-    procedure, which runs in a logarithmic
-    number of steps:[fn:41]
+    There is a clever algorithm for computing the Fibonacci numbers in a logarithmic number of steps.
+    Recall the transformation of the state variables a and b in the *fib-iter* process of [[file:Chapter1.2.2.org][1.2.2]]:
+    a ← a + b and b ← a .
+    Call this transformation T, and observe that applying T over and over again n times,
+    starting with 1 and 0, produces the pair Fib(n+1) and Fib(n).
+    In other words, the Fibonacci numbers are produced by applying T^n ,
+    the n^th power of the transformation T , starting with the pair (1, 0).
+    Now consider T to be the special case of p = 0 and q = 1 in a family of transformations T_pq ,
+    where T_pq transforms the pair (a, b) according to
+    a ← bq + aq + ap and b ← bp + aq.
+    Show that if we apply such a transformation T_pq twice,
+    the effect is the same as using a single transformation T_p′q′ of the same form,
+    and compute p′ and q′ in terms of p and q .
+    This gives us an explicit way to square these transformations,
+    and thus we can compute T^n using successive squaring, as in the *fast-expt* procedure.
+    Put this all together to complete the following procedure,
+    which runs in a logarithmic number of steps:[fn:7]
+
+    有一种用于在对数步骤计算斐波那契数的算法.
+    回忆 fib-iter 进程中的状态变量 a 和 b:
+    a ← a + b and b ← a .
+    将这种状态转移方程称作 T, 并且观察到, 从 1 和 0 开始, 重复执行 T n 次,
+    会产生 Fib(n+1) 和 Fib(n) 的数对.
+    也就是说, 斐波那契数是通过执行从数对(1, 0) 开始的 T^n, 状态转移方程 T 的 n 方, 得到的.
+    现在将 T 视为 T_pq 这个状态转移族中 p=0, q=1 的特殊情况,
+    T_pq 根据
+    a ← bq + aq + ap and b ← bp + aq.
+    转化数对 (a, b).
+    证明, 如果我们执行这样的 T_pq 两次, 效果和执行一次相同形式的 T_p'q' ,
+    并且用 p 和 q 计算 p' 和 q' 是一样的.
+    这给了我们一种显式的方式计算那些转移方程的平方, 并且可以通过逐次乘方计算 T^n,
+    就像 fast-expt 函数一样.
+    用如上完成如下需要对数步骤的函数[fn:7]:
+
 
     #+begin_src scheme
     (define (fib n)
@@ -271,6 +294,12 @@ fast-expt 只需要 14 次乘积[fn:4].
 
 * Footnotes
 
+[fn:7] This exercise was suggested to us by Joe Stoy, based on an example in [[file:References.org][Kaldewaij 1990]].
+[fn:7] 这个练习由 Joe Stoy 提供, 基于 [[file:References.org][Kaldewaij 1990]] 中的例子.
+
+[fn:6] This algorithm, which is sometimes known as the “Russian peasant method” of multiplication, is ancient. Examples of its use are found in the Rhind Papyrus, one of the two oldest mathematical documents in existence, written about 1700 B.C. (and copied from an even older document) by an Egyptian scribe named A’h-mose.
+[fn:6] 这种算法, 有时被称作乘法的 “Russian peasant method”, 很古老. 它的一个实例出现在 A’h-mose (埃及名) 的 Rhind Papyrus, 写于约公元前 1700 年(并且可能是更古老文献的抄本), 的一本现今第二古老的数学文献, 中.
+
 [fn:5] This iterative algorithm is ancient. It appears in the Chandah-sutra by Áchárya Pingala, written before 200 B.C. See [[file:References.org][Knuth 1981]], section 4.6.3, for a full discussion and analysis of this and other methods of exponentiation.
 [fn:5] 这个迭代算法很古老. 出现在公元前 200 年前的Áchárya Pingala 的 Chandah-sutra 中. 见 [[file:References.org][Knuth 1981]], 第 4.6.3 节, 一个对这种方法的讨论和分析, 以及另一种计算指数的方式.
 
@@ -284,5 +313,3 @@ fast-expt 只需要 14 次乘积[fn:4].
 
 [fn:1] 为书写方便, 所有大 Omega(n) 都写作 O(n)
 
-[fn:40] This algorithm, which is sometimes known as the “Russian peasant method” of multiplication, is ancient. Examples of its use are found in the Rhind Papyrus, one of the two oldest mathematical documents in existence, written about 1700 B.C. (and copied from an even older document) by an Egyptian scribe named A’h-mose.
-[fn:41] This exercise was suggested to us by Joe Stoy, based on an example in [[file:References.org][Kaldewaij 1990]].
