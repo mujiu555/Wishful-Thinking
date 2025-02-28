@@ -1,6 +1,5 @@
 #lang sicp
 
-
 ;; The exponentiation algorithms in this
 ;; section are based on performing
 ;; exponentiation by means of repeated
@@ -49,7 +48,7 @@
     (cond
       [(= n 0)
        0]
-      [(even? b)
-       (double (mutiple a (halve b)))]
-      [(odd? b)
-       (+ a (multiple a (- b 1)))])))
+      [(even? n)
+       (double (mutiple m (halve n)))]
+      [(odd? n)
+       (+ m (mutiple m (- n 1)))])))
