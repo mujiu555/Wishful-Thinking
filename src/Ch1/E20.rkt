@@ -38,7 +38,7 @@
     (gcd 40 (remainder 206 40)))
 (if (= 40 0)
     206
-    (if (= 6 0)
+    (if (= 6 0)                         ; (remainder 206 40)
         40
         (gcd 6 (remainder 40 6))))
 ;; ...
