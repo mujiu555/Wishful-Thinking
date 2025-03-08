@@ -11,7 +11,7 @@ The exercises at the end of this section suggest programming projects based on t
 本节描述了两种检查整数 n 的素性的方法,
 一种的增长阶为 Θ(sqrt(n)),
 另一种是增长阶为 Θ(log n)的“概率”算法.
-本节末尾的练习是基于这些算法的编程项目。
+本节末尾的练习是基于这些算法的编程项目 [fn:6].
 
 ** Searching for divisors
 
@@ -78,6 +78,7 @@ The Θ(log⁡n) primality test is based on a result from number theory known as 
     _Fermat’s Little Theorem_: If n is a prime number and a is any positive integer less than n , then a raised to the n^th power is congruent to a modulo n .
 
     费马小定理: 如果 n 是一个素数, a 是任何小于 n 的正整数, 则 a 的 n 次幂与 a 在模 n 下同余.
+    (n is prime, a < n => a^n % n = a % n)
 
 (Two numbers are said to be /congruent modulo/ n if they both have the same remainder when divided by n .
 The remainder of a number a when divided by n is also referred to as the /remainder of a modulo n/ ,
@@ -112,7 +113,7 @@ To implement the Fermat test,
 we need a procedure that computes the exponential of a number modulo another number:
 
 为了实现费马测试,
-我们需要一个计算一个数同余另一个数的指数的函数:
+我们需要一个计算一个数的指数模另一个数的值的函数:
 
 #+begin_src scheme
 (define (expmod base exp m)
@@ -304,7 +305,7 @@ and probabilistic algorithms have been fruitfully applied to many fields [fn:5].
     编写一个名为 search-for-primes 的函数,
     检查指定范围内连续奇数的素性.
     使用你的函数找到三个大于
-    1000, 10,000, 100,000 和 1,000,000
+    1000, 1,0000, 10,0000 和 100,0000
     的最小素数.
     注意测试每个素数所需的时间.
     由于测试算法的增长阶为 Θ(√n),
@@ -362,8 +363,8 @@ and probabilistic algorithms have been fruitfully applied to many fields [fn:5].
     以使用 fast-prime? (费马方法),
     并测试你在该练习中找到的 12 个素数.
     由于费马测试的增长阶为 Θ(log n),
-    你预期测试 1,000,000 左右的素数所需的时间
-    与测试 1,000 左右的素数所需的时间
+    你预期测试 100,0000 左右的素数所需的时间
+    与测试 1000 左右的素数所需的时间
     相比如何?
     你的数据是否支持这一点?
     你能否解释任何出现的差异?
@@ -468,13 +469,18 @@ and probabilistic algorithms have been fruitfully applied to many fields [fn:5].
     一个不能被欺骗的费马测试的变体称为米勒-拉宾测试 ( [[file:References.org][Miller 1976]]; [[file:References.org][Rabin 1980]] ).
     这个测试基于费马小定理的另一种形式,
     它指出, 如果 n 是一个质数, a 是任何小于 n 的正整数,
-    那么 a 的 (n−1) 次幂与 1 模 n 同余.
+    那么 a 的 n−1 次幂与 1 模 n 同余.
+    (n is prime, Any a < n, a^{n-1} === 1 (mod n))
+    (x^2 - 1 === 0 (mod n) -> (x+1)(x-1) === 0 (mod n))
+    (- p|(x+1)(x-1) ->)
+    ((x-1) == 0 or (x+1)(x-1) == m*n)
+    (-> x1 = 1, x2 = n-1)
     为了使用米勒-拉宾测试来测试一个数 n 的素性,
-    我们选择一个随机数 a < n,
-    并使用 expmod 计算 a 的 (n−1) 次幂模 n.
+    我们选择一个随机数 a < n, 并使用 expmod 计算 a 的 (n−1) 次幂模 n.
     然而, 在 expmod 过程中每次执行平方步骤时,
     我们都会检查是否发现了 "1 模 n 的的非平凡平方根",
     即, 一个不等于 1 或 n−1 且其平方等于 1 模 n 的数.
+    (Any x != 1 and x != n-1, x^2 === 1 (mod n))
     可以证明, 如果存在这样的非平凡平方根, 那么 n 就不是质数.
     还可以证明, 如果 n 是一个非质数的奇数,
     那么, 对于至少有一半的 a < n,
@@ -484,8 +490,13 @@ and probabilistic algorithms have been fruitfully applied to many fields [fn:5].
     并使用这种方法实现类似于 fermat-test 的米勒-拉宾测试.
     通过检查已知的质数和非质数来检查你的函数.
     提示: expmod 发信的一个简单方法是返回 0.
+    ([fn:7] .)
 
 * Footnotes
+[fn:7] Reference: [[https://zhuanlan.zhihu.com/p/349360074][Zhihu: 朝夕的ACM笔记]]
+
+[fn:6] 其实还有两种线性复杂度(O(n))的方法, 分别为欧拉筛和埃氏筛, 欧不, 它们是求出素数的方法, 不过求出素数是不是也可以判断素性呢~ XD, 与之相关的, 还有 O(n log n) 复杂度的方法, 也即除以小于其 sqrt(n) 大小的素数以判断是否存在因数
+
 [fn:5] One of the most striking applications of probabilistic prime testing has been to the field of cryptography. Although it is now computationally infeasible to factor an arbitrary 200-digit number, the primality of such a number can be checked in a few seconds with the Fermat test. This fact forms the basis of a technique for constructing “unbreakable codes” suggested by [[file:References.org][Rivest et al. (1977)]]. The resulting RSA algorithm has become a widely used technique for enhancing the security of electronic communications. Because of this and related developments, the study of prime numbers, once considered the epitome of a topic in “pure” mathematics to be studied only for its own sake, now turns out to have important practical applications to cryptography, electronic funds transfer, and information retrieval.
 [fn:5] 概率质数测试的一个最引人注目的应用是在密码学领域. 尽管现在在计算上无法在合理时间内分解一个任意的 200 位数, 但它的素性可以在几秒内被费马测试确定. 这一事实是由 Rivest 等（1977）提出的构建 "不可破解的密码" 技术的基础. 由此产生的 RSA 算法已成为广泛使用于增强电子通信安全的技术. 由于这一及相关的发展, 质数的研究---曾经被认为是“纯”数学的一个典型课题, 仅为了其自身的价值而被研究---现在在密码学, 电子资金转账和信息检索等方面具有重要的实际应用.
 
