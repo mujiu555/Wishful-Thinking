@@ -78,7 +78,7 @@ The Θ(log⁡n) primality test is based on a result from number theory known as 
     _Fermat’s Little Theorem_: If n is a prime number and a is any positive integer less than n , then a raised to the n^th power is congruent to a modulo n .
 
     费马小定理: 如果 n 是一个素数, a 是任何小于 n 的正整数, 则 a 的 n 次幂与 a 在模 n 下同余.
-    (n is prime, a < n => a^n % n = a % n)
+    (n is prime, a < n => a^n % n = a % n) [fn:8]
 
 (Two numbers are said to be /congruent modulo/ n if they both have the same remainder when divided by n .
 The remainder of a number a when divided by n is also referred to as the /remainder of a modulo n/ ,
@@ -493,6 +493,8 @@ and probabilistic algorithms have been fruitfully applied to many fields [fn:5].
     ([fn:7] .)
 
 * Footnotes
+
+[fn:8] Reference: [[https://zhuanlan.zhihu.com/p/75685377][Zhihu: 同余运算和费马小定理的证明]]
 [fn:7] Reference: [[https://zhuanlan.zhihu.com/p/349360074][Zhihu: 朝夕的ACM笔记]]
 
 [fn:6] 其实还有两种线性复杂度(O(n))的方法, 分别为欧拉筛和埃氏筛, 欧不, 它们是求出素数的方法, 不过求出素数是不是也可以判断素性呢~ XD, 与之相关的, 还有 O(n log n) 复杂度的方法, 也即除以小于其 sqrt(n) 大小的素数以判断是否存在因数
