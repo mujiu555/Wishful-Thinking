@@ -65,7 +65,7 @@ To express such patterns as concepts,
 we will need to construct procedures that can accept
 procedures as arguments or return procedures as values.
 Procedures that manipulate procedures are called *higher-order procedures*.
-This section shows how higher-order procedures can serve as powerful abstraction mechanisms,
+This section shows how /higher-order procedures/ can serve as powerful abstraction mechanisms,
 vastly increasing the expressive power of our language.
 
 然而即使是限制我们只能使用数作参数的函数,
