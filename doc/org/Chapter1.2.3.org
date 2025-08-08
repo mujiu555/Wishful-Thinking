@@ -1,5 +1,5 @@
 #+title: Chapter 1.2.3
-#+author: 惘顾
+#+author: 暮玖(github@mujiu555)
 
 * 1.2.3 Orders of Growth 增长顺序
 

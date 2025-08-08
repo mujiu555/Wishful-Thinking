@@ -1,5 +1,5 @@
 #+title: Chapter 1.1.8
-#+author: 惘顾
+#+author: 暮玖(github@mujiu555)
 
 * 1.1.8 Procedures as Black-Box Abstractions
 

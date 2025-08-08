@@ -1,5 +1,5 @@
 #+title: Chapter 1.1.2
-#+author: 惘顾(github@ReverberationFromAbyss)
+#+author: 暮玖(github@mujiu555)
 
 * 1.1.2 Naming and the Environment 命名与环境
 

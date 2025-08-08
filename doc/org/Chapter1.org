@@ -1,5 +1,5 @@
 #+title: Chapter 1.
-#+author: @惘顾(github@ReverberationFromAbyss)
+#+author: 暮玖(github@mujiu555)
 
 * Building Abstraction with Procedures - 用过程建立抽象[fn:1]
 

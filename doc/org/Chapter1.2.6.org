@@ -1,5 +1,5 @@
 #+title: Chapter 1.2.6
-#+author: 惘顾
+#+author: 暮玖(github@mujiu555)
 
 * 1.2.6 Example: Testing for Primality
 
