@@ -1,5 +1,5 @@
 #+title: Chapter 1.1.5
-#+author: 惘顾
+#+author: 暮玖(github@mujiu555)
 
 * 1.1.5 The Substitution Model for Procedure Application 函数调用的代换模型
 

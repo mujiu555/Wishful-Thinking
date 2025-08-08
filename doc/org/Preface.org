@@ -1,5 +1,5 @@
 #+title: Preface
-#+author: 惘顾(github@ReverberationFromAbyss)
+#+author: 暮玖(github@mujiu555)
 
 * Preface to the Second Edition
 

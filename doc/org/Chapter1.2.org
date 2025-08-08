@@ -1,4 +1,5 @@
 #+title: Chapter 1 2
+#+author: 暮玖(github@mujiu555)
 
 * 1.2 Procedures and the Processes They Generate 函数和它们产生的进程
 

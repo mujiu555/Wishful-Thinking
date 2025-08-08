@@ -1,5 +1,5 @@
 #+title: Preface1e
-#+author: 惘顾(github@ReverberationFromAbyss)
+#+author: 暮玖(github@mujiu555)
 
 * Preface to the First Edition
 
