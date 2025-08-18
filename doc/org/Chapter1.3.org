@@ -34,7 +34,8 @@ by always writing expressions such as
 
 and never mentioning *cube* explicitly.
 This would place us at a serious disadvantage,
-forcing us to work always at the level of the particular operations that happen to be primitives in the language
+forcing us to work always at the level of the particular operations
+that happen to be primitives in the language
 (multiplication, in this case)
 rather than in terms of higher-level operations.
 Our programs would be able to compute cubes,
@@ -43,7 +44,8 @@ One of the things we should demand from a powerful programming language
 is the ability to build abstractions by assigning names to common patterns
 and then to work in terms of the abstractions directly.
 Procedures provide this ability.
-This is why all but the most primitive programming languages include mechanisms for defining procedures.
+This is why all but the most primitive programming languages
+include mechanisms for defining procedures.
 
 而从不直接提及立方.
 这会给我们带来严重的不便,
