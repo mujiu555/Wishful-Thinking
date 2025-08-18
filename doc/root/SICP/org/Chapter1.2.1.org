@@ -1,0 +1,214 @@
+#+title: Chapter 1 2 1
+#+author: 暮玖(github@mujiu555)
+
+* 1.2.1 Linear Recursion and Iteration
+
+We begin by considering the factorial function, defined by
+
+我们先考虑如下的阶乘函数
+
+#+begin_example
+n! = n⋅(n−1)⋅(n−2) ⋯  3⋅2⋅1 .
+#+end_example
+
+There are many ways to compute factorials. One way is to make use of the observation that n! is equal to n times (n−1)! for any positive integer n :
+
+有很多中计算阶乘的方法. 一种是观察到, 对于任何正整数 n, n!与 n*(n-1)!相等:
+
+#+begin_example
+n! = n⋅[(n−1)⋅(n−2) ⋯  3⋅2⋅1]=n⋅(n−1)! .
+#+end_example
+
+Thus, we can compute n! by computing (n−1)! and multiplying the result by n . If we add the stipulation that 1! is equal to 1, this observation translates directly into a procedure:
+
+于是, 我们可以通过计算(n-1)!, 并将它的结果乘以 n 来得到 n!. 如果我们规定 1!等于 1, 那么这个观察就可以被写成函数:
+
+#+begin_src scheme
+(define (factorial n)
+  (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+#+end_src
+
+We can use the substitution model of [[file:Chapter1.1.5.org][1.1.5]] to watch this procedure in action computing 6!, as shown in [[Figure 1.3]].
+
+我们可以用 [[file:Chapter1.1.5.org][1.1.5]] 节中的代换模型来看这个函数是如何计算 6! 的, 见图 [[Figure 1.3][1.3]] .
+
+#+begin_example
+(factorial 6)            >-----.
+(* 6 (factorial 5))              ---.
+(* 6 (* 5 (factorial 4)))            ---.
+(* 6 (* 5 (* 4 (factorial 3))))           ---.
+(* 6 (* 5 (* 4 (* 3 (factorial 2)))))         \
+(* 6 (* 5 (* 4 (* 3 (* 2 (factorial 1))))))   /
+(* 6 (* 5 (* 4 (* 3 (* 2 1)))))              /
+(* 6 (* 5 (* 4 (* 3 2))))              .----`
+(* 6 (* 5 (* 4 6)))                   /
+(* 6 (* 5 24))                  .----`
+(* 6 120)                 .----`
+720              <-------`
+#+end_example
+<<Figure 1.3>>: A linear recursive process for computing 6!.
+
+Now let’s take a different perspective on computing factorials. We could describe a rule for computing n! by specifying that we first multiply 1 by 2, then multiply the result by 3, then by 4, and so on until we reach n . More formally, we maintain a running product, together with a counter that counts from 1 up to n. We can describe the computation by saying that the counter and the product simultaneously change from one step to the next according to the rule
+
+现在我们来看另一种计算阶乘的方式. 我们可以将这个规则描述为先计算 1 乘 2, 然后将结果乘 3, 然后是 4, ..., 直到乘到 n. 更正式的来说, 我们维护了一个积, 以及一个记录了从 1 到 n 的计数器. 我们可以将这个计算过程描述为计数器和积根据这个如下规则同步地从一个步骤变动到另一个步骤
+
+#+begin_example
+product ←  counter * product
+counter ←  counter + 1
+#+end_example
+
+and stipulating that n! is the value of the product when the counter exceeds n.
+
+并且规定 n! 是当计数器达到 n 的时候的值.
+
+Once again, we can recast our description as a procedure for computing factorials[fn:1]:
+
+再一次, 我们可以重写我们对于计算阶乘的函数的描述[fn:1]:
+
+#+begin_src scheme
+(define (factorial n)
+  (fact-iter 1 1 n))
+
+(define (fact-iter product counter max-count)
+  (if (> counter max-count)
+      product
+      (fact-iter (* counter product)
+                 (+ counter 1)
+                 max-count)))
+#+end_src
+
+As before, we can use the substitution model to visualize the process of computing 6!, as shown in [[Figure 1.4]] .
+
+和之前一样, 我们可以使用代换模型来将计算 6! 的过程可视化, 就像图 [[Figure 1.4][1.4]].
+
+#+begin_example
+(factorial 6)   >---.
+(fact-iter 1 1 6)    |
+(fact-iter 1 2 6)    |
+(fact-iter 2 3 6)    |
+(fact-iter 6 4 6)    |
+(fact-iter 24 5 6)   |
+(fact-iter 120 6 6)  |
+(fact-iter 720 7 6)  |
+720     <-----------`
+#+end_example
+<<Figure 1.4>>: A linear iterative process for computing 6!.
+
+Compare the two processes. From one point of view, they seem hardly different at all. Both compute the same mathematical function on the same domain, and each requires a number of steps proportional to n to compute n!. Indeed, both processes even carry out the same sequence of multiplications, obtaining the same sequence of partial products. On the other hand, when we consider the “shapes” of the two processes, we find that they evolve quite differently.
+
+比较两种过程. 从一方面来看, 它们几乎完全没有区别. 都计算了一些有同样定义域的数学函数, 并且两个都需要一些数量的步骤计算 n!. 事实上, 两个进程甚至都执行了同样的乘法次序, 按同样的顺序得到中间乘积. 但是另一方面, 当我们考虑两种进程的 "形状(调用状态)" 时, 我们却发现它们变化的极其不同.
+
+(好烦啊其实这书里面倒是 procedure 表示 "过程" 这个东西, process 表示执行的过程, 和计算机实际运算的过程, 后者倒是可以叫做进程吧, 但是前者好像除了 "过程" 就没别的词来表示了, 虽然讲为了表述方便都吧 procedure 按照 c 的习惯叫 "函数" 而数学里的函数叫计算函数了但是就这样就把 process 叫进程和过程了总感觉有些怪, 但是好像全拿进程代指就更怪了...)
+
+Consider the first process. The substitution model reveals a shape of expansion followed by contraction, indicated by the arrow in [[Figure 1.3]]. The expansion occurs as the process builds up a chain of /deferred operations/ (in this case, a chain of multiplications). The contraction occurs as the operations are actually performed. This type of process, characterized by a chain of deferred operations, is called a /recursive process/. Carrying out this process requires that the interpreter keep track of the operations to be performed later on. In the computation of n! , the length of the chain of deferred multiplications, and hence the amount of information needed to keep track of it, grows linearly with n (is proportional to n), just like the number of steps. Such a process is called a /linear recursive process/.
+
+看到第一个进程. 代换模型取得了一个先拓展再收缩的形状, 由图 [[Figure 1.3][1.3]] 展示的箭头指出. 这个扩展来源于这个进程建立了一些递延操作的链条(在这个例子中, 是一串乘法操作). 缩减发生在操作实际进行时. 这种类型的进程, 以存在递延操作的链条为特征, 被称作递归进程. 执行这种进程需要解释器保持跟踪将要被执行的操作. 在计算 n! 的过程中, 这种递延的乘法运算的长度, 以及相对应需要跟踪的信息, 与 n 呈现线性递增关系(与 n 成比例), 如同步骤. 如此的进程被称作线性递归进程.
+
+By contrast, the second process does not grow and shrink. At each step, all we need to keep track of, for any n , are the current values of the variables *product*, *counter*, and *max-count*. We call this an /iterative process/. In general, an iterative process is one whose state can be summarized by a fixed number of /state variables/, together with a fixed rule that describes how the state variables should be updated as the process moves from state to state and an (optional) end test that specifies conditions under which the process should terminate. In computing n! , the number of steps required grows linearly with n . Such a process is called a /linear iterative process/.
+
+相反的, 第二个进程并不增长和缩减. 在每一步中, 所有我们需要跟踪的, 对于任何 n, 都是当前变量 product, counter, 和 max-count 的值. 我们将它称为迭代进程. 总体而言, 一个迭代进程是一种状态可以用规定数量状态变量总结, 有一个固定规则描述一个状态变量要如何在进程从一个状态转变到另一个状态, 和一个(可选的)规定了进程需要终止的情况的终止测试的进程. 在计算 n! 时, 需要的步骤随 n 线性增长. 这种进程被称作线性迭代进程.
+
+The contrast between the two processes can be seen in another way. In the iterative case, the program variables provide a complete description of the state of the process at any point. If we stopped the computation between steps, all we would need to do to resume the computation is to supply the interpreter with the values of the three program variables. Not so with the recursive process. In this case there is some additional “hidden” information, maintained by the interpreter and not contained in the program variables, which indicates “where the process is” in negotiating the chain of deferred operations. The longer the chain, the more information must be maintained [fn:2].
+
+这两种进程的区别可以从另一方面来看. 在迭代情况下, 程序的变量描述了任何时候进程完整的状态. 如果我们在计算的两个步骤之间停止, 我们恢复计算需要的只是提供给解释器三个变量的值. 但是这对递归进程不管用. 在这种情况下有一些额外的 "隐藏" 信息, 由解释器维护, 而且不在程序的变量中, 在一串递延的操作中描述了 "进程到哪了" 的信息. 这个(调用)链越长, 越多的信息需要被维护[fn:2].
+
+In contrasting iteration and recursion, we must be careful not to confuse the notion of a recursive /process/ with the notion of a recursive /procedure/. When we describe a procedure as recursive, we are referring to the syntactic fact that the procedure definition refers (either directly or indirectly) to the procedure itself. But when we describe a process as following a pattern that is, say, linearly recursive, we are speaking about how the process evolves, not about the syntax of how a procedure is written. It may seem disturbing that we refer to a recursive procedure such as *fact-iter* as generating an iterative process. However, the process really is iterative: Its state is captured completely by its three state variables, and an interpreter need keep track of only three variables in order to execute the process.
+
+在迭代和递归的比较中, 我们必须小心地防止弄混递归进程的想法和递归函数的理解. 当我们描述递归函数的时候, 我们是在指这个函数定义引用(不论直接或间接)了这个函数自己的句法事实. 但是当我们描述一个符合, 如, 线性递归, 的模式的进程时, 我们说的是这个进程是如何变化的, 无关于这个函数是如何写下的语法. 当我们引述例如 fact-iter 这样的递归函数产生一个迭代进程时似乎很令人困惑. 然而, 这个进程确实是迭代的: 它的状态完全由它的三个状态变量捕获, 并且解释器只需要保持跟踪这三个变量就可以执行进程了.
+
+One reason that the distinction between process and procedure may be confusing is that most implementations of common languages (including Ada, Pascal, and C) are designed in such a way that the interpretation of any recursive procedure consumes an amount of memory that grows with the number of procedure calls, even when the process described is, in principle, iterative. As a consequence, these languages can describe iterative processes only by resorting to special-purpose “looping constructs” such as *do*, *repeat*, *until*, *for*, and *while*. The implementation of Scheme we shall consider in [[file:Chapter5.org][Chapter 5]] does not share this defect. It will execute an iterative process in constant space, even if the iterative process is described by a recursive procedure. An implementation with this property is called /tail-recursive/. With a tail-recursive implementation, iteration can be expressed using the ordinary procedure call mechanism, so that special iteration constructs are useful only as syntactic sugar[fn:3].
+
+进程和函数的区分或许容易弄混的原因是大部分通用语言的实现(包括 Ada, Pascal, 和 C)都被设计为任何递归函数都消耗随着函数调用增长的内存, 即便这个进程理论上是迭代的, 的解释(运行)方式. 所以, 那些语言仅可以倚靠使用特殊目的的, 如 do, repeat, until, for, 和 while, 的 "循环指令" 来描述迭代进程. 我们将在第 [[file:Chapter5.org][5]] 章考虑的 Scheme 的实现并不存在这种缺陷. 它将使用固定空间执行迭代进程, 即便这个迭代进程是用递归函数描述的. 一个具有这种数学的实现被称作 "尾递归". 用一个尾递归实现, 迭代可以用普通的被称作体系的函数表示, 这样特殊的迭代结构就只需要作为语法糖了[fn:3].
+
+**** Exercise 1.9:
+    Each of the following two procedures defines a method for adding two positive integers in terms of the procedures inc, which increments its argument by 1, and dec, which decrements its argument by 1.
+
+    如下两个函数定义了一个使用了函数 inc, 可以将它的参数加 1, 和函数 dec, 将它的参数减 1, 的用于加合两个正整数的方法
+
+    #+begin_src scheme
+    (define (+ a b)
+      (if (= a 0)
+          b
+          (inc (+ (dec a) b))))
+
+    (define (+ a b)
+      (if (= a 0)
+          b
+          (+ (dec a) (inc b))))
+    #+end_src
+
+    Using the substitution model, illustrate the process generated by each procedure in evaluating *(+ 4 5)*. Are these processes iterative or recursive?
+
+    使用代换模型, 展示这两个函数求值 (+ 4 5) 的进程. 这些进程迭代还是递归?
+
+**** Exercise 1.10:
+    The following procedure computes a mathematical function called Ackermann’s function.
+
+    以下函数计算了一个被称作 Ackermann 函数的数学函数.
+
+    #+begin_src scheme
+    (define (A x y)
+      (cond ((= y 0) 0)
+            ((= x 0) (* 2 y))
+            ((= y 1) 2)
+            (else (A (- x 1)
+                     (A x (- y 1))))))
+    #+end_src
+
+    What are the values of the following expressions?
+
+    以下表达式的值是什么?
+
+    #+begin_src scheme
+    (A 1 10)
+    (A 2 4)
+    (A 3 3)
+    #+end_src
+
+    Consider the following procedures, where A is the procedure defined above:
+
+    对于以下函数, A 定义如上:
+
+    #+begin_src scheme
+    (define (f n) (A 0 n))
+    (define (g n) (A 1 n))
+    (define (h n) (A 2 n))
+    (define (k n) (* 5 n n))
+    #+end_src
+
+    Give concise mathematical definitions for the functions computed by the procedures f, g, and h for positive integer values of n . For example, (k n) computes 5n^2 .
+
+    给出对于用函数 f, g, 和 h 对于正整数 n 计算的函数的简要的数学定义. 如, (k n)计算 5n^2.
+
+* Footnotes
+
+[fn:3] Tail recursion has long been known as a compiler optimization trick. A coherent semantic basis for tail recursion was provided by Carl [[file:References.org][Hewitt (1977)]], who explained it in terms of the “message-passing” model of computation that we shall discuss in [[file:Chapter3.org][Chapter 3]]. Inspired by this, Gerald Jay Sussman and Guy Lewis Steele Jr. (see [[file:References.org][Steele and Sussman 1975]]) constructed a tail-recursive interpreter for Scheme. Steele later showed how tail recursion is a consequence of the natural way to compile procedure calls ([[file:References.org][Steele 1977]]). The IEEE standard for Scheme requires that Scheme implementations be tail-recursive.
+[fn:3] 尾递归一直以来都是一种编译器优化方法. 一个尾递归连贯语义的基础由 [[file:References.org][Carl Hewitt(1977)]] 用我们将在第 [[file:Chapter3.org][3]] 章介绍的 计算 "信息传递" 模型证明. 出于此, Geerald Jay Sussman 和 Guy Lewis Steele Jr. (见 see [[file:References.org][Steele and Sussman 1975]] )构建了一个 Scheme 的尾递归解释器. Steele 后来证实尾递归如何是编译函数调用的自然方法的结果([[file:References.org][Steele 1977]]). IEEE scheme 标准要求所有 Scheme 实现都是尾递归的.
+
+[fn:2] When we discuss the implementation of procedures on register machines in [[file:Chapter5.org][Chapter 5]], we will see that any iterative process can be realized “in hardware” as a machine that has a fixed set of registers and no auxiliary memory. In contrast, realizing a recursive process requires a machine that uses an auxiliary data structure known as a stack.
+[fn:2] 当我们在第 [[file:Chapter5.org][5]] 章讨论寄存器机器上函数的实现时, 我们将会看到所有迭代进程可以被认为是 "硬件上" 一个拥有固定数量寄存器且没有临时内存的机器. 反之, 一个递归进程需要被视为有一个被称作栈的中间数据结构的机器.
+
+[fn:1] In a real program we would probably use the block structure introduced in the last section to hide the definition of *fact-iter*:
+#+begin_src scheme
+(define (factorial n)
+  (define (iter product counter)
+    (if (> counter n)
+        product
+        (iter (* counter product)
+              (+ counter 1))))
+  (iter 1 1))
+#+end_src
+We avoided doing this here so as to minimize the number of things to think about at once.
+[fn:1] 对于一个实际的程序我们很可能会用上一节引入的块结构来隐藏 fact-iter 的定义:
+#+begin_src scheme
+(define (factorial n)
+  (define (iter product counter)
+    (if (> counter n)
+        product
+        (iter (* counter product)
+              (+ counter 1))))
+  (iter 1 1))
+#+end_src
+我们在这里为了最小化需要一次性考虑的东西, 避免了这种写法.

@@ -1,0 +1,81 @@
+#+title: Chapter 1.3
+#+author: 惘顾
+
+* Formulating Abstractions with Higher-Order Procedures
+
+We have seen that procedures are, in effect,
+abstractions that describe compound operations
+on numbers independent of the particular numbers.
+For example, when we
+
+我们已经看到, 从实质上讲,
+函数是描述了与特定数无关的关于数的操作的抽象.
+例如, 当我们(定义)
+
+#+begin_src scheme
+(define (cube x) (* x x x))
+#+end_src
+
+we are not talking about the cube of a particular number,
+but rather about a method for obtaining the cube of any number.
+Of course we could get along without ever defining this procedure,
+by always writing expressions such as
+
+我们讨论的不是某个特定数字的立方,
+而是关于获取任何数字立方的方法.
+当然, 我们完全可以不定义这个过程,
+而是总是编写像这样的表达式
+
+#+begin_src scheme
+(* 3 3 3)
+(* x x x)
+(* y y y)
+#+end_src
+
+and never mentioning *cube* explicitly.
+This would place us at a serious disadvantage,
+forcing us to work always at the level of the particular operations
+that happen to be primitives in the language
+(multiplication, in this case)
+rather than in terms of higher-level operations.
+Our programs would be able to compute cubes,
+but our language would lack the ability to express the concept of cubing.
+One of the things we should demand from a powerful programming language
+is the ability to build abstractions by assigning names to common patterns
+and then to work in terms of the abstractions directly.
+Procedures provide this ability.
+This is why all but the most primitive programming languages
+include mechanisms for defining procedures.
+
+而从不直接提及立方.
+这会给我们带来严重的不便,
+迫使我们总是在特定操作的层面上工作,
+这些操作恰好是语言中的原始操作(在这个例子中是乘法),
+而不是在更高级别的操作层面上.
+我们的程序将能够计算立方,
+但我们的语言将缺乏表达立方概念的能力.
+我们应该要求一个强大的编程语言能够通过为常见模式分配名称来构建抽象,
+然后直接以抽象的方式工作.
+函数提供了这种能力.
+这就是为什么除了最原始的编程语言之外,
+所有编程语言都包含定义函数的机制.
+
+Yet even in numerical processing we will be severely limited in our ability to create abstractions
+if we are restricted to procedures whose parameters must be numbers.
+Often the same programming pattern will be used with a number of different procedures.
+To express such patterns as concepts,
+we will need to construct procedures that can accept
+procedures as arguments or return procedures as values.
+Procedures that manipulate procedures are called *higher-order procedures*.
+This section shows how /higher-order procedures/ can serve as powerful abstraction mechanisms,
+vastly increasing the expressive power of our language.
+
+然而即使是限制我们只能使用数作参数的函数,
+我们在数值计算中定义抽象的能力也将被限制.
+通常, 相同的编程模式会通过许多不同的函数被使用.
+为了表示这些模式的概念,
+我们将需要构造可以接受过程作为参数,
+或返回过程作为值的函数.
+操纵过程的过程被称为高阶过程.
+本节展示了高阶过程如何作为强大的抽象机制,
+增强我们语言的表达能力.

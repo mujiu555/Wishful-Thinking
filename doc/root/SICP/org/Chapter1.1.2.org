@@ -1,0 +1,63 @@
+#+title: Chapter 1.1.2
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.2 Naming and the Environment 命名与环境
+
+A critical aspect of a programming language is the means it provides for using names to refer to computational objects. We say that the name identifies a /variable/ whose value is the object.
+
+编程语言中很重要的一点是它提供了用于通过名称来引用计算对象的方式. 我们称之为, 命名确定了一个值为一个对象的 "变量".
+
+In the Scheme dialect of Lisp, we name things with *define*. Typing
+
+在 Scheme 方言中, 我们通过 define 来为事物命名, 输入:
+
+#+begin_src scheme
+(define size 2)
+#+end_src
+
+causes the interpreter to associate the value 2 with the name size.[fn:1] Once the name *size* has been associated with the number 2, we can refer to the value 2 by name:
+
+将使解释器把 2 这个值与名称 size 联系在一起[fn:1], 既然 size 这个名字以及与数字 2 联系在一起, 我们就可以通过名称来代表 2 这个数值:
+
+#+begin_src scheme
+size
+;;=> 2
+
+(* 5 size)
+;;=> 10
+#+end_src
+
+Here are further examples of the use of *define*:
+
+这里是 define 更多用法的例子:
+
+#+begin_src scheme
+(define pi 3.14159)
+(define radius 10)
+
+(* pi (* radius radius))
+;;=> 314.159
+
+(define circumference (* 2 pi radius))
+
+circumference
+;;=> 62.8318
+#+end_src
+
+Define is our language’s simplest means of abstraction, for it allows us to use simple names to refer to the results of compound operations, such as the *circumference* computed above. In general, computational objects may have very complex structures, and it would be extremely inconvenient to have to remember and repeat their details each time we want to use them. Indeed, complex programs are constructed by building, step by step, computational objects of increasing complexity. The interpreter makes this step-by-step program construction particularly convenient because name-object associations can be created incrementally in successive interactions. This feature encourages the incremental development and testing of programs and is largely responsible for the fact that a Lisp program usually consists of a large number of relatively simple procedures.
+
+define 是我们语言中用于抽象的最简单方法, 它使我们可以用简单的名字去代指复合操作的结果, 比如以上被计算的 circumference, 总而言之, 计算对象可能会有非常复杂的结构, 也会及其不便于在每次想要使用它们时记起和重复它们的各种细节, 事实上, 复杂的程序是通过一步一步构建复杂都逐渐升高的对象来实现的[fn:2]. 解释器使这个一步步进行的程序构建变得及其方便. 因为名称-对象关系可以在成功的交互中被无限制的创建, 这种特性促进了程序的增量开发和测试, 并且极大程度上左右了 Lisp 程序通常都由大量相对简单的过程组成的这一事实.
+
+It should be clear that the possibility of associating values with symbols and later retrieving them means that the interpreter must maintain some sort of memory that keeps track of the name-object pairs. This memory is called the /environment/ (more precisely the /global environment/, since we will see later that a computation may involve a number of different environments).[fn:3]
+
+将值与符号关联, 并在之后取回它们的能力, 很显然意味着解释器必须维持一些持续跟踪 名-值 对的内存, 这些内存被称作 "环境"(更准确的来说, 全局环境, 因为在后们我们将了解, 一个计算过程可能会包含多个不同的环境)[fn:3].
+
+* Footnotes
+
+[fn:3] [[file:Chapter3.org][Chapter 3]] will show that this notion of environment is crucial, both for understanding how the interpreter works and for implementing interpreters.
+第三章将展示这种对环境的表示对于理解解释器如何工作和如何实现解释器都很重要.
+
+[fn:2] 如上文提到的, 定义半径, 求得直径, 再求得周长, 最后与高组合得到柱面面积...
+
+[fn:1] In this book, we do not show the interpreter’s response to evaluating definitions, since this is highly implementation-dependent.
+本书中, 不展示解释器在解释定义时的反映, 因为这取决于实现

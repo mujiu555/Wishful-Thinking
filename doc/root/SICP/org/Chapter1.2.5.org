@@ -1,0 +1,210 @@
+#+title: Chapter 1.2.5
+#+author: 暮玖(github@mujiu555)
+
+* 1.2.5 Greatest Common Divisors
+
+The greatest common divisor (_GCD_) of two integers a and b is defined to be the largest integer that divides both a and b with no remainder.
+For example, the _GCD_ of 16 and 28 is 4.
+In [[file:Chapter2.org][Chapter 2]], when we investigate how to implement rational-number arithmetic,
+we will need to be able to compute _GCDs_ in order to reduce rational numbers to lowest terms.
+(To reduce a rational number to lowest terms,
+we must divide both the numerator and the denominator by their _GCD_.
+For example, 16/28 reduces to 4/7.)
+One way to find the _GCD_ of two integers is to factor them and search for common factors,
+but there is a famous algorithm that is much more efficient.
+
+两个整数 a 和 b 的最大公因数是可以同时整除 a 和 b 的最大整数.
+例如, 16 和 28 的最大公因数是 4.
+在 [[file:Chapter2.org][第二章]] 中, 当我们了解如何实现有理数运算时,
+我们将要需要顺序计算最大公因数以将有理数化至最简.
+(为了最简化一个有理数, 我们必须将分子和分母同时除以它们的最大公因数.
+例如: 16/28->4/7)
+一个求值两个整数的最大公因数的方式是求出它们的所有因数, 并搜索公共因数,
+但是有一个更有效的著名算法.
+
+The idea of the algorithm is based on the observation that,
+if r is the remainder when a is divided by b ,
+then the common divisors of a and b are precisely the same as the common divisors of b and r .
+Thus, we can use the equation
+
+这个算法的思路基于,
+如果 r 是 a 除以 b 的余数,
+那么 a 和 b 的公因数就是 b 和 r 的公因数
+于是, 我们可以写出如下等式
+
+#+begin_example
+GCD(a,b) = GCD(b,r)
+#+end_example
+
+to successively reduce the problem of computing a _GCD_ to the problem of computing the _GCD_ of smaller and smaller pairs of integers.
+For example,
+
+将计算最大公约数的问题逐步简化为计算越来越小的整数对的最大公约数的问题.
+例如,
+
+#+begin_example
+GCD(206,40) = GCD(40,6)
+            = GCD(6,4)
+            = GCD(4,2)
+            = GCD(2,0) = 2
+#+end_example
+
+reduces _GCD_(206, 40) to _GCD_(2, 0), which is 2.
+It is possible to show that starting with any two positive integers and performing repeated reductions will always eventually produce a pair where the second number is 0.
+Then the _GCD_ is the other number in the pair.
+This method for computing the _GCD_ is known as /Euclid’s Algorithm/ [fn:1].
+
+将 GCD(206, 40) 简化成为 GCD(2, 0), 结果为 2.
+可以证明, 从任何正整数开始, 并且进行重复简化操作, 最终会产生一对第二个数是 0 的数对.
+那么 GCD 就是数对中的另一个数字.
+这种计算 GCD 的方法被称作 "欧几里德算法" [fn:1].
+
+It is easy to express Euclid’s Algorithm as a procedure:
+
+可以很轻松用一个函数表示欧几里德算法:
+
+#+begin_src scheme
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+#+end_src
+
+This generates an iterative process,
+whose number of steps grows as the logarithm of the numbers involved.
+
+这产生了一个迭代进程,
+步骤以对数顺序增长.
+
+The fact that the number of steps required by Euclid’s Algorithm has logarithmic growth bears an interesting relation to the Fibonacci numbers:
+
+欧几里德算法需要的步骤以对数增长这一事实呈现了一个关于斐波那契数的有趣关系:
+
+    _Lamé’s Theorem_: If Euclid’s Algorithm requires k steps to compute the _GCD_ of some pair, then the smaller number in the pair must be greater than or equal to the k^th Fibonacci number[fn:2].
+
+    拉梅定理: 如果欧几里德算法计算某一对数的最大公约数需要 k 步, 那么这对数的较小数一定大于或等于第 k 个斐波那契数[fn:2].
+
+We can use this theorem to get an order-of-growth estimate for Euclid’s Algorithm.
+Let n be the smaller of the two inputs to the procedure.
+If the process takes k steps, then we must have
+n ≥ Fib (k) ≈ φ^k / sqrt(5) .
+Therefore the number of steps k grows as the logarithm (to the base φ ) of n .
+Hence, the order of growth is Θ(log⁡n) .
+
+我们可以通过这个定理估计欧几里德算法的增长顺序.
+令 n 为函数两个输入中较小的那个.
+如果这个进程需要 k 步, 那么我们就必须有
+n ≥ Fib (k) ≈ φ^k / sqrt(5) .
+因此, 步骤 k 随着(以 phi 为底) n 的对数增长.
+于是, 增长顺序是 O(log n)
+
+**** Exercise 1.20:
+    The process that a procedure generates is of course dependent on the rules used by the interpreter.
+    As an example, consider the iterative gcd procedure given above.
+    Suppose we were to interpret this procedure using normal-order evaluation, as discussed in [[file:Chapter1.1.5.org][1.1.5]].
+    (The normal-order-evaluation rule for *if* is described in [[file:Chapter1.1.6.org][Exercise 1.5]].)
+    Using the substitution method (for normal order),
+    illustrate the process generated in evaluating *(gcd 206 40)* and indicate the *remainder* operations that are actually performed.
+    How many *remainder* operations are actually performed in the normal-order evaluation of *(gcd 206 40)*?
+    In the applicative-order evaluation?
+
+    一个函数生成的过程是与解释器使用的规则相关的.
+   例如, 考虑到以上的 gcd 函数.
+   假设我们使用正常序求值解释这个函数的, 就像 [[file:Chapter1.1.5.org][1.1.5]] 节所讨论的.
+   (if 的正常序求值规则已经在 [[file:Chapter1.1.6.org][练习 1.5]] 中被讨论.).
+   使用代换方法 (正常顺序),
+   展示求值 (gcd 206 40) 时产生的进程并指出实际执行的 remainder 操作.
+   在正常序求值 (gcd 206 40) 时有多少 remainder 操作被实际执行了?
+   对于应用序求值呢?
+
+* Footnotes
+
+[fn:3] Translated by AI
+
+[fn:2] This theorem was proved in 1845 by Gabriel Lamé, a French mathematician and engineer known chiefly for his contributions to mathematical physics.
+To prove the theorem, we consider pairs (a_k, b_k) , where a_k ≥ b_k , for which Euclid’s Algorithm terminates in k steps.
+The proof is based on the claim that, if
+(a_{k+1}, b_{k+1})
+→ (a_k, b_k)
+→ (a_{k−1}, b_{k−1})
+are three successive pairs in the reduction process,
+then we must have
+b_{k+1} ≥ b_k + b_{k−1} .
+To verify the claim, consider that a reduction step is defined by applying the transformation
+a_{k−1} = b_k ,
+b_{k−1} = remainder of a_k divided by b_k .
+The second equation means that
+a_k = q b_k + b_{k−1}
+for some positive integer q .
+And since q must be at least 1 we have
+a_k = q b_k + b_{k−1} ≥ b_k + b_{k−1} .
+But in the previous reduction step we have
+b_{k+1} = a_k .
+Therefore,
+b_{k+1} = a_k ≥ b_k + b_{k−1} .
+This verifies the claim.
+Now we can prove the theorem by induction on k , the number of steps that the algorithm requires to terminate.
+The result is true for k = 1 , since this merely requires that b be at least as large as Fib ( 1 ) = 1 .
+Now, assume that the result is true for all integers less than or equal to k and establish the result for k + 1 .
+Let
+(a_{k+1}, b_{k+1})
+→ (a_k, b_k)
+→ (a_{k−1}, b_{k−1})
+be successive pairs in the reduction process.
+By our induction hypotheses, we have
+b_{k−1} ≥ Fib(k−1)
+and b_k ≥ Fib(k) .
+Thus, applying the claim we just proved together with the definition of the Fibonacci numbers gives
+b_{k+1} ≥
+b_k + b_{k−1} ≥
+Fib(k) + Fib(k−1)
+= Fib(k+1) ,
+which completes the proof of Lamé’s Theorem.
+[fn:2] 这个定理由加布里埃尔·拉梅在 1845 年证明，
+他是一位主要因其对数学物理学的贡献而闻名的法国数学家和工程师。
+为了证明这个定理，我们考虑对（a_k, b_k），其中 a_k ≥ b_k，欧几里得算法在 k 步内终止。
+证明基于这样一个断言，如果
+（a_k+1, b_k+1）
+→（a_k, b_k）
+→（a_k−1, b_k−1）
+是缩减过程中的三个连续对，则我们必须有
+b_k+1 ≥ b_k + b_k−1。
+为了验证这个断言，考虑一个缩减步骤是通过应用变换
+a_k−1 = b_k,
+b_k−1 = a_k 除以 b_k 的余数来定义的。
+第二个等式意味着对于某个正整数 q，我们有
+a_k = q*b_k + b_k−1。
+由于 q 至少为 1，我们有
+a_k = q*b_k + b_k−1 ≥ b_k + b_k−1。
+但在前一个缩减步骤中，我们有
+b_k+1 = a_k。
+因此，
+b_k+1 = a_k ≥ b_k + b_k−1。
+这验证了断言。
+现在我们可以通过对 k 进行归纳，即算法终止所需的步骤数，来证明定理。
+对于 k = 1 的情况，结果是成立的，因为这仅仅要求 b 至少与 Fib(1) = 1 一样大。
+现在，假设对于所有小于或等于 k 的整数，结果是成立的，并且为 k + 1 建立结果。
+让
+（a_k+1, b_k+1）
+→（a_k, b_k）
+→（a_k−1, b_k−1）
+是缩减过程中的连续对。
+根据我们的归纳假设，我们有
+b_k−1 ≥ Fib(k−1)
+和 b_k ≥ Fib(k)。
+因此，应用我们刚刚证明的断言以及斐波那契数的定义，我们得到
+b_k+1 ≥
+b_k + b_k−1 ≥
+Fib(k) + Fib(k−1)
+= Fib(k+1)，
+这完成了拉梅定理的证明[fn:3].
+
+[fn:1] Euclid’s Algorithm is so called because it appears in Euclid’s Elements (Book 7, ca. 300 B.C.).
+According to [[file:References.org][Knuth (1973)]], it can be considered the oldest known nontrivial algorithm.
+The ancient Egyptian method of multiplication ([[file:Chapter1.2.4.org][Exercise 1.18]]) is surely older,
+but, as Knuth explains, Euclid’s algorithm is the oldest known to have been presented as a general algorithm, rather than as a set of illustrative examples.
+[fn:1] 欧几里德算法得名于它出现在欧几里德的 "几何原本" (第七卷, 约公元前 300 年).
+根据 [[file:References.org][Knuth (1973)]], 它可以被认为是最古老的非平凡算法.
+古埃及的乘方方法(见[[file:Chapter1.2.4.org][1.18]])明显更加古老,
+但是如 Knuth 解释的, 欧几里德算法是已知最古老的以通用算法, 而非作为示例(形式)被呈现的(算法).
+

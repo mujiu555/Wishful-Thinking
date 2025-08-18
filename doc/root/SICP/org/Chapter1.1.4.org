@@ -1,0 +1,118 @@
+#+title: Chapter 1.1.4
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.4 Compound Procedures 复合函数
+
+We have identified in Lisp some of the elements that must appear in any powerful programming language:
+
+我们已经在 Lisp 中标明了在任何强大的编程语言中必须出现的元素:
+
+    Numbers and arithmetic operations are primitive data and procedures.
+    Nesting of combinations provides a means of combining operations.
+    Definitions that associate names with values provide a limited means of abstraction.
+
+    作为基本数据和函数的数据和过程
+    提供组合操作的途径的嵌套组合式
+    提供了有限抽象方式的将值和名字相联系的的定义
+
+Now we will learn about /procedure definitions/, a much more powerful abstraction technique by which a compound operation can be given a name and then referred to as a unit.
+
+现在, 我们将学习过程定义, 一个使可复合操作可以被赋予一个名字, 并以整体被引用, 的更有力的抽象方式.
+
+We begin by examining how to express the idea of “squaring.” We might say, “To square something, multiply it by itself.” This is expressed in our language as
+
+我们通过检视如何表达 "平方" 的观念开始, 我们或许会说:" 将它自身与自身相乘来得到某物的平方". 在我们的语言中, 它被表述为:
+
+#+begin_src scheme
+(define (square x) (* x x))
+#+end_src
+
+We can understand this in the following way:
+
+我们可以通过以下的方式来理解,
+
+#+begin_example
+(define (square x)    (*       x       x))
+  |      |      |      |       |       |
+ To square something, multiply it by itself.
+#+end_example
+
+We have here a /compound procedure/, which has been given the name *square*. The procedure represents the operation of multiplying something by itself. The thing to be multiplied is given a local name, x, which plays the same role that a pronoun plays in natural language. Evaluating the definition creates this compound procedure and associates it with the name square[fn:1].
+
+于是我们有了一个 "复合过程", 它的名字是 square. 这个过程表示了将某物乘以其自身的操作, 要被乘的数被给予了一个本地的名字 x, 作为自然语言中的代词, 对定义的求值创建了这个复合函数. 并且将它与名称 square 相联系[fn:1].
+
+The general form of a procedure definition is
+
+函数定义的一般形式是:
+
+#+begin_src scheme
+(define (⟨name⟩ ⟨formal parameters⟩)
+  ⟨body⟩)
+#+end_src
+
+The ⟨name⟩ is a symbol to be associated with the procedure definition in the environment[fn:2]. The ⟨formal parameters⟩ are the names used within the body of the procedure to refer to the corresponding arguments of the procedure. The ⟨body⟩ is an expression that will yield the value of the procedure application when the formal parameters are replaced by the actual arguments to which the procedure is applied[fn:3]. The ⟨name⟩ and the ⟨formal parameters⟩ are grouped within parentheses, just as they would be in an actual call to the procedure being defined.
+
+<name> 是环境中要与函数定义相关联的符号[fn:2], <formal parameters> 是函数体中用于引用函数对应参数们的名字, <body> 是函数调用时型参被函数调用的实参取代后用于产生函数调用结果值的表达式[fn:3].
+
+Having defined square, we can now use it:
+
+定义了 square, 我们现在可以使用它了:
+
+#+begin_src scheme
+(square 21)
+;;=> 441
+
+(square (+ 2 5))
+;;=> 49
+
+(square (square 3))
+;;=> 81
+#+end_src
+
+We can also use square as a building block in defining other procedures. For example, x^2 + y^2 can be expressed as
+
+也可以在定义其他过程的时候将 square 作为一个构建块, 如 x^2 + y^2 可以被表示为:
+
+#+begin_src scheme
+(+ (square x) (square y))
+#+end_src
+
+We can easily define a procedure sum-of-squares that, given any two numbers as arguments, produces the sum of their squares:
+
+我们可以轻易定义一个方法, sum-of-squares, 提供任意两个数作为参数, 产生它们平方的和:
+
+#+begin_src scheme
+(define (sum-of-squares x y)
+  (+ (square x) (square y)))
+
+(sum-of-squares 3 4)
+;;=> 25
+#+end_src
+
+Now we can use sum-of-squares as a building block in constructing further procedures:
+
+现在我们就可以用 sum-of-squares 来作为构建块创建进一步的过程:
+
+#+begin_src scheme
+(define (f a)
+  (sum-of-squares (+ a 1) (* a 2)))
+
+(f 5)
+;;=> 136
+#+end_src
+
+Compound procedures are used in exactly the same way as primitive procedures. Indeed, one could not tell by looking at the definition of sum-of-squares given above whether square was built into the interpreter, like + and *, or defined as a compound procedure.
+
+复合过程和原语有一样的使用方式, 事实上, 没有人可以凭着 sum-of-squares 的定义判断 square 是否是像+和*一样内置在解释器中, 或是被定义为一个复合过程[fn:4].
+
+* Footnotes
+[fn:4] 在此以后, procedure 将会被作为 "函数" 翻译
+
+[fn:3] More generally, the body of the procedure can be a sequence of expressions. In this case, the interpreter evaluates each expression in the sequence in turn and returns the value of the final expression as the value of the procedure application.
+[fn:3] 更确切的来说, 函数体可以是一系列表达式, 在这种情况下, 解释器一次执行序列中的表达式, 并将最后一个表达式的值作为函数调用的返回值.
+
+[fn:2] Throughout this book, we will describe the general syntax of expressions by using italic symbols delimited by angle brackets—e.g., ⟨name⟩—to denote the “slots” in the expression to be filled in when such an expression is actually used.
+[fn:2] 在本书中, 我们将用尖括号包括的 italic 符号来描述表达式的一般语法, 如 <name>, 来表示表达式实际被应用时要填入的槽(在表达式中的位置).
+
+[fn:1] Observe that there are two different operations being combined here: we are creating the procedure, and we are giving it the name square. It is possible, indeed important, to be able to separate these two notions—to create procedures without naming them, and to give names to procedures that have already been created. We will see how to do this in [[file:Chapter1.3.org][Chapter 1.3]].
+[fn:1] 注意到这有两个不同的操作被组合在了一起: 我们创造了过程, 并且我们给予其一个名字叫 square. 将它分为两个观念 --- 创建一个函数而不对其命名, 和为一个已有的函数命名 --- 是可能的, 事实上, 是重要的, 我们将于 1.3.2 节来见证如何做到这点.

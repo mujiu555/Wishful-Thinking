@@ -1,0 +1,130 @@
+#+title: Chapter 1.1.1
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.1 Expressions 表达式
+
+One easy way to get started at programming is to examine some typical interactions with an interpreter for the Scheme dialect of Lisp. Imagine that you are sitting at a computer terminal. You type an /expression/, and the interpreter responds by displaying the result of its /evaluating/ that expression.
+
+一个开始编程之路的简单方法是用作为 Lisp 方言的 Scheme 解释器去验证一些经典的交互. 想象你正坐在电脑的终端前[fn:1]. 你输入了一段表达式, 然后解释器呈现出它计算的那个表达式的结果.
+
+One kind of primitive expression you might type is a number. (More precisely, the expression that you type consists of the numerals that represent the number in base 10.) If you present Lisp with a number
+
+一个你可能(可以)输入的表达式是数字(更确切的说, 这个由你键入的表达式由数字组成, 并且代表了十进制下的一个数), 如果你向 Lisp(解释器)键入一个数:
+
+#+begin_src scheme
+486
+#+end_src
+
+the interpreter will respond by printing[fn:2]
+
+解释器将会打印[fn:2]:
+
+#+begin_example
+486
+#+end_example
+
+Expressions representing numbers may be combined with an expression representing a primitive procedure (such as + or *) to form a compound expression that represents the application of the procedure to those numbers. For example:
+
+一个代表数的表达式也可以与代表来基本过程(原语)[fn:3]的表达式组合成代表将过程应用到那些数的复合表达式, 如:
+
+#+begin_src scheme
+(+ 137 349)
+;;=> 486
+
+(- 1000 334)
+;;=> 666
+
+(* 5 99)
+;;=> 495
+
+(/ 10 5)
+;;=> 2
+
+(+ 2.7 10)
+;;=> 12.7
+#+end_src
+
+Expressions such as these, formed by delimiting a list of expressions within parentheses in order to denote procedure application, are called /combinations/. The leftmost element in the list is called the /operator/, and the other elements are called /operands/. The value of a combination is obtained by applying the procedure specified by the operator to the /arguments/ that are the values of the operands.
+
+像这些一样, 用于标识函数调用的, 形如一系列以括号界定的表达式组成的表达式, 被称作组合式. 在最左侧的元素被称作 "操作符", 余下的元素被称作 "被操作符(操作数)" [fn:4]. 一个组合子的值通过将由操作符指定的过程对值为操作数的 "参数(实参)" 调用得到[fn:5].
+
+The convention of placing the operator to the left of the operands is known as /prefix/ notation, and it may be somewhat confusing at first because it departs significantly from the customary mathematical convention. Prefix notation has several advantages, however. One of them is that it can accommodate procedures that may take an arbitrary number of arguments, as in the following examples:
+
+这种将操作符置于操作数左边的约定被称作 "前缀式", 并且由于其与惯常的数学约定相去甚远, 因此一开始会令人有些困惑. 然而, 前缀式也有它的优点, 其中之一就是它可以为可以接受任意数量参数的函数提供参数, 如下例:
+
+#+begin_src scheme
+(+ 21 35 12 7)
+;;=> 75
+
+(* 25 4 12)
+;;=> 1200
+#+end_src
+
+No ambiguity can arise, because the operator is always the leftmost element and the entire combination is delimited by the parentheses.
+
+不会出现任何歧义, 因为操作符总是最左边的元素, 并且整个组合子都是用括号界定的.
+
+A second advantage of prefix notation is that it extends in a straightforward way to allow combinations to be /nested/, that is, to have combinations whose elements are themselves combinations:
+
+另一个前缀表示法的优势在于它可以以一种明了的方式被拓展, 以允许组合子的嵌套, 即, 允许其内部元素本身就是一个组合子:
+
+#+begin_src scheme
+(+ (* 3 5) (- 10 6))
+;;=> 19
+#+end_src
+
+There is no limit (in principle) to the depth of such nesting and to the overall complexity of the expressions that the Lisp interpreter can evaluate. It is we humans who get confused by still relatively simple expressions such as
+
+这种嵌套在深度上(理论上)没有限制, 并且对于那些 Lisp 解释器可以求值的表达式的总体复杂度也是如此[fn:6]. 只是我们人类会对那些仍然相对简单的表达式而感到困惑, 如: 对于:
+
+#+begin_src scheme
+(+ (* 3 (+ (* 2 4) (+ 3 5))) (+ (- 10 7) 6))
+#+end_src
+
+which the interpreter would readily evaluate to be 57. We can help ourselves by writing such an expression in the form
+
+解释器将立即求值的到 57, 我们可以通过将这个表达式, 以如下被称作 "美观打印" 的格式约定写下来, 帮助我们自己:
+
+#+begin_src scheme
+(+ (* 3
+      (+ (* 2 4)
+         (+ 3 5)))
+   (+ (- 10 7)
+      6))
+#+end_src
+
+following a formatting convention known as /pretty-printing/, in which each long combination is written so that the operands are aligned vertically. The resulting indentations display clearly the structure of the expression.[fn:7]
+
+在这个规范中, 每个长组合子被写成如上操作数垂直平齐的形式, 结果的缩进清晰的呈现除这个表达式的结构[fn:7]
+
+Even with complex expressions, the interpreter always operates in the same basic cycle: It reads an expression from the terminal, evaluates the expression, and prints the result. This mode of operation is often expressed by saying that the interpreter runs in a /read-eval-print/ loop. Observe in particular that it is not necessary to explicitly instruct the interpreter to print the value of the expression.[fn:8]
+
+即使诗歌复杂的表达式, 解释器仍会以相同的基本循环执行: 先从终端中读入表达式, 对表达式求值, 然后输出结果, 这种执行模式通常以说这个解释器进行了 "读取-求值-打印 循环". 尤其, 不需要显式要求解释器打印出表达式的值[fn:8].
+
+* Footnotes
+
+[fn:9] 使用 Lisp, 需要考虑各种内置方法的性能开销, 化用自:"Fortran programmers know the value of a few things and the cost of a few very small things".
+
+[fn:8] Lisp obeys the convention that every expression has a value. This convention, together with the old reputation of Lisp as an inefficient language, is the source of the quip by Alan Perlis (paraphrasing Oscar Wilde) that “Lisp programmers know the value of everything but the cost of nothing.”
+Lisp 遵循每个表达式都有值的惯例, 这个惯例, 和 Lisp 十一个低效的语言的旧名声一样, 是 Alan Perlis (套用 Oscar Wilde 之语) 所说: "Lsip 程序员指导所有事物的值, 却不知道所有事物的代价"[fn:9].
+翻译参考: [[https://epigrams-on-programming.readthedocs.io/zh-cn/latest/epigrams.html][编程警句]]
+
+[fn:7] Lisp systems typically provide features to aid the user in formatting expressions. Two especially useful features are one that automatically indents to the proper pretty-print position whenever a new line is started and one that highlights the matching left parenthesis whenever a right parenthesis is typed.
+Lisp 系统一般会提供辅助用户格式化表达式的功能, 两个及其有用的功能之一是新行开始时自动缩进到美观打印位置, 另一个是高亮匹配括号, 无论右括号何时被输入.
+
+[fn:6] 对于表达式的复杂度也没有限制, 只要 Lisp 解释器可以识别.
+
+[fn:5] 将操作符表示的过程, 将实参(arguments)按照形参(parameters)顺序, 一一匹配, 应用过程, 得到的值, 实参就是操作数的值.
+
+[fn:4] operator, 操作符; operands, 被操作符(操作数)
+
+[fn:3] primitive procedure, 原语
+
+[fn:2] Throughout this book, when we wish to emphasize the distinction between the input typed by the user and the response printed by the interpreter, we will show the latter in slanted characters.
+本书中, 当需要强调用户输入和解释器输出时, 将会以斜体表示后者,
+译注: 翻译中不遵循此例, 将以 ";;=>" 注释表示输出
+
+[fn:1] 终端: Terminal, 老式的大型机同时有一个主机和多个终端, 终端是一个同时具有键盘和输出设备的物理设备, 一个典型的终端就是现在 Linux 及其他*nix 系统中常见的 tty 设备的原型: 电传打字机(TeleTYper), 常见的编程语言中的 print* 的 "打印" 的含义便部分来自于点穿打字机 回显 的过程;
+命令行: Command Line, 终端是用户与计算机交互的物理接口, 命令行是软件接口, 早期对计算机的操作均通过命令行来完成(更早期则还可能是纸带, 拨板等), 但是命令行仅仅是接口, 所以需要有一个 Cli(Command Line Interface) 程序来承担翻译指令的工作, 这个程序被称作外科程序;
+外壳程序: Shell, 一个命令行的应用程序, 承担来翻译指令的工作, 正如其名, 外壳程序将用户与用户台 API 与内核态隔离开来. 在 Linux 上, login(程序) 启动的第一个程序便是各种 shell, 而在 Windows 上, 传统的 Cli 外壳程序被 GUI 的桌面程序替代, 但是在它的库中仍然保留了 WinShell API;
+控制台: Console, 同样是一个存在于老式大型机上的设备, 用于控制计算机的运行状态, 观察运行情况的物理设备, 与终端不同的是, 控制台直接位于主机之上, 可以控制几乎所有的主机功能, 终端则是远程连接到主机之上, 仅用于交互作用.

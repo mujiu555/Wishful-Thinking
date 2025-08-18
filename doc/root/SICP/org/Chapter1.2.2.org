@@ -1,0 +1,396 @@
+#+title: Chapter 1.2.2
+#+author: 暮玖(github@mujiu555)
+
+* 1.2.2 Tree Recursion 递归树
+
+Another common pattern of computation is called /tree recursion/.
+As an example, consider computing the sequence of Fibonacci
+numbers, in which each number is the sum of the preceding two:
+
+另一种计算的模式被称作 "递归树". 例如: 考虑斐波那契数列,
+每个数都是它前面两个(数)的和:
+
+#+begin_example
+0, 1, 1, 2, 3, 5, 8, 13, 21, ….
+#+end_example
+
+In general, the Fibonacci numbers can be defined by the rule
+
+通常而言, 斐波那契数可以被定义为
+
+#+begin_example
+         { 0                  if n = 0 ,
+Fib(n) = { 1                  if n = 1 ,
+         { Fib(n−1)+Fib(n−2)  otherwise .
+#+end_example
+
+We can immediately translate this definition into a recursive
+procedure for computing Fibonacci numbers:
+
+我们可以将这个定义翻译成为用于计算斐波那契数的函数:
+
+#+begin_src scheme
+(define (fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib (- n 1))
+                 (fib (- n 2))))))
+#+end_src
+
+Consider the pattern of this computation. To compute *(fib 5)*, we
+compute *(fib 4)* and *(fib 3)*. To compute *(fib 4)*, we compute
+*(fib 3)* and *(fib 2)*. In general, the evolved process looks like
+a tree, as shown in [[Figure 1.5]]. Notice that the branches split into
+two at each level (except at the bottom); this reflects the fact
+that the fib procedure calls itself twice each time it is invoked.
+
+看到这个计算的模式. 为了计算(fib 5), 我们要计算(fib 4)和(fib 3).
+为了计算(fib 4), 我们计算(fib 3)和(fib 2). 总的来说,
+这种发展的进程看上去像一棵树, 如图 [[Figure 1.5][1.5]] 所示.
+注意到每一层的分支都分为两个(除了底端);
+这表示 fib 在它被调用时会调用它自己两次.
+
+#+begin_example
+
+        <~~~~~~~~~~~~~~~~~~~<  fib5  <~~~~~~~~~
+       .      .-----------------``---------.    .
+      .     fib4         <.. ~~~~>~~~ .>  fib3    .
+     .   .---``------------. .       . .----``--.  .
+    .   fib3  <..~~>~~.. fib2  .    . fib2     fib1 .
+   .   .-``-----. <~~.   /  \    . .  /   \      |  ^
+  .   fib2  ..  fib1 . fib1  fib0 .v fib1 fib0 . 1  .
+ .    /  \    .v |  ^ . |  ~  |  ^ . |  .  |  . .  .
+ .  fib1 fib0 .. 1  . v 1 . . 0 .  . 1 . . 0 .   ~
+ .   |  ~  |  ^.   .   ~~~   ~>~    ~>~   ~>~
+ .   1 . . 0  . ~~
+  .    . .    .
+   ~~>~   ~~>~
+#+end_example
+<<Figure 1.5>>: The tree-recursive process generated in computing (fib 5).
+
+This procedure is instructive as a prototypical tree recursion, but
+it is a terrible way to compute Fibonacci numbers because it does
+so much redundant computation. Notice in [[Figure 1.5]] that the entire
+computation of *(fib 3)* — almost half the work—is duplicated. In
+fact, it is not hard to show that the number of times the procedure
+will compute *(fib 1)* or *(fib 0)* (the number of leaves in the
+above tree, in general) is precisely Fib(n+1) . To get an idea of
+how bad this is, one can show that the value of Fib(n) grows
+exponentially with n . More precisely (see [[file:Chapter1.2.2.org][Exercise 1.13]]), Fib (n)
+is the closest integer to φ^n / sqrt(5) , where
+
+这个函数作为递归树的原型是有指导意义的,
+但是它确实是一种计算斐波那契数的糟糕方法,
+因为它进行了太多不必要的(重复)计算了.
+注意到图 [[Figure 1.5][1.5]] 中整个计算过程中对(fib 3) 的计算 ---
+几乎占据了一半的工作量 ---
+是冗余的. 事实上, 不难看出, 这个函数会计算(fib 1)或(fib 0)
+(简单而言, 以上树的叶子节点的数量) 的次数就是 Fib(n+1)的值.
+为了了解这有多坏, 我们可以展示出, Fib(n)的值随着 n 指数增长.
+更确切的说(见 [[file:Chapter1.2.2.org][Exercise 1.13]]), Fib(n)是最接近 φ^n / sqrt(5) 的整数,
+而
+
+#+begin_example
+    1 + sqrt(5)
+φ = ----------- ≈ 1.6180
+         2
+#+end_example
+
+is the golden ratio, which satisfies the equation
+
+是黄金比例, 满足等式
+
+#+begin_example
+φ^2 = φ + 1.
+#+end_example
+
+Thus, the process uses a number of steps that grows exponentially
+with the input. On the other hand, the space required grows only
+linearly with the input, because we need keep track only of which
+nodes are above us in the tree at any point in the computation. In
+general, the number of steps required by a tree-recursive process
+will be proportional to the number of nodes in the tree, while the
+space required will be proportional to the maximum depth of the
+tree.
+
+于是, 这个进程需要执行随着输入指数增长的步骤. 另一方面而言,
+空间需求仅仅随着输入线性增长,
+因为在任何计算过程中我们只需要跟踪树上那个在我们之上的节点.
+总的来说, 递归树进程需要的步骤与树上节点的个数成比例,
+而空间需求则会与树的最大深度成比例.
+
+We can also formulate an iterative process for computing the
+Fibonacci numbers. The idea is to use a pair of integers a and b ,
+initialized to Fib(1) = 1 and Fib(0) = 0 , and to repeatedly apply
+the simultaneous transformations
+
+我们也可以设计一个用于计算斐波那契数的迭代进程.
+(基本)思想是用一对整数 a 和 b, 初始化为 Fib(1) = 1 和 Fib(0) = 0,
+并且重复应用同步变化
+
+#+begin_example
+a ← a + b ,
+b ← a .
+#+end_example
+
+It is not hard to show that, after applying this transformation n
+times, a and b will be equal, respectively, to Fib(n+1) and Fib(n).
+Thus, we can compute Fibonacci numbers iteratively using the
+procedure
+
+并不难看出, 应用了这种变换 n 次之后, a 和 b 将会对应等于, Fib(n+1)
+和 Fib(n). 于是, 我们可以用如下函数迭代计算斐波那契数.
+
+#+begin_src scheme
+(define (fib n)
+  (fib-iter 1 0 n))
+
+(define (fib-iter a b count)
+  (if (= count 0)
+      b
+      (fib-iter (+ a b) a (- count 1))))
+#+end_src
+
+This second method for computing Fib(n) is a linear iteration. The
+difference in number of steps required by the two methods—one
+linear in n , one growing as fast as Fib(n) itself—is enormous,
+even for small inputs.
+
+第二种用于计算 Fib(n) 的方式是线性迭代的.
+这两种方法在执行步骤上的区别 --- 一个随 n 线性, 一个和 Fib(n)
+增长的一样快 --- 是巨大的, 即便是很小的输入.
+
+One should not conclude from this that tree-recursive processes are
+useless. When we consider processes that operate on hierarchically
+structured data rather than numbers, we will find that tree
+recursion is a natural and powerful tool [fn:1]. But even in
+numerical operations, tree-recursive processes can be useful in
+helping us to understand and design programs. For instance,
+although the first *fib* procedure is much less efficient than the
+second one, it is more straightforward, being little more than a
+translation into Lisp of the definition of the Fibonacci sequence.
+To formulate the iterative algorithm required noticing that the
+computation could be recast as an iteration with three state
+variables.
+
+当然不能从这个例子总结认为递归树进程是无用的.
+当我们考虑对一个分层结构的数据, 而不是数字, 的操作时,
+我们会发现递归树是自然和有力的工具[fn:1].
+但是即便是数值计算, 递归树进程也可以帮助我们理解和设计程序.
+比如, 尽管第一个 fib 函数比第二个要低效的多, 它也更直接,
+只比直接将斐波那契数列的定义翻译为 Lisp 多做一点点.
+而为了构成迭代算法,
+需要注意到计算过程可以被重写为三个状态变量的迭代.
+
+** Example: Counting change 例子: 统计找零
+
+It takes only a bit of cleverness to come up with the iterative
+Fibonacci algorithm. In contrast, consider the following problem:
+How many different ways can we make change of $1.00, given
+half-dollars, quarters, dimes, nickels, and pennies? More
+generally, can we write a procedure to compute the number of ways
+to change any given amount of money?
+
+设计迭代的斐波那契算法需要一些智慧.
+反之, 考虑到这个问题: 有哪些 $1.00 的找零方式,
+半美元, 25 美分, 10 美分, 5 美分, 还是 1 美分?
+更通用的, 我们可以写出一个计算任何金额的找零的函数吗?
+
+This problem has a simple solution as a recursive procedure.
+Suppose we think of the types of coins available as arranged in
+some order. Then the following relation holds:
+
+这个问题有一个递归的简单解法. 假设不同种硬币在同样顺序可用.
+那么就有以下的关系:
+
+The number of ways to change amount a using n kinds of coins
+equals
+
+用 n 中硬币找零的方式
+
+    + the number of ways to change amount a using all but the first kind of coin, plus
+    + the number of ways to change amount a − d using all n kinds of coins, where d is the denomination of the first kind of coin.
+
+    + 总量 a 都用除第一种硬币以外所有找零的方法的数量, 加
+    + 总量 (a-d) 换成所有种类硬币的方法的数量, d 是第一种硬币的面额[fn:2]
+
+To see why this is true, observe that the ways to make change can
+be divided into two groups: those that do not use any of the
+first kind of coin, and those that do. Therefore, the total
+number of ways to make change for some amount is equal to the
+number of ways to make change for the amount without using any of
+the first kind of coin, plus the number of ways to make change
+assuming that we do use the first kind of coin. But the latter
+number is equal to the number of ways to make change for the
+amount that remains after using a coin of the first kind.
+
+为了验证这是真的, 观察到计算找零的方法有两组:
+一种不用任何第一种硬币的, 和那些用的. 于是,
+所有找零的方式等于不用第一种硬币的方式加
+我们假设使用第一种硬币的方式.
+但是第二部分等于用第一种硬币以后剩余的总量的找零的方式.
+
+Thus, we can recursively reduce the problem of changing a given
+amount to the problem of changing smaller amounts using fewer
+kinds of coins. Consider this reduction rule carefully, and
+convince yourself that we can use it to describe an algorithm if
+we specify the following degenerate cases [fn:3]:
+
+于是, 我们可以将给定金额的找零递归简化成为
+用更少种类硬币的更小规模金额的找零. 仔细考虑简化规则,
+并且确信我们可以用它描述我们特指的以下退化案例的算法[fn:3]:
+
+    + If a is exactly 0, we should count that as 1 way to make change.
+    + If a is less than 0, we should count that as 0 ways to make change.
+    + If n is 0, we should count that as 0 ways to make change.
+
+    + 如果 a 是 0, 我们认为它有一种找零方式[fn:7].
+    + 如果 a 小于 0, 我们认为它有 0 种找零方式.
+    + 如果 n 是 0, 我们认为有 0 中找零方式.
+
+We can easily translate this description into a recursive
+procedure:
+
+我们可以简单将这种描述翻译成为递归函数:
+
+#+begin_src scheme
+(define (count-change amount)
+  (cc amount 5))
+
+(define (cc amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0)
+             (= kinds-of-coins 0))
+         0)
+        (else
+         (+ (cc amount (- kinds-of-coins 1))
+            (cc (- amount (first-denomination
+                           kinds-of-coins))
+                kinds-of-coins)))))
+
+(define (first-denomination kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+#+end_src
+
+(The *first-denomination* procedure takes as input the number of
+kinds of coins available and returns the denomination of the
+first kind. Here we are thinking of the coins as arranged in
+order from largest to smallest, but any order would do as well.)
+We can now answer our original question about changing a dollar:
+
+(first-denomination 函数接受一个可用硬币的种类的数量的输入,
+并且返回第一种的面额. 这里我们认为硬币都被由大到小排列,
+但是其他顺序也是存在的.)
+(于是)我们现在可用解决我们最开始关于找零的问题了:
+
+#+begin_src scheme
+(count-change 100)
+292
+#+end_src
+
+*count-change* generates a tree-recursive process with
+redundancies similar to those in our first implementation of fib.
+(It will take quite a while for that 292 to be computed.) On the
+other hand, it is not obvious how to design a better algorithm
+for computing the result, and we leave this problem as a
+challenge. The observation that a tree-recursive process may be
+highly inefficient but often easy to specify and understand has
+led people to propose that one could get the best of both worlds
+by designing a “smart compiler” that could transform
+tree-recursive procedures into more efficient procedures that
+compute the same result [fn:4].
+
+count-change 生成一个有类似第一版 fib 实现的冗余的树状递归进程.
+(它需要相当一段时间去算出那个 292.)
+另一方面, 更好的算法也并不是那么明显, 并且我们会将这个问题留作挑战[fn:6].
+观察到树状递归进程也许相当低效, 但是却很容易被确定和理解,
+(并且)这件事确实引导人们去思考(是否)有人可以通过设计一个可将
+树状递归函数转变成可以计算出相同结果而更有效的函数的 "聪明的编译器" 来取得这两方面的好处 [fn:4].
+
+**** Exercise 1.11:
+    A function f is defined by the rule that f(n) = n if n < 3 and f(n) = f(n−1) + 2f(n−2) + 3f(n−3) if n ≥ 3 . Write a procedure that computes f by means of a recursive process. Write a procedure that computes f by means of an iterative process.
+
+    一个函数 f 用
+    #+begin_example
+       { f(n) = n                          if n < 3
+       { f(n) = f(n−1) + 2f(n−2) + 3f(n−3) if n ≥ 3 .
+    #+end_example
+    定义. 写出一个函数通过递归进程计算 f. (再)写出一个函数用迭代进程.
+
+**** Exercise 1.12:
+    The following pattern of numbers is called /Pascal’s triangle/.
+
+    以下数字被称作 "杨辉三角".
+
+    #+begin_example
+             1
+           1   1
+         1   2   1
+       1   3   3   1
+     1   4   6   4   1
+           . . .
+    #+end_example
+
+    The numbers at the edge of the triangle are all 1, and each number inside the triangle is the sum of the two numbers above it [fn:5]. Write a procedure that computes elements of Pascal’s triangle by means of a recursive process.
+
+    三角形边上的数都为 1, 并且三角形内部的数都是它上方两数的和[fn:5]. 写一个函数通过递归进程计算杨辉三角的元素
+
+**** Exercise 1.13:
+    Prove that Fib(n) is the closest integer to φ^n / sqrt(5) , where φ = (1 + sqrt(5)) / 2 . Hint: Let ψ = ( 1 − sqrt(5)) / 2 . Use induction and the definition of the Fibonacci numbers (see [[file:Chapter1.2.2.org][1.2.2]]) to prove that Fib(n) = ( φ^n − ψ^n ) / sqrt(5) .
+
+    证明 Fib(n) 是最接近 φ^n / sqrt(5) 的整数, φ = (1 + sqrt(5)) / 2 . 提示: 令ψ = (1 − sqrt(5)) / 2. 用数学归纳法和斐波那契数的定义(见 [[file:Chapter1.2.2.org][1.2.2]])证明 Fib(n) = ( φ^n − ψ^n ) / sqrt(5) .
+
+
+* Footnotes
+[fn:8] 函数调用的过程实际上需要通过汇编理解,
+1. 参数: 依据调用约定(如_stdcall, _cdecl, _fastcall, _thiscall, _naked, SysV AMD64 ABI Calling Convention, MS x64 calling convention (four argument fast call)...) (似乎其实好像没有必要写这么多? 好吧其实只是我个人掺杂私货罢了...), 将参数以顺序从右向左入栈(右侧参数在栈底)
+2. 调用: call 指令调用函数, 跳转到 "符号" 代指地址(jmp cs:ip 好吧实际上不长这样), 将跳转前地址(恢复地址)入栈
+3. 保留栈帧: push rbp 保存上一个函数调用栈帧的栈底, mov rbp, rsp 并将上一个函数调用栈帧的栈顶(附加了恢复地址版)作为当前栈帧的栈底
+4. 执行: pc(cs:ip)程序计数器从新地址读取指令, ir, mar, 保存解释执行指令
+5. 恢复栈帧: mov rsp, rbp 恢复栈顶, pop rbp 恢复栈底
+6. 返回值: mov rax, ... / xor rax, rax
+7. 返回: ret, 弹出返回地址, 并跳转
+8. 清理调用参数
+
+以上就是基本的汇编函数调用过程 (其实也是 c 的
+
+[fn:7] 即, 正好找完
+
+[fn:6] Challenge:
+迭代和递归实际上可以直接互相转化,
+因为递归的 "递" 和 "归" 可以表示出,
+最初被调用的函数实际上是在最后完成求值的.
+这和"栈"的 先入后出 顺序完全一致.
+另一方面, 在现代计算机中, 函数的调用是在栈中进行的,
+每一次函数调用都会在 "调用栈" 中创建一个 "栈帧".
+那么就可以用如下方法理解递归:
+递: 当函数被调用时, 创建新栈帧
+归: 函数返回时, 移出旧栈帧[fn:8]
+于是, 可以用一个显式的栈模拟调用栈,
+而将递归转化成为迭代 (参见: [[https://www.hello-algo.com/chapter_computational_complexity/iteration_and_recursion/#223][hello alog]] .)
+此处并不采用这种方式, 这题是一道经典的动态规划题目,
+本题类似经典的完全背包问题
+#+begin_src racket
+#lang sicp
+
+#+end_src
+
+[fn:5] The elements of Pascal’s triangle are called the binomial coefficients, because the n^th row consists of the coefficients of the terms in the expansion of ( x + y )^n . This pattern for computing the coefficients appeared in Blaise Pascal’s 1653 seminal work on probability theory, Traité du triangle arithmétique. According to [[file:References.org][Knuth (1973)]], the same pattern appears in the Szu-yuen Yü-chien (“The Precious Mirror of the Four Elements”), published by the Chinese mathematician Chu Shih-chieh in 1303, in the works of the twelfth-century Persian poet and mathematician Omar Khayyam, and in the works of the twelfth-century Hindu mathematician Bháscara Áchárya.
+[fn:5] 杨辉三角的元素被称作 "二项式", 因为第 n^th 行由形如 (x+y)^n (的公式)的展开式的系数组成. 这种计算系数的模式在 Blaise Pascal 1653 年半完成的概率论著作, Traité du triangle arithmétique, 中出现. 据 [[file:References.org][Knuth (1973)]], 同样的模式出现在了由中国数学家 Chu Shih-chieh 在 1303 年发表的 Szu-yuen Yü-chien (<<详解<九章算术>>>)中, 在十二世纪波斯诗人和数学家 Omar Khayyam 的著作中, 以及在十二世纪印度教数学家 Bháscara Áchárya 的著作中.
+
+(怎么怎么看都不太像杨辉啊)
+
+[fn:4] One approach to coping with redundant computations is to arrange matters so that we automatically construct a table of values as they are computed. Each time we are asked to apply the procedure to some argument, we first look to see if the value is already stored in the table, in which case we avoid performing the redundant computation. This strategy, known as tabulation or memoization, can be implemented in a straightforward way. Tabulation can sometimes be used to transform processes that require an exponential number of steps (such as count-change) into processes whose space and time requirements grow linearly with the input. See [[Exercise 3.27]].
+[fn:4] 一个解决冗余计算的方法是规划情况, 这样就可以自动地构建计算出值的表. 每次我们需要用某些参数执行函数时都先看一下这个值是否已经被存储在表中了, 这样就避免了冗余计算. 这种策略, 表格, 或 "记忆化", 可以用一种很直接的方法实现. 表格有时可以被用于需要指数级步骤(如 count-change)转换为时间空间随输入线性增长的进程.
+
+[fn:3] For example, work through in detail how the reduction rule applies to the problem of making change for 10 cents using pennies and nickels.
+[fn:3] 例如: 仔细思考化简规则是如何对 10 美分用几尼和 1 美分找零的.
+
+[fn:2] 即, 取用了一个第一种硬币的方法总和, 取一个第一种硬币, 余下的金额可以继续找零
+
+[fn:1] An example of this was hinted at in [[file:Chapter1.1.3.org][1.1.3]]. The interpreter itself evaluates expressions using a tree-recursive process.
+[fn:1] 一个这个的例子在 [[file:Chapter1.1.3.org][1.1.3]] . 一个解释器本身就用树状递归进程求值表达式
