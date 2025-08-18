@@ -4,3 +4,6 @@
 [submodule "doc/root/IU-P423-P523-E313-E513/Essentials-of-Compilation"]
 	path = doc/root/IU-P423-P523-E313-E513/Essentials-of-Compilation
 	url = https://github.com/IUCompilerCourse/Essentials-of-Compilation
+[submodule "doc/root/IU-P423-P523-E313-E513/IU-P423-P523-E313-E513-Fall-2020"]
+	path = doc/root/IU-P423-P523-E313-E513/IU-P423-P523-E313-E513-Fall-2020
+	url = https://github.com/IUCompilerCourse/IU-P423-P523-E313-E513-Fall-2020
