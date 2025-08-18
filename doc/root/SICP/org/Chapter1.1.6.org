@@ -1,0 +1,240 @@
+#+title: Chapter 1.1.6
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.6Conditional Expressions and Predicates
+
+The expressive power of the class of procedures that we can define at this point is very limited, because we have no way to make tests and to perform different operations depending on the result of a test. For instance, we cannot define a procedure that computes the absolute value of a number by testing whether the number is positive, negative, or zero and taking different actions in the different cases according to the rule
+
+我们现在可以定义的这种函数的表现能力非常受限, 因为我们没有能力去测试和根据一些测试的结果执行不同的操作. 比如, 我们不能定义一个通过测试一个数是正, 负, 还是零, 并依照规则, 在不同情况下执行不同行为, 来计算一个数的绝对值的函数.
+
+#+begin_example
+        {  x if x > 0,
+| x | = {  0 if x = 0,
+        { −x if x < 0.
+#+end_example
+
+This construct is called a /case analysis/, and there is a special form in Lisp for notating such a case analysis. It is called *cond* (which stands for “conditional”), and it is used as follows:
+
+这种结构被称作 "条件分析", 并且在 Lisp 中有特殊的形式来表示这种条件分析. 它是 cond (表示"条件的"), 并且它以如下形式使用:
+
+#+begin_src scheme
+(define (abs x)
+  (cond ((> x 0) x)
+        ((= x 0) 0)
+        ((< x 0) (- x))))
+#+end_src
+
+The general form of a conditional expression is
+
+一个条件表达式的普遍形式是:
+
+#+begin_src scheme
+(cond (⟨p₁⟩ ⟨e₁⟩)
+      (⟨p₂⟩ ⟨e₂⟩)
+      …
+      (⟨pₙ⟩ ⟨eₙ⟩))
+#+end_src
+
+consisting of the symbol *cond* followed by parenthesized pairs of expressions
+
+由跟着一系列括号括住的被称作"子句" 的表达式组对的符号 cond 组成:
+
+#+begin_src scheme
+(⟨p⟩ ⟨e⟩)
+#+end_src
+
+called /clauses/. The first expression in each pair is a /predicate/ — that is, an expression whose value is interpreted as either true or false[fn:1].
+
+每对(表达式)的前半部分是谓词, 即, 一个解释后值为真或假的表达式[fn:1].
+
+Conditional expressions are evaluated as follows. The predicate ⟨ p 1 ⟩ is evaluated first. If its value is false, then ⟨ p 2 ⟩ is evaluated. If ⟨ p 2 ⟩ ’s value is also false, then ⟨ p 3 ⟩ is evaluated. This process continues until a predicate is found whose value is true, in which case the interpreter returns the value of the corresponding /consequent expression/ ⟨ e ⟩ of the clause as the value of the conditional expression. If none of the ⟨ p ⟩ ’s is found to be true, the value of the *cond* is undefined.
+
+条件表达式以如下(方式)求值. 谓词<p1>先被求值. 如果它的值为假, 则<p2>被求值. 如果<p2>的值还是假, 则<p3>被求值. 这种过程持续直到有一个谓词的值是真(I(<p_n>) = true), 这种情况下, 解释器返回对应子句跟随的 "后继表达式" <e>, 作为(整个)条件表达式的值. 如果没有<p>是真, 这个 cond 表达式的值是未定义的.
+
+The word predicate is used for procedures that return true or false, as well as for expressions that evaluate to true or false. The absolute-value procedure *abs* makes use of the primitive predicates >, <, and =[fn:2]. These take two numbers as arguments and test whether the first number is, respectively, greater than, less than, or equal to the second number, returning true or false accordingly.
+
+谓词这个词用于只反回真或假的函数, 也可以用于求值为真或假的表达式. 这个绝对值函数用了原语 >, <, 和=[fn:2]. 那些(原语)采用两个数作为参数, 并且测试是否第一个数, 相对应的, 大于, 小于, 或等于, 第二个数, 对应返回真或假.
+
+Another way to write the absolute-value procedure is
+
+另一个写出绝对值函数的方法是
+
+#+begin_src scheme
+(define (abs x)
+  (cond ((< x 0) (- x))
+        (else x)))
+#+end_src
+
+which could be expressed in English as “If x is less than zero return − x ; otherwise return x .” *else* is a special symbol that can be used in place of the ⟨ p ⟩ in the final clause of a *cond*. This causes the *cond* to return as its value the value of the corresponding ⟨ e ⟩ whenever all previous clauses have been bypassed. In fact, any expression that always evaluates to a true value could be used as the ⟨ p ⟩ here.
+
+可以用中文[fn:3]表达为 "如果 x 小于 0, 反回-x; 否则反回 x". else 是一个可以用作于 cond 最后子句<p>的位置的特殊符号. 这使得 cond 即便之前所有子句都被跳过, 也可以返回它的值. 事实上, 任何永真的表达值都可以被用作这个<p>.
+
+Here is yet another way to write the absolute-value procedure:
+
+这里是再另一个写出绝对值函数的方法:
+
+#+begin_src scheme
+(define (abs x)
+  (if (< x 0)
+      (- x)
+      x))
+#+end_src
+
+This uses the special form if, a restricted type of conditional that can be used when there are precisely two cases in the case analysis. The general form of an if expression is
+
+这里使用了特殊形式 if, 一个可以用于只有两种情况的条件分析的 conditional 的受限形式. if 表达式的通用形式是:
+
+#+begin_src scheme
+(if ⟨predicate⟩ ⟨consequent⟩ ⟨alternative⟩)
+#+end_src
+
+To evaluate an if expression, the interpreter starts by evaluating the ⟨predicate⟩ part of the expression. If the ⟨predicate⟩ evaluates to a true value, the interpreter then evaluates the ⟨consequent⟩ and returns its value. Otherwise it evaluates the ⟨alternative⟩ and returns its value.[fn:4]
+
+为了求值 if 表达式, 解释器先求值表达式的<predicate>部分. 如果<predicate>求值的到一个真值, 解释器会求值<consequent>, 并且返回它的值. 否则, 它会求值<alternative> 再返回它的值[fn:4].
+
+In addition to primitive predicates such as <, =, and >, there are logical composition operations, which enable us to construct compound predicates. The three most frequently used are these:
+
+在如同 <, =, 和 > 的原语之外, 还有逻辑复合操作, 使得我们可以组建复合谓词. 三中最常用的是:
+
+    + (and ⟨e₁⟩ … ⟨eₙ⟩)
+
+    The interpreter evaluates the expressions ⟨e⟩ one at a time, in left-to-right order. If any ⟨e⟩ evaluates to false, the value of the and expression is false, and the rest of the ⟨e⟩’s are not evaluated. If all ⟨e⟩’s evaluate to true values, the value of the and expression is the value of the last one.
+
+    解释器一次求值一个表达式<e>, 自左向右. 如果任何一个<e>求值为假, 则整个 and 表达式的值为假, 并且余下的<e>并不会被求值. 如果所有的<e>都被求值为真, 则表达式的值会是最后一个(<e>)的值[fn:5].
+
+    + (or ⟨e₁⟩ … ⟨eₙ⟩)
+
+    The interpreter evaluates the expressions ⟨e⟩ one at a time, in left-to-right order. If any ⟨e⟩ evaluates to a true value, that value is returned as the value of the or expression, and the rest of the ⟨e⟩’s are not evaluated. If all ⟨e⟩’s evaluate to false, the value of the or expression is false.
+
+    解释器一次求值一个表达式<e>, 自左向右. 如果任何一个<e>求值为真, 则这个值被作为整个 or 表达式的值被返回, 并且余下的<e>并不会被求值. 如果所有的<e>都被求值为假, 则表达式的值是假.
+
+    + (not ⟨e⟩)
+
+    The value of a *not* expression is true when the expression ⟨e⟩ evaluates to false, and false otherwise.
+
+    not 表达式的值当<e>求值为假时是真, 相反为假.
+
+Notice that *and* and *or* are special forms, not procedures, because the subexpressions are not necessarily all evaluated. Not is an ordinary procedure.
+
+注意到那个 and 和 or 都是特殊形式, 不是函数, 因为它们的子表达式都不必要求值. 而 not 是一个普通的函数.
+
+As an example of how these are used, the condition that a number x be in the range 5 < x < 10 may be expressed as
+
+一个关于它们会被如何使用的例子, 数 x 在区间(5, 10)之间也许会被表示为
+
+#+begin_src scheme
+(and (> x 5) (< x 10))
+#+end_src
+
+As another example, we can define a predicate to test whether one number is greater than or equal to another as
+
+另一个例子, 我们可以定义一个谓词去测试是否一个数大于或等于另一个
+
+#+begin_src scheme
+(define (>= x y)
+  (or (> x y) (= x y)))
+#+end_src
+
+or alternatively as
+
+或者
+
+#+begin_src scheme
+(define (>= x y)
+  (not (< x y)))
+#+end_src
+
+**** Exercise 1.1:
+Below is a sequence of expressions. What is the result printed by the interpreter in response to each expression? Assume that the sequence is to be evaluated in the order in which it is presented.
+
+以下是一系列表达式, 它们的结果是什么? 假设序列的结果以它们出现的顺序被求值.
+
+    #+begin_src scheme
+    10
+    (+ 5 3 4)
+    (- 9 1)
+    (/ 6 2)
+    (+ (* 2 4) (- 4 6))
+    (define a 3)
+    (define b (+ a 1))
+    (+ a b (* a b))
+    (= a b)
+    (if (and (> b a) (< b (* a b)))
+        b
+        a)
+    (cond ((= a 4) 6)
+          ((= b 4) (+ 6 7 a))
+          (else 25))
+    (+ 2 (if (> b a) b a))
+    (* (cond ((> a b) a)
+             ((< a b) b)
+             (else -1))
+       (+ a 1))
+    #+end_src
+
+**** Exercise 1.2:
+Translate the following expression into prefix form:
+
+将以下表达式转为前缀式:
+
+    #+begin_example
+        5 + 4 + ( 2 − ( 3 − ( 6 + 4 5 ) ) )
+        ----------------------------------- .
+              3 ( 6 − 2 ) ( 2 − 7 )
+    #+end_example
+
+**** Exercise 1.3:
+Define a procedure that takes three numbers as arguments and returns the sum of the squares of the two larger numbers.
+
+定义一个函数, 接受三个参数, 并返回两个较大数的平方的和.
+
+**** Exercise 1.4:
+Observe that our model of evaluation allows for combinations whose operators are compound expressions. Use this observation to describe the behavior of the following procedure:
+
+观察到我们的求值模型允许操作符本身就是复合表达式的组合式. 使用这个观察结果来描述以下函数的行为:
+
+    #+begin_src scheme
+    (define (a-plus-abs-b a b)
+      ((if (> b 0) + -) a b))
+    #+end_src
+
+**** Exercise 1.5:
+Ben Bitdiddle has invented a test to determine whether the interpreter he is faced with is using applicative-order evaluation or normal-order evaluation. He defines the following two procedures:
+
+Ben Bitdiddle 发明了一种用于确定他面对的解释器是应用序还是正常序求值的测试. 它定义了如下两个函数:
+
+    #+begin_src scheme
+    (define (p) (p))
+
+    (define (test x y)
+      (if (= x 0)
+          0
+          y))
+    #+end_src
+
+    Then he evaluates the expression
+
+    然后它求值了如下表达式
+
+    #+begin_src scheme
+    (test 0 (p))
+    #+end_src
+
+    What behavior will Ben observe with an interpreter that uses applicative-order evaluation? What behavior will he observe with an interpreter that uses normal-order evaluation? Explain your answer. (Assume that the evaluation rule for the special form if is the same whether the interpreter is using normal or applicative order: The predicate expression is evaluated first, and the result determines whether to evaluate the consequent or the alternative expression.)
+
+    当使用一个应用序求值的解释器时, Ben 将要观察到什么行为? 当是一个正常序求值的解释器呢? 解释你的答案. (假设正常序和应用序对于特殊规则的求值规则是一样的: 谓词表达式首先被求值, 然后它的结果确定是否需要求值 然后 或 否则 表达式)
+
+* Footnotes
+
+[fn:5] 短路操作
+
+[fn:4] A minor difference between if and cond is that the ⟨e⟩ part of each cond clause may be a sequence of expressions. If the corresponding ⟨p⟩ is found to be true, the expressions ⟨e⟩ are evaluated in sequence and the value of the final expression in the sequence is returned as the value of the cond. In an if expression, however, the ⟨consequent⟩ and ⟨alternative⟩ must be single expressions.
+[fn:4] if 和 cond 的一个次要区别是每个 cond 子句的<e>部分可以是一系列表达式. 如果对应的<p>被求值为真, 所有<e>部分的表达式都依次求值, 并且最后一个表达式的值被作为 cond 的值反回. 而在 if 表达式中, <consequent>和<alternative>子句都必须为单独的表达式.
+
+[fn:3] 毕竟是翻译.jpg
+
+[fn:2] Abs also uses the “minus” operator -, which, when used with a single operand, as in (- x), indicates negation.
+[fn:2] 绝对值也用了 "减" 运算符 -, 当用作单元运算数时, 如(- x), 表示取反.
+
+[fn:1] “Interpreted as either true or false” means this: In Scheme, there are two distinguished values that are denoted by the constants #t and #f. When the interpreter checks a predicate’s value, it interprets #f as false. Any other value is treated as true. (Thus, providing #t is logically unnecessary, but it is convenient.) In this book we will use names true and false, which are associated with the values #t and #f respectively.
+[fn:1] "解释出真或假" 表示: 在 Scheme 中, 有两种分别被表示为 #t 和 #f 的独立的常量. 当解释器检查一个谓词的值, 它将 #f 视为假. 其他任何值都被视为真. (即, 给出一个 #t 在逻辑上是没必要的, 但是它很方便). 在这本书中我们将使用名字 "真" 和假, 分别与 #t 和 #f 对应.

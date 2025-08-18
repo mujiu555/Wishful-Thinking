@@ -1,0 +1,135 @@
+#+title: Chapter 1.1.5
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.5 The Substitution Model for Procedure Application 函数调用的代换模型
+
+To evaluate a combination whose operator names a compound procedure, the interpreter follows much the same process as for combinations whose operators name primitive procedures, which we described in [[1.1.3 Evaluating Combinations][1.1.3]]. That is, the interpreter evaluates the elements of the combination and applies the procedure (which is the value of the operator of the combination) to the arguments (which are the values of the operands of the combination).
+
+为了对一个操作符命名了一个复合函数的组合式求值, 解释器遵循与 [[file:Chapter1.1.3.org][1.1.3]] 节中操作符为原语的组合式的相同的过程, 即, 解释器最组合式的元素求值, 并应用函数(组合式的操作符求出的值)于参数(组合式操作数的值).
+
+We can assume that the mechanism for applying primitive procedures to arguments is built into the interpreter. For compound procedures, the application process is as follows:
+
+我们可以认为将原语应用到参数的机制是解释器内置的, 对于复合函数, 应用过程遵循:
+
+    To apply a compound procedure to arguments, evaluate the body of the procedure with each formal parameter replaced by the corresponding argument.
+
+    为了将函数参数应用于函数, 用对应的参数对应替代函数体内的参数.
+
+To illustrate this process, let’s evaluate the combination
+
+为了表示这个过程, 我们来对这个组合式求值:
+
+#+begin_src scheme
+(f 5)
+#+end_src
+
+where f is the procedure defined in [[1.1.4 Compound Procedures][1.1.4]]. We begin by retrieving the body of f:
+
+f 是在 [[file:Chapter1.1.4.org][1.1.4]] 节中定义的函数, 我们先取回 f 的函数体:
+
+#+begin_src scheme
+(sum-of-squares (+ a 1) (* a 2))
+#+end_src
+
+Then we replace the formal parameter a by the argument 5:
+
+然后我们用实参 5 代替形式参数:
+
+#+begin_src scheme
+(sum-of-squares (+ 5 1) (* 5 2))
+#+end_src
+
+Thus the problem reduces to the evaluation of a combination with two operands and an operator *sum-of-squares*. Evaluating this combination involves three subproblems. We must evaluate the operator to get the procedure to be applied, and we must evaluate the operands to get the arguments. Now (+ 5 1) produces 6 and (* 5 2) produces 10, so we must apply the *sum-of-squares* procedure to 6 and 10. These values are substituted for the formal parameters x and y in the body of *sum-of-squares*, reducing the expression to
+
+于是这个问题被消去成为对两个操作数和一个操作符 sum-of-square 的组合式的求值. 对这个组合式的求值包含三个子问题. 我们必须求值操作符来得到将要被应用的函数, 并且我们必须对被操作符求值来取得实参, 于是现在 (+ 5 1) 产生 6 而 (* 5 2) 产生 10. 所以我们必须要将函数 sum-of-squares 通过 6 和 10 应用. 那些值又代替了 sum-of-squares 的形参 x 和 y. 将表达式简化成为:
+
+#+begin_src scheme
+(+ (square 6) (square 10))
+#+end_src
+
+If we use the definition of *square*, this reduces to
+
+如果我们应用 square 的定义, 则可以化简为:
+
+#+begin_src scheme
+(+ (* 6 6) (* 10 10))
+#+end_src
+
+which reduces by multiplication to
+
+而这可以消去乘法, 得到:
+
+#+begin_src scheme
+(+ 36 100)
+#+end_src
+
+and finally to
+
+最后有:
+
+#+begin_src scheme
+136
+#+end_src
+
+The process we have just described is called the /substitution model/ for procedure application. It can be taken as a model that determines the “meaning” of procedure application, insofar as the procedures in this chapter are concerned. However, there are two points that should be stressed:
+
+我们刚刚描述的是用于函数生效时的替代模型, 到此章所讨论的函数为止, 它都可以被视为确定函数应用方式的模型. 然而, 在此有两点需要强调:
+
+    + The purpose of the substitution is to help us think about procedure application, not to provide a description of how the interpreter really works. Typical interpreters do not evaluate procedure applications by manipulating the text of a procedure to substitute values for the formal parameters. In practice, the “substitution” is accomplished by using a local environment for the formal parameters. We will discuss this more fully in [[file:Chapter3.org][Chapter 3]] and [[file:Chapter4.org][Chapter 4]] when we examine the implementation of an interpreter in detail.
+    + Over the course of this book, we will present a sequence of increasingly elaborate models of how interpreters work, culminating with a complete implementation of an interpreter and compiler in [[file:Chapter5.org][Chapter 5]]. The substitution model is only the first of these models—a way to get started thinking formally about the evaluation process. In general, when modeling phenomena in science and engineering, we begin with simplified, incomplete models. As we examine things in greater detail, these simple models become inadequate and must be replaced by more refined models. The substitution model is no exception. In particular, when we address in [[file:Chapter3.org][Chapter 3]] the use of procedures with “mutable data,” we will see that the substitution model breaks down and must be replaced by a more complicated model of procedure application[fn:3].
+
+      + 代换的目的是帮助我们理解函数的应用(过程), 而不是描述解释器实际是如何工作的[fn:1], 传统的解释器不通过操作函数的文本来替代形参的方式来应用函数, 实践上, "代换法" 通过实现形参的本地环境来实现[fn:2], 我们将在第 [[file:Chapter3.org][3]], [[file:Chapter4.org][4]] 章详细检视解释器时更充分地讨论这个.
+      + 在本书的课程中, 我们将展示一系列逐渐详仅的关于解释器如何工作的模块, 最终在第 [[file:Chapter5.org][5]] 章得到一个完整实现的解释器和编译器. 代换模型只是这些模型中的第一个, 一个用于从形式上开始理解求值过程的方式, 总体而言, 当对科学和工程上的现象进行建模时, 我们从简化了的, 不完整的模型开始, 而当我们在更细节上检视事物, 呢写简单的模型变得不充分(证明)而且必须由更改善的模型代替. 代换模型也不例外. 如, 当我们在第 [[file:Chapter3.org][3]] 章介绍具有 "可变数据" 的函数时, 我们将会见证代换模型失效. 而且必须由一个对函数应用的更复杂的模型代替[fn:3].
+
+*** Applicative order versus normal order 应用序和正常序
+
+According to the description of evaluation given in [[1.1.3 Evaluating Combinations][1.1.3]], the interpreter first evaluates the operator and operands and then applies the resulting procedure to the resulting arguments. This is not the only way to perform evaluation. An alternative evaluation model would not evaluate the operands until their values were needed. Instead it would first substitute operand expressions for parameters until it obtained an expression involving only primitive operators, and would then perform the evaluation. If we used this method, the evaluation of (f 5) would proceed according to the sequence of expansions
+
+根据节 [[file:Chapter1.1.3.org][1.1.3]] 中对于求值的描述, 解释器首先对操作符和操作数求值, 然后将得到的函数应用于得到的参数上, 这不是求值的唯一方法, 一种其他的求值模型不会对操作数求值, 直到它们的值真正会被用到[fn:4]. 与前者相反, 它会先代换参数的操作数表达式, 直到它获得了仅含有原语的表达式. 然后才会进行求值. 如果我们采用这种模型, 对于 (f 5) 的求值会根据如下展开序列进行:
+
+#+begin_src scheme
+(sum-of-squares (+ 5 1) (* 5 2))
+
+(+ (square (+ 5 1))
+   (square (* 5 2)))
+
+(+ (* (+ 5 1) (+ 5 1))
+   (* (* 5 2) (* 5 2)))
+#+end_src
+
+followed by the reductions
+
+#+begin_src scheme
+(+ (* 6 6)
+   (* 10 10))
+
+(+ 36 100)
+
+136
+#+end_src
+
+This gives the same answer as our previous evaluation model, but the process is different. In particular, the evaluations of (+ 5 1) and (* 5 2) are each performed twice here, corresponding to the reduction of the expression (* x x) with x replaced respectively by (+ 5 1) and (* 5 2).
+
+这与我们之前的求值模型给出了相同的答案, 但是过程不同. 特别的, 对 (+ 5 1) 和 (* 5 2) 的求值在此处被分别执行了两次, 相对着 x 分别被 (+ 5 1) 和 (* 5 2) 代替的表达式 (* x x) 的化简.
+
+This alternative “fully expand and then reduce” evaluation method is known as /normal-order evaluation/, in contrast to the “evaluate the arguments and then apply” method that the interpreter actually uses, which is called /applicative-order evaluation/. It can be shown that, for procedure applications that can be modeled using substitution (including all the procedures in the first two chapters of this book) and that yield legitimate values, normal-order and applicative-order evaluation produce the same value. (See [[Exercise 1.5: Ben Bitdiddle has invented a test to determine whether the interpreter he is faced with is using applicative-order evaluation or normal-order evaluation. He defines the following two procedures:][Exercise 1.5]] for an instance of an “illegitimate” value where normal-order and applicative-order evaluation do not give the same result.)
+
+这种 "先完全展开再化简求值" 的求值方式被称作 "正常序" 求值, 与 "对参数求值再应用" 的解释器通常使用, 被称作 "应用序" 求值 的方法相对, 它可以用来展示, 对于可以用代换模型执行函数应用(本书前两章的所有函数都是如此)并产生合法的值的函数, 正常序和应用序求值会求得相同的值. (见 [[file:Chapter1.1.6.org][Exercise 1.5]] 来看到正常序和应用序取得不同结果的 "非法" 的值)
+
+Lisp uses applicative-order evaluation, partly because of the additional efficiency obtained from avoiding multiple evaluations of expressions such as those illustrated with (+ 5 1) and (* 5 2) above and, more significantly, because normal-order evaluation becomes much more complicated to deal with when we leave the realm of procedures that can be modeled by substitution. On the other hand, normal-order evaluation can be an extremely valuable tool, and we will investigate some of its implications in [[file:Chapter3.org][Chapter 3]] and [[file:Chapter4.org][Chapter 4]] [fn:5].
+
+Lisp 采用应用序求值, 部分是因为防止对于如上展示的 (+ 5 1) 和 (* 5 2) 的对表达式重复求值的额外效率损失, 并且, 更重要的是, 正常序求值在我们离开可以用代换模型表示的函数时, 会变得更加复杂. 另一方面, 正常序求值可以是一个及其有用的工具, 并且我们将在第 [[file:Chapter3.org][3]], [[file:Chapter4.org][4]] 章中了解它而一些应用[fn:5].
+
+* Footnotes
+
+[fn:5] In [[file:Chapter3.org][Chapter 3]] we will introduce stream processing, which is a way of handling apparently “infinite” data structures by incorporating a limited form of normal-order evaluation. In [[file:Chapter4.2.org][4.2]] we will modify the Scheme interpreter to produce a normal-order variant of Scheme.
+[fn:5] 在第 [[file:Chapter3.org][3]] 章中, 我们将介绍流, 一种通过包含受限形式的正常序求值来处理表面上 "无限" 的数据结构的方法. 在 [[file:Chapter4.2.org][4.2]] 节中我们将调整 Scheme 解释器来产生 Scheme 的正常序变体.
+
+[fn:4] 可以理解为惰性求值, 懒加载. 或 Scheme 中的引擎. 但实际上不同. 在此, 是一种求值策略, 目的在于对每层表达式采用同样的方式求值.
+
+[fn:3] Despite the simplicity of the substitution idea, it turns out to be surprisingly complicated to give a rigorous mathematical definition of the substitution process. The problem arises from the possibility of confusion between the names used for the formal parameters of a procedure and the (possibly identical) names used in the expressions to which the procedure may be applied. Indeed, there is a long history of erroneous definitions of substitution in the literature of logic and programming semantics. See [[file:References.org][Stoy 1977]] for a careful discussion of substitution.
+[fn:3] 尽管代换的想法很简单, 给代换的过程一个严格的数学定义还是惊人的复杂. 问题主要来源于一个名字既可以用于函数形参, 也可以在函数生效的表达式中而导致的困惑. 确实, 对代换在词法逻辑和编程语义上的错误定义有个很悠久的历史. 看到 [[file:References.org][Stoy 1977]] 来得到一个关于代换的仔细探讨.
+
+[fn:2] 似可以理解为 Clause, 闭包, 包含对环境的弱引用的同时, 引入函数的内部环境, 在内部环境中引入实参
+
+[fn:1] 此处描写的仅为如何理解求值过程, 实际的求值过程并不是这样, 并在之后有对其的勘误

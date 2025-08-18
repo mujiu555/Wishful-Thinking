@@ -1,0 +1,10 @@
+#+title: Check Table
+#+author: 暮玖(github@mujiu555)
+#+SEQ_TODO: TODO(t@) WIP(w) FIXME(f@) | DONE(D!) CANCELED(C@/!)
+#+SEQ_TODO: REPORT(r@) BUG(b@) KNOWN(k@) | FIXED(F!)
+
+* TODO Chapter
++ procedure: 过程/ 函数(自 1.1.4 以后)
++ primitive: 原语
++ primitive procedures: 原语
++ built-in procedures: 内置过程/ 内置函数

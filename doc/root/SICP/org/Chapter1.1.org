@@ -1,0 +1,31 @@
+#+title: Chapter1 1
+#+author: 暮玖(github@mujiu555)
+
+* 1.1 The Elements of Programming
+
+A powerful programming language is more than just a means for instructing a computer to perform tasks. The language also serves as a framework within which we organize our ideas about processes. Thus, when we describe a language, we should pay particular attention to the means that the language provides for combining simple ideas to form more complex ideas. Every powerful language has three mechanisms for accomplishing this:
+
+一个强大的编程语言不止是指导计算机执行任务的方式, 语言同时扮演了我们组织有关于过程的观念的框架. 因此, 当我们描述一门语言时, 我们应着重关系语言提供给用于将简单想法组成更复杂的想法的方式. 每种强力的语言, 都有如下三种机制来实现上述目标:
+
+ + primitive expressions, which represent the simplest entities the language is concerned with,
+ + means of combination, by which compound elements are built from simpler ones, and
+ + means of abstraction, by which compound elements can be named and manipulated as units.
+
+ + 基本表达式: 表示一门语言相关的最简单的实体,
+ + 组合途径: 用于将简单元素组合成为新的复合元素,
+ + 抽象方式: 使得复合元素可以被命名, 并以单元形式被操作.
+
+In programming, we deal with two kinds of elements: procedures and data. (Later we will discover that they are really not so distinct.) Informally, data is “stuff” that we want to manipulate, and procedures are descriptions of the rules for manipulating the data. Thus, any powerful programming language should be able to describe primitive data and primitive procedures and should have methods for combining and abstracting procedures and data.
+
+在编程的过程中, 我们要处理的元素有两种, 函数和数据(之后我们将揭示它们并没有什么大区别). 不正式地说, 数据是我们想要操作的 "玩意", 而函数描述了操作数据的规则. 因此, 任何强力的编程语言应可以描述基本数据和基本函数, 并且有组合和抽象函数和数据的方式.[fn:1]
+
+In this chapter we will deal only with simple numerical data so that we can focus on the rules for building procedures.[fn:2] In later chapters we will see that these same rules allow us to build procedures to manipulate compound data as well.
+
+本节中我们将只处理简单数值数据, 以此可以专注于用于构建过程的规则[fn:2]. 在后们的章节中我们将见证那些相同的规则仍将允许我们构建操作复合数据的过程.
+
+* Footnotes
+[fn:2] The characterization of numbers as “simple data” is a barefaced bluff. In fact, the treatment of numbers is one of the trickiest and most confusing aspects of any programming language. Some typical issues involved are these: Some computer systems distinguish integers, such as 2, from real numbers, such as 2.71. Is the real number 2.00 different from the integer 2? Are the arithmetic operations used for integers the same as the operations used for real numbers? Does 6 divided by 2 produce 3, or 3.0? How large a number can we represent? How many decimal places of accuracy can we represent? Is the range of integers the same as the range of real numbers? Above and beyond these questions, of course, lies a collection of issues concerning roundoff and truncation errors—the entire science of numerical analysis. Since our focus in this book is on large-scale program design rather than on numerical techniques, we are going to ignore these problems. The numerical examples in this chapter will exhibit the usual roundoff behavior that one observes when using arithmetic operations that preserve a limited number of decimal places of accuracy in noninteger operations.
+
+对数作为 "简单数据" 的描写不过是个无耻的吹嘘. 事实上, 对于数的处置是任何编程语言中最棘手和令人疑惑的方面之一. 有一些经典的议题: 一些计算机系统会将如 2 这样的整数与类似 2.71 这样的实数区分开来, 那么是否需要将实数 2.0 与整数 2 相区分? 对整型的算术运算是否与对实数的相同? 用 6 比 2 应得到 3, 或者是 3.0? 最大应该可以表示多大的数? 可以表示多大的十进制精度位? 整数的表示范围是否与实数的一样? 所有这些问题, 都存在于关于舍入和切断的问题的集合---整个数值分校科学中. 因为本书关注的是宏观上的程序设计而非科学技术, 所以我们将无视那些问题. 文章中的数字例子将会不会展示只会当非整型数在保持有限位精度的操作中出现的通常的舍入情况.
+
+[fn:1] 函数抽象操作, 变量封装值

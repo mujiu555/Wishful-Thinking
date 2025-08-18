@@ -1,0 +1,315 @@
+#+title: Chapter 1.2.4
+#+author: 暮玖(github@mujiu555)
+
+
+* 1.2.4 Exponentiation
+
+Consider the problem of computing the exponential
+of a given number. We would like a procedure that
+takes as arguments a base b and a positive integer
+exponent n and computes b^n . One way to do this is
+via the recursive definition
+
+考虑计算给定数的指数的问题.
+我们需要一个接受基数 b 和正整数指数 n 作为参数
+而计算出 b^n 的函数.
+一个方法是通过递归定义
+
+#+begin_example
+b^n = b ⋅ b^{n − 1} ,
+b^0 = 1 ,
+#+end_example
+
+which translates readily into the procedure
+
+可以轻松得到函数
+
+#+begin_src scheme
+(define (expt b n)
+  (if (= n 0)
+      1
+      (* b (expt b (- n 1)))))
+#+end_src
+
+This is a linear recursive process, which requires
+Θ(n) steps and Θ(n) space. Just as with
+factorial, we can readily formulate an equivalent
+linear iteration:
+
+这是一个线性递归进程,
+需要 O(n) 的步骤和 O(n) 的空间[fn:1].
+就像阶乘, 我们可以将它轻易写成线性迭代:
+
+#+begin_src scheme
+(define (expt b n)
+  (expt-iter b n 1))
+
+(define (expt-iter b counter product)
+  (if (= counter 0)
+      product
+      (expt-iter b
+                 (- counter 1)
+                 (* b product))))
+#+end_src
+
+This version requires Θ(n) steps and Θ(1) space.
+
+这个版本(的指数函数)需要 O(n) 的步骤和 O(1) 的空间.
+
+We can compute exponentials in fewer steps by using
+successive squaring. For instance, rather than
+computing b^8 as
+
+我们可以用逐次平方的方式来用更少次数求解指数.
+例如, 与其用
+
+#+begin_example
+b⋅(b⋅(b⋅(b⋅(b⋅(b⋅(b⋅b)))))) ,
+#+end_example
+
+we can compute it using three multiplications:
+
+计算 b^8, 我们可以用以下三个乘法(代替):
+
+#+begin_example
+b^2 = b ⋅ b ,
+b^4 = b^2 ⋅ b^2 ,
+b^8 = b^4 ⋅ b^4 .
+#+end_example
+
+This method works fine for exponents that are
+powers of 2. We can also take advantage of
+successive squaring in computing exponentials in
+general if we use the rule
+
+这种方法对于 2 的次方的指数起效. 我们也可以用逐次乘方来用如下规则计算指数的普遍情况
+
+#+begin_example
+b^n = (b^{n/2})^2  if n is even ,
+b^n = b⋅b^{n−1}   if n is odd .
+#+end_example
+
+We can express this method as a procedure:
+
+我们可以用(如下)函数表示这个方法:
+
+#+begin_src scheme
+(define (fast-expt b n)
+  (cond ((= n 0)
+         1)
+        ((even? n)
+         (square (fast-expt b (/ n 2))))
+        (else
+         (* b (fast-expt b (- n 1))))))
+#+end_src
+
+where the predicate to test whether an integer is
+even is defined in terms of the primitive procedure
+*remainder* by
+
+用于测试是否一个整数是偶数的谓词是用原语 remainder 定义的
+
+#+begin_src scheme
+(define (even? n)
+  (= (remainder n 2) 0))
+#+end_src
+
+The process evolved by *fast-expt* grows
+logarithmically with n in both space and number of
+steps. To see this, observe that computing b^{2n}
+using *fast-expt* requires only one more
+multiplication than computing b^n . The size of the
+exponent we can compute therefore doubles
+(approximately) with every new multiplication we
+are allowed. Thus, the number of multiplications
+required for an exponent of n grows about as fast
+as the logarithm of n to the base 2. The process
+has Θ(log⁡n) growth[fn:3].
+
+fast-expt 的进程随 n 在空间和时间上对数增长.
+为了确定这个(结论),
+观察到用 fast-expt 计算 b^2n 仅需要比
+b^n 多一次的乘法.
+于是我们可以计算的指数的规模
+就随每个我们被允许的新乘法(就大约)翻倍了[fn:2].
+于是, 一个 n 的指数所需要的乘法数量便
+如同以 2 为底的 n 的对数增长.
+这个进程有着 O(log n)的增长[fn:3].
+
+The difference between Θ(log⁡n) growth and Θ(n)
+growth becomes striking as n becomes large. For
+example, fast-expt for n = 1000 requires only 14
+multiplications[fn:4]. It is also possible to use
+the idea of successive squaring to devise an
+iterative algorithm that computes exponentials with
+a logarithmic number of steps (see [[Exercise 1.16]]),
+although, as is often the case with iterative
+algorithms, this is not written down so
+straightforwardly as the recursive algorithm[fn:5].
+
+O(log n) 和 O(n) 增长在 n 极大的时候有显著差异.
+例如, 对于 n=1000(的情况),
+fast-expt 只需要 14 次乘积[fn:4].
+用逐次平方来设计一个对数步骤的计算指数
+的迭代算法当然也是可以的(见  [[Exercise 1.16]]),
+尽管, 正如迭代算法常见的问题,
+它不如递归算法那么直接[fn:5].
+
+**** Exercise 1.16:
+    Design a procedure that evolves an
+    iterative exponentiation process that
+    uses successive squaring and uses a
+    logarithmic number of steps, as does
+    *fast-expt*. (Hint: Using the observation
+    that (b^{n/2})^2 = (b^2)^{n/2} ,
+    keep, along with the exponent n and the
+    base b , an additional state variable a ,
+    and define the state transformation in
+    such a way that the product ab^n is
+    unchanged from state to state. At the
+    beginning of the process a is taken to be
+    1, and the answer is given by the value
+    of a at the end of the process. In
+    general, the technique of defining an
+    /invariant quantity/ that remains
+    unchanged from state to state is a
+    powerful way to think about the design of
+    iterative algorithms.)
+
+    设计一个用逐次平方而(产生)需要对数步骤的迭代指数进程的函数,
+    就像 fast-expt.
+    (提示: (b^{n/2})^2 = (b^2)^{n/2},
+    需要维护, 指数 n, 基数 b,
+    和一个额外的状态变量 a,
+    并且定义一个 ab^n
+    不会随状态改变而改变的转化过程.
+    在进程的一开始, a 是 1,
+    而答案是 a 在进程结束时的值.
+    普遍的,
+    这种定义一个保持在状态之间不变的 "常量"
+    的方法是一种思考如何设计迭代算法的有力途径)
+
+**** Exercise 1.17:
+    The exponentiation algorithms in this
+    section are based on performing
+    exponentiation by means of repeated
+    multiplication. In a similar way, one can
+    perform integer multiplication by means
+    of repeated addition. The following
+    multiplication procedure (in which it is
+    assumed that our language can only add,
+    not multiply) is analogous to the *expt*
+    procedure:
+
+    本节中的指数算法基于执行重复的乘方而计算指数的方法. 另一个相似的方法中, 可以通过重复相加实现整数乘法. 如下的乘法函数(假设我们的语言仅可以加合而无法乘方)是对于 expt 函数的模拟(模仿):
+
+    #+begin_src scheme
+    (define (* a b)
+      (if (= b 0)
+          0
+          (+ a (* a (- b 1)))))
+    #+end_src
+
+    This algorithm takes a number of steps
+    that is linear in b. Now suppose we
+    include, together with addition,
+    operations *double*, which doubles an
+    integer, and *halve*, which divides an
+    (even) integer by 2. Using these, design
+    a multiplication procedure analogous to
+    *fast-expt* that uses a logarithmic number
+    of steps.
+
+    这个算法需要的步骤随 b 线性. 假设我们现在有加合, double, 翻倍整数, 和 halve, 将偶数除二. 通过这些, 设计一个乘法函数模拟只需要对数步骤的 fast-expt.
+
+**** Exercise 1.18:
+    Using the results of [[Exercise 1.16]] and
+    [[Exercise 1.17]], devise a procedure that
+    generates an iterative process for
+    multiplying two integers in terms of
+    adding, doubling, and halving and uses a
+    logarithmic number of steps[fn:6].
+
+    使用 [[Exercise 1.16]] 和 [[Exercise 1.17]] 中的结果, 用 adding, doubling 和 halving 设计一个产生计算两整数之积, 只需要对数步骤的迭代进程的函数[fn:6]
+
+**** Exercise 1.19:
+    There is a clever algorithm for computing the Fibonacci numbers in a logarithmic number of steps.
+    Recall the transformation of the state variables a and b in the *fib-iter* process of [[file:Chapter1.2.2.org][1.2.2]]:
+    a ← a + b and b ← a .
+    Call this transformation T, and observe that applying T over and over again n times,
+    starting with 1 and 0, produces the pair Fib(n+1) and Fib(n).
+    In other words, the Fibonacci numbers are produced by applying T^n ,
+    the n^th power of the transformation T , starting with the pair (1, 0).
+    Now consider T to be the special case of p = 0 and q = 1 in a family of transformations T_pq ,
+    where T_pq transforms the pair (a, b) according to
+    a ← bq + aq + ap and b ← bp + aq.
+    Show that if we apply such a transformation T_pq twice,
+    the effect is the same as using a single transformation T_p′q′ of the same form,
+    and compute p′ and q′ in terms of p and q .
+    This gives us an explicit way to square these transformations,
+    and thus we can compute T^n using successive squaring, as in the *fast-expt* procedure.
+    Put this all together to complete the following procedure,
+    which runs in a logarithmic number of steps:[fn:7]
+
+    有一种用于在对数步骤计算斐波那契数的算法.
+    回忆 fib-iter 进程中的状态变量 a 和 b:
+    a ← a + b and b ← a .
+    将这种状态转移方程称作 T, 并且观察到, 从 1 和 0 开始, 重复执行 T n 次,
+    会产生 Fib(n+1) 和 Fib(n) 的数对.
+    也就是说, 斐波那契数是通过执行从数对(1, 0) 开始的 T^n, 状态转移方程 T 的 n 方, 得到的.
+    现在将 T 视为 T_pq 这个状态转移族中 p=0, q=1 的特殊情况,
+    T_pq 根据
+    a ← bq + aq + ap and b ← bp + aq.
+    转化数对 (a, b).
+    证明, 如果我们执行这样的 T_pq 两次, 效果和执行一次相同形式的 T_p'q' ,
+    并且用 p 和 q 计算 p' 和 q' 是一样的.
+    这给了我们一种显式的方式计算那些转移方程的平方, 并且可以通过逐次乘方计算 T^n,
+    就像 fast-expt 函数一样.
+    用如上完成如下需要对数步骤的函数[fn:7]:
+
+
+    #+begin_src scheme
+    (define (fib n)
+      (fib-iter 1 0 0 1 n))
+
+    (define (fib-iter a b p q count)
+      (cond ((= count 0)
+             b)
+            ((even? count)
+             (fib-iter a
+                       b
+                       ⟨??⟩  ;compute p'
+                       ⟨??⟩  ;compute q'
+                       (/ count 2)))
+            (else
+             (fib-iter (+ (* b q)
+                          (* a q)
+                          (* a p))
+                       (+ (* b p)
+                          (* a q))
+                       p
+                       q
+                       (- count 1)))))
+    #+end_src
+
+* Footnotes
+
+[fn:7] This exercise was suggested to us by Joe Stoy, based on an example in [[file:References.org][Kaldewaij 1990]].
+[fn:7] 这个练习由 Joe Stoy 提供, 基于 [[file:References.org][Kaldewaij 1990]] 中的例子.
+
+[fn:6] This algorithm, which is sometimes known as the “Russian peasant method” of multiplication, is ancient. Examples of its use are found in the Rhind Papyrus, one of the two oldest mathematical documents in existence, written about 1700 B.C. (and copied from an even older document) by an Egyptian scribe named A’h-mose.
+[fn:6] 这种算法, 有时被称作乘法的 “Russian peasant method”, 很古老. 它的一个实例出现在 A’h-mose (埃及名) 的 Rhind Papyrus, 写于约公元前 1700 年(并且可能是更古老文献的抄本), 的一本现今第二古老的数学文献, 中.
+
+[fn:5] This iterative algorithm is ancient. It appears in the Chandah-sutra by Áchárya Pingala, written before 200 B.C. See [[file:References.org][Knuth 1981]], section 4.6.3, for a full discussion and analysis of this and other methods of exponentiation.
+[fn:5] 这个迭代算法很古老. 出现在公元前 200 年前的Áchárya Pingala 的 Chandah-sutra 中. 见 [[file:References.org][Knuth 1981]], 第 4.6.3 节, 一个对这种方法的讨论和分析, 以及另一种计算指数的方式.
+
+[fn:4] You may wonder why anyone would care about raising numbers to the 1000th power. See [[file:Chapter1.2.6.org][1.2.6]].
+[fn:4] 你也许会想, 为什么有人会考虑数的 1000 次方. 见 [[file:Chapter1.2.6.org][1.2.6]].
+
+[fn:3] More precisely, the number of multiplications required is equal to 1 less than the log base 2 of n plus the number of ones in the binary representation of n . This total is always less than twice the log base 2 of n . The arbitrary constants k_1 and k_2 in the definition of order notation imply that, for a logarithmic process, the base to which logarithms are taken does not matter, so all such processes are described as Θ(log⁡n) .
+[fn:3] 更准确的来说, 所需要的乘法的数量等于 n 的以 2 为底的对数减 1 再加上 n 的二进制表示中 1 的数量. 这个总数始终小于以 2 为底的对数的两倍. 定义中的任意常数 k_1 和 k_2 意味着, 对于一个对数进程, 对数的底并不重要, 所以所有这样的进程都可以被描述为 O(log n)
+
+[fn:2] 同等时间和空间内可以用乘法计算出来的数据的规模翻倍
+
+[fn:1] 为书写方便, 所有大 Omega(n) 都写作 O(n)
+

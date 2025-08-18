@@ -1,0 +1,77 @@
+#+title: Chapter 1.
+#+author: 暮玖(github@mujiu555)
+
+* Building Abstraction with Procedures - 用过程建立抽象[fn:1]
+
+#+begin_quote
+The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three: 1. Combining several simple ideas into one compound one, and thus all complex ideas are made. 2. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations. 3. The third is separating them from all other ideas that accompany them in their real existence: this is called abstraction, and thus all its general ideas are made.
+
+—John Locke, An Essay Concerning Human Understanding (1690)
+#+end_quote
+
+#+begin_quote
+通过简单点子来发挥作用的思维的艺术有三:
+1. 将两个简单的点子组合成一个新的复杂的点子
+2. 将两个点子, 无论复杂或简单, 在一起观察(观察其全貌), 不用将它们组合, 就得到它们之间的关系
+3. 将一些点子从它们组成的目标中抽离, 这就是 "抽象", 于是一个通用的点子就形成了[fn:2]
+#+end_quote
+
+We are about to study the idea of a computational process. Computational processes are abstract beings that inhabit computers. As they evolve, processes manipulate other abstract things called data. The evolution of a process is directed by a pattern of rules called a program. People create programs to direct processes. In effect, we conjure the spirits of the computer with our spells.
+
+我们将学习的是计算过程的思想. 计算过程是一种在计算机中的抽象存在. 随着它的发展, 进程也操作着被称作 "数据" 的抽象存在. 进程的变化由 "程序" 这一系列模式的规则指导, 人们通过创建程序来指导进程. 因此, 从结果上来看, 我们是用咒语支配了计算机中的精灵.
+
+A computational process is indeed much like a sorcerer’s idea of a spirit. It cannot be seen or touched. It is not composed of matter at all. However, it is very real. It can perform intellectual work. It can answer questions. It can affect the world by disbursing money at a bank or by controlling a robot arm in a factory. The programs we use to conjure processes are like a sorcerer’s spells. They are carefully composed from symbolic expressions in arcane and esoteric programming languages that prescribe the tasks we want our processes to perform.
+
+计算过程实际上和巫师的精灵及其相似. 它看不见, 摸不着, 完全不由物质组成. 然而, 它又是非常真实的, 它可以执行智力工作, 可以回答问题, 可以通过从银行里拨款或者控制工厂中的机械臂来影响现实. 我们用以控制进程的程序就类似巫师的咒语, 它们被用描述了我们希望进程去执行的任务的编程语言的符号表达式小心地写成.
+
+A computational process, in a correctly working computer, executes programs precisely and accurately. Thus, like the sorcerer’s apprentice, novice programmers must learn to understand and to anticipate the consequences of their conjuring. Even small errors (usually called bugs or glitches) in programs can have complex and unanticipated consequences.
+
+计算过程在一台正在运行的计算机中, 精确的执行程序. 因此, 如同巫师的学徒, 新手程序员必须学习如何理解和预测它们控制的结果. 即便是很小的错误(通常被称作 Bug 或者"小故障")都可能会导致复杂且难以预料的后果.
+
+Fortunately, learning to program is considerably less dangerous than learning sorcery, because the spirits we deal with are conveniently contained in a secure way. Real-world programming, however, requires care, expertise, and wisdom. A small bug in a computer-aided design program, for example, can lead to the catastrophic collapse of an airplane or a dam or the self-destruction of an industrial robot.
+
+幸运的是, 学习程序比学习巫术安全的. 因为我们要面对的精灵被以一种安全的方式约束着. 然而, 真实世界的编程, 需要细心, 专业, 与智慧. 举例而言, 一个计算机辅助设计程序中的一个小漏洞, 可以导致飞机或大坝的解体, 或者工厂中机械臂的自我损毁.
+
+Master software engineers have the ability to organize programs so that they can be reasonably sure that the resulting processes will perform the tasks intended. They can visualize the behavior of their systems in advance. They know how to structure programs so that unanticipated problems do not lead to catastrophic consequences, and when problems do arise, they can debug their programs. Well-designed computational systems, like well-designed automobiles or nuclear reactors, are designed in a modular manner, so that the parts can be constructed, replaced, and debugged separately.
+
+首席软件工程师应当有组织程序的能力, 这样才能有理由确定处理结果的进程会如期处理任务. 他们可以提前使系统的行为可视化, 他们知道如何构建程序以使无法预料的问题不会产生灾难性的后果. 并且当这种情况发生时为它除错(Debug). 设计良好的计算系统, 就如同良好设计的汽车, 或者核反应堆一样, 是以模块化设计的, 这样(它的)每个部分(子系统)都可以被独立的构造, 替换, 和调试.
+
+** Programming in Lisp 用 Lisp 来编程
+
+We need an appropriate language for describing processes, and we will use for this purpose the programming language Lisp. Just as our everyday thoughts are usually expressed in our natural language (such as English, French, or Japanese), and descriptions of quantitative phenomena are expressed with mathematical notations, our procedural thoughts will be expressed in Lisp. Lisp was invented in the late 1950s as a formalism for reasoning about the use of certain kinds of logical expressions, called recursion equations, as a model for computation. The language was conceived by John McCarthy and is based on his paper “Recursive Functions of Symbolic Expressions and Their Computation by Machine” (McCarthy 1960).
+
+我们需要一个恰当的语言去描述过程, 并且为此我们将用 Lisp 来满足这个目的. 正如我们用自然语言 (如英语, 法语, 或日语) 来表达我们的想法, 用数学符号来表示大量的定理, 我们对过程的想法也将用 Lisp 来表述. Lsip 在 20 世纪 50 年代末期被作为一种对递归式的特殊逻辑表达式的推导形式, 作为一种计算模型而被发明出来. 这个语言最初是由 Jhon McCarthy 基于他的论文<<符号表达式的递归方程和机器运算>>(McCarthy, 1960)发明.
+
+Despite its inception as a mathematical formalism, Lisp is a practical programming language. A Lisp interpreter is a machine that carries out processes described in the Lisp language. The first Lisp interpreter was implemented by McCarthy with the help of colleagues and students in the Artificial Intelligence Group of the MIT Research Laboratory of Electronics and in the MIT Computation Center.[fn:3] Lisp, whose name is an acronym for LISt Processing, was designed to provide symbol-manipulating capabilities for attacking programming problems such as the symbolic differentiation and integration of algebraic expressions. It included for this purpose new data objects known as atoms and lists, which most strikingly set it apart from all other languages of the period.
+
+尽管它是为了数学的形式化表示而被确立, Lisp 也是一个实用编程语言. Lisp 解释器是一个可以承载用 Lisp 描述了的程序的机器. 第一个 Lisp 解释器是由 McCarthy 在他的同时和来自 MIT 人工智能学院的学生们的帮助下实现的[fn:3]. 这个名字由 LISt Process(表处理)缩写形成的语言, 被设计用于提供处理, 如符号差异或代数表达式的积分, 等编程问题的符号处理的能力. 它通过两个新的被称作 atoms(原子)和 lists(表)的数据对象来解决这个问题, 这也是它与当时其他的语言的显著区别.
+
+Lisp was not the product of a concerted design effort. Instead, it evolved informally in an experimental manner in response to users’ needs and to pragmatic implementation considerations. Lisp’s informal evolution has continued through the years, and the community of Lisp users has traditionally resisted attempts to promulgate any “official” definition of the language. This evolution, together with the flexibility and elegance of the initial conception, has enabled Lisp, which is the second oldest language in widespread use today (only Fortran is older), to continually adapt to encompass the most modern ideas about program design. Thus, Lisp is by now a family of dialects, which, while sharing most of the original features, may differ from one another in significant ways. The dialect of Lisp used in this book is called Scheme.[fn:4]
+
+Lisp 不是一个共同协作下的作品, 相反的, 它在用户需求和实际实现的考量下, 以实验性的方式不正规的发展, Lisp 的非官方发展持续来数年. 并且 Lisp 社区的用户也照例拒绝提出任何对该语言的 "官方" 定义. 这样的发展, 和它最初自由, 优雅的主张, 使得 Lisp, 这样一个第二古老的被广泛使用的语言(只有 Fortran 比它更古老), 不断的去适应而包含了程序设计里最先进的思想. 因此, 现在的 Lisp 已经是一族方言了. 这些方言在共享大部分原始功能的同时又在其他方面有着极大差异. 本书使用的方言是 Scheme.[fn:4]
+
+Because of its experimental character and its emphasis on symbol manipulation, Lisp was at first very inefficient for numerical computations, at least in comparison with Fortran. Over the years, however, Lisp compilers have been developed that translate programs into machine code that can perform numerical computations reasonably efficiently. And for special applications, Lisp has been used with great effectiveness.[fn:6] Although Lisp has not yet overcome its old reputation as hopelessly inefficient, Lisp is now used in many applications where efficiency is not the central concern. For example, Lisp has become a language of choice for operating-system shell languages and for extension languages for editors and computer-aided design systems.
+
+由于它实验性的特征和对于符号处理的强调. Lisp 一开始在数值计算方面极其低效, 至少和 Fortran 相比是如此. 但是几年后, 可以将 Lisp 代码编译为可以高校处理数值计算的机器码的编译器被开发出来. 并且, 对于特定的程序, Lisp 可以发挥巨大成效[fn:6]. 虽然 Lisp 仍未克服它那令人绝望的低效的恶名, 它现在仍然被用在那些效率并非核心考量的应用中. 比如 Lisp 已经成为操作系统外壳程序(Shell)或者作为编辑器或计算机辅助设计系统[fn:5].
+
+If Lisp is not a mainstream language, why are we using it as the framework for our discussion of programming? Because the language possesses unique features that make it an excellent medium for studying important programming constructs and data structures and for relating them to the linguistic features that support them. The most significant of these features is the fact that Lisp descriptions of processes, called procedures, can themselves be represented and manipulated as Lisp data. The importance of this is that there are powerful program-design techniques that rely on the ability to blur the traditional distinction between “passive” data and “active” processes. As we shall discover, Lisp’s flexibility in handling procedures as data makes it one of the most convenient languages in existence for exploring these techniques. The ability to represent procedures as data also makes Lisp an excellent language for writing programs that must manipulate other programs as data, such as the interpreters and compilers that support computer languages. Above and beyond these considerations, programming in Lisp is great fun.
+
+既然 Lisp 不是一门主流语言, 为什么要用它作为我们讨论编程的框架呢? 因为这门语言有使得它能够成为学习重要程序构造和数据结构, 以及将它们与支持它们实现的语言特性相联系的绝佳媒介的独特特性. 其中最重要的特性是 Lisp 对被成为过程(Procedures)的过程的描述本省就可以被以 Lisp 的数据的形式表示和操作. 这关键在于一些强力的程序设计技术依赖于将传统上对 "被动的" 的数据与 "主动的" 的进程的模糊的能力(模糊了传统中对"被动的"数据和"主动的"进程的区分的能力). 并且我们将揭示 Lisp 可以将函数作为数据处理的灵活新使得它成为现有语言中探索那些(程序设计技术)最方便的一种. 这种将过程视作数据的能力也使得 Lisp 成功编写必须将其他程序视为数据处理的程序, 如支持及其语言的解释器和编译器, 的绝佳语言. 除开以上考虑, Lisp 很有意思.
+
+* Footnotes
+[fn:6] One such special application was a breakthrough computation of scientific importance -- an integration of the motion of the Solar System that extended previous results by nearly two orders of magnitude, and demonstrated that the dynamics of the Solar System is chaotic. This computation was made possible by new integration algorithms, a special-purpose compiler, and a special-purpose computer all implemented with the aid of software tools written in Lisp (Abelson et al. 1992; Sussman and Wisdom 1992).
+一个这样的特殊程序是科学上的重要计算突破---太阳系运动的整合, 将以前的结果拓展了两个数量级, 并且描述了太阳系统动力学的混沌. 这个计算由新的统一算法, 特定的编译器, 和一台专用计算机, 和完全用 Lisp 写的程序协助完成的 (Abelson et al. 1992; Sussman and Wisdom 1992).
+
+[fn:5] Scsh - Scheme, Emacs - EmacsLisp, AutoCAD - AutoLisp
+
+[fn:4] The two dialects in which most major Lisp programs of the 1970s were written are MacLisp (Moon 1978; Pitman 1983), developed at the MIT Project MAC, and Interlisp (Teitelman 1974), developed at Bolt Beranek and Newman Inc. and the Xerox Palo Alto Research Center. Portable Standard Lisp (Hearn 1969; Griss 1981) was a Lisp dialect designed to be easily portable between different machines. MacLisp spawned a number of subdialects, such as Franz Lisp, which was developed at the University of California at Berkeley, and Zetalisp (Moon 1981), which was based on a special-purpose processor designed at the MIT Artificial Intelligence Laboratory to run Lisp very efficiently. The Lisp dialect used in this book, called Scheme (Steele 1975), was invented in 1975 by Guy Lewis Steele Jr. and Gerald Jay Sussman of the MIT Artificial Intelligence Laboratory and later reimplemented for instructional use at MIT. Scheme became an IEEE standard in 1990 (IEEE 1990). The Common Lisp dialect (Steele 1982, Steele 1990) was developed by the Lisp community to combine features from the earlier Lisp dialects to make an industrial standard for Lisp. Common Lisp became an ANSI standard in 1994 (ANSI 1994)
+
+1970 年代主要写就 Lisp 程序的方言是在 MIT Project Mac 上开发的 MacLisp (Moon, 1978; Pitman1983) 和由 Bolt Beranek & Newman Inc. 和 Xerox Palo Alto Research Center 开发的 InterLisp(Teitelman 1974)两个. Portable Standard Lisp (Hearn 1969; Coriss 1981) 是为了便于在不同的机器之间分发而设计的, MacLisp 诞生出多个方言, 如 FranzLisp, 由加州大学伯克利分校(BSD)开发, 和 ZetaLisp, 基于 MIT 人工智能实验室为了有效运行 Lisp 特别设计的处理器. 本书中使用的方言是 Scheme (Steele and Sussman 1975) 在 1975 年由 Guy Lewis Steels Jr 和 Gerald Jay Sussman 于 MIT 人工智能实验室开发. 并在不久后又为指导用途重新被实现. Scheme 于 1990 年被纳入 IEEE 标准, (IEEE 1990), Common Lisp 方言(Steele 1982, Steele 1990) 由 Lisp 社区为建立 Lisp 的指导性标准而结合早期方言的功能组合而成. CL 在 1994 年成为来一个 ANSI 标准.
+
+[fn:3] <<The Lisp^1 Programmer's Manual>> Appeared in 1960, and the <<Lisp 1.5 Programmers' Manual (McCarthy et al. 1965)>> was published in 1962, The early history of Lisp is described in McCarthy 1978
+
+[fn:2] 此处的点子可以视为步骤或者途径
+
+人的心智活动透过简单的概念而发挥它的力量，方法主要可分为三种: 第一，把数个简单的概念组合成一个复合的概念，于是所有复杂的概念成焉。 第二，将两个概念——不论简单或复杂——不将它们结合，而是同时并列在一起观察，如此就能得知何为相互关联。 第三，把某些概念，从与其伴随的其他真实存在的概念中抽离出来，这称为抽象化，所有一般化、概化的概念皆是由此而生。
+
+[fn:1] 本书中常见 "Procedures" 一词, 英文中原义为过程, 此处也作为 "过程" 理解, 表示 "执行某些操作的过程", 是对为达成某些任务而执行的操作的抽象. 不过在传统中, c 语言及其子系均采用 function , "函数", 表示. 此处及以后将仍作 "过程" 翻译

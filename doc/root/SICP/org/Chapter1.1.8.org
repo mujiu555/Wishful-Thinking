@@ -1,0 +1,165 @@
+#+title: Chapter 1.1.8
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.8 Procedures as Black-Box Abstractions
+
+*sqrt* is our first example of a process defined by a set of mutually defined procedures. Notice that the definition of *sqrt-iter* is /recursive/; that is, the procedure is defined in terms of itself. The idea of being able to define a procedure in terms of itself may be disturbing; it may seem unclear how such a “circular” definition could make sense at all, much less specify a well-defined process to be carried out by a computer. This will be addressed more carefully in [[file:Chapter1.2.org][1.2]]. But first let’s consider some other important points illustrated by the *sqrt* example.
+
+sqrt 是我们第一个用一系列互相定义的函数定义的进程. 注意到 sqrt-iter 的定义是 "递归" 的; 即, 这个函数的定义本来就用到了自己. 这种可以用到(函数)自己来定义函数的想法可能会令人困惑; 这种 "循环" 定义到底是如何起作用的(这件事)似乎是完全不明朗的, 完全不像一个可以被计算机处理的良好定义的进程. 这将会在 [[file:Chapter1.2.org][1.2]] 章中被详细的解释. 但是我们首先来考虑一些由 sqrt 这个例子展示了的要点.
+
+(欸呀这个 in terms of 直译根本译不了 ... 我太菜了 ... (bushi
+
+Observe that the problem of computing square roots breaks up naturally into a number of subproblems: how to tell whether a guess is good enough, how to improve a guess, and so on. Each of these tasks is accomplished by a separate procedure. The entire sqrt program can be viewed as a cluster of procedures (shown in [[Figure 1.2]]) that mirrors the decomposition of the problem into subproblems.
+
+观察到计算平方根的这个问题被自然的分成了一系列子问题[fn:1]: 如何去判断一个猜测是否已经足够好, 如何去提升一个猜测, 等等. 每个这些任务都由一个独立的函数解决. (所以)整个 sqrt 程序可以被看作是一蔟对应了被分解了的问题的子问题的函数(见图 [[Figure 1.2][1.2]])的整体.
+
+最后一个部分也可以视为: 是一簇对应了某问题的子问题的整体
+(真的不会翻了其实它的意思用中文表达起来很简单的但是要一一对应的话就显得很难懂)
+# TODO: 修改翻译
+
+#+begin_example
+           sqrt
+             |
+         sqrt-iter
+         /       \
+    good-enough  improve
+    /        \      \
+square      abs    average
+#+end_example
+<<Figure 1.2>>: Procedural decomposition of the sqrt program.
+
+The importance of this decomposition strategy is not simply that one is dividing the program into parts. After all, we could take any large program and divide it into parts—the first ten lines, the next ten lines, the next ten lines, and so on. Rather, it is crucial that each procedure accomplishes an identifiable task that can be used as a module in defining other procedures. For example, when we define the *good-enough?* procedure in terms of *square*, we are able to regard the square procedure as a “black box.” We are not at that moment concerned with how the procedure computes its result, only with the fact that it computes the square. The details of how the square is computed can be suppressed, to be considered at a later time. Indeed, as far as the *good-enough?* procedure is concerned, square is not quite a procedure but rather an abstraction of a procedure, a so-called *procedural abstraction*. At this level of abstraction, any procedure that computes the square is equally good.
+
+这种分解策略的要点在于不能简单将程序分为(不同)部分. 总之, 我们可以将任何大程序分为很多部分 --- 开头十行, 紧接着的十行, 再十行, 等等. 不过, 重要的是每个函数需要完成一个独立的可以作为其他函数中模块存在的任务. 例如, 当我们使用 square 定义 good-enough? 函数时, 我们可以将 square 函数当成一个 "黑盒"[fn:2]. 我们并不需要考虑这个函数是如何得到它的结果的, 而只需要(知道)它是用来计算平方的(非直译). 事实上, good-enough? 函数考虑的, square 不一定是一个函数, 而是对于一种过程的抽象, 一种被称作 "过程抽象" (的东西). 在这种程度的抽象之上, 任何计算了平方的函数都可以(非直译).
+
+Thus, considering only the values they return, the following two procedures for squaring a number should be indistinguishable. Each takes a numerical argument and produces the square of that number as the value[fn:3].
+
+于是, 只考虑它们反回的值, 以下两个用于平方一个数的函数也应当无法被区分. (它们)每个都接受一个数值参数, 并且产生这个数的平方, 作为其值[fn:3].
+
+#+begin_src scheme
+(define (square x) (* x x))
+
+(define (square x)
+  (exp (double (log x))))
+
+(define (double x) (+ x x))
+#+end_src
+
+So a procedure definition should be able to suppress detail. The users of the procedure may not have written the procedure themselves, but may have obtained it from another programmer as a black box. A user should not need to know how the procedure is implemented in order to use it.
+
+于是一个函数定义需要可以隐藏细节. 一个函数的用户不需要可以自己写下函数, 但是要可以将它们作为黑盒从其他程序言那里获取. 一个用户在使用一个函数时不需要知道它到底是怎么实现的.
+
+*** Local names 本地命名
+
+One detail of a procedure’s implementation that should not matter to the user of the procedure is the implementer’s choice of names for the procedure’s formal parameters. Thus, the following procedures should not be distinguishable:
+
+一个函数实现的细节在于函数实现者对于函数形参名字的选择不应当影响函数的用户. 所以, 以下两个函数不应可区分:
+
+#+begin_src scheme
+(define (square x) (* x x))
+(define (square y) (* y y))
+#+end_src
+
+This principle—that the meaning of a procedure should be independent of the parameter names used by its author—seems on the surface to be self-evident, but its consequences are profound. The simplest consequence is that the parameter names of a procedure must be local to the body of the procedure. For example, we used square in the definition of *good-enough?* in our square-root procedure:
+
+这种理念 --- 函数的意义与它的作者使用的参数的名字无关 --- 表面上看起来是不证自明的, 但是它的后果很严重. 一个最简单的后果是, 函数的参数名必须是在本地函数体中的. 例如, 我们用 good-enough? 定义中的 square 到我们的 square-root 函数中:
+
+#+begin_src scheme
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+#+end_src
+
+The intention of the author of *good-enough?* is to determine if the square of the first argument is within a given tolerance of the second argument. We see that the author of *good-enough?* used the name *guess* to refer to the first argument and x to refer to the second argument. The argument of *square* is *guess*. If the author of *square* used *x* (as above) to refer to that argument, we see that the *x* in *good-enough?* must be a different *x* than the one in *square*. Running the procedure square must not affect the value of *x* that is used by *good-enough?*, because that value of *x* may be needed by *good-enough?* after *square* is done computing.
+
+good-enough? 的作者的意图是确定是否第一个参数的平方是否位于第二个参数的误差中. 我们可以发现 good-enough? 的作者用 guess 这个名字去引用第一个参数, 而 x 去引用第二个参数. square 的参数是 guess. 如果 square 的作者也用 x (如上)去引用这个参数, 我们就会发现, good-enough? 中的 x 必须与 square 中的 x 不同. 运行 square 这个函数必须不能影响 good-enough? 用到的 x 的值, 因为 good-enough? 也许会在 square 运算完以后还用到 x 的值.
+
+If the parameters were not local to the bodies of their respective procedures, then the parameter *x* in *square* could be confused with the parameter *x* in *good-enough?*, and the behavior of *good-enough?* would depend upon which version of square we used. Thus, square would not be the black box we desired.
+
+如果参数对于函数自己的函数体并不是本地化的, 那么 square 中的参数 x 就会 hegood-enough? 的参数 x 搞混, 于是 good-enough? 的行为就会依赖于我们使用的 square 的版本了. 那么 square 就无法达成我们想要的黑盒了.
+
+A formal parameter of a procedure has a very special role in the procedure definition, in that it doesn’t matter what name the formal parameter has. Such a name is called a /bound variable/, and we say that the procedure definition /binds/ its formal parameters. The meaning of a procedure definition is unchanged if a bound variable is consistently renamed throughout the definition[fn:4]. If a variable is not bound, we say that it is /free/. The set of expressions for which a binding defines a name is called the /scope/ of that name. In a procedure definition, the bound variables declared as the formal parameters of the procedure have the body of the procedure as their scope.
+
+一个函数的形参在一个不需要考虑它的形参名字到底是什么的函数定义中起到了非常特殊的作用. 这种名字被称作 "绑定变量", 并且我们可以认为这个函数定义 "绑定" 了它的形参. 一个函数定义的意义不会因为定义中的(同一个)绑定变量的同时改名而改变[fn:4]. 如果一个变量没有被绑定, 我们称它为 "自由的". 绑定了一个名字的表达式的集合被称作那个名字的 "范围". 在一个函数定义中, 被定义为函数形参的绑定变量将函数体作为它们的范围.
+
+In the definition of *good-enough?* above, *guess* and x are bound variables but *<*,*-*,*abs*, and *square* are free. The meaning of *good-enough?* should be independent of the names we choose for *guess* and x so long as they are distinct and different from *<*,*-*,*abs*, and *square*. (If we renamed *guess* to abs we would have introduced a bug by capturing the variable abs. It would have changed from free to bound.) The meaning of *good-enough?* is not independent of the names of its free variables, however. It surely depends upon the fact (external to this definition) that the symbol abs names a procedure for computing the absolute value of a number. *good-enough?* will compute a different function if we substitute *cos* for *abs* in its definition.
+
+在上述 good-enough? 的定义中, guess 和 x 都是绑定变量, 而<, -, abs, 和 square 都是自由的. good-enough? 的含义需要是独立于我们选择的 guess 和 x, 所以它们(两个之间)需要不同, 且和<, -, abs, 和 square 不同. (如果我们将 guess 重命名为 abs, 我们将会因为(试图)捕获 abs 这个变量而引入一个错误. 那会将自由变量转变成为绑定变量) 然而, good-enough? 的含义与它的自由变量有关. 它依赖于(在这个定义之外)符号 abs 命名了一个用于计算一个数的绝对值的函数的事实. good-enough? 将会因为我们在它的定义中替换 abs 为 cos 而计算出不同的功能.
+
+*** Internal definitions and block structure 内部定义和块结构
+
+We have one kind of name isolation available to us so far: The formal parameters of a procedure are local to the body of the procedure. The square-root program illustrates another way in which we would like to control the use of names. The existing program consists of separate procedures:
+
+目前我们还有一种独立可用的命名种类: 函数形参对于其函数体是本地的. square-root 程序展示了另一种我们可用于控制命名使用的方式. 现有的程序有独立的函数组成:
+
+#+begin_src scheme
+(define (sqrt x)
+  (sqrt-iter 1.0 x))
+
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x) x)))
+
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+#+end_src
+
+The problem with this program is that the only procedure that is important to users of sqrt is sqrt. The other procedures (*sqrt-iter*, *good-enough?*, and *improve*) only clutter up their minds. They may not define any other procedure called *good-enough?* as part of another program to work together with the square-root program, because *sqrt* needs it. The problem is especially severe in the construction of large systems by many separate programmers. For example, in the construction of a large library of numerical procedures, many numerical functions are computed as successive approximations and thus might have procedures named *good-enough?* and *improve* as auxiliary procedures. We would like to localize the subprocedures, hiding them inside *sqrt* so that *sqrt* could coexist with other successive approximations, each having its own private *good-enough?* procedure. To make this possible, we allow a procedure to have internal definitions that are local to that procedure. For example, in the square-root problem we can write
+
+这个程序的问题在于, 对于 sqrt 的用户来说唯一重要的函数是 sqrt. 其他的函数(sqrt-iter, good-enough?, 和 improve)仅仅只是搞乱他们的脑子. 他们没法在其他和 square-root 程序一起使用的程序中定义一个叫做 good-enough? 的函数了, 因为 sqrt 需要它. 这个问题在一个有非常多独立程序员残余的大型系统的构建中特别严重. 例如, 在一个大型数值计算库的构建中们大量数值函数都用逼近估值来计算, 并且需要被称作 good-enough? 和 improve 的辅助函数. 我们就需要让子函数本地化, 将他们隐藏在 sqrt 内部, 这样 sqrt 就可用和其他逼近估值一起存在, 每个都有他们自己私有的 good-enough? 函数. 为了让这成真, 我们(要)让函数可以有对函数本地的内部定义. 比如, 对于 square-root 问题我们可以写出
+
+#+begin_src scheme
+(define (sqrt x)
+  (define (good-enough? guess x)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess x)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess x)
+    (if (good-enough? guess x)
+        guess
+        (sqrt-iter (improve guess x) x)))
+  (sqrt-iter 1.0 x))
+#+end_src
+
+Such nesting of definitions, called /block structure/, is basically the right solution to the simplest name-packaging problem. But there is a better idea lurking here. In addition to internalizing the definitions of the auxiliary procedures, we can simplify them. Since *x* is bound in the definition of *sqrt*, the procedures *good-enough?*, *improve*, and *sqrt-iter*, which are defined internally to *sqrt*, are in the scope of *x*. Thus, it is not necessary to pass x explicitly to each of these procedures. Instead, we allow *x* to be a free variable in the internal definitions, as shown below. Then *x* gets its value from the argument with which the enclosing procedure *sqrt* is called. This discipline is called /lexical scoping/[fn:5].
+
+这样一个嵌套的定义, 被称作 "块结构", 基本是这种最简单命名-打包问题的正确解决方案. 但是还有种更好的潜在方案. 在内部化辅助函数之外, 我们可以简化他们. 既然 x 是在 sqrt 的定义中被绑定的, 那么函数 good-enough?, improve, 和 sqrt-iter, 这些定义在 sqrt 中的, 都在 x 的范围中. 于是, 我们不需要显式将 x 分别提供给那些函数. 实际上, 我们可以让 x 作为内部定义的自由变量, 就像下面展示的那样. 然后 x 就从 sqrt 被调用时供给的参数完成函数, 而获取值. 这种准则被称作 "词法作用域" [fn:5].
+
+#+begin_src scheme
+(define (sqrt x)
+  (define (good-enough? guess)
+    (< (abs (- (square guess) x)) 0.001))
+  (define (improve guess)
+    (average guess (/ x guess)))
+  (define (sqrt-iter guess)
+    (if (good-enough? guess)
+        guess
+        (sqrt-iter (improve guess))))
+  (sqrt-iter 1.0))
+#+end_src
+
+We will use block structure extensively to help us break up large programs into tractable pieces[fn:6]. The idea of block structure originated with the programming language Algol 60. It appears in most advanced programming languages and is an important tool for helping to organize the construction of large programs.
+
+我们将广泛地使用块结构帮助我们将大型程序分为易处理的小部分[fn:6]. 这种块结构的思想来源与 Algol 60 语言. 它也在大部分高级编程语言中出现, 作为帮助组织大型程序构建的工具.
+
+* Footnotes
+
+[fn:6] Embedded definitions must come first in a procedure body. The management is not responsible for the consequences of running programs that intertwine definition and use.
+[fn:6] 嵌入的定义必须在函数体最前方出现. 不对运行定义和使用交织的程序而负责.
+
+[fn:5] Lexical scoping dictates that free variables in a procedure are taken to refer to bindings made by enclosing procedure definitions; that is, they are looked up in the environment in which the procedure was defined. We will see how this works in detail in [[file:Chapter3.org][Chapter 3]] when we study environments and the detailed behavior of the interpreter.
+[fn:5] 词法作用域简单来说是函数中的自由变量都被用于引用一个完整函数定义中的绑定; 即, 它们会在(它们)被定义的函数的环境中寻找. 我们将在第 [[file:Chapter3.org][3]] 章学习环境和解释器详细行为时了解它是如何工作的.
+
+[fn:4] The concept of consistent renaming is actually subtle and difficult to define formally. Famous logicians have made embarrassing errors here.
+[fn:4] 一致改名的想法是微妙的, 而且难以正式定义. 有名的逻辑学家也曾犯过一些尴尬的错误.
+
+[fn:3] It is not even clear which of these procedures is a more efficient implementation. This depends upon the hardware available. There are machines for which the “obvious” implementation is the less efficient one. Consider a machine that has extensive tables of logarithms and antilogarithms stored in a very efficient manner.
+[fn:3] 甚至哪种函数的实现更有效也是不确定的. 这依赖于有效的硬件. (确实)存在一些 "明显的" 实现更低效的机器. 想象一下有一台有着用高效的方式存储着对数表和反对数表的机器.
+
+[fn:2] 黑盒抽象
+
+[fn:1] 分治的思想
+

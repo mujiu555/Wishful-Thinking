@@ -1,0 +1,82 @@
+#+title: Chapter 1.1.3
+#+author: 暮玖(github@mujiu555)
+
+* 1.1.3 Evaluating Combinations 组合式求值
+
+One of our goals in this chapter is to isolate issues about thinking procedurally. As a case in point, let us consider that, in evaluating combinations, the interpreter is itself following a procedure.
+
+本章中我们的一个目标是独立有关过程式思考的论题, 举个特例, 我们先考虑, 在表达式求值时, 解释器本身跟着一个过程:
+
+    To evaluate a combination, do the following:
+
+    为了求值表达式, 需:
+
+        1. Evaluate the subexpressions of the combination.
+        2. Apply the procedure that is the value of the leftmost subexpression (the operator) to the arguments that are the values of the other subexpressions (the operands).
+
+        1. 对表达式的子表达式求值;
+        2. 将最左侧的子表达式(操作符)的值应用于其他表达式(操作数)的值的参数.
+
+Even this simple rule illustrates some important points about processes in general. First, observe that the first step dictates that in order to accomplish the evaluation process for a combination we must first perform the evaluation process on each element of the combination. Thus, the evaluation rule is /recursive/ in nature; that is, it includes, as one of its steps, the need to invoke the rule itself[fn:1].
+
+这简单的规则描述来普遍过程的一些重点. 首先, 可知, 第一步表明, 为了完成对组合式的求值过程, 我们必须对组合式的每一个元素求值. 既, 求值规则自然递归. 既, 它包含, 作为步骤之一的, 将规则作用于自身的需求[fn:1].
+
+Notice how succinctly the idea of recursion can be used to express what, in the case of a deeply nested combination, would otherwise be viewed as a rather complicated process. For example, evaluating
+
+注意到递归的思想在表达一个被视为复杂的处于多层嵌套中的组合式时多么有效, 例如: 求值:
+
+#+begin_src scheme
+(* (+ 2 (* 4 6)) (+ 3 5 7))
+#+end_src
+
+requires that the evaluation rule be applied to four different combinations. We can obtain a picture of this process by representing the combination in the form of a tree, as shown in [[Figure 1.1]]. Each combination is represented by a node with branches corresponding to the operator and the operands of the combination stemming from it. The terminal nodes (that is, nodes with no branches stemming from them) represent either operators or numbers. Viewing evaluation in terms of the tree, we can imagine that the values of the operands percolate upward, starting from the terminal nodes and then combining at higher and higher levels. In general, we shall see that recursion is a very powerful technique for dealing with hierarchical, treelike objects. In fact, the “percolate values upward” form of the evaluation rule is an example of a general kind of process known as /tree accumulation/.
+
+需要将求值规则应用于四种不同的组合式中, 我们可以将表达式以树的形式表示, 来的到关于这个函数的图像, 如[[Figure 1.1][图像1.1]]所示, 每个组合式都由一个带有代表了操作符与操作数的自其延伸出分支的节点来代表, 终端节点(没有由其发出其他分支的节点)代表操作符或操作数. 通过以数的方式观察求值过程, 我们可以想象被操作数的值自下而上递归, 自终端节点, 然后被组合到更高的层级. 总之, 我们会发现递归是一种处理有层级, 树状的对象的有力技术. 事实上, 这种 "向上传递值" 的求值规则的形式是一种被称作 "累积树" 的普适性过程的一个例子.
+
+#+begin_example
+           390
+           /\^^^^^^^^^^\
+          /  \          \
+         *   26         15
+             /|\      / /\ \
+            / | \    / /  \ \
+           *  2 24  +  3  5  7
+               /| \
+              / |  \
+             *  4   6
+#+end_example
+<<Figure 1.1>>: Tree representation, showing the value of each subcombination.
+
+Next, observe that the repeated application of the first step brings us to the point where we need to evaluate, not combinations, but primitive expressions such as numerals, built-in operators, or other names. We take care of the primitive cases by stipulating that
+
+然后, 注意到对第一步的重复执行, 使我们需要求值的地方, 不再为组合式, 而是如数, 原语, 或其他命名的基本表达式. 我们规定以下来处理这些基本情况:
+
+    + the values of numerals are the numbers that they name,
+    + the values of built-in operators are the machine instruction sequences that carry out the corresponding operations, and
+    + the values of other names are the objects associated with those names in the environment.
+
+    + 数的值是它们名字的数值[fn:2]
+    + 内置操作符的值是代表对应操作的由机器指令序列(机器码)
+    + 其他名字的值是环境中与那些名字相关联的对象的值
+
+We may regard the second rule as a special case of the third one by stipulating that symbols such as + and * are also included in the global environment, and are associated with the sequences of machine instructions that are their “values.” The key point to notice is the role of the environment in determining the meaning of the symbols in expressions. In an interactive language such as Lisp, it is meaningless to speak of the value of an expression such as (+ x 1) without specifying any information about the environment that would provide a meaning for the symbol x (or even for the symbol +). As we shall see in [[file:Chapter3.org][Chapter 3]], the general notion of the environment as providing a context in which evaluation takes place will play an important role in our understanding of program execution.
+
+我们可以通过规定如+和*这样的符号以及存在于全局环境之中, 并且以相对应的指令为值, 来将第二种情况视为第三种情况的特例. 重点在于, 环境在确定表达式中符号含义中的作用, 在一个如 Lisp 这样交互式的语言中, 不指明会提供符号 x (甚至于+) 的环境而言, 谈论表达式, 如(+ x 1)的值是毫无意义的, 我们将在[[file:Chapter3.org][第三章]]中见证, 提供了求值时的上下文的环境的普适性表示在我们理解程序的执行时起到了很重要的作用.
+
+Notice that the evaluation rule given above does not handle definitions. For instance, evaluating (define x 3) does not apply define to two arguments, one of which is the value of the symbol x and the other of which is 3, since the purpose of the define is precisely to associate x with a value. (That is, (define x 3) is not a combination.)
+
+注意到以上求值规则并不处理定义, 如, 求值(define x 3)并不是将 define 应用于两个参数, 一个是符号 x 的值而另一个是 3, 因为 define 的用意在于将 x 与 一个值相关联. (即, (define x 3)不是一个表达式).
+
+Such exceptions to the general evaluation rule are called /special forms/. *Define* is the only example of a special form that we have seen so far, but we will meet others shortly. Each special form has its own evaluation rule. The various kinds of expressions (each with its associated evaluation rule) constitute the syntax of the programming language. In comparison with most other programming languages, Lisp has a very simple syntax; that is, the evaluation rule for expressions can be described by a simple general rule together with specialized rules for a small number of special forms[fn:3].
+
+这些常规求值规则的特例被称作 "特殊形式". Define 只是我们到现在为止见到过的唯一特殊形式的例子, 不过, 很快我们将见到其他的. 每个特殊形式都有它们自己的求值规则. 这些不同的表达式(和它们相对应的求值规则)组成了这个语言的语法. 与其他语言相比, Lisp 的语法及其简洁, 即: 表达式求值规则可以由普适规则和一小部分特殊形式的特定规则描述[fn:3].
+
+* Footnotes
+[fn:3] Special syntactic forms that are simply convenient alternative surface structures for things that can be written in more uniform ways are sometimes called syntactic sugar, to use a phrase coined by Peter Landin. In comparison with users of other languages, Lisp programmers, as a rule, are less concerned with matters of syntax. (By contrast, examine any Pascal manual and notice how much of it is devoted to descriptions of syntax.) This disdain for syntax is due partly to the flexibility of Lisp, which makes it easy to change surface syntax, and partly to the observation that many “convenient” syntactic constructs, which make the language less uniform, end up causing more trouble than they are worth when programs become large and complex. In the words of Alan Perlis, “Syntactic sugar causes cancer of the semicolon.”
+可以以更统一的方式写就的事物的简单代替的表面结构的特殊语法(syntactic)形式有时会被称作 "语法糖" (syntactic sugar). 一个由 Peter Landin 所创造的术语, 与其他(编程)语言的使用者相比, Lisp 程序员不那么关系作为规则的语法相关的事物. (相反的, 检查任何 Pascal 手册, 然后观察它在语法描述上面下了多大功夫.) 这种对语法的轻视可能部分出于 Lisp 那足以轻易改变表层语法的灵活以及对于使语言不那么统一, 最终使得在程序变得庞大复杂时入不敷出的许多 "方便的" 语法构造的吸收, 如 Alan Perlis 所说: "语法糖导致分号癌".
+
+[fn:2] 字面量 , 如, 对于符号 123, 值就是 十进制数 123
+
+[fn:1] It may seem strange that the evaluation rule says, as part of the first step, that we should evaluate the leftmost element of a combination, since at this point that can only be an operator such as + or * representing a built-in primitive procedure such as addition or multiplication. We will see later that it is useful to be able to work with combinations whose operators are themselves compound expressions.
+求值规则的第一步说的, 我们应对最左边的元素求值, 听起来似乎很奇怪, 因为当前这里只会是如+或*这样代表了如加或乘的原语的操作符, 之后将会见到在处理那些组合式本身就是复杂表达式的表达式时这会多么有用.
+
