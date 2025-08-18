@@ -5,3 +5,5 @@ compiled/
 \#*
 .\#*
 tmp/*
+
+doc/books
