@@ -1,0 +1,6 @@
+[submodule "doc/root/IU-P423-P523-E313-E513/Essentials-of-Compilation"]
+	path = doc/root/IU-P423-P523-E313-E513/Essentials-of-Compilation
+	url = https://github.com/IUCompilerCourse/Essentials-of-Compilation
+[submodule "doc/root/IU-C311/Pearl"]
+	path = doc/root/IU-C311/Pearl
+	url = https://github.com/siriusdemon/Pearl.git
