@@ -74,12 +74,12 @@
 
       (implement zoo foo:constraint
         (define bar
-          (lambda () => ()
+          (lambda ()
             (display 1))))
 
       (implement zoo new
         (define new
-          (lambda (self) => ()
+          (lambda (self)
             (alloc:heap (this))))
 
       (define a (new zoo))
@@ -204,7 +204,9 @@
 ##### Procedure Call
 
 ``` scheme
-(<operator> <operand> ...)
+<call>          => (<operator> <operand> ...)
+<operator>      => <expression>
+<operand>       => [ '#&' <name> ] <expression>
 ```
 
 ##### Method Call
@@ -233,6 +235,13 @@ For dynamic dispatch:
 ((method <class> <operator-name>) <operand> ...)
 ```
 
+##### Annotation
+
+``` scheme
+<Annotation>    => '#@(' <name> { <operand> } ')'
+<name>          => <symbol>
+```
+
 #### Procedure Macro
 
 #### Reader Macro
@@ -247,6 +256,10 @@ For dynamic dispatch:
 
 #### Definition
 
+``` scheme
+<define>        => '(' 'define' <name> [ '#:type' <type> ] <init> ')'
+```
+
 + variable
 + function
 + generic
@@ -260,75 +273,106 @@ For dynamic dispatch:
 ##### Quotation
 
 ``` scheme
-<quotation>     => '(' 'quote' <datum> ')'
+<quotation>      => '(' 'quote' <datum> ')'
 ```
 
 ##### Function
 
 ``` scheme
-<lambda>        => '(' 'lambda' <formals> '=>' <returing> <body> ')'
-<formals>       => '(' { <param> } ')'
-                |  <param>
-                |  '(' <param> . <param> ')'
-<param>         => '(' [ <pass> ] <name> <type> [ <initial> ] [ <constraint> ] ')'
-<pass>          => '#:ref'         ; pass by reference
-                |  '#:in'          ; pass by reference, read only
-                |  '#:out'         ; pass by reference, ignore value
-                |  '#:val'         ; pass by value
-                |  '#:move'        ; do ownership move
-<name>          => <symbol>
-<type>          => <expression>
-<initial>       => <literals>
-<constraint>    => <expression>
-<returning>     => '(' { <type> } ')'
-<body>          => <expression>
+<lambda>         => 
+'(' 'lambda' <formals> [ ('#:returns' <returning>) | ('=>' <returning>) ] 
+    <body> ')'
+<formals>        => '(' { <param> } ')'
+                 |  <param>
+                 |  '(' <param> . <param> ')'
+<param>          => '(' [ <pass> ] <name> <type> [ <initial> ] [ <constraint> ] ')'
+<pass>           => '#:ref'         ; pass by reference
+                 |  '#:in'          ; pass by reference, read only
+                 |  '#:out'         ; pass by reference, ignore value
+                 |  '#:val'         ; pass by value
+                 |  '#:move'        ; do ownership move
+<name>           => <symbol>
+<type>           => <expression>
+<initial>        => <literals>
+<constraint>     => <expression>
+<returning>      => '(' { <type> } ')'
+                 |  <nil>
+                 |  <type>
+<body>           => <expression>
+```
+
+``` scheme
+<function>       => '(' 'function' <formals> <returning> ')'
+<formals>        => '(' { <param> } ')'
+                 |  <param>
+                 |  '(' <param> . <param> ')'
+<param>          => '(' [ <pass> ] <name> <type> [ <initial> ] [ <constraint> ] ')'
+<pass>           => '#:ref'         ; pass by reference
+                 |  '#:in'          ; pass by reference, read only
+                 |  '#:out'         ; pass by reference, ignore value
+                 |  '#:val'         ; pass by value
+                 |  '#:move'        ; do ownership move
+<name>           => <symbol>
+<type>           => <expression>
+<initial>        => <literals>
+<constraint>     => <expression>
+<returning>      => '(' { <type> } ')'
+                 |  <nil>
+                 |  <type>
 ```
 
 ##### Logical Expression
 
 ``` scheme
-<and>           => '(' 'and' { <test> } ')'
-<or>            => '(' 'or' { <test> } ')'
-<xor>           => '(' 'xor' { <test> } ')'
-<not>           => '(' 'not' <test> ')'
+<and>            => '(' 'and' { <test> } ')'
+<or>             => '(' 'or' { <test> } ')'
+<xor>            => '(' 'xor' { <test> } ')'
+<not>            => '(' 'not' <test> ')'
 ```
 
 ##### Conditionals
 
 ``` scheme
-<if>            => '(' 'if' <test> <consequent> [ <alternate> ] ')'
+<if>             => '(' 'if' <test> <consequent> [ <alternate> ] ')'
 ```
 
 ``` scheme
-<cond>          => '(' 'cond' <entry> { <entry> } ')'
-<entry>         => '(' <test> <consequent> ')'
-                |  '(' ':else' <consequent> ')'
+<cond>           => '(' 'cond' <entry> { <entry> } ')'
+<entry>          => '(' <test> <consequent> ')'
+                 |  '(' ':else' <consequent> ')'
 ```
 
 ``` scheme
-<case>          => '(' 'case' <val> <entry> { <entry> } ')'
-<val>           => <expression>
-<entry>         => '(' <pattern> <consequent> ')'
-                |  '(' ':else' <consequent ')'
-<pattern>       => <expression>
+<case>           => '(' 'case' <val> <entry> { <entry> } ')'
+<val>            => <expression>
+<entry>          => '(' <pattern> <consequent> ')'
+                 |  '(' ':else' <consequent ')'
+<pattern>        => <expression>
 ```
 
 Pattern match utility:
 
 ``` scheme
-<match>         => '(' 'match' <val> <entry> { <entry> } ')'
-<val>           => <expression>
-<entry>         => '(' <pattern> <consequent> ')'
-                |  '(' '_' <consequent ')'
-<pattern>       => <expression>
+<match>          => '(' 'match' <val> <entry> { <entry> } ')'
+<val>            => <expression>
+<entry>          => '(' <pattern> <consequent> ')'
+                 |  '(' '_' <consequent ')'
+<pattern>        => <expression>
+```
+
+##### Loop
+
+``` scheme
+<iter>           => '(' 'iter' '(' <binding-lst> { <binding-lst> } ')'  <body> ')'
+<binding-lst>    => '(' <name> <enumerable> ')'
 ```
 
 ##### Assignment
 
 ``` scheme
 <set!>           => '(' 'set!' <variable> <value> ')'
-<variable>      => <expression>
-<value>         => <expression>
+<variable>       => <expression>
+<value>          => <expression>
 ```
 
 Assignable
@@ -336,23 +380,23 @@ Assignable
 ##### Binding Structures
 
 ``` scheme
-<let>           => '(' 'let' ({ <binding-lst> }) <body> ')'
-<binding-lst>   => '(' <variable> <init> [ <type> ] ')'
+<let>            => '(' 'let' '(' { <binding-lst> } ')' <body> ')'
+<binding-lst>    => '(' <variable> [ '#:type' <type> ] [ <init> ] ')'
 
-<let:fwd>       => '(' 'let:fwd' ({ <binding-lst> }) <body> ')'
-<let:rec>       => '(' 'let:rec' ({ <binding-lst> }) <body> ')'
-<let:rec:fwd>   => '(' 'let:rec:fwd' ({ <binding-lst> }) <body> ')'
+<let:fwd>        => '(' 'let:fwd' '(' { <binding-lst> } ')' <body> ')'
+<let:rec>        => '(' 'let:rec' '(' { <binding-lst> } ')' <body> ')'
+<let:rec:fwd>    => '(' 'let:rec:fwd' '(' { <binding-lst> } ')' <body> ')'
 
-<for>           => '(' 'for' <name> ({ <binding-lst> }) <body> ')'
+<for>            => '(' 'for' <name> '(' { <binding-lst> } ')' <body> ')'
 ```
 
 ##### Sequence
 
 ``` scheme
-<sequence>      => '(' 'sequence' [ '#:tag' <name> ] <body> ')'
-<body>          => <expression>
-                |  '(' ':break' [ '#:tag' <name> ] [ <value> ] ')'
-<value>         => <expression>
+<sequence>       => '(' 'sequence' [ '#:tag' <name> ] <body> ')'
+<body>           => <expression>
+                 |  '(' ':break' [ '#:tag' <name> ] [ <value> ] ')'
+<value>          => <expression>
 ```
 
 ##### Equivalent Predicate
@@ -400,18 +444,53 @@ Assignable
 '(' ':properties' <defprop> { <defprop> } ')'
 
 <deffield>       =>
-'(' 'define' <name> <type> [ <init> ] ')'
+'(' 'define' <name> [ '#:type' ] <type> [ <init> ] ')'
 <defprop>        =>
-'(' 'define' <name> <type> <init> <getter> <setter> ')'
+'(' 'define' <name> [ '#:type' ] <type> <init> <getter> <setter> ')'
+```
+
++ Type Self Reference
+
+``` scheme
+<Self>           => '&Self'
+```
+
++ Interface
+
+``` scheme
+<interface>      =>
+'(' 'interface' <inherits>
+   <methods>
+  { <methods> } ')'
 ```
 
 + Method
 
 ``` scheme
-<interface>      =>
-'(' 'interface' <inherits>
-   <methods> ')'
+<method>         => '(' 'define' <name> <lambda> ')'
+<lambda>         => '(' 'lambda' <formals> [ '#:returns' <types> ] <body> ')'
+<formals>        => '(' { <param> } ')'
+                 |  <param>
+                 |  '(' <param> . <param> ')'
+<param>          => '(' [ <pass> ] <name> <type> [ <initial> ] [ <constraint> ] ')'
+                 |  [ <pass> ] <self>
+<pass>           => '#:ref'         ; pass by reference
+                 |  '#:in'          ; pass by reference, read only
+                 |  '#:out'         ; pass by reference, ignore value
+                 |  '#:val'         ; pass by value
+                 |  '#:move'        ; do ownership move
 ```
+
++ Implement
+
+``` scheme
+<implement>      =>
+'(' 'implement' <class> [ <interface> ]
+   <method>
+   { <method> } ')'
+```
+
++ Generic
 
 ###### Trait Shadow
 
