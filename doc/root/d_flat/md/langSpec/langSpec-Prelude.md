@@ -125,6 +125,9 @@ Pattern match utility:
 
 #### Assignment
 
+`set!` is a generic function that works for any type
+that implements `Assignable` interface.
+
 ``` scheme
 <set!>           => '(' 'set!' <variable> <value> ')'
 <variable>       => <expression>
@@ -183,72 +186,10 @@ Assignable
 
 ### Type
 
-+ Class:
+#### Interfaces
 
-``` scheme
-<class>          =>
-'(' 'class' <inherits>
-   [ '#:super' <super> ]
-   [ '#:self' <self> ]
-   { <fields> }
-   { <properties> } ')'
-
-<inherits>       => '(' { <class> } ')'
-<fields>         =>
-'(' ':fields' <deffield> { <deffield> } ')'
-<properties>     =>
-'(' ':properties' <defprop> { <defprop> } ')'
-
-<deffield>       =>
-'(' 'define' <name> [ '#:type' ] <type> [ <init> ] ')'
-<defprop>        =>
-'(' 'define' <name> [ '#:type' ] <type> <init> <getter> <setter> ')'
-```
-
-+ Type Self Reference
-
-``` scheme
-<Self>           => '&Self'
-```
-
-+ Interface
-
-``` scheme
-<interface>      =>
-'(' 'interface' <inherits>
-   <methods>
-  { <methods> } ')'
-```
-
-+ Method
-
-``` scheme
-<method>         => '(' 'define' <name> <lambda> ')'
-<lambda>         => '(' 'lambda' <formals> [ '#:returns' <types> ] <body> ')'
-<formals>        => '(' { <param> } ')'
-                 |  <param>
-                 |  '(' <param> . <param> ')'
-<param>          => '(' [ <pass> ] <name> <type> [ <initial> ] [ <constraint> ] ')'
-                 |  [ <pass> ] <self>
-<pass>           => '#:ref'         ; pass by reference
-                 |  '#:in'          ; pass by reference, read only
-                 |  '#:out'         ; pass by reference, ignore value
-                 |  '#:val'         ; pass by value
-                 |  '#:move'        ; do ownership move
-```
-
-+ Implement
-
-``` scheme
-<implement>      =>
-'(' 'implement' <class> [ <interface> ]
-   <method>
-   { <method> } ')'
-```
-
-+ Generic
-
-#### Trait Shadow
++ Assignable
++ Mutable
 
 ### Multiple Values
 
