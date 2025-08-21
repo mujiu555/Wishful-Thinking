@@ -18,16 +18,30 @@
 
 #### Method Call
 
+To locate a method:
+
+``` scheme
+(method <object> <operator-name)
+(method <class> <operator-name)
+```
+
 For static dispatch:
 
 ``` scheme
 ((method <object> <operator-name>) <object> <operand> ...)
+((method <class> <operator-name>) <object> <operand> ...)
 ```
 
 For dynamic dispatch:
 
 ``` scheme
 (invoke <object> <operator-name> <operand> ...)
+```
+
+To locate a method precisely:
+
+``` scheme
+(method <class> <interface> <operator-name)
 ```
 
 #### Method Call Abbreviation
