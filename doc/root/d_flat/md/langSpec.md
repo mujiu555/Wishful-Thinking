@@ -319,9 +319,9 @@ parameter-definition ::= <parameter>
                      |   (<parameter> ... [. <parameter>])
                      |   (<parameter> ... [#&rest <parameter>])
 parameter            ::= (<symbol> [<reference>]
-                             [#:type <class>]
+                                   [#:type <class>]
                                    [#:default <val>]
-           [#:constraint <expression>])
+                                   [#:constraint <expression>])
                |    (list <symbol> [#:type <class>])
                |    (array <symbol> [#:type <class>])
 reference            ::= #:ref
