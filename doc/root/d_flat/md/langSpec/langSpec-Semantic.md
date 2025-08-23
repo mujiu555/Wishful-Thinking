@@ -6,6 +6,11 @@
 
 ### Variable, Binding, Scope & Environment
 
+### Array
+
+Array is a continuous memory space.
+It drop the `Assignable` interface, and implemented `Index` interface.
+
 ### Exceptional Condition
 
 ### Argument Check
