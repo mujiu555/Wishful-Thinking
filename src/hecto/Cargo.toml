@@ -4,5 +4,4 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-termion = "4.0.5"
-ratatui = "0.30.0-alpha.5"
+crossterm = "0.29.0"
