@@ -108,6 +108,8 @@
 
 Pattern match utility:
 
+It provided with structure-deconstruct ability.
+
 ``` scheme
 <match>          => '(' 'match' <val> <entry> { <entry> } ')'
 <val>            => <expression>
