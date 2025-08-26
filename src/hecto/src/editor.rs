@@ -1,7 +1,7 @@
 use crate::Cursor;
 use crate::Terminal;
-use std::io::{Write, stdout};
-use termion::event::Key;
+use crossterm::event::KeyCode;
+use crossterm::event::KeyEvent;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -29,17 +29,23 @@ impl Editor {
     pub fn new() -> Self {
         Self {
             quit: false,
-            term: Terminal::new().expect("Failed to initialize terminal"),
-            cur: Cursor::new(),
+            term: Terminal::default(),
+            cur: Cursor::default(),
         }
     }
 
     fn process_keypress(&mut self) -> Result<(), std::io::Error> {
         let key = Terminal::read()?;
-        match key {
-            Key::Esc => self.quit = true,
+        let KeyEvent {
+            code,
+            modifiers,
+            kind,
+            state,
+        } = key;
+        match code {
+            KeyCode::Esc => self.quit = true,
             // TODO:
-            Key::Up => self.quit = false,
+            KeyCode::Up => self.quit = false,
             _ => (),
         }
         Ok(())
