@@ -1,51 +1,59 @@
-use std::io::{Write, stdin, stdout};
-use termion::{event::Key, input::TermRead, raw::IntoRawMode, raw::RawTerminal};
+use std::io::stdout;
 
-pub struct Size {
-    pub width: u16,
-    pub height: u16,
+use crate::Cursor;
+use crossterm::event::{self, Event, KeyEvent};
+use crossterm::terminal::{
+    Clear, EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
+};
+use crossterm::{ExecutableCommand, execute};
+
+#[derive(Debug)]
+struct Size {
+    width: usize,
+    height: usize,
 }
 
+#[derive(Debug)]
 pub struct Terminal {
-    _stdout: RawTerminal<std::io::Stdout>,
+    size: Size,
+    cursor: Cursor,
+}
+
+impl Default for Terminal {
+    fn default() -> Self {
+        Self {
+            size: Size {
+                width: 1,
+                height: 1,
+            },
+            cursor: Cursor::default(),
+        }
+    }
 }
 
 impl Terminal {
-    /// # Errors
-    pub fn new() -> Result<Self, std::io::Error> {
-        Ok(Self {
-            _stdout: stdout().into_raw_mode()?,
-        })
+    pub fn init() -> Result<(), std::io::Error> {
+        enable_raw_mode()?;
+        execute!(stdout(), EnterAlternateScreen)?;
+        Ok(())
     }
 
-    #[must_use]
-    pub fn size() -> Result<Size, std::io::Error> {
-        let size = termion::terminal_size()?;
-        Ok(Size {
-            width: size.0,
-            height: size.1,
-        })
+    pub fn exit() -> Result<(), std::io::Error> {
+        execute!(stdout(), LeaveAlternateScreen)?;
+        disable_raw_mode()?;
+        Ok(())
     }
 
-    pub fn clear() {
-        print!("{}", termion::clear::All);
-    }
-
-    pub fn clear_line() {
-        print!("{}", termion::clear::CurrentLine);
-    }
-
-    /// # Errors
-    pub fn flush() -> Result<(), std::io::Error> {
-        stdout().flush()
-    }
-
-    /// # Errors
-    pub fn read() -> Result<Key, std::io::Error> {
+    pub fn read() -> Result<KeyEvent, std::io::Error> {
         loop {
-            if let Some(k) = stdin().lock().keys().next() {
-                return k;
+            if let Event::Key(key) = event::read()? {
+                return Ok(key);
             }
         }
+    }
+
+    pub fn clear() -> Result<(), std::io::Error> {
+        stdout().execute(Clear(crossterm::terminal::ClearType::All))?;
+        Ok(())
     }
 }

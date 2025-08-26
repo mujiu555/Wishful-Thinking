@@ -1,32 +1,18 @@
-use std::io::{self, Write, stdin, stdout};
-use termion::{event::Key, input::TermRead, raw::IntoRawMode, raw::RawTerminal};
-
+#[derive(Debug)]
 struct Pos {
-    x: usize,
-    y: usize,
+  x: usize,
+  y: usize,
 }
 
+#[derive(Debug)]
 pub struct Cursor {
-    pos: Pos,
+  pos: Pos,
 }
 
-impl Cursor {
-    pub fn new() -> Self {
-        Self {
-            pos: Pos { x: 0, y: 0 },
-        }
+impl Default for Cursor {
+  fn default() -> Self {
+    Self {
+      pos: Pos { x: 0, y: 0 },
     }
-    pub fn pos(x: u16, y: u16) {
-        let x = x.saturating_add(1);
-        let y = y.saturating_add(1);
-        print!("{}", termion::cursor::Goto(x, y));
-    }
-
-    pub fn hide() {
-        print!("{}", termion::cursor::Hide);
-    }
-
-    pub fn show() {
-        print!("{}", termion::cursor::Show);
-    }
+  }
 }
