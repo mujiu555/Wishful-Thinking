@@ -1,59 +1,117 @@
-use crate::Cursor;
+use crate::Buffer;
+use crate::INIT_EXPT;
 use crate::Terminal;
+use crate::exp::EXIT_EXPT;
 use crossterm::event::KeyCode;
 use crossterm::event::KeyEvent;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
+#[derive(Default)]
 pub struct Editor {
     quit: bool,
     term: Terminal,
-    cur: Cursor,
+    buf: Buffer,
+}
+
+impl Editor {
+    pub fn new() -> Result<Self, std::io::Error> {
+        Ok(Editor {
+            quit: false,
+            term: Terminal::new()?,
+            buf: Buffer::default(),
+        })
+    }
 }
 
 impl Editor {
     pub fn run(&mut self) {
+        self.term.init().expect(INIT_EXPT);
         loop {
             if let Err(e) = self.refresh() {
-                die(e);
+                self.die(e);
             }
             if self.quit {
                 break;
             }
             if let Err(e) = self.process_keypress() {
-                die(e);
+                self.die(e);
             }
         }
-    }
-
-    pub fn new() -> Self {
-        Self {
-            quit: false,
-            term: Terminal::default(),
-            cur: Cursor::default(),
-        }
+        self.term.exit().expect(EXIT_EXPT);
     }
 
     fn process_keypress(&mut self) -> Result<(), std::io::Error> {
         let key = Terminal::read()?;
         let KeyEvent {
             code,
-            modifiers,
-            kind,
-            state,
+            modifiers: _modifiers,
+            kind: _kind,
+            state: _state,
         } = key;
         match code {
             KeyCode::Esc => self.quit = true,
-            // TODO:
-            KeyCode::Up => self.quit = false,
+            KeyCode::Up
+            | KeyCode::Down
+            | KeyCode::Right
+            | KeyCode::Left
+            | KeyCode::PageUp
+            | KeyCode::PageDown
+            | KeyCode::End
+            | KeyCode::Home => self.cursor(key)?,
             _ => (),
         }
         Ok(())
     }
 
-    fn wlcome_msg() {
+    fn cursor(&mut self, key: KeyEvent) -> Result<(), std::io::Error> {
+        let KeyEvent {
+            code,
+            modifiers: _modifiers,
+            kind: _kind,
+            state: _state,
+        } = key;
+        match code {
+            KeyCode::Up => {
+                self.term.prev(1)?;
+                self.buf.prev(1)?;
+            }
+            KeyCode::Down => {
+                self.term.next(1)?;
+                self.buf.next(1)?;
+            }
+            KeyCode::Left => {
+                self.term.back(1)?;
+                self.buf.back(1)?;
+            }
+            KeyCode::Right => {
+                self.term.forward(1)?;
+                self.buf.forward(1)?;
+            }
+            KeyCode::PageUp => {
+                self.term.prev((self.term.height()? as usize).div_ceil(2))?;
+                self.buf.prev((self.term.height()? as usize).div_ceil(2))?;
+            }
+            KeyCode::PageDown => {
+                self.term.next((self.term.height()? as usize).div_ceil(2))?;
+                self.buf.next((self.term.height()? as usize).div_ceil(2))?;
+            }
+            KeyCode::Home => {
+                self.term.bol()?;
+                self.buf.bol()?;
+            }
+            KeyCode::End => {
+                self.term.eol()?;
+                self.buf.eol()?;
+            }
+            _ => (),
+        }
+        Ok(())
+    }
+
+    fn wlcome_msg(&mut self) {
         let wlcome_msg = format!("version -- {VERSION}");
-        let w = Terminal::size().unwrap().width as usize;
+        let w = self.term.width().unwrap() as usize;
         let len = wlcome_msg.len();
         let padding = w.saturating_sub(len) / 2;
         let spaces = " ".repeat(padding.saturating_sub(1));
@@ -62,32 +120,34 @@ impl Editor {
         println!("~{wlcome_msg}\r",);
     }
 
-    fn refresh(&self) -> Result<(), std::io::Error> {
-        Cursor::pos(0, 0);
+    fn refresh(&mut self) -> Result<(), std::io::Error> {
         if self.quit {
-            Cursor::pos(0, 0);
-            println!("quit!");
+            self.term.goto(1, 1)?;
+            println!("quit!\r");
         } else {
-            Self::lines();
-            Cursor::pos(0, 0);
+            self.lines()?;
+            self.term.hide()?;
         }
-        stdout().flush()
+        self.term.refresh()?.show()?;
+        Ok(())
     }
 
-    fn lines() {
-        let h = Terminal::size().unwrap().height;
-        for row in 0..h - 1 {
-            Terminal::clear_line();
-            if row == h / 3 {
-                Self::wlcome_msg();
+    fn lines(&mut self) -> Result<(), std::io::Error> {
+        print!("\r");
+        let height = self.term.height().unwrap();
+        for row in 0..height - 1 {
+            self.term.clear_line()?;
+            if row == height / 3 {
+                self.wlcome_msg();
             } else {
                 println!("~\r");
             }
         }
+        Ok(())
     }
-}
 
-fn die(e: impl std::error::Error) {
-    Terminal::clear();
-    panic!("{}", e);
+    fn die(&mut self, e: impl std::error::Error) {
+        self.term.clear().unwrap();
+        panic!("{}", e);
+    }
 }
