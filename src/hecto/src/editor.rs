@@ -1,7 +1,7 @@
 use crate::Buffer;
+use crate::EXIT_EXPT;
 use crate::INIT_EXPT;
 use crate::Terminal;
-use crate::exp::EXIT_EXPT;
 use crossterm::event::KeyCode;
 use crossterm::event::KeyEvent;
 
