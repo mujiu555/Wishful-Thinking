@@ -10,7 +10,21 @@
 <define>        => '(' 'define' <name> [ '#:type' <type> ] <init> ')'
 ```
 
-+ variable
++ constants:
+  When `<init>` for definition is a constant,
+  then the symbol `<name>` represented that constant.
++ variable:
+  `alloc:` family will allocate a space for specified type,
+  and `new` family will allocate that space,
+  and do default construct.
++ array:
+  `alloc:` family function can allocate space for
+  more than only one slot, this continuous space,
+  traditionally, is call array.
+  Provide an array directly to a function needs
+  single value is not allowed.
+  Array can be indexed or provide to a function in whole.
+  Each array has its own type.
 + function
 + generic
 + macro
@@ -108,8 +122,6 @@
 
 Pattern match utility:
 
-It provided with structure-deconstruct ability.
-
 ``` scheme
 <match>          => '(' 'match' <val> <entry> { <entry> } ')'
 <val>            => <expression>
@@ -176,7 +188,7 @@ Assignable
 
 ### Symbol
 
-### Pair & List
+### Pair
 
 ### Character
 
@@ -184,7 +196,17 @@ Assignable
 
 ### Array
 
+Array is some structure that is fixed-length and same-type-inside.
+
+Array actually hold an array in literal.
+
+### List
+
+### Slice
+
 ### Error
+
+### `alloc:stack`, `alloc:heap` & `new`
 
 ### Type
 
