@@ -137,5 +137,64 @@ The span of a map are linear space constructed by the base of matrix.
 
 == Basis
 
+If, there are exactly n vectors $arrow(e)_1, ..., arrow(e)_n$
+such that $"span"(arrow(e)_1, ..., arrow(e)_n) = RR^n$.
+Then those vectors are a basis of $RR^n$
 
+NOTE. If and only if there are exactly n vectors, neither more or less.
 
+- The vectors are linear independent
+- Maybe orthogonal: 正交
+
+== Orthogonal Basis
+
+When two vectors has zero as their result for dot product,
+the two vectors are orthogonal.
+For two vector in $RR^2$ Space, they are orthogonal if they has $theta = 90degree$
+
+For vectors $arrow(e)_1, ..., arrow(e)_n$ are basis vectors and
+$ angle.l arrow(e)_i, arrow(e)_j angle.r = brace ^(1, i = j,)_(0, "otherwise".) $
+
+== Gram-Schmidt method
+
+To gain a orthogonal basis of a plant with non-orthogonal basis,
+use Gram-Schmidt method.
+
++ normalize first vector: divide by its length
+  $arrow(e)_1 := arrow(u)_1 / (|arrow(u)_1|)$
++ subtract any component of the 1st vector from the 2nd one
+  $arrow(u)_2 := arrow(u)_2 - angle.l arrow(u)_2, arrow(e)_1 angle.r arrow(e)_1$
++ normalize 2nd
++ until all normalized
+
+PS. For float numbers, using qr decomposition.
+
+== Fourier Transform
+
+Project onto basis of sinusoids: $sin(n x), cos(m x), m, n in NN$
+
+$LL^2$ Linear map of those two are orthogonal.
+
+A linear map from one basis to another.
+Projecting a signal onto different frequent.
+
+== System of Linear Equations
+
+A bunch of equations where left hand is a linear function,
+and right hand side is constant.
+
+- Degrees of freedom: unknown values, columns in left side of augmented matrix
+- Constraints: equations
+- Goal: solve for DOFs that simultaneously satisfied constraint.
+
+Review:
+- Row Rank: non-zero line
+- Pivot: first non-zero value's position of a line in reduced echelon form.
+  Pivots must existed in different columns and different rows.
+- $"col" = "row-rank" + "free-variables" = "DOFs"$
+
+== Visualization
+
+== Uniqueness, existence of Solutions
+
+== Matrices in Linear Algebra
