@@ -116,6 +116,7 @@
 + Allocation
   + `alloc:stack`: Object Allocated in Stack
   + `alloc:heap`: Object Allocated in Heap
+  + `new`: Object creation
 + Auto Life-cycle Detection
 + Auto Type Detection
 + Expression Tree
