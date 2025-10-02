@@ -128,7 +128,7 @@ impl Terminal {
     pub fn forward(&mut self, step: usize) -> Result<&mut Self, std::io::Error> {
         let mut new_x = self.x().saturating_add(step);
         if new_x >= self.width()? as usize {
-            new_x = self.width()? as usize;
+            new_x = self.width()? as usize - 1;
         }
         self.cur.goto(new_x, self.y());
         Ok(self)
@@ -143,7 +143,7 @@ impl Terminal {
     pub fn next(&mut self, step: usize) -> Result<&mut Self, std::io::Error> {
         let mut new_y = self.y().saturating_add(step);
         if new_y >= self.height()? as usize {
-            new_y = self.height()? as usize;
+            new_y = self.height()? as usize - 1;
         }
         self.cur.goto(self.x(), new_y);
         Ok(self)
