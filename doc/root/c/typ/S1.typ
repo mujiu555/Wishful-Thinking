@@ -25,7 +25,6 @@ C 驱动着世界上绝大多数设备的运行.
 C是一门高级语言, 但是何为高级语言?
 
 == 高级语言
-<高级语言>
 
 高级语言是相对于低级语言而言的. 一般而言, 我们所说的低级语言,
 是各个不同设备上面的汇编语言, 这些语言非常强大, 可以操作 CPU,
@@ -53,8 +52,7 @@ C是一门高级语言, 但是何为高级语言?
 
 这就为程序的移植提供了极大的方便, 不再需要手动为不同的平台进行适配.
 
-== 中级语言
-<中级语言>
+=== 中级语言
 
 C语言虽然名义上是一个高级语言, 但是很多人并不这么认为,
 因为C语言并不提供一种通用的内存管理方案.
@@ -64,8 +62,7 @@ C语言虽然名义上是一个高级语言, 但是很多人并不这么认为,
 因此, 便有人将C语言称作中级语言, 过渡语言. 不过,
 这不过是称呼上的差别而已.
 
-== 编译 & 解释
-<编译-解释>
+=== 编译 & 解释
 
 CPU 实际上只能够理解和运行二进制的机器码.
 因此, 直接以人类可读形式写出来的代码, 计算机没有办法直接执行.
@@ -111,7 +108,6 @@ CPU 实际上只能够理解和运行二进制的机器码.
 便是通过解释器执行的, 因此才认为 python语言 是一门编译型语言.
 
 == 环境
-<环境>
 
 不知道大家是否喜欢玩 PC 上的游戏, 有时候玩游戏会提示缺少 `DirectX`
 运行时环境, 编程也和玩游戏一样, 是需要环境的. 一般而言,
@@ -141,7 +137,6 @@ Education)" 和 "理论计算机导论 (Introduction to Theoretical Computer
 Science)" 中找到.
 
 === 环境变量
-<环境变量>
 
 环境变量是一种可以被程序读取, 并根据其值进行配置的一些 "键-值" 对.
 简单的理解, 就是字典的索引, 当我试图索引一些信息的时候, 可以先去目录找到
@@ -162,7 +157,6 @@ Science)" 中找到.
 - 好吧其实目前只用知道 PATH 一个就够了 (
 
 === Windows
-<windows>
 
 对于 Windows 而言, 环境变量的修改非常便捷安全:
 
@@ -173,7 +167,6 @@ Science)" 中找到.
 如果需要编辑任何之一, 只需要双击点选项目, 就可以看见对应修改界面了.
 
 === Linux, MacOS & \*nix
-<linux-macos-nix>
 
 对于类Unix及Unix系统而言, 环境变量的修改往往和用户配置文件相关联. 不过,
 实际上, 要在这类系统上安装 C 的编程环境, 完全不需要对环境变量做过多修改,
@@ -212,7 +205,6 @@ pkg install gcc
 ```
 
 == Hello, World
-<hello-world>
 
 于是便到了我们的第一个程序: Hello, World!
 
@@ -242,7 +234,7 @@ int main(void) {
 
 大家可以在终端中输入 ```sh ./hello``` 来执行它.
 
-== Explanation
+=== Explanation
 
 这段程序, 首先是一串以 '\#' 号开头的文本, 这句话表示,
 我们引入了一个名叫stdio的库的定义.
@@ -266,7 +258,7 @@ Stdio, 是 "Standard Input / Output" 的简称,
 再重新编译一下这个程序, 看看是否会有区别.
 如果将尖括号改成双引号呢?
 
-== Library
+=== Library
 
 C语言的内核很小, 只包括了一些非常基础的功能, 而其他的部分则都通过库来提供.
 同时又因为它相对比较简陋, 所以当我们使用它的库的时候需要一个描述文件,
@@ -278,7 +270,7 @@ C语言的内核很小, 只包括了一些非常基础的功能, 而其他的部
 
 下面就是我们程序的主体了.
 
-== main
+=== main
 
 ```c
 int main(void) {
@@ -315,7 +307,7 @@ return 0;
 
 这其实也涉及到了一些后面的知识, 所以目前记住主函数的结束, 必须写上这样一句 ```c return 0;```就可以了.
 
-== Expression: Sentence.
+=== Expression: Sentence.
 
 大家如果仔细观察了, 就会发现, main函数内部的两个东西, 结尾都是分号.
 
@@ -367,7 +359,7 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 ], size: 8pt)
 这就是我们说的 "静态类型" 系统.
 
-== Literal
+=== Literal
 
 字面量, 就像我们在解数学题目的时候, 会写下一些系数, 一些常量,
 字面量就是直接出现在程序当中的常量.
@@ -376,7 +368,7 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 而计算机程序中的常量, 则仅仅只是表示一个变量不会被改变而已...
 通过一些特殊的手段, 我们也是可以让一个常量打开心扉, 接受新的数值的.
 
-== Basic Data Types
+=== Basic Data Types
 
 对于简单的编程任务, C语言定义了一些基本数据类型.
 它们涵盖了数字, 文本和逻辑(好吧其实并没有).
@@ -505,7 +497,7 @@ wprintf(L"Hello World");
 c语言中并不是很常用到8位的数值, 因此这样的代替也并不是很大的问题.
 当我们真的需要它的时候, 也可以临时用 ```c char``` 类型充当一下.
 
-== Logical Values
+=== Logical Values
 
 当然, 计算机也不总是只处理数值.
 作为一堆二三极管, 逻辑门, 晶体管拼接而成的产物,
@@ -519,7 +511,7 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 
 很简单对不对.
 
-== Void Type
+=== Void Type
 
 以上的类型, 都还很具体, 不过当我们需要表示 "这里没有东西" 呢?
 该怎么办?
@@ -564,19 +556,37 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
   table.hline(),
 )
 
-== Logical Operations
+=== Logical Operations
 
-== Bitwise Logical
+=== Bitwise Logical
 
-== Overflow
+=== Overflow
 
-== Binary Calculation
+=== Binary Calculation
 
-== 2's Completion
+=== 2's Completion
+
+== Syntax
+
+=== Statements
+
+=== Expression
+
+=== Code Block
+
+=== Empty Lines & Space
+
+=== Comment
 
 == Variables & Variable space
 
 == Type Convert
+
+== Input And Output
+
+=== ```c printf```
+
+=== ```c scanf```
 
 == Array
 
@@ -608,7 +618,7 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 
 == Memory Management
 
-== Virtual Memory (OS)
+=== Virtual Memory (OS)
 
 == Function Call
 
@@ -620,9 +630,9 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 
 == `Struct`
 
-== Simulate `class` Using Structure
+=== Simulate `class` Using Structure
 
-== Virtual Function Table
+=== Virtual Function Table
 
 == `Enum`
 
@@ -634,23 +644,41 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 
 == Pointers
 
-== Pointer offset, index & linked list
+=== Pointer offset, index & linked list
+
+=== Void Pointers
+
+=== Pointer Convert
 
 == Pointer in Assembly
 
-== Macro, C Style Macro, Template, Process Macro in Rust, Extended Macro for Common Lisp & Hygiene Macro System
+== Preprocessor
+
+=== Header files
+
+=== Macro, C Style Macro, Template, Process Macro in Rust, Extended Macro for Common Lisp & Hygiene Macro System
+
+=== Compiler Comments
+
+=== ```c #program```
 
 == Meta-programming
 
 == Compiler
 
-== Compile Process
+=== Compile Process
 
-== Compiler Driver
+=== Compiler Driver
 
-== Linker
+=== Assembler
 
-== Link
+=== Assemble
+
+=== Assembly Code
+
+=== Linker
+
+=== Link
 
 == Dynamic Linked Library
 
@@ -664,4 +692,6 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 
 == Multiple File Compile
 
-== ...
+== Variable Decorator
+
+== \_Generic
