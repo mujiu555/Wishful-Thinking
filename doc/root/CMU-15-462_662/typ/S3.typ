@@ -248,3 +248,74 @@ result to $gradient F(f_0) = 2 f_0$
 == Vector Fields
 
 Assign a vector to each point.
+
+Divergence:
+how much a field shrinking/expanding.
+$ gradient dot X $
+Given $gradient = angle.l (partial) / (partial u_1), ..., (partial) / (partial u_n) angle.r$,
+and, $X(arrow(u)) = angle.l X_1 (arrow(u)), ..., X_n (arrow(u)) angle.r$,
+then, $gradient dot X = sum_(i=1)^n (partial) / (partial u_i) X_i arrow(u)$
+
+Curl:
+how much is field spinning.
+$ gradient times X $
+Still, $gradient = angle.l (partial) / (partial u_1), ..., (partial) / (partial u_3) angle.r$, and $X(arrow(u)) = angle.l X_1(arrow(u)), ..., X_3(arrow(u)) angle.r$,
+then, ...
+Furthermore, curl(2D) is just determinant of which k is all 0.
+
+Divergence of X is the same as curl of 90-degree rotation of X.
+$ gradient dot X = gradient times X^perp $
+
+== Laplacian
+
+- Basis for Fourier transform.
+- used to define model PDEs (Laplace, heat, wave equations)
+- encodes rich information about geometry
+
+What does 2nd derivative tells:
+- concave up if < 0
+- convex if > 0
+
+Curvature of a function
+
+Maps a scalar function to another scalar function: linearly.
+- divergence of gradient $Delta f := gradient dot gradient f = "div"("grad" f)$
+- $gradient^2$ for Hessian
+- sum of 2nd partial derivatives $Delta f := sum_(i=1)^n partial^2 / (partial x_1^2)$
+- gradient of Dirichlet energy $Delta f := - gradient_f (1/2 ||gradient f||^2)$
+- analogy: graph Laplacian: grid, graph, 
+
+Basic definition: $Delta f := sum_i (partial^2 f) / (partial x_i^2)$
+
+== Hessian
+
+Taylor series: approximation for ordinary function.
+Best linear approximation: using gradient.
+Hessian, quadratic term in local approximation.
+
+$ gradient^2 $
+
+As gradient are "vector that gives us partial derivatives of the function",
+Hessian is "operator that gives us partial derivatives of the gradient".
+
+i.e. Gradient of the gradient of a function
+
+$ (gradient^2 f) arrow(u) := D_arrow(u) (gradient f) $
+
+For a function $f(x): RR^n -> RR$, 
+$ gradient^2 f :=
+mat(
+  (partial^2 f) / (partial x_1 partial x_1), dots, (partial^2 f) / (partial x_1 partial x_n);
+  dots.v, dots.down, dots.v;
+  (partial^2 f) / (partial x_n partial x_1), dots, (partial^2 f) / (partial x_n partial x_n);
+)
+$
+a matrix and each entry are partial directive for f along two coordinate direction.
+The Hessian matrix always symmetric.
+
+2nd-order approximation of any smooth multivariable function $f(x)$ around some point $x_0$:
+$ f(arrow(x)) approx f(arrow(x)_0) + gradient f(arrow(x)_0) dot (arrow(x) - arrow(x)_0) + (gradient^2 f(x_0)(arrow(x) - arrow(x)_0) dot (arrow(x) - arrow(x)_0)) / 2 $
+Likely, $c in RR, arrow(b) in RR^n, Mu in RR^(n times n)$,
+then,
+$ f(arrow(u)) approx 1/2 arrow(u)^T Alpha arrow(u) + arrow(b)^T arrow(u) + c, arrow(u) := arrow(x) - arrow(x)_0 $
+The way to do directive on expression involve matrix.
