@@ -1,5 +1,4 @@
-= The C Programming Language
-<the-c-programming-language>
+= From The C Programming Language To Theoretical Computer Science
 
 #show raw: set text(font: (
   (name: "DejaVu Sans Mono", covers: "latin-in-cjk"),
@@ -7,6 +6,8 @@
 ))
 
 #outline()
+
+== Section I: C Programming Language
 
 == Intro
 
@@ -24,7 +25,7 @@ C 驱动着世界上绝大多数设备的运行.
 
 C是一门高级语言, 但是何为高级语言?
 
-== 高级语言
+== High Level Language
 
 高级语言是相对于低级语言而言的. 一般而言, 我们所说的低级语言,
 是各个不同设备上面的汇编语言, 这些语言非常强大, 可以操作 CPU,
@@ -52,7 +53,7 @@ C是一门高级语言, 但是何为高级语言?
 
 这就为程序的移植提供了极大的方便, 不再需要手动为不同的平台进行适配.
 
-=== 中级语言
+=== Mid-Level Language
 
 C语言虽然名义上是一个高级语言, 但是很多人并不这么认为,
 因为C语言并不提供一种通用的内存管理方案.
@@ -62,7 +63,7 @@ C语言虽然名义上是一个高级语言, 但是很多人并不这么认为,
 因此, 便有人将C语言称作中级语言, 过渡语言. 不过,
 这不过是称呼上的差别而已.
 
-=== 编译 & 解释
+=== Compile & Interpret
 
 CPU 实际上只能够理解和运行二进制的机器码.
 因此, 直接以人类可读形式写出来的代码, 计算机没有办法直接执行.
@@ -107,7 +108,7 @@ CPU 实际上只能够理解和运行二进制的机器码.
 再如, 大家或许熟悉的 Python语言,
 便是通过解释器执行的, 因此才认为 python语言 是一门编译型语言.
 
-== 环境
+== Environment
 
 不知道大家是否喜欢玩 PC 上的游戏, 有时候玩游戏会提示缺少 `DirectX`
 运行时环境, 编程也和玩游戏一样, 是需要环境的. 一般而言,
@@ -136,7 +137,7 @@ Linux 平台, 最常用的 "IDE" 是 (Neo)Vim 和 Emacs, 不过,
 Education)" 和 "理论计算机导论 (Introduction to Theoretical Computer
 Science)" 中找到.
 
-=== 环境变量
+=== Environment Variables
 
 环境变量是一种可以被程序读取, 并根据其值进行配置的一些 "键-值" 对.
 简单的理解, 就是字典的索引, 当我试图索引一些信息的时候, 可以先去目录找到
