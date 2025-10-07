@@ -214,6 +214,12 @@ Array actually hold an array in literal.
 
 ### `alloc:stack`, `alloc:heap` & `new`
 
+``` scheme
+(alloc:stack <type> {<dimensions>})
+(alloc:heap <type> {<dimensions>})
+(new <type> ({<constructor parameters>}) {<dimensions>})
+```
+
 ### Type
 
 #### Interfaces
