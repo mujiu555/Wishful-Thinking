@@ -72,6 +72,12 @@
 ```
 
 ``` scheme
+[<variable>] for value pass
+<variable> for reference
+(address <variable>) for pointer
+```
+
+``` scheme
 <function>       => '(' 'function' <formals> <returning> ')'
 <formals>        => '(' { <param> } ')'
                  |  <param>
