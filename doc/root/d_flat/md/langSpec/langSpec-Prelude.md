@@ -72,6 +72,12 @@
 ```
 
 ``` scheme
+[<variable>] for value pass
+<variable> for reference
+(address <variable>) for pointer
+```
+
+``` scheme
 <function>       => '(' 'function' <formals> <returning> ')'
 <formals>        => '(' { <param> } ')'
                  |  <param>
@@ -207,6 +213,12 @@ Array actually hold an array in literal.
 ### Error
 
 ### `alloc:stack`, `alloc:heap` & `new`
+
+``` scheme
+(alloc:stack <type> {<dimensions>})
+(alloc:heap <type> {<dimensions>})
+(new <type> ({<constructor parameters>}) {<dimensions>})
+```
 
 ### Type
 
