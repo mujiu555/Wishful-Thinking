@@ -8,6 +8,11 @@
 
 #### Variable Reference
 
+``` scheme
+<variable-dereference> => '[' <variable-name> ']'
+<variable-dereference> => '[' <variable-name> {,<index>} ']'
+```
+
 #### Procedure Call
 
 ``` scheme
