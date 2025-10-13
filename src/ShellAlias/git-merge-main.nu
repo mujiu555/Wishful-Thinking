@@ -1,0 +1,1 @@
+git branch | tail -n +2 | xargs -n 1 -- git merge
