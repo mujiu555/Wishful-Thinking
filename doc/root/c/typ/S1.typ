@@ -189,17 +189,144 @@ WSL的全称是 "Windows Subsystem for Linux",
 
 如果需要在Windows上安装WSL, 我们首先需要:
 + 通过管理员权限, 打开一个控制台. ```cmd Windows+X A```, 
+  #figure(image("img/F1-Console.png"), caption: [Open a console])
 + 在弹出的窗口中选择允许
+  #figure(image("img/F2-Admin-Console.png"), caption: [Opened console])
 + 并输入 ```pwsh wsl --install``` 和 ```pwsh wsl --update```
-+ 完成后, 运行 wsl, 并按照指示, 创建初始用户, 注意:
-  输入密码的时候并不会显示已经输入了多少
-+ 完成初始之后, 就可以安装编程环境了: 
-  ```bash sudo apt install gcc gdb make clang```
-  在这一步, 也是会提示输入密码的
+  #figure(image("img/F3-Install.png"), caption: [Install `WSL`])
+  #figure(image("img/F4-Update.png"), caption: [Check Update])
++ 此时, 我们需要按照指示, 重新启动电脑, 以满足系统更新需求
++ 完成后, 运行 `WSL` (或者, 在开始菜单找到`Ubunut`), 运行,
+  并按照指示, 创建初始用户, 注意:
+  输!入!密!码!的!时!候!并!不!会!显!示!已!经!输!入!了!多!少!
+  请盲打输入密码, 当完成一遍输入以后按下回车完成输入
+  一共需要输入两遍密码, 两遍输入的密码需要相同
+  #figure(image("img/F5-ubuntuinstall.png"), caption: [Initializing `WSL`])
+  - 以下为示例文本:
+    ```txt
+    Installing, this may take a few minutes...
+    Installation successful!
+    Please create a default UNIX user account. The username does not need to match you Windows username.
+    For more information visit: https://aka.ms/wslusers
+    Enter new UNIX username:
+    ```
+  - 看见这个界面, 或者文本, 即可开始输入用户名称, 如
+    ```txt
+    Enter new UNIX username: dot
+    ```
+  - 此时, dot即为我输入的用户名, 这个用户名不需要与Windows的用户名相同,
+    但是须满足, 
+    1) 仅包含小写字母, 下划线, 或数字, 
+    2) 数字不在开头,
+    3) 用户名中不包含空格.
+    当按下回车, 会显示:
+    ```txt
+    Enter new password:
+    ```
+  - 此时就应当开始输入密码:
+    输入完成后, 仍然只会呈现 `Enter new password:`字样,
+    此时按下回车, 就完成了第一遍的密码输入:
+    ```txt
+    Enter new password again:
+    ```
+  - 这时就需要开始进行第二次密码输入.
+  当输入完成后, 就会进入到我们的正常环境,
+  如果存在, 输入完成后, 用户为root的, 说明安装失败, 需要重新安装.
+  重新安装的步骤为:
+  - 打开任意终端:
+    按下 "Win键+R键", 看到运行窗口:
+    #figure(image("img/F6-Run.png"))
+    #figure(image("img/F7-cmd.png"), caption: [Run Cmd])
+  - 运行删除指令:
+    ```bat
+    wsl --unregister Ubuntu
+    ```
+    取消 `WSL` 发行版注册
+  - 再次运行安装指令
+    ```bat
+    wsl --install
+    ```
+    或,
+    打开微软商店, 搜索 "Ubuntu",
+    #figure(image("img/F9-Store.png"), caption: [Store])
+    选中 "Ubuntu", 或 "Ubuntu-24.04 lts", 此处以 "Ubuntu" 为例:
+    #figure(image("img/F10-Ubuntu.png"), caption: [Ubuntu `WSL`])
+    点击获取, 即可开始安装.
++ 完成上述步骤, 即可开始环境配置:
+  + 第一步: "换源", Ubuntu默认获取软件的方式是从境外服务器拉取软件,
+    这样的速度非常缓慢, 因此, 需要将服务器切换回到中国提供商.
+
+    这里使用清华大学开源软件镜像站为我们提供的免费软件代理服务:
+    #link("https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/"),
+    在清华的站点, 可以看到, 它对于我们如何进行换源操作有完整的介绍:
+    注意: 对于安装了 "Ubuntu" 或 "Ubuntu-24.04 lts" 的同学而言,
+    需要使用的是清华镜像站使用帮助中的 "DEB822格式" 下的文本:
+    #figure(image("img/F11-Mirror.png"), caption: [tuna.Tsinghua mirror help])
+
+    - 打开Ubuntu, 输入指令:
+    ```bash
+    sudo su
+    ```
+    这时候会提示输入密码:
+    ```txt
+    [sudo] enter password for dot:
+    ```
+    因为我的用户名为"dot", 所以提示的是输入 "dot" 这个用户的密码.
+    当输入完成后, 就会进入 "root" 用户的终端中.
+    此时, 输入:
+    ```bash
+    cat > /etc/apt/sources.d.list/ubunut.sources
+    ```
+    #figure(image("./img/F12-root.png"), caption: [Substitute Mirror])
+    运行完以后, 将从清华开源软件镜像站处拷贝的文本,
+    直接粘贴 (右键) 终端当中:
+    #figure(image("./img/F13-paste.png"))
+    当粘贴完成后, 按下回车, 同时按下 "Ctrl键+D键", 即可完成换源工作.
+    #figure(image("./img/F14-paste-result.png"), caption: [paste result])
+
+    最后, 需要输入 ```bash exit``` 退出 "root" 用户环境.
+
+  + 第二步是更新源信息: 刚刚的步骤仅仅只是告诉系统, 应该用哪里的服务器,
+    但是实际上, 并没有更新具体还可以安装哪些软件, 因此需要更新源信息:
+    ```bash
+    sudo apt update && sudo apt upgrade
+    ```
+    通过这个指令, 即可更新源信息. 在这以后, `WSL` 才真正可以正常使用.
+    #figure(image("img/F15-update.png"), caption: [Update repository information])
+    #figure(image("img/F16-upgrade.png"), caption: [Running update])
+
+    当更新进行一半的时候, 系统会提示是否确定更新, 此时直接按下回车即可:
+    #figure(image("img/F17-confirm.png"), caption: [Confirm])
+
+  + 完成初始之后, 就可以安装编程环境了:
+    ```bash sudo apt install build-essential gdb clang```
+    在这一步, 也是会提示输入密码的
+    #figure(image("img/F18-install.png"), caption: [Install required tools])
+
+    同样的, 在执行到一半的时候, 会要求确定操作, 直接回车即可.
 
 完成了上述的操作, 就可以架设自己的IDE了,
 比如, 可以使用 "Visual Studio Code", 并加装微软提供的 "C/C++" 插件.
 或者直接在WSL中安装 NeoVim, Emacs 等 Linux 传统开发工具.
+
++ 对于 `VSCode`, 我们需要先安装好需要的插件 "C/C++",
+  #figure(image("img/F19-C_Cpp.png"), caption: [Install C/C++ Plugin])
++ 然后选择界面左下角处的远程连接
+  + !第一步: 选择左下角按钮,
+  + !第二步: 选择Connect to WSL, 或 WSL, 后者会自动装插件
+  #figure(image("img/F20-Connect.png"), caption: [Connect to Ubuntu])
+  #figure(image("img/F21-Ubuntu-Vsc.png"), caption: [确认连接建立])
++ 最后, 再次选中插件页面, 此时找到 "C/C++", 选择, "Install for Ubuntu"
+  安装完成以后, 应当可以看见如下图所示插件列表:
+  #figure(image("img/F22-Plugins.png"), caption: [Plugin lists])
++ 然后打开终端:
+  - 通过Visual Studio Code 的 "终端-新建终端" 菜单, 创建新终端:
+    #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
+  - 然后找到终端(下图红框中), 并点击进入对终端的输入模式.
+    #figure(image("img/F24-Terminal.png"), caption: [Terminal])
+  - 输入 ```bash mkdir -p prj```
++ 选择左侧文件浏览器 "File Explorer" 处的 "打开文件夹" (或 "Open folder").
+  #figure(image("img/F25-OpenFolder.png"), caption: [Open Folder])
 
 === Linux, MacOS & \*nix
 
@@ -218,7 +345,7 @@ xcode-select --install
 - Linux (Debian & Ubuntu \*):
 
 ```sh
-sudo apt install build-essential clang
+sudo apt install build-essential clang gdb
 ```
 
 - Linux (Arch \*):
@@ -258,9 +385,19 @@ int main(void) {
 
 大家可以用任何笔记本将这段代码写下, 将它保存 (不要放桌面) 为 `hello.c`.
 
+使用Visual Studio Code的同学可以选择,
+点击左侧文件浏览器中的 "新建文件"("New File") 按钮,
+#figure(image("img/F26-NewFile.png"), caption: ["New File" Button])
+创建名为 `hello.c` 的文件
+#figure(image("img/F27-Hello.c.png"), caption: [New file])
+并回车,
+在打开的文本编辑窗口中将以上代码写下并保存.
+
 然后, 我们就可以开始进行编译了:
-+ 在文件所处的文件夹, 打开一个终端:
-  Windows 直接右键选择"终端"; MacOS, 咱弃疗了
++ 通过Visual Studio Code 的 "终端-新建终端" 菜单, 创建新终端:
+  #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
+  然后找到终端(下图红框中), 并点击进入对终端的输入模式.
+  #figure(image("img/F24-Terminal.png"), caption: [Terminal])
 + 输入 `dir` 确认文件是否存在
 + 最后, 输入 ```sh clang hello.c -o hello```
 
