@@ -284,7 +284,7 @@ WSL的全称是 "Windows Subsystem for Linux",
     当输入完成后, 就会进入 "root" 用户的终端中.
     此时, 输入:
     ```bash
-    cat > /etc/apt/sources.d.list/ubunut.sources
+    cat > /etc/apt/sources.list.d/ubuntu.sources
     ```
     #figure(image("./img/F12-root.png"), caption: [Substitute Mirror])
     运行完以后, 将从清华开源软件镜像站处拷贝的文本,
