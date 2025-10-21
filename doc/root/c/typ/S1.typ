@@ -410,13 +410,31 @@ int main(void) {
   #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
   然后找到终端(下图红框中), 并点击进入对终端的输入模式.
   #figure(image("img/F24-Terminal.png"), caption: [Terminal])
-+ 输入 `dir` 确认文件是否存在
-+ 最后, 输入 ```sh clang hello.c -o hello```
++ Enter `dir` to check if there exists file `hello.c`,
+  and then type `cat hello.c`,
+  just after the command has been inserted,
+  the content of whole file will be displayed.
+  If the content printed in screen does not match the contents showing
+  in your text input area, then you have not save the file properly.
+  For example, the command will response with:
+  ```txt
+  #include <stdio.h>
+  
+  int main(void) {
+    printf("Hello, World");
+    return 0;
+  }
+  ```
+  in my computer with my code shown above.
++ 最后, 输入 ```sh clang hello.c -o hello```, and it will give no
+  information if there are no syntax error or other problems.
 
-然后我们就会获得一个名为hello的文件 (`hello` 是文件名, `.exe` 叫拓展名).
+然后我们就会获得一个名为hello的文件
+(`hello` 是文件名, `.exe` 叫拓展名).
+(you may find it at the file explorer).
 这就是我们的目标可执行文件了!
 
-大家可以在终端中输入 ```sh ./hello``` 来执行它.
+Finally, 大家可以在终端中输入 ```sh ./hello``` 来执行它.
 这样, 就可以看到它执行以后的结果啦:
 
 ```txt
@@ -425,12 +443,25 @@ Hello, World!
 
 这样, 你就完成了c程序的基本组成, 下面, 我们将依次简单的介绍,
 它们都代表了什么含义.
-这样, 你就可以自己尝试, 修改这个程序的内容, 写出独属于自己的 "Hello World".
+这样, 你就可以自己尝试, 修改这个程序的内容,
+写出独属于自己的 "Hello World".
+
+(Ten mins break.)
+Try to change the source code and you may let it print your name.
 
 === Explanation
 
+Looks fantastic?
+
+Here let us explain the structure of our current program.
+
+The c program always composed in similar order.
+For example, we always have the three parts -- header file import, entry, and expression.
+
 我们的 "Hello, World" 程序, 包含了几个部分,
 库文件的引入, 入口函数(main), 以及主要的表达式.
+
+
 
 === Library
 
@@ -538,6 +569,16 @@ return 0;
 大家如果仔细观察了, 就会发现, main函数内部的两个东西, 结尾都是分号.
 
 其实, 分号 (';'), 表示一个语句的结尾.
+What is statement, statements are base unit of c programming language.
+Every c program are make up with statements
+For example, our simplest program is:
+```c
+int main(){}
+```
+here, it contains just a function definition statement.
+But after all, every c program must have at least one statement.
+
+Statements are colourful, but, the rule for them are relative same.
 除了一些特殊情况, C语言中写下的所有代码, 结尾都是有分号的.
 
 语句大致可以被分为五种:
@@ -550,6 +591,7 @@ return 0;
 将会在后面详细讲解各个语句, 不过, 一定要记住, 每个语句的结尾都需要一个分号;
 
 == Types
+<types>
 
 C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新知识点了!
 - 什么是类型,
@@ -1247,8 +1289,10 @@ C语言, 实际上, 作为一种和计算机进行沟通交流的语言,
 int main(int argc, char* argv[], char* envp) {
   int integer_value;
   float float_value = 1.0;
+
   printf("Hello, World!\n" /* comment can appear any where */);
   integer_value = 10;
+
   printf("Calculate a + b: %d + %f = %f", integer_value, float_value, float_value + integer_value);
   return 0;
 }
@@ -1259,21 +1303,323 @@ void foo(void) {
 }
 ```
 
+From the program above, we can see that there are several lines that
+contains something we haven't met before.
+
+We all explain them all in this chapter.
+
 === Statements
+
+The first thing I'd like to tell you is definition for statement.
+
+The c program are composed with statements, just as what we have
+mentioned before.
+
+Statements define the operation the program will execute.
+Each statement may have do something.
+
+According to the C Programming Language Standard, every statement in c
+need to end with semi-colon (';').
+Unless it is listed detailed that has no necessary to have semi-colon.
+
+For example, we can see,
+```c
+  int integer_value;
+  float float_value = 1.0;
+  printf("Hello, World!\n");
+  integer_value = 10;
+```
+they all statements.
+
+Also, multiple statements can be written in same line.
+You may see this:
+```c
+int i; i = 1;
+```
+From here, we written two statements, `int i;`, and `i = 1;`
+
+So, it is not necessary to add line feed between two different
+statements.
+
+They are added for beauty and clear.
+
+Also, because the statement termination will just be determined by
+semi-colon, one statement may be written in multiple lines.
+```c
+int
+i
+=
+10
+;
+```
+They are illegal as well.
+
+But, we'll not write code in this way.
+More common usage of this feature will be:
+```c
+int i = 10,
+    j = 20;
+```
 
 === Expression
 
+As we have known statement, another import part of c program is
+expression.
+
+From which, a expression is some form that contains different 
+operation.
+
+Most basic expression we'd used in program are calculation.
+```c
+1 + 2
+i = 0
+printf("Hello, World")
+```
+
+They all expressions, and finally get the result of those operation.
+
+Statements may contains expression, but expression cannot construct a 
+statement.
+
+Also, most of the time, a expression will generate some value, that
+can be used in the following program.
+
+Furthermore, expression is able to be nested.
+
+```c
+printf("%d", 1+1)
+```
+
+Here, we have two expression, the smaller one `1+1`, and the larger
+one, which wraps the small one, `printf("%d", ~)`.
+
+Once we add semi-colon after them, the whole expression will be a
+statement.
+
+```c
+printf("%d", 1+1);
+```
+
+And is ready to do something particular.
+
+You may image, as the function call is a valid expression,
+and can be turned into statement.
+The calculations, we can also add semi-colon after them, to have a
+statement.
+
+```c
+1;
+8*2;
+```
+
+But they are meaningless.
+
 === Code Block
+
+When we programming, sometimes we may want to
+execute some operation at same time
+(or intend to execute them at same time).
+
+Then, we need Code Blocks, or "compounded statements".
+They are Statements composed and wrapped in one large brackets.
+For example:
+```c
+{
+  int x;
+  x = 1;
+}
+```
+They are seen as a group,
+one large statement later on the rest of program.
+
+And we need no semi-colon at the end of bracket expression.
 
 === Empty Lines & Space
 
+Not only for beauty, we'll need spaces in code for distinct different
+syntax object.
+
+For example, why we always need a space between `int` and `i`?
+Because if we dropped it, the compiler will only see `inti`,
+which is not a valid name, or anything else.
+
+Just like the reason why we must write space between different words.
+(Even in Chinese).
+
+So, at some particular times, if we can say that, the space will not
+change the structure of our code, the space is able to be deleted.
+
+Empty lines, the line which contains no code, does relative same as
+space.
+If it is not necessarily placed there, then it does only for beauty,
+and can be removed.
+
+The example here points out, when can we discard the space and empty lines.
+```c
+int x = 1;
+// Equals to
+int x=1;
+```
+
 === Comment
+
+Comments are another thing that will not affect anything within our code.
+When compiler meets a comment, it will ignore it directly.
+Which means, comment will behaviour like a space in our code.
+
+There are two ways for us to write comments.
+- `/* ... */`: multiple line comment, but also for inline comment,
+  anything inside `/*` and `*/` will be ignored.
+- `// ...`: one-line comment, anything follow after will be ignored.
+
+We can see the code above, to have a relative simple understand to comments.
 
 == Variables & Variable space
 
+Here, we comes to the most import part of a program.
+We'll know what variable is, how it is defined, and operations done on
+them.
+
+First of all, we'd like to see, relation between variable and value.
+
 === Data, Variable, Value
 
+Data, something that represents something, carrying some information,
+always the object we will manipulate in program.
+
+But how can we describe a data?
+We may use something called "variable", they are some slot that has
+desired space for storing data.
+
+Thus, in general, variable are some space, slot, that can store some
+value, carrying some specified data.
+
+=== Definition
+
+Before we use some concrete variable in our program.
+We must define them.
+
+The basic forms of variable definition are list below:
+```bnf
+<variable-type> <variable-name>;
+[<decorator>] <variable-type> <variable-name> [= <literal-value>];
+```
+Also, we have another way to declare a variable:
+```bnf
+extern <variable-type> <variable-name>;
+```
+
+From them all, we can see that, to declare a variable.
+We'd have to write in "type name;" form.
+
+Where, type can be any type specifier mentioned above in
+#link(<types>)[type] section.
+
+Such that,
+```c
+int a;
+int b;
+```
+
+Furthermore, when we have learnt the structure, enumerator, union and
+function, we all have more form of types.
+
+=== Variable Name
+
+One must-have element of variable definition is type.
+And another one is variable name.
+
+Once we have define a variable, we can then reference it using its
+name.
+
+Just like you call one's name.
+
+Variable names in c programming language must follow some rules:
++ start with '\$', '\_' and alphabet,
++ have no space inside,
++ followed by '\$', '\_', alphabet, and numbers.
++ has a total length less than 63 character.
++ not duplicate with any other names defined before or same with
+  keywords like 'int'.
+
+Keywords, are some commands will reserve for special usage in c
+program, for example, `int`, `if`, `continue`.
+And C programming language also have some name reserved for further
+usage.
+So, for those name, although it is possible to be use, it is not
+encouraged to do so.
+
+Here are some mainly used keywords and reserved names:
+```c
+auto, break, case, char, const, continue, default, do, double, else, enum, extern, float, for, goto, if, inline, int, long, register, restrict, return, short, signed, sizeof, static, struct, switch, typedef, typeof, union, unsigned, void, volatile, while, _Generic
+```
+
+Outside those keywords that cannot use, we also have extra naming 
+rules.
+
+Names starts with two underscore ('\_') and those start with one
+underscore and a capitalized alphabet are reserved for compiler.
+
+Names starts with two underscore and ends with two underscore are
+reserved for system-wide standard library.
+
+Names starts with one underscore and a lower-case alphabet, ends with
+one underscore are reserved for library.
+
+Names all capitalized alphabet, split by underscore, meaning
+constants.
+
+=== Initialize
+
+Once you finished declaration, which doesn't means you finished the
+variable definition.
+
+A variable must do initialize, and then can be put into use.
+Otherwise, you may get random value when you try to reference it.
+
+First time assignment to a variable are called "initialization".
+
+Only for that, with variable declaration and initialization, we can
+say we finished a variable definition.
+
+From list above, we can see that initialization can be done together
+with declaration.
+
+```c
+int a = 10;
+```
+
 === Assignment Operations
+
+Assignment are some operation special to variable.
+
+#table(
+  columns: 3,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([Operations], [Description], [Form]),
+  table.hline(stroke: 0.5pt),
+  [`=`], [Assignment], [```c A = val```],
+  table.hline(),
+)
+
+After program finish a assignment operation, it value store within
+variable will be replaced.
+
+```c
+int i = 20;
+printf("%d", i);
+// => 20
+i = 9;
+printf("%d", i);
+// => 9
+```
+
+
+=== Global Variables
+
+=== Local Variables
 
 === Composed Assignment Operations
 
@@ -1319,7 +1665,7 @@ void foo(void) {
 
 == Stack
 
-== Stack Variables, Local Variables
+=== Stack Variables, Local Variables
 
 == Global Variables
 
