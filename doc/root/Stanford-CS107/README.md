@@ -12,6 +12,8 @@ Self-teaching notes.
 
 I'm learning ...
 
+Referencing Notes, [zhenghe-lecture-notes](zhenghe-md.gitbooks.io/zhenghe-lecture-notes-digest/content/di-qi-ke-yun-xing-shi-nei-cun-jie-gou.html)
+
 ## Install
 
 ## Usage

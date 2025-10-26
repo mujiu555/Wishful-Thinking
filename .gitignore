@@ -5,6 +5,3 @@ compiled/
 \#*
 .\#*
 tmp/*
-
-doc/books
-src/leetcode/target
