@@ -99,3 +99,92 @@ Sin ware
 High frequencies in the original signal masquerade as low frequencies after reconstruction due to undersampling.
 
 == Nyquist-Shannon theorem
+
+Consider a band-limited signal: has no frequencies above some threshold
+$omega_0$.
+
+The signal can be perfectly reconstructed if sampled with period
+$T = 1/(2omega_0)$.
+Using "sinc filter".
+
+Ideal filter with no frequencies above cutoff, and also infinite extent.
+
+Sinc filter is $sinc(x) = 1 / (pi x)$.
+Wave goes forever.
+
+== Sampling in computer graphics
+
+Signal are often not band-limited in computer graphics.
+
+When there exists sharp edge, to add higher and higher infinite series of
+frequencies, till it eventually approximate looks like a piecewise constant function.
+分段函数
+
+When there exists a disconnected in image, like sharp edge, the input 
+have infinite frequencies.
+
+Also, ideal reconstruct filter is imparactical
+for efficient implementations.
+For n samples in image, for each samples must calculate the contribution to 
+other samples, using sinc filter.
+The $O(n^2)$ algorithm too expansive.
+
+== Aliasing artifacts in images
+
+== How to reduce aliasing
+
+Integrate signal into pixels.
+
+
+Increase frequency of sampling converge signal.
+
+Super sampling: Rather than just take one sampling for coverage signal,
+takes more sample for same pixel, with some location.
+
+== Resampling
+
+Converting from one discrete sampled representation to another.
+
+From sampling value, to the coarsely value,
+so that it can be drawn in the screen.
+
+- Sampling in a very high frequency, ->
+- Dense sampling of reconstructed signal, -> 
+- reconstruct into coarsely value
+
+So that, for a pixel:
+- All covered ,If all sample are covered,
+- None-covered, if non of which are covered,
+- some percentage covered, if average by sampling numbers.
+
+== Checkerboard - Exact Solution.
+
+== How actually evaluate coverage(x, y)
+
+How to check if a given point q is inside a triangle.
+
+Check if it is contained in three half planes associated with the edges.
+
+Given points $P_i$, $P_j$, along an edge and a query point $q$.
+Find whether q is to the left or right of the line from $P_i$, $P_j$.
+
+=== Incremental traversal
+
+Visit pixels along a special order
+
+=== Parallel coverage tests
+
+Test all samples in triangle in parallel
+
+=== Hybrid approach: tiled triangle traversal
+
+Traversal a large blocks, intersect the triangle.
+- If there has no pixels in a triangle, skip the block.
+- If the block is contained inside the block, all should be drawn.
+- If some of which in the block are inside the triangle,
+  sample points parallel.
+
+=== Hierarchical strategies
+
+Check if the Triangle intersect with large Three Blocks.
+And split it into smaller blocks till all small blocks reaches pixel size.
