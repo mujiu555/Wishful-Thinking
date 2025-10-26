@@ -47,6 +47,12 @@ C是一门高级语言, 但是何为高级语言?
 而高级语言, 是一种对于低级语言共同特征的抽象,
 帮助程序员写出可以在不同平台间无痛或相对轻松移植的代码.
 
+低级语言, 就像是专门为特定的设备编写的特制工具, 只能在某台设备上面使用.
+它们虽然可以直接操作硬件设备, 但是写起来非常复杂.
+而高级语言, 比如C或者Python, 可以让程序员使用更加容易理解的方式写出程序.
+系统可以帮你, 将你的代码, "翻译" 成为机器可以理解的指令,
+这样即便不担心底层的细节, 也能让程序在不同的设备上运行.
+
 当通过C编程语言进行工作的时候, 我们可以抽象出加减乘除等操作,
 分别对应操作不同位数数据的汇编指令; 可以抽象出各种变量,
 直接对应内存中的一段空间.
@@ -148,17 +154,20 @@ Science)" 中找到.
 
 === Environment Variables
 
-环境变量是一种可以被程序读取, 并根据其值进行配置的一些 "键-值" 对.
-简单的理解, 就是字典的索引, 当我试图索引一些信息的时候, 可以先去目录找到
-"键", 然后根据 "键" 取得 "值".
+环境变量可以被视为程序的设置, 它们告诉程序该如何工作,
+比如, 配置 "PATH" 可以帮助程序找到需要的文件或者指令.
+
+简单的理解, 对于程序而言, 这就是字典的索引, 当我试图索引一些信息的时候,
+可以先去目录找到 "键", 然后根据 "键" 取得 "值".
 
 而这些组合, 可以控制程序的行动. 目前需要了解,
 并且对于今后都非常重要的一些环境变量分别是:
 
-- `PATH`: Path 环境变量, 故名思义, 便是一些路径, 那么,
-  究竟是什么东西的路径呢? 实际上, Path 是系统执行指令时的搜索路径的集合.
+- `PATH`: PATH 变量就像是指示牌, 告诉了系统到哪些地方找到你输入的指令
 - 例如:
-  当我们在控制台(命令行) 输入一些指令, 并试图执行它们的时候,
+  当你希望去通过 gcc 来编译程序的时候, 系统就会到 path 指定的文件夹中,
+  查找 gcc 程序. 如果没有办法找到, 就会报错.
+- 当我们在控制台(命令行) 输入一些指令, 并试图执行它们的时候,
   操作系统就会通过 Path 环境变量搜索, 如果可以找到,
   就执行对应找到的指令, 如果没有, 则会报错.
 - 当然,
@@ -189,17 +198,144 @@ WSL的全称是 "Windows Subsystem for Linux",
 
 如果需要在Windows上安装WSL, 我们首先需要:
 + 通过管理员权限, 打开一个控制台. ```cmd Windows+X A```, 
+  #figure(image("img/F1-Console.png"), caption: [Open a console])
 + 在弹出的窗口中选择允许
+  #figure(image("img/F2-Admin-Console.png"), caption: [Opened console])
 + 并输入 ```pwsh wsl --install``` 和 ```pwsh wsl --update```
-+ 完成后, 运行 wsl, 并按照指示, 创建初始用户, 注意:
-  输入密码的时候并不会显示已经输入了多少
-+ 完成初始之后, 就可以安装编程环境了: 
-  ```bash sudo apt install gcc gdb make clang```
-  在这一步, 也是会提示输入密码的
+  #figure(image("img/F3-Install.png"), caption: [Install `WSL`])
+  #figure(image("img/F4-Update.png"), caption: [Check Update])
++ 此时, 我们需要按照指示, 重新启动电脑, 以满足系统更新需求
++ 完成后, 运行 `WSL` (或者, 在开始菜单找到`Ubunut`), 运行,
+  并按照指示, 创建初始用户, 注意:
+  输!入!密!码!的!时!候!并!不!会!显!示!已!经!输!入!了!多!少!
+  请盲打输入密码, 当完成一遍输入以后按下回车完成输入
+  一共需要输入两遍密码, 两遍输入的密码需要相同
+  #figure(image("img/F5-ubuntuinstall.png"), caption: [Initializing `WSL`])
+  - 以下为示例文本:
+    ```txt
+    Installing, this may take a few minutes...
+    Installation successful!
+    Please create a default UNIX user account. The username does not need to match you Windows username.
+    For more information visit: https://aka.ms/wslusers
+    Enter new UNIX username:
+    ```
+  - 看见这个界面, 或者文本, 即可开始输入用户名称, 如
+    ```txt
+    Enter new UNIX username: dot
+    ```
+  - 此时, dot即为我输入的用户名, 这个用户名不需要与Windows的用户名相同,
+    但是须满足, 
+    1) 仅包含小写字母, 下划线, 或数字, 
+    2) 数字不在开头,
+    3) 用户名中不包含空格.
+    当按下回车, 会显示:
+    ```txt
+    Enter new password:
+    ```
+  - 此时就应当开始输入密码:
+    输入完成后, 仍然只会呈现 `Enter new password:`字样,
+    此时按下回车, 就完成了第一遍的密码输入:
+    ```txt
+    Enter new password again:
+    ```
+  - 这时就需要开始进行第二次密码输入.
+  当输入完成后, 就会进入到我们的正常环境,
+  如果存在, 输入完成后, 用户为root的, 说明安装失败, 需要重新安装.
+  重新安装的步骤为:
+  - 打开任意终端:
+    按下 "Win键+R键", 看到运行窗口:
+    #figure(image("img/F6-Run.png"))
+    #figure(image("img/F7-cmd.png"), caption: [Run Cmd])
+  - 运行删除指令:
+    ```bat
+    wsl --unregister Ubuntu
+    ```
+    取消 `WSL` 发行版注册
+  - 再次运行安装指令
+    ```bat
+    wsl --install
+    ```
+    或,
+    打开微软商店, 搜索 "Ubuntu",
+    #figure(image("img/F9-Store.png"), caption: [Store])
+    选中 "Ubuntu", 或 "Ubuntu-24.04 lts", 此处以 "Ubuntu" 为例:
+    #figure(image("img/F10-Ubuntu.png"), caption: [Ubuntu `WSL`])
+    点击获取, 即可开始安装.
++ 完成上述步骤, 即可开始环境配置:
+  + 第一步: "换源", Ubuntu默认获取软件的方式是从境外服务器拉取软件,
+    这样的速度非常缓慢, 因此, 需要将服务器切换回到中国提供商.
+
+    这里使用清华大学开源软件镜像站为我们提供的免费软件代理服务:
+    #link("https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/"),
+    在清华的站点, 可以看到, 它对于我们如何进行换源操作有完整的介绍:
+    注意: 对于安装了 "Ubuntu" 或 "Ubuntu-24.04 lts" 的同学而言,
+    需要使用的是清华镜像站使用帮助中的 "DEB822格式" 下的文本:
+    #figure(image("img/F11-Mirror.png"), caption: [tuna.Tsinghua mirror help])
+
+    - 打开Ubuntu, 输入指令:
+    ```bash
+    sudo su
+    ```
+    这时候会提示输入密码:
+    ```txt
+    [sudo] enter password for dot:
+    ```
+    因为我的用户名为"dot", 所以提示的是输入 "dot" 这个用户的密码.
+    当输入完成后, 就会进入 "root" 用户的终端中.
+    此时, 输入:
+    ```bash
+    cat > /etc/apt/sources.list.d/ubuntu.sources
+    ```
+    #figure(image("./img/F12-root.png"), caption: [Substitute Mirror])
+    运行完以后, 将从清华开源软件镜像站处拷贝的文本,
+    直接粘贴 (右键) 终端当中:
+    #figure(image("./img/F13-paste.png"))
+    当粘贴完成后, 按下回车, 同时按下 "Ctrl键+D键", 即可完成换源工作.
+    #figure(image("./img/F14-paste-result.png"), caption: [paste result])
+
+    最后, 需要输入 ```bash exit``` 退出 "root" 用户环境.
+
+  + 第二步是更新源信息: 刚刚的步骤仅仅只是告诉系统, 应该用哪里的服务器,
+    但是实际上, 并没有更新具体还可以安装哪些软件, 因此需要更新源信息:
+    ```bash
+    sudo apt update && sudo apt upgrade
+    ```
+    通过这个指令, 即可更新源信息. 在这以后, `WSL` 才真正可以正常使用.
+    #figure(image("img/F15-update.png"), caption: [Update repository information])
+    #figure(image("img/F16-upgrade.png"), caption: [Running update])
+
+    当更新进行一半的时候, 系统会提示是否确定更新, 此时直接按下回车即可:
+    #figure(image("img/F17-confirm.png"), caption: [Confirm])
+
+  + 完成初始之后, 就可以安装编程环境了:
+    ```bash sudo apt install build-essential gdb clang```
+    在这一步, 也是会提示输入密码的
+    #figure(image("img/F18-install.png"), caption: [Install required tools])
+
+    同样的, 在执行到一半的时候, 会要求确定操作, 直接回车即可.
 
 完成了上述的操作, 就可以架设自己的IDE了,
 比如, 可以使用 "Visual Studio Code", 并加装微软提供的 "C/C++" 插件.
 或者直接在WSL中安装 NeoVim, Emacs 等 Linux 传统开发工具.
+
++ 对于 `VSCode`, 我们需要先安装好需要的插件 "C/C++",
+  #figure(image("img/F19-C_Cpp.png"), caption: [Install C/C++ Plugin])
++ 然后选择界面左下角处的远程连接
+  + !第一步: 选择左下角按钮,
+  + !第二步: 选择Connect to WSL, 或 WSL, 后者会自动装插件
+  #figure(image("img/F20-Connect.png"), caption: [Connect to Ubuntu])
+  #figure(image("img/F21-Ubuntu-Vsc.png"), caption: [确认连接建立])
++ 最后, 再次选中插件页面, 此时找到 "C/C++", 选择, "Install for Ubuntu"
+  安装完成以后, 应当可以看见如下图所示插件列表:
+  #figure(image("img/F22-Plugins.png"), caption: [Plugin lists])
++ 然后打开终端:
+  - 通过Visual Studio Code 的 "终端-新建终端" 菜单, 创建新终端:
+    #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
+  - 然后找到终端(下图红框中), 并点击进入对终端的输入模式.
+    #figure(image("img/F24-Terminal.png"), caption: [Terminal])
+  - 输入 ```bash mkdir -p prj```
++ 选择左侧文件浏览器 "File Explorer" 处的 "打开文件夹" (或 "Open folder").
+  #figure(image("img/F25-OpenFolder.png"), caption: [Open Folder])
 
 === Linux, MacOS & \*nix
 
@@ -218,7 +354,7 @@ xcode-select --install
 - Linux (Debian & Ubuntu \*):
 
 ```sh
-sudo apt install build-essential clang
+sudo apt install build-essential clang gdb
 ```
 
 - Linux (Arch \*):
@@ -247,36 +383,97 @@ pkg install gcc gdb clang
 同时, 它也陪伴了一代又一代新生的程序员.
 带着我们对自己创造的新世界的欢呼.
 
+"Hello World" 是程序设计中的经典入门例子. 它简单的向屏幕输出一句话, 帮助你了解代码的基本结构和运行流程. 学会了如何编写和运行 "Hello World",
+你就可以开始学习更加复杂的程序啦.
+
 ```c
 #include <stdio.h>
 
 int main(void) {
-  printf("Hello, World!");
+  printf("Hello, World!\n");
   return 0;
 }
 ```
 
 大家可以用任何笔记本将这段代码写下, 将它保存 (不要放桌面) 为 `hello.c`.
 
-然后, 我们就可以开始进行编译了:
-+ 在文件所处的文件夹, 打开一个终端:
-  Windows 直接右键选择"终端"; MacOS, 咱弃疗了
-+ 输入 `dir` 确认文件是否存在
-+ 最后, 输入 ```sh clang hello.c -o hello```
+使用Visual Studio Code的同学可以选择,
+点击左侧文件浏览器中的 "新建文件"("New File") 按钮,
+#figure(image("img/F26-NewFile.png"), caption: ["New File" Button])
+创建名为 `hello.c` 的文件
+#figure(image("img/F27-Hello.c.png"), caption: [New file])
+并回车,
+在打开的文本编辑窗口中将以上代码写下并保存.
 
-然后我们就会获得一个名为hello的文件 (`hello` 是文件名, `.exe` 叫拓展名).
+然后, 我们就可以开始进行编译了:
++ 通过Visual Studio Code 的 "终端-新建终端" 菜单, 创建新终端:
+  #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
+  然后找到终端(下图红框中), 并点击进入对终端的输入模式.
+  #figure(image("img/F24-Terminal.png"), caption: [Terminal])
++ Enter `dir` to check if there exists file `hello.c`,
+  and then type `cat hello.c`,
+  just after the command has been inserted,
+  the content of whole file will be displayed.
+  If the content printed in screen does not match the contents showing
+  in your text input area, then you have not save the file properly.
+  For example, the command will response with:
+  ```txt
+  #include <stdio.h>
+  
+  int main(void) {
+    printf("Hello, World");
+    return 0;
+  }
+  ```
+  in my computer with my code shown above.
++ 最后, 输入 ```sh clang hello.c -o hello```, and it will give no
+  information if there are no syntax error or other problems.
+
+然后我们就会获得一个名为hello的文件
+(`hello` 是文件名, `.exe` 叫拓展名).
+(you may find it at the file explorer).
 这就是我们的目标可执行文件了!
 
-大家可以在终端中输入 ```sh ./hello``` 来执行它.
+Finally, 大家可以在终端中输入 ```sh ./hello``` 来执行它.
+这样, 就可以看到它执行以后的结果啦:
+
+```txt
+Hello, World!
+```
+
+这样, 你就完成了c程序的基本组成, 下面, 我们将依次简单的介绍,
+它们都代表了什么含义.
+这样, 你就可以自己尝试, 修改这个程序的内容,
+写出独属于自己的 "Hello World".
+
+(Ten mins break.)
+Try to change the source code and you may let it print your name.
 
 === Explanation
 
-这段程序, 首先是一串以 '\#' 号开头的文本, 这句话表示,
+Looks fantastic?
+
+Here let us explain the structure of our current program.
+
+The c program always composed in similar order.
+For example, we always have the three parts -- header file import, entry, and expression.
+
+我们的 "Hello, World" 程序, 包含了几个部分,
+库文件的引入, 入口函数(main), 以及主要的表达式.
+
+
+
+=== Library
+
+C语言的内核很小, 只包括了一些非常基础的功能, 而其他的部分则都通过库来提供.
+同时又因为它相对比较简陋, 所以当我们使用它的库的时候需要一个描述文件,
+这个文件就可以告诉编译器, 这个库提供了哪些功能.
+
+比如说, 这段程序, 首先是一串以 '\#' 号开头的文本, 这句话表示,
 我们引入了一个名叫stdio的库的定义.
 
-'\#' 号, 实际上代表了 "预处理指令" 的开始, 这里的预处理指令就是
-"include". Include指令常常被用来包含一个文件, 比如说这里, 就包含了 stdio.h
-这个文件.
+'\#' 号, 实际上代表了 "预处理指令" 的开始, 这里的预处理指令就是 "include".
+Include指令常常被用来包含一个文件, 比如说这里, 就包含了 stdio.h 这个文件.
 
 Stdio, 是 "Standard Input / Output" 的简称,
 它定义了常用的输入和输出函数, 它也将会成为后续C语言程序设计中最常用的库.
@@ -291,14 +488,8 @@ Stdio, 是 "Standard Input / Output" 的简称,
 
 大家可以尝试, 在 `hello.c` 同目录, 创建一个 `stdio.h` 文件,
 再重新编译一下这个程序, 看看是否会有区别.
+
 如果将尖括号改成双引号呢?
-
-=== Library
-
-C语言的内核很小, 只包括了一些非常基础的功能, 而其他的部分则都通过库来提供.
-同时又因为它相对比较简陋, 所以当我们使用它的库的时候需要一个描述文件,
-这个文件就可以告诉编译器, 这个库提供了哪些功能.
-
 比如我们下面会说到的 `printf` "函数", 就是由stdio.h文件告知编译器的.
 
 那么什么是函数呢... 先卖个关子, 后面会对函数有详细的解释.
@@ -313,7 +504,19 @@ int main(void) {
 }
 ```
 
-这部分, 就是我们的程序开始执行的部分. 我们将它称作 "主函数定义".
+这部分, 就是我们的程序开始执行的部分.
+如果没有它, 我们的程序就没有办法执行.
+
+大家可以试一试, 如果不写这些部分, 只写下中间的 `printf("Hello, World!\n");`
+会出现什么情况?
+当然, 当我们按下运行按钮的时候, 它会告知, 这段程序并不 "合法".
+当然, 这不是在说我们做了违法的事情, 而是这样的程序, 不合C语言的语法.
+
+同时, 如果看到 Visual Studio Code 底部的 "PROBLES" 面板, 也可以看到, 它告知我们, 这个文件, 有许多的问题.
+我们将它告知的信息称之为, 错误信息, 或报错.
+
+我们将这个部分称作 "主函数定义".
+而这个main, 就是主函数了.
 
 它基本可以被认为是固定格式 (固定格式一共有四种, 托管环境三种, 非托管环境一种, 但是目前只需要会这一种即可).
 
@@ -324,9 +527,28 @@ printf("Hello, World");
 则是我们程序唯一的主体 --- 我们的程序实际上只干了这一件事 ---
 输出 "Hello, World".
 
+=== Function
+
+刚才的两个部分, 我们都提到了一个概念 -- "函数",
+函数是什么呢, 函数实际上是一系列代码, 一系列功能的集合,
+通过定义函数, 我们可以将一些不同的操作组合在一起.
+方便了程序的开发.
+同样的, 也可以把这样的函数提供给自己, 或者其他人使用.
+
+比如我们用到的 `printf` 函数, 也比如我们定义的main函数.
+
+和数学里的函数类似, 函数可以接受一些参数, 并且产生一些输出.
+就像多元微积分里的向量函数,
+$ f(x, y, z): RR^3 -> RR $
+就可以接受x,y,z这样的参数, 并且将它们经过一系列的变换,
+让它们变成一个普通的一维值.
+
 这里的 ```c printf``` 和它之后的圆括号的组合, 我们将其称作函数调用.
-```c Printf(...)``` 的作用是, 将文本按照一定格式打印到屏幕上, "Print (with) format",
-就是这个意思啦.
+其实也和数学中的函数, 含义一致.
+
+```c Printf(...)``` 的作用是, 将文本按照一定格式打印到屏幕上,
+"Print (with) format", 就是这个意思啦.
+
 而这里的 ```c "Hello, World"``` 就是函数调用的参数, 它告诉 `printf` 函数,
 要将什么东西给输出到屏幕.
 
@@ -342,11 +564,22 @@ return 0;
 
 这其实也涉及到了一些后面的知识, 所以目前记住主函数的结束, 必须写上这样一句 ```c return 0;```就可以了.
 
-=== Expression: Sentence.
+=== Expression: Statement.
 
 大家如果仔细观察了, 就会发现, main函数内部的两个东西, 结尾都是分号.
 
 其实, 分号 (';'), 表示一个语句的结尾.
+What is statement, statements are base unit of c programming language.
+Every c program are make up with statements
+For example, our simplest program is:
+```c
+int main(){}
+```
+here, it contains just a function definition statement.
+But after all, every c program must have at least one statement.
+
+Statements are colourful, but, the rule for them are relative same.
+除了一些特殊情况, C语言中写下的所有代码, 结尾都是有分号的.
 
 语句大致可以被分为五种:
 + 表达式语句
@@ -358,6 +591,7 @@ return 0;
 将会在后面详细讲解各个语句, 不过, 一定要记住, 每个语句的结尾都需要一个分号;
 
 == Types
+<types>
 
 C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新知识点了!
 - 什么是类型,
@@ -408,6 +642,8 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 对于简单的编程任务, C语言定义了一些基本数据类型.
 它们涵盖了数字, 文本和逻辑(好吧其实并没有).
 
+==== Integer
+
 我们最常用, 并且也将最先介绍的就是整数家族了:
 - `short`: 短整型, 相对于整型, 需要的内存更少, 只有16位空间
   但是相应的,可以表示的数值也越少.
@@ -424,10 +660,11 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 short s = 0;
 int i = 65536;
 long l = 2147483647;
-long long = 2147483648ll;
+long long ll = 2147483648ll;
 ```
+注: 以上代码均写于 主函数 当中!
 
-这里, $0$, $65536$, $2147483647$就都是 "int" 类型的 "字面量",
+这里, $0$, $65536$, $2147483647$ 就都是 "int" 类型的 "字面量",
 而 $2147483648$ 就是一个 "long long" 类型的字面量了.
 
 不过这些数字前面的类型和等于号都有些什么作用呢... 大家马上也会明白!
@@ -447,6 +684,24 @@ long long = 2147483648ll;
 signed int i = 2147483647;
 unsigned int u = 2147482647u;
 ```
+
+==== Literal Suffix
+
+有些同学可能就注意到了, 我们有些的数字之后, 跟上了一些字符.
+这些字符, 比如 `ll`,`ull`, 被称作字面量后缀, 它的作用是, 给字面量一些修饰,
+以方便编译器正确的处理这些数值.
+
+那么, 大家注意到:
+```c
+long long ll = 2147483648ll;
+```
+这一行, 大家可以尝试将这一段文本的字面量后缀 `ll` 去掉, 看一下, 会发生什么?
+当我们尝试运行程序的时候, 程序报错了.
+
+这是因为, 在C语言中, 我们写下的所有整数, 默认的类型都是int类型,
+如果字面量超出了int类型的范围, 那就会出现错误.
+
+==== Real numbers: `float` & `double`
 
 在整数之外, 我们自然还有小数.
 在 C语言 中, 我们将小数称之为 "二进制浮点数" 简称 "浮点数".
@@ -479,6 +734,62 @@ C语言中的常用浮点数一共有三种, 分别是:
 不过, 上面我们表示的 "定点数", 是以 10 为基底的十进制定点数, 而在计算机里,
 我们使用二进制数来表示数据, 因此, 我们实际上使用的浮点数也是二进制表示的.
 这就可以解释什么叫做 "二进制浮点数" 了.
+
+==== Type Boost
+
+当然, 在数学之中, 我们也有整数和小数的运算,
+大家可以先试一下, 当我们在c语言之中, 进行了可以得到小数的运算之后,
+会得到怎么样的结果?
+
+```c
+printf("%d", 1 / 2);
+```
+
+结果是0, 是不是很奇怪?
+
+因为, 在c语言中, 整数和整数之间的运算, 只会得到整数,
+如果需要一个浮点数结果,
+就必须让一个浮点数参与运算,
+比如
+```c
+printf("%f", 1 / 2.0);
+```
+这样, 就得到了0.5.
+
+为什么会这样呢?
+因为在 C语言中, 当一个运算涉及的类型不相同的时候, 会将表达范围较小的数据,
+转换成为表达范围更大的一个数据, 再去参与运算.
+我们将这种过程称作, 自动类型转换.
+
+当这里的int类型的整数, 遇见了2.0这样一个float类型的浮点数,
+实际上浮点数的表示范围大于整数, 所以, int就被提升到了float类型,
+并且参与运算, 得到 1.0 / 2.0 = 0.5 了.
+
+以下是自动类型转换的图表
+#table(
+  columns: 7,
+  stroke: none,
+  table.cell(colspan: 7, )[small `------------------------------------------------------->` large] ,
+  [char, short, int], [unsigned int], [long], [long long], [float], [double], [long double]
+)
+从左到右, 类型依次自动提升.
+
+而从整数开始的类型转换, 被称作 "整型提升".
+比如可以看到, char, short, int类型, 均为同样的自动类型转换阶段.
+因为对于char, short, 和int类型, 都发生了相同了整型提升,
+按照C语言的规则, 会将所有的表示范围小于int的类型,
+均提升到int类型的大小来参与运算.
+
+#block[
+无论使用什么整数, 都可以在表达式中使用char, short int或 int字段(全部带符号或没有符号)或枚举类型的对象.
+如果一个int可以代表原始类型的所有值, 则该值将转换为int;
+否则, 该值将转换为unsigned int, 这个过程称为整体提升.
+]
+
+这从汇编的角度来看, 其实就是将寄存器由小寄存器, 拼接到相对大的寄存器.
+如, 将 `AH`寄存器, 提升到`EAX`寄存器.
+
+==== String & Char
 
 另一部分, 在数值之外, 就是字符类型和字符串了.
 
@@ -702,6 +1013,11 @@ C语言中是没有办法写出类似 $A>B>C$ 的这种表达式的.
 ```c
 1 < a && a < 10
 ```
+
+值得注意的是, 逻辑运算符, 都是 "短路" 的.
+这是什么意思呢?
+就是说, 如果逻辑运算符的左边结果, 已经可以决定逻辑运算符整体结果,
+那么逻辑运算的右半部分就不会被执行, 而是直接将逻辑运算的结果返回出来.
 
 === Associativity
 
@@ -956,19 +1272,354 @@ $ Z_n = Z mod n(Z, mod) $, 满足封闭性, 结合性, 则有Z上的模N剩余�
 
 == Syntax
 
+C语言, 实际上, 作为一种和计算机进行沟通交流的语言,
+实际上也有自己的一套语法规范.
+
+在前面几节中, 我们也看到了, 如果没有按照它的语法规范来书写,
+就会遇见 "非法" 报错.
+
+因此, 我们有必要系统了解一下C语言的各种语法规范.
+
+以下是我们的示例程序:
+
+```c
+/// file: main.c
+
+// main function, the entry
+int main(int argc, char* argv[], char* envp) {
+  int integer_value;
+  float float_value = 1.0;
+
+  printf("Hello, World!\n" /* comment can appear any where */);
+  integer_value = 10;
+
+  printf("Calculate a + b: %d + %f = %f", integer_value, float_value, float_value + integer_value);
+  return 0;
+}
+
+/* foo function, void parameter and empty body */
+void foo(void) {
+  // do sth.
+}
+```
+
+From the program above, we can see that there are several lines that
+contains something we haven't met before.
+
+We all explain them all in this chapter.
+
 === Statements
+
+The first thing I'd like to tell you is definition for statement.
+
+The c program are composed with statements, just as what we have
+mentioned before.
+
+Statements define the operation the program will execute.
+Each statement may have do something.
+
+According to the C Programming Language Standard, every statement in c
+need to end with semi-colon (';').
+Unless it is listed detailed that has no necessary to have semi-colon.
+
+For example, we can see,
+```c
+  int integer_value;
+  float float_value = 1.0;
+  printf("Hello, World!\n");
+  integer_value = 10;
+```
+they all statements.
+
+Also, multiple statements can be written in same line.
+You may see this:
+```c
+int i; i = 1;
+```
+From here, we written two statements, `int i;`, and `i = 1;`
+
+So, it is not necessary to add line feed between two different
+statements.
+
+They are added for beauty and clear.
+
+Also, because the statement termination will just be determined by
+semi-colon, one statement may be written in multiple lines.
+```c
+int
+i
+=
+10
+;
+```
+They are illegal as well.
+
+But, we'll not write code in this way.
+More common usage of this feature will be:
+```c
+int i = 10,
+    j = 20;
+```
 
 === Expression
 
+As we have known statement, another import part of c program is
+expression.
+
+From which, a expression is some form that contains different 
+operation.
+
+Most basic expression we'd used in program are calculation.
+```c
+1 + 2
+i = 0
+printf("Hello, World")
+```
+
+They all expressions, and finally get the result of those operation.
+
+Statements may contains expression, but expression cannot construct a 
+statement.
+
+Also, most of the time, a expression will generate some value, that
+can be used in the following program.
+
+Furthermore, expression is able to be nested.
+
+```c
+printf("%d", 1+1)
+```
+
+Here, we have two expression, the smaller one `1+1`, and the larger
+one, which wraps the small one, `printf("%d", ~)`.
+
+Once we add semi-colon after them, the whole expression will be a
+statement.
+
+```c
+printf("%d", 1+1);
+```
+
+And is ready to do something particular.
+
+You may image, as the function call is a valid expression,
+and can be turned into statement.
+The calculations, we can also add semi-colon after them, to have a
+statement.
+
+```c
+1;
+8*2;
+```
+
+But they are meaningless.
+
 === Code Block
+
+When we programming, sometimes we may want to
+execute some operation at same time
+(or intend to execute them at same time).
+
+Then, we need Code Blocks, or "compounded statements".
+They are Statements composed and wrapped in one large brackets.
+For example:
+```c
+{
+  int x;
+  x = 1;
+}
+```
+They are seen as a group,
+one large statement later on the rest of program.
+
+And we need no semi-colon at the end of bracket expression.
 
 === Empty Lines & Space
 
+Not only for beauty, we'll need spaces in code for distinct different
+syntax object.
+
+For example, why we always need a space between `int` and `i`?
+Because if we dropped it, the compiler will only see `inti`,
+which is not a valid name, or anything else.
+
+Just like the reason why we must write space between different words.
+(Even in Chinese).
+
+So, at some particular times, if we can say that, the space will not
+change the structure of our code, the space is able to be deleted.
+
+Empty lines, the line which contains no code, does relative same as
+space.
+If it is not necessarily placed there, then it does only for beauty,
+and can be removed.
+
+The example here points out, when can we discard the space and empty lines.
+```c
+int x = 1;
+// Equals to
+int x=1;
+```
+
 === Comment
+
+Comments are another thing that will not affect anything within our code.
+When compiler meets a comment, it will ignore it directly.
+Which means, comment will behaviour like a space in our code.
+
+There are two ways for us to write comments.
+- `/* ... */`: multiple line comment, but also for inline comment,
+  anything inside `/*` and `*/` will be ignored.
+- `// ...`: one-line comment, anything follow after will be ignored.
+
+We can see the code above, to have a relative simple understand to comments.
 
 == Variables & Variable space
 
+Here, we comes to the most import part of a program.
+We'll know what variable is, how it is defined, and operations done on
+them.
+
+First of all, we'd like to see, relation between variable and value.
+
+=== Data, Variable, Value
+
+Data, something that represents something, carrying some information,
+always the object we will manipulate in program.
+
+But how can we describe a data?
+We may use something called "variable", they are some slot that has
+desired space for storing data.
+
+Thus, in general, variable are some space, slot, that can store some
+value, carrying some specified data.
+
+=== Definition
+
+Before we use some concrete variable in our program.
+We must define them.
+
+The basic forms of variable definition are list below:
+```bnf
+<variable-type> <variable-name>;
+[<decorator>] <variable-type> <variable-name> [= <literal-value>];
+```
+Also, we have another way to declare a variable:
+```bnf
+extern <variable-type> <variable-name>;
+```
+
+From them all, we can see that, to declare a variable.
+We'd have to write in "type name;" form.
+
+Where, type can be any type specifier mentioned above in
+#link(<types>)[type] section.
+
+Such that,
+```c
+int a;
+int b;
+```
+
+Furthermore, when we have learnt the structure, enumerator, union and
+function, we all have more form of types.
+
+=== Variable Name
+
+One must-have element of variable definition is type.
+And another one is variable name.
+
+Once we have define a variable, we can then reference it using its
+name.
+
+Just like you call one's name.
+
+Variable names in c programming language must follow some rules:
++ start with '\$', '\_' and alphabet,
++ have no space inside,
++ followed by '\$', '\_', alphabet, and numbers.
++ has a total length less than 63 character.
++ not duplicate with any other names defined before or same with
+  keywords like 'int'.
+
+Keywords, are some commands will reserve for special usage in c
+program, for example, `int`, `if`, `continue`.
+And C programming language also have some name reserved for further
+usage.
+So, for those name, although it is possible to be use, it is not
+encouraged to do so.
+
+Here are some mainly used keywords and reserved names:
+```c
+auto, break, case, char, const, continue, default, do, double, else, enum, extern, float, for, goto, if, inline, int, long, register, restrict, return, short, signed, sizeof, static, struct, switch, typedef, typeof, union, unsigned, void, volatile, while, _Generic
+```
+
+Outside those keywords that cannot use, we also have extra naming 
+rules.
+
+Names starts with two underscore ('\_') and those start with one
+underscore and a capitalized alphabet are reserved for compiler.
+
+Names starts with two underscore and ends with two underscore are
+reserved for system-wide standard library.
+
+Names starts with one underscore and a lower-case alphabet, ends with
+one underscore are reserved for library.
+
+Names all capitalized alphabet, split by underscore, meaning
+constants.
+
+=== Initialize
+
+Once you finished declaration, which doesn't means you finished the
+variable definition.
+
+A variable must do initialize, and then can be put into use.
+Otherwise, you may get random value when you try to reference it.
+
+First time assignment to a variable are called "initialization".
+
+Only for that, with variable declaration and initialization, we can
+say we finished a variable definition.
+
+From list above, we can see that initialization can be done together
+with declaration.
+
+```c
+int a = 10;
+```
+
 === Assignment Operations
+
+Assignment are some operation special to variable.
+
+#table(
+  columns: 3,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([Operations], [Description], [Form]),
+  table.hline(stroke: 0.5pt),
+  [`=`], [Assignment], [```c A = val```],
+  table.hline(),
+)
+
+After program finish a assignment operation, it value store within
+variable will be replaced.
+
+```c
+int i = 20;
+printf("%d", i);
+// => 20
+i = 9;
+printf("%d", i);
+// => 9
+```
+
+
+=== Global Variables
+
+=== Local Variables
 
 === Composed Assignment Operations
 
@@ -1014,7 +1665,7 @@ $ Z_n = Z mod n(Z, mod) $, 满足封闭性, 结合性, 则有Z上的模N剩余�
 
 == Stack
 
-== Stack Variables, Local Variables
+=== Stack Variables, Local Variables
 
 == Global Variables
 
