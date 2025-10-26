@@ -29,7 +29,7 @@ directory.
 ### Referencing
 
 [CS Plan](https://cs-plan.com)
-[CsDiy](ahttps://csdiy.wiki)
+[CsDiy](https://csdiy.wiki)
 
 ## Install
 
