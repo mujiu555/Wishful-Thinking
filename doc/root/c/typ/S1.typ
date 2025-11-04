@@ -1,8 +1,8 @@
 = From The C Programming Language To Theoretical Computer Science
 
 #show raw: set text(font: (
-  (name: "DejaVu Sans Mono", covers: "latin-in-cjk"),
-  "SimHei"
+  (name: "WenQuanYi Micro Hei Mono", covers: "latin-in-cjk"),
+  "WenQuanYi Micro Hei Mono"
 ))
 
 Author: #text("GitHub@mujiu555").
@@ -15,6 +15,9 @@ Waiting for finishing.
 #outline()
 
 == Section I: C Programming Language
+
+To have a glance to computer science, we must have known a programming language, and then it could lead you to
+understand some key concept within the computer and programming language design.
 
 == Intro
 
@@ -2022,6 +2025,18 @@ Some kind of like to `printf`, right?
   table.hline(),
 )
 
+Sample question: A+B Problem:
+```c
+#include <stdio.h>
+
+int main(void) {
+  int a, b;
+  scanf("%d%d",&a, &b);
+  printf("%d + %d = %d", a, b, a + b);
+  return 0;
+}
+```
+
 == Conditional Statement
 
 Since the program is not only tool to calculating,
@@ -2062,27 +2077,303 @@ Here, we execute two statements when x larger than current max value.
 === If-Else
 
 Instead of just "if" statement, sometimes we may need "else" part.
-For example, when you see
+// NOTE: example required
+```c
+if (condition)
+  then-statement
+else
+  else-statement
+```
+
+Just similar to if statements, when condition is not 0, or, acceptable, execute
+then-statement, else, execute else-statement.
+
+Also, you may find some case, you may classify different case, so you can written then
+like this:
+```c
+if (cond1)
+  then1-statement
+else if (cond2)
+  then2-statement
+else if (cond3)
+...
+else
+  else-statement
+```
+This is simply nested if-else statements for each "else if" are new if statement place in else part of
+further one.
+This is for beauty, but you can also write like this:
+```c
+if (cond1) {
+  then1
+} else {
+  if (cond2) {
+    then2
+  }
+  ...
+}
+```
+Very clear.
 
 === Ternary if-else operator
 
 三元运算符
 
+Though in most case, if-else statements is enough, it is still the statement but a expression.
+Thus in some corner condition, written using if-else may result in more lines of code and complexity.
+
+Thus we introduces ternary if-else operator. With this operator, you got a expression, so you can than
+combine them together with other expressions.
+
+Ternary if-else looks like this
+```c
+condition ? then : else
+```
+when condition is true, then part will be executed, and if condition is false, else part will be evaluated.
+And finally, the value of expression will be return.
+
+So, you may write:
+```c
+int i = 10;
+i = i - 100 < 0 ? 0 : i - 100;
+```
+or, in c++, you may found you can write like this:
+(we must mention c++ here for clear because this style of
+ternary is indeed not allowed to be written in pure c,
+but most of programmers may not distinct c/c++)
+```cpp
+int i = 0;
+int j = 10;
+(i < j ? i : j) = 1;
+```
+(the second case is correct because every operation in c++ are special methods(functions), so = is actually a function call,
+equivalent style is ```cpp int::operator=(i< j ? i : j, 1);```)
+
+
+They all correct, but second one is not encouraged to use.
+
 === Switch-Case
+
+Addition to if-else statement, we also have switch-case statements.
+
+```c
+switch (object) {
+  case label:
+    statements
+  case label:
+  ...
+}
+```
+Label can be one of "case literal-value" or "default", and it is not necessary to add brackets if you have multiple statements in one case.
+Each label means an entry, when object matches label, it will execute start from the position of label, until meets `break statements`
+
+Then, a legal switch-case statements may look like:
+```c
+int i; // for random value
+switch (i) {
+  case 1:
+  case 2:
+    printf("less than 3\n");
+    break;
+  case 4:
+    printf("larger than 3\n");
+  case 5:
+    printf("larger than 4\n");
+  default:
+    printf("do nothing\n");
+    break;
+}
+```
+
+==== Break statement
+
+But what does break statement do?
+
+Break statements has two variants.
+One is here, break statements used to jump out of the switch case statements' execution sequence.
+
+When c finds object matches the label, and it will execute each statements after the label until meets end bracket,
+but in some case, actually, most case, you may not want it to do so.
+So, break can break whole process, when it executed break statements, it will simply jump out of switch-case statements,
+and rest statements inside will not be executed.
+
+Though break statements in switch-case is not mandatory, but it is a good habit to add break for each label.
 
 == Loop
 
-=== For
+What if you want to execute multiple, same, or equivalent same statements?
+Here we needs loop.
+
+Loop are some statements can execute other statements repeatedly according to some condition.
 
 === While
 
+While loop looks similar to if statement,
+```c
+while (condition)
+  loop-body
+```
+and works similar to if statement as well.
+When condition is true, then loop-body will be executed.
+
+Furthermore, most similar part between while loop and if statement is that body of loop has still single statement.
+If you want multiple statements to be evaluated, you must add brackets.
+
+```c
+while (1) {
+  printf("infinity loop\n");
+}
+```
+
+=== For
+
+For loop is another type of loop, it may not that clear to have the name "for",
+```c
+for (initial; condition; update)
+  loop-body
+```
+for loop always have four part.
+
+Initial part give the ability to define loop variable and initialize them inside the loop.
+Condition part is same as while loop, if it is true, then body executed, else, just break the process.
+Loop-body, still, same as if and while loop, execute if everything OK.
+And finally, update, when loop-body finished, the for loop will do update, to update loop variable.
+
+```c
+for (int i = 0; i < 10; i ++) {
+  printf("%d", i);
+}
+```
+
 === Do-While
+
+But what if we need to execute body at least once?
+
+Then we need do-while loop.
+```c
+do {
+  body
+} while (condition);
+```
+
+Apart form other statements, do-while loop requires brackets compulsory.
+
+=== Break
+
+Still break, the other form of break is here,
+when break statement used within the body of loops, it will jump out of whole loop.
+Discard anything after break.
+Even update part of for loop.
+
+Similar to switch-case.
+
+=== Continue
+
+Sometimes, you may need to just skip rest of part in body, but not jump out of loop,
+then you needs continue statement.
+
+When continue executed, it will just go to another round of loop, do update, test condition, and new execution
+process of body.
 
 == Array
 
+When we are dealing with small scale of data, define multiple variables is enough,
+but how about sequence of data?
+
+For example, read scores of over 500 students and sort them.
+
+In contrast, average and maximum can be done with only one or two variables, but this requires store all information.
+
+Arrays are linear and continuous data structure for storing same type values.
+
+Definition for one-dimension array written as following:
+```c
+type name[length];
+```
+
+And further, array can be multiple-dimension.
+```c
+type name[length][length];
+type name[length][length][length];
+...
+```
+
+Once we define an array, then it has length elements stored, you may visit them using index:
+```c
+name[idx];
+```
+each element can be seen as a regular variable whose type is same as type used to define whole array.
+
+And we can then traversal array using loop:
+```c
+int arr[10];
+for (int i = 0; i < 10; i ++) {
+  arr[i] = i;
+}
+```
+
+Then, how can we initialize an array?
+
+There are two main ways:
+```c
+type name[] = {value1, value2, ...};
+type name[length] = {value1, value2, ...};
+
+type name[][length] = {value1, value2, ..., value6, ...};
+type name[length][length] = {value1 ...};
+type name[length][length] = {{value1, ...}, {value_length, ...}};
+...
+```
+One is not write length, but just wrap initial values using brackets,
+the final array will have the length of total count of initial values.
+The other way is to specify length, and also provide initial value wrapped using brackets.
+
+For multiple-dimension arrays, you must specify other dimension length except first one,
+and you can write initial values directly in one pair of brackets, but also, spare each dimension array elements using
+different brackets pair.
+
 === C Style String
 
+Finally, we come to string part.
+
+As we mentioned before, string and character has some special relationship.
+Actually, strings in c programming language are array of char.
+
+In C programming language, it will treat char array end with '\0' as a string.
+
+== `sizeof`
+
+Though it is possible to traversal arrays using literals.
+It is not that convenient.
+
+To simplify operation, we can use `sizeof` operator:
+```c
+sizeof(type)
+sizeof(variable)
+sizeof(array)
+```
+`sizeof` operator will return the total length of target type/variable/array in bytes.
+So, to have the length of array, we can say that:
+```c
+int len = sizeof(array) / sizeof(type);
+```
+
 == Iterator
+
+To traversal arrays, using `idx` traversal variable is one possible method.
+The other way to archive the goal is using iterator.
+```c
+int a[10];
+for (int*p = a; p < a + 10; p ++) {
+  *p = 1;
+}
+```
+here, we defined p as iterator for array a.
+And then, it is able to iterate whole array.
+
+The p here is called, pointer points to int.
+
+More detail will be covered in #link(<Pointers>)[Pointers] section.
 
 == Function
 
@@ -2114,6 +2405,8 @@ For example, when you see
 
 === Function In Assembly
 
+== `goto`
+
 == User Defined Types
 
 === `Struct`
@@ -2131,6 +2424,7 @@ For example, when you see
 == Structure space, Memory Alignment & Offset
 
 == Pointers
+<Pointers>
 
 === Pointer offset, index & linked list
 
@@ -2139,6 +2433,20 @@ For example, when you see
 === Pointer Convert
 
 == Pointer in Assembly
+
+== Exception
+
+=== `setjump`, `longjump`
+
+=== Try-Catch, Throw
+
+=== Seh, Structure exception handler
+
+=== Herbexception
+
+=== Exception spread
+
+=== Condition System
 
 == Preprocessor
 
