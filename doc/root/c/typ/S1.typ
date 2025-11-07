@@ -2448,6 +2448,8 @@ More detail will be covered in #link(<Pointers>)[Pointers] section.
 
 === Condition System
 
+=== Continuous
+
 == Preprocessor
 
 === Header files, ```c #include```
