@@ -26,7 +26,9 @@
 
 === Accessibility
 
-== Lambda Expression
+== Turning Machine
+
+== Lambda Calculus
 
 === Church numeral
 
