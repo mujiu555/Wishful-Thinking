@@ -1,9 +1,13 @@
+#import "@preview/zh-kit:0.1.0": *
+
 = From The C Programming Language To Theoretical Computer Science
 
 #show raw: set text(font: (
-  (name: "WenQuanYi Micro Hei Mono", covers: "latin-in-cjk"),
-  "WenQuanYi Micro Hei Mono"
+  (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
+  "Noto Sans CJK SC"
 ))
+
+#show: doc => setup-base-fonts(doc)
 
 Author: #text("GitHub@mujiu555").
 
@@ -2245,6 +2249,16 @@ for (int i = 0; i < 10; i ++) {
 }
 ```
 
+Another important part is that,
+for totally four part of for loop, `initial`, `condition`, and `update` parts can be empty.
+Thus, you may find in some special case,
+```c
+for (;;)
+  body
+```
+can be seen as infinity loop.
+
+
 === Do-While
 
 But what if we need to execute body at least once?
@@ -2377,23 +2391,165 @@ More detail will be covered in #link(<Pointers>)[Pointers] section.
 
 == Function
 
+Function, a kind of contract, accepts some input and generate outputs.
+Most similar to their mathematical form, any same input provide for a function will result in same output.
+Furthermore, the format of function is almost same as that in math:
+```c
+int func(int R);
+```
+You may assume it as: $"function" f: N->N$ or $f(x) -> N, x in N$
+And
+```c
+float func(float a, float b);
+```
+may represents $"function" f: R, R -> R$ for $f(arrow(v)) -> R, arrow(v) = angle.l a, b angle.r, a, b in R$.
+
+Formally, input in C programming language can be zero or more parameters.
+And output are something so called "return value".
+There may exists more way to pass output value other than regular returning method.
+
+Ideally, a function may not affect anything outside itself, this kind of function are seen as pure functional function.
+But, in normal program, they may need to perform operations other than calculation.
+For example, I/O. Any operation modify memory, variables outside its own scope, or perform I/O, are defined as side effects of a function.
+
+More particularly, some function in C programming language may have even no returning but side-effects.
+
 === Definition
+
+To brief understand function in c, first look at the function definition.
+
+Function definition does almost same as variable declaration, but the main purpose
+it to tell the compiler about a function's name, return type and its parameters,
+rather than allocate a new space indeed.
+
+We call it prototype.
+```c
+<return-type> <function-name>(<parameters> ...);
+```
+Usually, prototype are placed within headers.
+
+For example, you may have prototype for function`add` that generate sum of two integer like:
+```c
+int add (int a, int b);
+```
+Here we declare the function add, which accepts two arguments, corresponding to parameters a, and b respectively.
+
+And then, as variables must initialized before referenced.
+Functions must have finish implementation before being called.
+
+Function implementation roughly like declaration,
+but with extra function body part:
+```c
+<return-type> <function-name> (<parameters> ...) {
+  <function-body>...
+}
+```
+Body part may be regular statements, but also possible for `return` statement.
+
+Purpose of `return` statement is tell the program, which value are seen as return value of the function.
+
+Like equation mark in $f(x,y) = x + y$.
+
+Here we implement function `add`:
+```c
+int add (int a, int b) {
+  return a + b;
+}
+```
+
+=== Function Calling
+
+Once a function has been defined, it can be used in our program with function call syntax.
+
+As we mentioned very early at the beginning of our tutorial, a function call is written in such form:
+```c
+<function-name> (<arguments> ...)
+```
+And arguments must match parameter in order and type.
+
+For example, if we have a function add defined before,
+```c
+int add(int a, int b){
+  return a + b;
+}
+```
+Then we can use it like:
+```
+#include <stdio.h>
+
+int main(void) {
+  int a = 10;
+  a = add(a, 20);
+  printf("%d", a);
+  return 0;
+}
+```
+first argument we provide for `add` is integer variable a, which has the same type as parameter `a`,
+and second argument is literal value `20`, since any integer literal without suffix will be seen as integer in c,
+it has also same type with parameter `b`.
+Thus, the function call is acceptable.
+
+But what if we provide arguments less, more, or even has type mismatch?
+The C programming language will complain about syntax error.
 
 === Recursion
 
+Since a function can be called within body of other functions,
+it make nonsense to prevent a function calling it self.
+
+A function that calling it self are called recursion function.
+
 === Function Tail Call Optimization
+
+== Assembly
+
+=== Architecture
+
+==== AMD64 (x86_64)
+
+==== Aarch64 / arm64
+
+==== MIPS / Loong
+
+=== BUS
+
+==== Bridges
+
+=== CPU
+
+=== Intel Syntax, AT&T Syntax
+
+=== Memory Access
+
+=== Commands
+
+=== Direct Memory Access
 
 == Stack
 
+=== Frames
+
 === Stack Variables, Local Variables
+
+=== Recursion Function Expansion
 
 == Global Variables
 
 == Variable Scope
 
-== Variable Allocation
+=== Dynamic Scope
+
+=== Lexical Scope
+
+==== Function Scope
+
+==== Block Scope
+
+== Closure
 
 == Heap Space
+
+=== Variable Allocation
 
 == Memory Management
 
@@ -2427,6 +2583,18 @@ More detail will be covered in #link(<Pointers>)[Pointers] section.
 <Pointers>
 
 === Pointer offset, index & linked list
+
+=== Array, Pointers Points To Continuous Memory
+
+=== Function pointers
+
+==== Form
+
+==== Function As Function Pointer
+
+==== Calling With Function Pointer
+
+==== Simplified Function Call
 
 === Void Pointers
 
@@ -2520,6 +2688,32 @@ More detail will be covered in #link(<Pointers>)[Pointers] section.
 
 ==== Binary (Bin)
 
+== ABI
+
+=== Function Call Conventions
+
+==== `__cdecl`
+
+==== `__stdcall`
+
+==== `__fastcall`
+
+==== `thiscall`
+
+==== `System V ABI syscall`
+
+=== Function Naming Convention
+
+==== C Function Naming Convention
+
+==== MSVC C++ Function Naming Convention
+
+==== Rust Function Naming Convention
+
+==== Common Lisp Naming Convention
+
+=== Endian
+
 === Dynamic Linked Library
 
 === Static Linked Library
@@ -2553,5 +2747,11 @@ More detail will be covered in #link(<Pointers>)[Pointers] section.
 == ```c __attribute__((attribute))```
 
 == ```c _Generic```
+
+== ```c ..., va_start, va_arg, va_end``` Macro, stdarg.h
+
+== ```c __VA_ARGS__```
+
+== Variable Length Array
 
 == ASCII, EBCDIC, Unicode/UCS-II

@@ -26,9 +26,15 @@
 
 === Accessibility
 
+== Object System
+
+=== 
+
 == Turning Machine
 
 == Lambda Calculus
+
+== First Order Function
 
 === Church numeral
 
