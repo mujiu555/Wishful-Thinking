@@ -2700,7 +2700,9 @@ A function that calling it self are called recursion function.
 
 ==== `thiscall`
 
-==== `System V ABI syscall`
+==== Microsoft 4-register fastcall `__vectorcall` 
+
+==== System V ABI syscall
 
 === Function Naming Convention
 
