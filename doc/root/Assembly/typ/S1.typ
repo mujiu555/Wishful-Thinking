@@ -1,8 +1,8 @@
-= Assembly, Constitution Principle of Computer and Computer Organization and Architecture,
+= Assembly, Constitution Principle of Computer, Computer Organization and Architecture and Operating System
 
 Author: #link("https://github.com/mujiu555")[GitHub\@mujiu555].
 
-== Section I: Basis
+== Section I: Basis Assembly
 
 == Coding, Numeration, Radix
 
@@ -189,33 +189,284 @@ Furthermore, most important, MAR, MBR still not the real register.
 
 === Fetch-Execute Cycle
 
+When CPU executing programs, it follows the fetch-execute cycle.
+Until it receives halt instruction, it will repeat read, decode, execute process.
+
+Instructions are stored in memory, and CPU must read them so that it can be decode then.
+CU, controls the whole process of reading and decode.
+
+CPU first determine logical memory address according to PC, and then send the memory request to MAR.
+MAR store the command and communicate with main memory.
+Main memory pass requested data, or instructions to CPU by bus, and then store those data in MBR.
+IR then fetch instruction from MBR, split full instruction into Operator part and address part.
+Calling ALU to actually execute the instruction.
+
+This is a full fetch-execute cycle for CPU.
+
 === CISC & RISC
+
+CISC, Complex Instruction Set Computer, a collection of architecture,
+try to improve computer performance by decrease instruction number of some specify operations.
+In general, CISC computer may have more special purpose instruction, so that it can perform different
+complex operation within one execution cycle.
+Instructions used by CISC, sometimes are multiple-bytes, and may vary with its purpose.
+Total CPU cycle consumed by a instruction may also vary.
+But they always provides various method for memory accessing.
+
+While RISC, Reduced Instruction Set Computer, try to reduce type of instructions.
+Since most instructions in CISC may not used frequently,
+and some of those instruction can be seen as combination of other simpler high-frequent instructions,
+improve the performance of basic instructions may have higher performance overall,
+and this can make ISA design simpler as well.
+Instructions are all fixed byte and most of them consume only 1 CPU cycle strictly in RISC.
+CPU pipeline can even shrink some instructions' execution less than 1 CPU cycle.
+Memory addressing method are limited and most operations are finished in register.
+
+Most register in CISC may have its own function but those in RISC are mostly general purposed.
+Furthermore, overall number of registers in RISC are more than those in CISC.
+
+CPU control method adopted by those two type of architecture are also different,
+CISC often uses micro program to control whole CPU, while RISC uses logical circuit.
+
+=== Cache
+
+Inside CPU, it is too slow to fetch outside registers, so cache some frequent used data is a good idea.
+Cache may have multiple level, each get far away from core.
+
+L1, L2 cache may spare within one core, and L3 cache may be used commonly by whole CPU.
 
 === Memory
 
+Memory, most data and instructions are stored here,
+CPU use it to cache data, store results and communicate with other components.
+
+Primary memory, often RAM, random access memory, have different kind of distribution.
+Mainly there are two different RAM,
+- Static RAM, SRAM, RAM that designed using flip-flop to store bits.
+  "Static" means that SRAM need not extra operations to keep data.
+  And have relative faster access speed among all kind of memory.
+  - Sync SRAM
+  - Async SRAM
+  - Burst SRAM
+- Dynamic RAM, DRAM, RAM that designed using capacitor.
+  "Dynamic", in contrast, needs refresh regularly, for capacitor lacks electron as time.
+  DRAM always have smaller size, lower electronic level, but slower speed.
+  - DDR
+  - LPDDR
+
+On the other part, memory can also distinct by memory Error Check and Correct ability,
+- Regular memory
+- ECC memory
+
+Recently (but not that recently), there are a new kind of memory,
+Optane memory, it can even store data after power-off.
+
+Devices other than main memory still have their own memory,
+for example, hard drivers, may have their own cache (a memory) to exchange information with CPU.
+
 ==== Address
+
+Memory is a kind of physical device,
+but it is not possible to access memory through its physical information,
+otherwise, every program vendor must provide different program instance for every combination of memory,
+CPU, and other hardware.
+Concerning size of memory, design of memory, even id of memory.
+
+So, mapping physical memory unit into logical memory is essential.
+In computer, we assume memory are continuous, no matter how many memory card you installed, and no matter
+what size each memory card have.
+And then, we split this continuous space into pieces with same logical size.
+Assign each logical piece with an id, for referencing.
+Those ID for memory space, just like id for bank safe, by accessing corresponding bank safe,
+we can store or withdraw things in it.
+
+Even, you may store a id represent another bank safe inside.
+And we can than find another bank safe by the one you holds.
+
+Other memories (or some special device can abstract as memory) will also be mapped and concatenated into the logical memory.
+And then CPU can access those devices without specify its hardware information.
+
+This id, we call it "Address".
+Every address indexes a space of memory.
 
 ==== Bytes, Word, Double Word and Half-Word
 
-=== Direct Memory Access
+In assembly, or CPU design, there are another measurement for data,
+
+#table(
+  columns: 3,
+  stroke: none,
+  table.hline(),
+  table.header([Name], [Conversion], [From]),
+  table.hline(stroke: 0.5pt),
+  [`bit`], [/], [None],
+  [`Byte`], [8], [`bit`],
+  [`Half`], [4], [`bit`],
+  [`Word`], [2], [`Byte`],
+  [`Double Word`], [2], [`Word`],
+  [`Quad Word`], [4], [`Word`],
+  [`Paragraph`], [8], [`Word`],
+  table.hline(),
+)
+
+Those units measure the data computer can manipulate DIRECTLY.
+
+==== Direct Memory Access
+
+Most time, CPU do calculating work, this takes relative small times.
+But when CPU have to access memory or other device, it must take multiple cycles to fetch data.
+Transfer data from and between memory.
+
+Thus, it is natural to have a special designed device fetching data for CPU.
+When CPU have to fetch data from peripheral, DMA will take this job and copy information from those devices into memory,
+while CPU do its own calculating job.
+
+=== ROM
+
+Outside memory, there are another kind of data storage, ROM, Read-Only Memory.
+
+This kind of flash, can store data without electronic refresh.
+So, even power-off may not delete required data,
+thus, it always used for BIOS storage.
+
+As time goes, ROM soon developed into EPROM, EEPROM and NAND Flash.
+Which can be read and rewritten using special tool, can be covered using light or other method, and Write-Rewrite using only electron.
+NADA Flash is the basis of USB Memory Driver and SSD.
+
+=== Storage
+
+Hard drivers, together old school soft drivers, are storage for computer, which have larger space,
+more reliable storage ability than memory.
+Always have the responsibility for keep data.
+
+But the speed of storage are much slower than memory.
 
 === BUS
 
+How CPU access its desired data, how CPU touches its required devices indeed?
+
+In modern computer system, CPU communicate with other devices through BUS.
+
+Why we need BUS, rather than other communicate architecture?
+- BUS can decrease complexity:
+  In other system, like directly communicate, if we have N devices to communicate,
+  then there must have at least $C^2_N$ circuit.
+  But with BUS, N-N network topology can be then reduced to
+  N-1-N topology or N-1-Adapter-1-N bus-star topology.
+- BUS also standardize interfaces for devices.
+  Before PCIe, there are multiple different connector for devices.
+
 ==== Address BUS
+
+Address Bus, as its name, used for transfer memory address.
+With address bus, CPU then can visit its wanted memory.
+
+Address Bus transfer address information, and only pass from controller to terminal device.
+Width of address bus determine the largest memory space a computer can visit.
+
+With a 32-bit address bus, CPU can visit maximum 4GB data.
 
 ==== Data BUS
 
-==== Command BUS
+Data Bus transfer actual data, as CPU specify its wanted data space address by Address Bus.
+The terminal device may return actual data the space stores back towards CPU using Data Bus.
+Also, CPU may write its result to memory by Data Bus.
+
+Data Bus transfer data, Data Bus can transfer data towards both side.
+No matter data from CPU and write to terminal device, or come from terminal and fetched by CPU.
+Width of Data Bus limits maximum size of data a CPU can fetch or write.
+
+With a CPU with register size 64, Data Bus width 64, whole register can be stored directly.
+
+==== Control BUS
+
+Control Bus transfer control or status signal.
+Both side can send or receive signal transferred by Control Bus.
+Width of Control Bus can affect operations of CPU.
+
+Signals send by Control Bus controls the behaviour of devices, for example, write or read signal send
+to storage will instruction storage which data to read or how to store some data.
+Also, signals send by terminal devices may also affect CPU, for example, I/O finish interrupt signal
+may tell CPU some data finish reading.
+
+==== Dual Independent BUS: North, South Bridge
+
+In traditional bus system, bus connects all components of a computer.
+This result in long time waste when I/O transfer.
+
+Then it is possible to spare high-speed devices and low-speed devices into two bus.
+
+Back Side Bus, inside CPU, connect each kernel of CPU, ALU, CU and so on.
+Front Side Bus, outside CPU, connect CPU with North and South Bridge.
+- North Bridge, connects CPU, North Bridge and other high speed devices.
+  Main Memory and high speed caches
+- South Bridge, connects to North Bridge and other low speed devices.
+  - PCI: high speed I/O devices
+  - ISA: low speed I/O devices
 
 === Stack
 
+Since memory is represented in large continuous space logically.
+Find methods for data management is a large problem.
+
+A simple way to manage data is stack.
+
+Stack is a linear first-in-last-out data structure.
+First choose an address as base of stack, and then we can push data and pop data out of the stack.
+On the other way, it is possible to index element inside a stack by offset.
+
+==== Stack grows downwards
+
+In computer, continuous memory have address, and then some address with larger value can be seen as high
+address, and thus we can define the side of stack.
+
+In general, we always choose higher address as the base of stack,
+and then stack increment will result in stack grown towards lower address.
+
+Why stack always choose higher address: #link("https://github.com/mujiu555/Wishful-Thinking/blob/mujiu555@feat/c/doc/root/c/typ/S1.typ").
+
 ==== Push
+
+Push operations to stack eventually lead to stack growth.
+It first add new element onto the top of stack, and then increase stack top pointer.
 
 ==== Pop
 
+Pop operation to stack eventually lead to stack shrink.
+It store the value store at top to somewhere, and then decrease stack top pointer.
+
 === Registers
 
+Registers in CPU, is the most basic function unit.
+They have the function to store data, and put them into calculating.
+
+Following are registers commonly used in `8086`, `i386`, `x86`, `ia32`, `amd64`(`x86_64`).
+
 ==== AX(Accumulator), BX(Base Address), CX(Counter), DX(Data)
+
+In x86_64, there are four general purpose registers.
+They are `*AX`, `*BX`, `*CX`, `*DX`.
+
+Those general purpose registers can be divide, and used as smaller registers.
+
+#table(
+  columns: 6,
+  stroke: none,
+  table.hline(),
+  table.header([Name], [Representation], [x64], [x86], [x16], [8]),
+  table.hline(stroke: 0.5pt),
+  [`Accumulator`], [\*AX], [RAX], [EAX], [AX], [AH, AL],
+  [`Base Address`], [\*BX], [RBX], [EBX], [BX], [BH, BL],
+  [`Counter`], [\*CX], [RCX], [ECX], [CX], [CH, CL],
+  [`Data`], [\*DX], [RDX], [EDX], [DX], [DH, DL],
+  table.hline(),
+)
+
+- \*AX register always join calculation, and can store results in `mut`, `div` operation,
+  or function call returning value.
+- \*BX register always join rebase operation, used as memory access offset.
+- \*CX register always treat as counter, and will automatically decrease in loop.
+- \*DX register always transfer arguments, do I/O operation.
 
 ==== CS:IP(Code Segment: Instruction Pointer)
 
@@ -231,4 +482,16 @@ Furthermore, most important, MAR, MBR still not the real register.
 
 ==== R8, R9, R10, ..., R15
 
-=== North, South Bridge
+=== Heap
+
+== Syntax
+
+=== Operator, Operand
+
+=== Comment
+
+=== Memory Access
+
+=== Labels
+
+=== Macro
