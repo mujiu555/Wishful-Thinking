@@ -1,9 +1,13 @@
+#import "@preview/zh-kit:0.1.0": *
+
 = From The C Programming Language To Theoretical Computer Science
 
 #show raw: set text(font: (
-  (name: "DejaVu Sans Mono", covers: "latin-in-cjk"),
-  "SimHei"
+  (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
+  "Noto Sans CJK SC"
 ))
+
+#show: doc => setup-base-fonts(doc)
 
 Author: #text("GitHub@mujiu555").
 
@@ -15,6 +19,9 @@ Waiting for finishing.
 #outline()
 
 == Section I: C Programming Language
+
+To have a glance to computer science, we must have known a programming language, and then it could lead you to
+understand some key concept within the computer and programming language design.
 
 == Intro
 
@@ -685,6 +692,15 @@ signed int i = 2147483647;
 unsigned int u = 2147482647u;
 ```
 
+Integer may be expressed as:
+
+```txt
+<number>*<suffix>     for decimal express     ; 10, 11, 5
+0<number>*<suffix>    for octal express       ; 0, 01, 077
+0x<number>*<suffix>   for hexadecimal express ; 0x0, 0x1a, 0xff
+0b<number>*<suffix>   for binary express      ; 0b1, 0b0, 0b10
+```
+
 ==== Literal Suffix
 
 有些同学可能就注意到了, 我们有些的数字之后, 跟上了一些字符.
@@ -921,6 +937,16 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 如果运算符的位置在变量的前面, 那么就是先对变量进行操作, 然后再取值,
 而如果运算符的位置在变量的后面, 则先取值,
 等到值参与完运算以后再给变量自增或自减.
+
+```c
+int i = 0;
+printf("%d", i++); // => 0, i = 1;
+printf("%d", ++i); // => 2, i = 2;
+printf("%", i);
+printf("%d", i--); // => 2, i = 1;
+printf("%d", --i); // => 0, i = 0;
+printf("%", i);
+```
 
 同样的, 大家也可以看到, 这里对于运算符的描述并不是对数值生效了,
 而是对 "变量" 生效.
@@ -1174,7 +1200,7 @@ $ (1011)_((2)) = (001'011)_((2)) = (13)_((8)). $
   table.hline(stroke: 0.5pt),
   [`&`], [按位与], [```c A&B```], [若A和B对应位都非0, 则对应位置1],
   [`|`], [按位或], [```c A|B```], [若A和B对应位有至少一个非0, 则对应位置1],
-  [`^`], [按位与或], [```c A^B```], [若A和B对应位有且仅有一个非0, 则对应位置1; 否则, 则对应位置0; 不同为1, 相同为0],
+  [`^`], [按位异或], [```c A^B```], [若A和B对应位有且仅有一个非0, 则对应位置1; 否则, 则对应位置0; 不同为1, 相同为0],
   [`~`], [按位取反], [```c ~A```], [每一位若为0, 则置1; 若非0, 则置0],
   table.hline(),
 )
@@ -1269,6 +1295,76 @@ $ Z_n = Z mod n(Z, mod) $, 满足封闭性, 结合性, 则有Z上的模N剩余�
 
 有 $a' = -a$的加法逆元, 则, 对 $M$ 求补有 $a' = M - a, M = 10^n$,
 对于 `M` 有 $0 = M, 0 = 0$, 在 $M/2$ 上同余.
+
+=== Bitwise Shift
+
+Apart from regular bitwise operations, we have some special ones as well.
+Could you image that every digit of a numbers can be shift?
+
+We have mentioned float point numbers before already, right?
+You may think that float point can be seen as shift of digits.
+But actually, the float point numbers just move the position of decimal point.
+
+In bitwise shift operations, the decimal point will be fixed in `#0.`.
+And, move all digits directly right or left.
+
+- Logical Shift Right:
+  Shift all digits right based on 0 position. Every number outside 0 will be discarded.
+  Padding higher position with 0.
+  ```txt
+   | 0000'1001 0010'1111 | =>
+  0 | 0000'1001 0010'111 | 1 =>
+  00 | 0000'1001 0010'11 | 11 =>
+  ...
+  ```
+- Mathematical Shift Right:
+  Mostly same as logical shift right operation, but padding higher position based on
+  sign bit.
+  ```txt
+   | 0000'1001 0010'1111 | =>
+  0 | 0000'1001 0010'111 | 1 =>
+  00 | 0000'1001 0010'11 | 11 =>
+  ...
+  ```
+  For positive numbers, exactly like logical ones.
+  ```txt
+   | 1111'1001 0010'1111 | =>
+  1 | 1111'1001 0010'111 | 1 =>
+  11 | 1111'1001 0010'11 | 11 =>
+  ...
+  ```
+  For negative ones, padding number will be 1 instead.
+- Shift Left:
+  Shift all digits left based on highest position. Every number over highest limit will be discarded.
+  Padding 0 position with 0.
+  ```txt
+     <= | 0000'1001 0010'1111 |
+   <= 0 | 000'1001 0010'111 | 0
+  <= 00 | 00'1001 0010'11 | 00
+  ...
+  ```
+
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([Operations], [Description], [Form], [Comment]),
+  table.hline(stroke: 0.5pt),
+  [`<<`], [SHL], [```c A << B```], [],
+  [`>>`], [SHR], [```c A >> B```], [Different machine may choose different SHR method, Logical or mathematical],
+  table.hline(),
+)
+
+Give a brief knowledge of bitwise shift operations here.
+You may find that, shift operations just do multiplication and division indeed.
+
+How?
+
+Actually, `SHL` are some number multiple $2^n$.
+`SHR` are some number division $2^n$.
+
+And all discarded numbers are seen as overflow.
 
 == Syntax
 
@@ -1593,6 +1689,9 @@ int a = 10;
 
 Assignment are some operation special to variable.
 
+Most simple one has notation like `equation` in math.
+We call it `assignment operation` directly.
+
 #table(
   columns: 3,
   stroke: none,
@@ -1616,64 +1715,841 @@ printf("%d", i);
 // => 9
 ```
 
-
-=== Global Variables
-
-=== Local Variables
+So, this is the meaning of "variable", a space that can store some value.
+And assignment operation just find those space, and then replace the value inside.
+Just like the drawer that can store exactly one thing.
+You may put one thing inside.
+And you may clear the drawer, and put a new one inside.
 
 === Composed Assignment Operations
 
-== Type Convert
+Beyond regular assignment operation, we have some advanced ones.
+You may compose assignment operation with other mathematics operations.
+Thus, we got `compound assignment operation`.
+
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([Operations], [Description], [Form], [Equivalent Form]),
+  table.hline(stroke: 0.5pt),
+  [`+=`], [Addition Assignment], [```c A += val```], [```c A = (typeof(A))(A + val)```],
+  [`-=`], [Subtraction Assignment], [```c A -= val```], [```c A = (typeof(A))(A - val)```],
+  [`*=`], [Multiplication Assignment], [```c A *= val```], [```c A = (typeof(A))(A * val)```],
+  [`/=`], [Division Assignment], [```c A /= val```], [```c A = (typeof(A))(A / val)```],
+  [`%=`], [Modulus Assignment], [```c A %= val```], [```c A = (typeof(A))(A % val)```],
+
+  [`^=`], [Bitwise XOR Assignment], [```c A ^= val```], [```c A = (typeof(A))(A ^ val)```],
+  [`|=`], [Bitwise OR Assignment], [```c A |= val```], [```c A = (typeof(A))(A | val)```],
+  [`&=`], [Bitwise AND Assignment], [```c A &= val```], [```c A = (typeof(A))(A & val)```],
+
+  [`<<=`], [SHL Assignment], [```c A <<= val```], [```c A = (typeof(A))(A << val)```],
+  [`>>=`], [SHR Assignment], [```c A >>= val```], [```c A = (typeof(A))(A >> val)```],
+  table.hline(),
+)
+
+Those self-increment operation and self-decrease operations are some kind of same as
+addition assignment and subtraction assignment:
+```c
+int a = 0;
+a++;// a=>1
+a+=1; // Equivalent, a => 2
+--a;// a=>1
+a-=1;// a => 0
+```
+
+== Type Conversion
+
+As we mentioned before, C is typed language.
+Each type's variable occupies different spaces.
+
+So, to have one variable has type `int`, to be used as `long`, we must convert its value into type long.
+The way to archive this is called type convert.
+
+In #link(<types>)[Types] section, we have learnt `type boost`, this is a kind of special automatically type conversion.
+Auto type conversion always convert type from smaller ranges to larger.
+So, that's why we need force type conversion.
+
+To convert a value's type from one to another, add type with brackets before the expression.
+
+```c
+(int)10ll; // same as 10
+(char)12;  // same as '\14'
+
+char c;
+int i = 3000;
+c = (int)i;
+```
+
+But force type conversion has a serious problem: it may result in resolution lack.
+Conversion from `int` to `char`, is a kind of conversion from large range to smaller range.
+And it will simply discard higher part of `int` value.
+Instead of the case `short` convert to `int`, just put all data into lower part of int and everything is OK.
+
+For example,
+```txt
+  Short: 0010'0000 1000'0011 =>
+  Char:  1000'0011
+  Int:   0000'0000 0000'0000-0010'0000 1000'0011
+```
+
+This may cause some unexpected results.
+
+Also, conversion from real numbers to integer will also introduce same problem.
+All number after decimal point will be dropped directly.
 
 == Input And Output
 
+Programs does not only calculation, but also have to tell the result.
+Thus input and output utilities are indispensable.
+
+Most useful input and output function are provided by `printf` and `scanf` function in C.
+
 === ```c printf```
+
+`printf`, stand for "print with format", a kind of format output method.
+
+So, basically, the function of `printf` is to display some information on screen.
+And advanced functions are format output string.
+
+==== Output
+
+Most basic usage of `printf` is written as following:
+```c
+printf("output string")
+```
+Anything inside quotations, the string delimiter, except '%', will be displayed as is.
+
+For example, the `printf` here will print "output string" to terminal.
+The black-backgrounded window on your computer.
+
+For "terminal", the name came from the hardware long long ago.
+
+One thing you must noticed is that, example shown here is just a expression, but a statement.
+So, in order to make it work, you may have to add a semi-colon, ';', after whole expression.
+
+In most case, the system will refresh output with carriage return, line feed, or both.
+But `printf` will never add any of which after all content have been printed.
+So, to let output looks normal, you need to add a new line mark at the end of string:
+```c
+printf("string with new line mark at end\n")
+```
+
+Outside end of line, new line mark can also added inside a sentence.
+```c
+printf("string\nwith new line mark inside\n")
+```
+This may do the same as following:
+```c
+printf("string\n");
+printf("with new line mark inside\n");
+```
+(why we add semi-colon at the end of sentence? Because you will never able to written two different expression within one statement in such form)
+
+==== Placeholder & format
+
+And how about advanced functions?
+
+The format feature is provided by placeholders.
+Have you ever remember I have mentioned '%' before?
+Percentage mark works like placeholder here, and that's why it cannot be printed directly using `printf`.
+The method to print out '%' into screen is done by writing '%' as "%%" in format string, the first argument provided for `printf`.
+
+Since `printf` has the name "print with format", the placeholder must have not only the function
+to prevent percentage mark to be evaluated and printed.
+So, let us investigate more about placeholders.
+
+As we all know, C programming language has classified data into different types.
+So that placeholders must have different form so that `printf` function can then distinct them.
+Those decorator for placeholders are called "type specifier".
+And a full placeholder are written according to such syntax:
+```txt
+<placeholder> ::= '%' [flags] [width] [.precision] [length] <type specifier>
+flags         ::= '-' | '+' | space | '#' | '0'
+width         ::= <number>
+precision     ::= <number>
+length        ::= <number>
+```
+Looks complex? Just quick glance and move forward, examples says more than standard:
+
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([type specifier], [Description], [Form], [Expected Data]),
+  table.hline(stroke: 0.5pt),
+  [`a`, `A`], [Output floats in hexadecimal], [```c %a```], [Reals: float, double, double],
+  [`d`], [Output integer in decimal], [```c %d```], [Integers: char, short, int],
+  [`o`], [Output integer in octal], [```c %o```], [Integers: char, short, int],
+  [`x`, `X`], [Output integer in hexadecimal], [```c %x```], [Integers: char, short, int],
+  [`u`], [Output unsigned in octal], [```c %u```], [Unsigned Integers: unsigned char, short, int],
+  [`f`], [Output reals in decimal], [```c %f```], [Reals: float],
+  [`e`, `E`], [Output reals in exponent], [```c %e```], [Reals: float],
+  [`g`, `G`], [Output reals in shorter form], [```c %g```], [Reals: float],
+  [`c`], [Output Character], [```c %g```], [Character: char],
+  [`s`], [Output Character String], [```c %s```], [String: `char[]`],
+  [`p`], [Output Address], [```c %p```], [Pointer: `*`],
+  table.hline(),
+)
+
+And their long version variants:
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([type specifier], [Description], [Form], [Expected Data]),
+  table.hline(stroke: 0.5pt),
+  [`ld`], [Output integer in decimal], [```c %ld```], [Integers: long],
+  [`lo`], [Output integer in octal], [```c %lo```], [Integers: long],
+  [`lx`, `lX`], [Output integer in hexadecimal], [```c %lx```], [Integers: long],
+  [`lu`], [Output unsigned in octal], [```c %lu```], [Unsigned Integers: unsigned long],
+  [`lld`], [Output integer in decimal], [```c %lld```], [Integers: long long],
+  [`llo`], [Output integer in octal], [```c %llo```], [Integers: long long],
+  [`llx`, `llX`], [Output integer in hexadecimal], [```c %llx```], [Integers: long long],
+  [`llu`], [Output unsigned long long in octal], [```c %llu```], [Unsigned Integers: unsigned long long],
+  [`lf`], [Output reals in decimal], [```c %lf```], [Reals: double],
+  [`le`, `lE`], [Output reals in exponent], [```c %le```], [Reals: double],
+  [`lg`, `lG`], [Output reals in shorter form], [```c %lg```], [Reals: double],
+  [`%`], [Output `%`], [```c %%```], [None],
+  table.hline(),
+)
+
+Here are flags part:
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([flags], [Description], [Form], [Expected Data]),
+  table.hline(stroke: 0.5pt),
+  [`-`], [Align left, default right], [```c %-d```], [None],
+  [`+`], [Force output '+', default not show for positive], [```c %+d```], [None],
+  [` `], [Insert a space before output], [```c % d```], [None],
+  [`#`], [Show '0', '0x' or '0X' with 'o', 'x', 'X' descriptor \ force show decimal point with 'e', 'E', 'f' \ or, not remove tailed zero with 'g', 'G'], [```c %#d```], [None],
+  [`0`], [Padding 0 instead of space], [```c %0d```], [None],
+  table.hline(),
+)
+Width, .precision and length:
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([flags], [Description], [Form], [Expected Data]),
+  table.hline(stroke: 0.5pt),
+  [`(number)`], [minimal number of character to print, padding with space, if output longer than this value, output will not be truncated], [```c %8d```], [None],
+  [`*`], [width not specified in format string, but obtained as parameter before argument to be formatted], [```c %*d```], [Integer: char, short, int],
+  table.hline(stroke: 0.5pt),
+  [`.number`], [for integers (d, i, o, u, x, X): minimal digits to be written, less than this value will padding by 0. Longer than this value will affect nothing. 0 means nothing to print \ for e, E, f: digits after decimal point \ for g, G: maximal digits to be printed \ s: maximal length of a sting, default, all character will be printed, until '\0' \ c: nothing affected \ nothing placed will introduce a 1], [```c %.10d %.f```], [None],
+  [`.*`], [precision not specified, but obtained as parameter before argument to be formatted], [```c %.10d %.f```], [Integer: char, short, int],
+  table.hline(stroke: 0.5pt),
+  [`h`], [parameter as short, for i, d, o, u, x, X], [```c %hd```], [None],
+  [`l`], [parameter as long, for i, d, o, u, x, X \ double, for f \ wide char, for c \ wchar string, for s], [```c %ld```], [None],
+  [`ll`], [parameter as long long, for i, d, o, u, x, X \ long double, for e, E, f, g, G], [```c %lld```], [None],
+  [`L`], [parameter as long long, for e, E, f, g, G \ parameter as long long, for i, d, o, u, x, X], [```c %Lf```], [None],
+  table.hline(),
+)
+
+And `prinf` will return total character it printed.
+
+You may able to print ASCII code using `printf` now:
+```c
+#include <stdio.h>
+
+int main(void) {
+  for (int i = 0; i < 128; i ++) {
+    printf("ASCII: %5d, Char: %c;\n", i, i);
+  }
+}
+```
+Definition of `printf` function is written as:
+```c
+int printf(const char * fmt, ...);
+```
+So, you can call it using the form:
+```c
+printf("format string")
+printf("format string", arguments)
+printf("format string", arguments, arg2)
+printf("format string", arguments, arg2, arg3)
+...
+```
 
 === ```c scanf```
 
-== Array
+Once we learnt output part, it is also necessary to have a glance to input part.
 
-== C Style String
+The usage of `scanf` is roughly like to `printf`, except function calling methods.
+`Scanf` stands for "Scan from format", so, it necessarily needs placeholder as `printf`.
+
+Placeholders are written in this form:
+```txt
+<placeholder> ::= '%' ['*'] [width][modifiers] <type specifier>
+```
+Some kind of like to `printf`, right?
+
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([part], [Description], [Form], [Expected Data]),
+  table.hline(stroke: 0.5pt),
+  [`*`], [\* stand for discard input, or, simply skip data match the type], [```c %*d```], [None],
+  [width], [maximum character to be read], [```c %8d```], [None],
+  [modifiers], [decorator for type specifier like `printf`], [```c %ld```], [None],
+  [type], [data to be scan as], [```c %d```], [None],
+  table.hline(),
+)
+
+#table(
+  columns: 4,
+  stroke: none,
+  align: center,
+  table.hline(),
+  table.header([part], [Description], [Form], [Expected Data]),
+  table.hline(stroke: 0.5pt),
+  [`a`, `A`], [floats], [```c scanf("%a", &f)```], [floats],
+  [`c`], [characters, if width is not 0, read width character and set to parameter], [```c scanf("%c", &c), scanf("%3c", &c1, &c2, &c3)```], [char],
+  [`d`], [integer written in decimal, '+' or '-' are optional], [```c scanf("%d", &i)```], [int],
+  [`ld`], [integer written in decimal, '+' or '-' are optional], [```c scanf("%ld", &l)```], [long],
+  [`lld`], [integer written in decimal, '+' or '-' are optional], [```c scanf("%lld", &ll)```], [long long],
+  [`e`, `E`, `f`, `F`, `g`, `G`], [real numbers, '+' or '-' are optional, 'e' for exponent are optional], [```c scanf("%f", &f)```], [float],
+  [`i`], [integer], [```c scanf("%i", &i)```], [int],
+  [`o`], [integer written octal], [```c scanf("%o", &i)```], [int],
+  [`s`], [string, separated by blanks], [```c scanf("%s", s)```], [`char[]`],
+  [`u`], [unsigned int], [```c scanf("%u", &u)```], [unsigned int],
+  [`x`, `X`], [int written in hexadecimal], [```c scanf("%x", &i)```], [int],
+  [`p`], [pointer], [```c scanf("%p", &p)```], [`*`],
+  [`[]`], [ranges, simplified regular expression], [```c scanf("%[1-9]", &c)```], [char],
+  [`%`], [`%`], [```c scanf("%%")```], [None],
+  table.hline(),
+)
+
+Sample question: A+B Problem:
+```c
+#include <stdio.h>
+
+int main(void) {
+  int a, b;
+  scanf("%d%d",&a, &b);
+  printf("%d + %d = %d", a, b, a + b);
+  return 0;
+}
+```
 
 == Conditional Statement
 
+Since the program is not only tool to calculating,
+it also helps people to solve problems require decision.
+
+So, scientists introduces conditional statement.
+They can decide what to do according to conditions.
+
 === If
 
+If statement has form of:
+```c
+if (condition) statement
+```
+
+When condition expression part evaluated with true, then statement part will be executed.
+
+```c
+if (x < y)
+  printf("x less than y");
+```
+You can see, ```c x < y``` is condition expression,
+and if x indeed less than y, the program will output the information.
+
+But this is only the simplest case, what if we want to execute multiple statement within if statement?
+
+Remember code block?
+Code block can compose different statements together.
+So:
+```c
+if (max < x) {
+  swap(x, max);
+  printf("x larger than current max, swap them");
+}
+```
+Here, we execute two statements when x larger than current max value.
+
 === If-Else
+
+Instead of just "if" statement, sometimes we may need "else" part.
+// NOTE: example required
+```c
+if (condition)
+  then-statement
+else
+  else-statement
+```
+
+Just similar to if statements, when condition is not 0, or, acceptable, execute
+then-statement, else, execute else-statement.
+
+Also, you may find some case, you may classify different case, so you can written then
+like this:
+```c
+if (cond1)
+  then1-statement
+else if (cond2)
+  then2-statement
+else if (cond3)
+...
+else
+  else-statement
+```
+This is simply nested if-else statements for each "else if" are new if statement place in else part of
+further one.
+This is for beauty, but you can also write like this:
+```c
+if (cond1) {
+  then1
+} else {
+  if (cond2) {
+    then2
+  }
+  ...
+}
+```
+Very clear.
 
 === Ternary if-else operator
 
 三元运算符
 
+Though in most case, if-else statements is enough, it is still the statement but a expression.
+Thus in some corner condition, written using if-else may result in more lines of code and complexity.
+
+Thus we introduces ternary if-else operator. With this operator, you got a expression, so you can than
+combine them together with other expressions.
+
+Ternary if-else looks like this
+```c
+condition ? then : else
+```
+when condition is true, then part will be executed, and if condition is false, else part will be evaluated.
+And finally, the value of expression will be return.
+
+So, you may write:
+```c
+int i = 10;
+i = i - 100 < 0 ? 0 : i - 100;
+```
+or, in c++, you may found you can write like this:
+(we must mention c++ here for clear because this style of
+ternary is indeed not allowed to be written in pure c,
+but most of programmers may not distinct c/c++)
+```cpp
+int i = 0;
+int j = 10;
+(i < j ? i : j) = 1;
+```
+(the second case is correct because every operation in c++ are special methods(functions), so = is actually a function call,
+equivalent style is ```cpp int::operator=(i< j ? i : j, 1);```)
+
+
+They all correct, but second one is not encouraged to use.
+
 === Switch-Case
+
+Addition to if-else statement, we also have switch-case statements.
+
+```c
+switch (object) {
+  case label:
+    statements
+  case label:
+  ...
+}
+```
+Label can be one of "case literal-value" or "default", and it is not necessary to add brackets if you have multiple statements in one case.
+Each label means an entry, when object matches label, it will execute start from the position of label, until meets `break statements`
+
+Then, a legal switch-case statements may look like:
+```c
+int i; // for random value
+switch (i) {
+  case 1:
+  case 2:
+    printf("less than 3\n");
+    break;
+  case 4:
+    printf("larger than 3\n");
+  case 5:
+    printf("larger than 4\n");
+  default:
+    printf("do nothing\n");
+    break;
+}
+```
+
+==== Break statement
+
+But what does break statement do?
+
+Break statements has two variants.
+One is here, break statements used to jump out of the switch case statements' execution sequence.
+
+When c finds object matches the label, and it will execute each statements after the label until meets end bracket,
+but in some case, actually, most case, you may not want it to do so.
+So, break can break whole process, when it executed break statements, it will simply jump out of switch-case statements,
+and rest statements inside will not be executed.
+
+Though break statements in switch-case is not mandatory, but it is a good habit to add break for each label.
 
 == Loop
 
-=== For
+What if you want to execute multiple, same, or equivalent same statements?
+Here we needs loop.
+
+Loop are some statements can execute other statements repeatedly according to some condition.
 
 === While
 
+While loop looks similar to if statement,
+```c
+while (condition)
+  loop-body
+```
+and works similar to if statement as well.
+When condition is true, then loop-body will be executed.
+
+Furthermore, most similar part between while loop and if statement is that body of loop has still single statement.
+If you want multiple statements to be evaluated, you must add brackets.
+
+```c
+while (1) {
+  printf("infinity loop\n");
+}
+```
+
+=== For
+
+For loop is another type of loop, it may not that clear to have the name "for",
+```c
+for (initial; condition; update)
+  loop-body
+```
+for loop always have four part.
+
+Initial part give the ability to define loop variable and initialize them inside the loop.
+Condition part is same as while loop, if it is true, then body executed, else, just break the process.
+Loop-body, still, same as if and while loop, execute if everything OK.
+And finally, update, when loop-body finished, the for loop will do update, to update loop variable.
+
+```c
+for (int i = 0; i < 10; i ++) {
+  printf("%d", i);
+}
+```
+
+Another important part is that,
+for totally four part of for loop, `initial`, `condition`, and `update` parts can be empty.
+Thus, you may find in some special case,
+```c
+for (;;)
+  body
+```
+can be seen as infinity loop.
+
+
 === Do-While
+
+But what if we need to execute body at least once?
+
+Then we need do-while loop.
+```c
+do {
+  body
+} while (condition);
+```
+
+Apart form other statements, do-while loop requires brackets compulsory.
+
+=== Break
+
+Still break, the other form of break is here,
+when break statement used within the body of loops, it will jump out of whole loop.
+Discard anything after break.
+Even update part of for loop.
+
+Similar to switch-case.
+
+=== Continue
+
+Sometimes, you may need to just skip rest of part in body, but not jump out of loop,
+then you needs continue statement.
+
+When continue executed, it will just go to another round of loop, do update, test condition, and new execution
+process of body.
+
+== Array
+
+When we are dealing with small scale of data, define multiple variables is enough,
+but how about sequence of data?
+
+For example, read scores of over 500 students and sort them.
+
+In contrast, average and maximum can be done with only one or two variables, but this requires store all information.
+
+Arrays are linear and continuous data structure for storing same type values.
+
+Definition for one-dimension array written as following:
+```c
+type name[length];
+```
+
+And further, array can be multiple-dimension.
+```c
+type name[length][length];
+type name[length][length][length];
+...
+```
+
+Once we define an array, then it has length elements stored, you may visit them using index:
+```c
+name[idx];
+```
+each element can be seen as a regular variable whose type is same as type used to define whole array.
+
+And we can then traversal array using loop:
+```c
+int arr[10];
+for (int i = 0; i < 10; i ++) {
+  arr[i] = i;
+}
+```
+
+Then, how can we initialize an array?
+
+There are two main ways:
+```c
+type name[] = {value1, value2, ...};
+type name[length] = {value1, value2, ...};
+
+type name[][length] = {value1, value2, ..., value6, ...};
+type name[length][length] = {value1 ...};
+type name[length][length] = {{value1, ...}, {value_length, ...}};
+...
+```
+One is not write length, but just wrap initial values using brackets,
+the final array will have the length of total count of initial values.
+The other way is to specify length, and also provide initial value wrapped using brackets.
+
+For multiple-dimension arrays, you must specify other dimension length except first one,
+and you can write initial values directly in one pair of brackets, but also, spare each dimension array elements using
+different brackets pair.
+
+=== C Style String
+
+Finally, we come to string part.
+
+As we mentioned before, string and character has some special relationship.
+Actually, strings in c programming language are array of char.
+
+In C programming language, it will treat char array end with '\0' as a string.
+
+== `sizeof`
+
+Though it is possible to traversal arrays using literals.
+It is not that convenient.
+
+To simplify operation, we can use `sizeof` operator:
+```c
+sizeof(type)
+sizeof(variable)
+sizeof(array)
+```
+`sizeof` operator will return the total length of target type/variable/array in bytes.
+So, to have the length of array, we can say that:
+```c
+int len = sizeof(array) / sizeof(type);
+```
 
 == Iterator
 
+To traversal arrays, using `idx` traversal variable is one possible method.
+The other way to archive the goal is using iterator.
+```c
+int a[10];
+for (int*p = a; p < a + 10; p ++) {
+  *p = 1;
+}
+```
+here, we defined p as iterator for array a.
+And then, it is able to iterate whole array.
+
+The p here is called, pointer points to int.
+
+More detail will be covered in #link(<Pointers>)[Pointers] section.
+
 == Function
+
+Function, a kind of contract, accepts some input and generate outputs.
+Most similar to their mathematical form, any same input provide for a function will result in same output.
+Furthermore, the format of function is almost same as that in math:
+```c
+int func(int R);
+```
+You may assume it as: $"function" f: N->N$ or $f(x) -> N, x in N$
+And
+```c
+float func(float a, float b);
+```
+may represents $"function" f: R, R -> R$ for $f(arrow(v)) -> R, arrow(v) = angle.l a, b angle.r, a, b in R$.
+
+Formally, input in C programming language can be zero or more parameters.
+And output are something so called "return value".
+There may exists more way to pass output value other than regular returning method.
+
+Ideally, a function may not affect anything outside itself, this kind of function are seen as pure functional function.
+But, in normal program, they may need to perform operations other than calculation.
+For example, I/O. Any operation modify memory, variables outside its own scope, or perform I/O, are defined as side effects of a function.
+
+More particularly, some function in C programming language may have even no returning but side-effects.
+
+=== Definition
+
+To brief understand function in c, first look at the function definition.
+
+Function definition does almost same as variable declaration, but the main purpose
+it to tell the compiler about a function's name, return type and its parameters,
+rather than allocate a new space indeed.
+
+We call it prototype.
+```c
+<return-type> <function-name>(<parameters> ...);
+```
+Usually, prototype are placed within headers.
+
+For example, you may have prototype for function`add` that generate sum of two integer like:
+```c
+int add (int a, int b);
+```
+Here we declare the function add, which accepts two arguments, corresponding to parameters a, and b respectively.
+
+And then, as variables must initialized before referenced.
+Functions must have finish implementation before being called.
+
+Function implementation roughly like declaration,
+but with extra function body part:
+```c
+<return-type> <function-name> (<parameters> ...) {
+  <function-body>...
+}
+```
+Body part may be regular statements, but also possible for `return` statement.
+
+Purpose of `return` statement is tell the program, which value are seen as return value of the function.
+
+Like equation mark in $f(x,y) = x + y$.
+
+Here we implement function `add`:
+```c
+int add (int a, int b) {
+  return a + b;
+}
+```
+
+=== Function Calling
+
+Once a function has been defined, it can be used in our program with function call syntax.
+
+As we mentioned very early at the beginning of our tutorial, a function call is written in such form:
+```c
+<function-name> (<arguments> ...)
+```
+And arguments must match parameter in order and type.
+
+For example, if we have a function add defined before,
+```c
+int add(int a, int b){
+  return a + b;
+}
+```
+Then we can use it like:
+```
+#include <stdio.h>
+
+int main(void) {
+  int a = 10;
+  a = add(a, 20);
+  printf("%d", a);
+  return 0;
+}
+```
+first argument we provide for `add` is integer variable a, which has the same type as parameter `a`,
+and second argument is literal value `20`, since any integer literal without suffix will be seen as integer in c,
+it has also same type with parameter `b`.
+Thus, the function call is acceptable.
+
+But what if we provide arguments less, more, or even has type mismatch?
+The C programming language will complain about syntax error.
 
 === Recursion
 
+Since a function can be called within body of other functions,
+it make nonsense to prevent a function calling it self.
+
+A function that calling it self are called recursion function.
+
 === Function Tail Call Optimization
+
+== Assembly
+
+=== Architecture
+
+==== AMD64 (x86_64)
+
+==== Aarch64 / arm64
+
+==== MIPS / Loong
+
+=== BUS
+
+==== Bridges
+
+=== CPU
+
+=== Intel Syntax, AT&T Syntax
+
+=== Memory Access
+
+=== Commands
+
+=== Direct Memory Access
 
 == Stack
 
+=== Frames
+
 === Stack Variables, Local Variables
+
+=== Recursion Function Expansion
 
 == Global Variables
 
 == Variable Scope
 
-== Variable Allocation
+=== Dynamic Scope
+
+=== Lexical Scope
+
+==== Function Scope
+
+==== Block Scope
+
+== Closure
 
 == Heap Space
+
+=== Variable Allocation
 
 == Memory Management
 
@@ -1681,29 +2557,44 @@ printf("%d", i);
 
 == Function Call
 
-== Function Stack
+=== Function Stack
 
-== Function In Assembly
+=== Function In Assembly
+
+== `goto`
 
 == User Defined Types
 
-== `Struct`
+=== `Struct`
 
-=== Simulate `class` Using Structure
+==== Bit Field
 
-=== Virtual Function Table
+==== Simulate `class` Using Structure
 
-== `Enum`
+==== Virtual Function Table
 
-== `Union`
+=== `Enum`
 
-== Bit Field
+=== `Union`
 
 == Structure space, Memory Alignment & Offset
 
 == Pointers
+<Pointers>
 
 === Pointer offset, index & linked list
+
+=== Array, Pointers Points To Continuous Memory
+
+=== Function pointers
+
+==== Form
+
+==== Function As Function Pointer
+
+==== Calling With Function Pointer
+
+==== Simplified Function Call
 
 === Void Pointers
 
@@ -1711,15 +2602,55 @@ printf("%d", i);
 
 == Pointer in Assembly
 
+== Exception
+
+=== `setjump`, `longjump`
+
+=== Try-Catch, Throw
+
+=== Seh, Structure exception handler
+
+=== Herbexception
+
+=== Exception spread
+
+=== Condition System
+
+=== Continuous
+
 == Preprocessor
 
-=== Header files
+=== Header files, ```c #include```
 
-=== Macro, C Style Macro, Template, Process Macro in Rust, Extended Macro for Common Lisp & Hygiene Macro System
+=== Macro
+
+==== C Style Macro
+
+==== M4 Macro Language
+
+==== C++ Template
+
+==== Rust Procedure Macro
+
+==== Rust Macro Rules
+
+==== Macro Assembly, Pseudocode
+
+==== Common Lisp Expansion Macro
+
+==== Common Lisp Reader Macro
+
+==== Scheme Hygiene Macro System
+
+==== Scheme Syntax Rules
+
+==== Scheme Syntax Case
+
+==== Hygiene for the Unhygienic
 
 === Compiler Comments
 
-=== ```c #program```
+=== ```c #progma```
 
 == Meta-programming
 
@@ -1739,18 +2670,90 @@ printf("%d", i);
 
 === Link
 
-== Dynamic Linked Library
-
-== Static Linked Library
-
 == Executable File
 
-== Build Systems
+=== Object
 
-== C Project Management
+=== Executable
+
+=== Executable File Format
+
+==== Portable Executable (PE)
+
+==== Executable Linkable Format (ELF)
+
+==== Mach-5 (Fat-5)
+
+==== Common Object File Format (COFF)
+
+==== Binary (Bin)
+
+== ABI
+
+=== Function Call Conventions
+
+==== `__cdecl`
+
+==== `__stdcall`
+
+==== `__fastcall`
+
+==== `thiscall`
+
+==== Microsoft 4-register fastcall `__vectorcall` 
+
+==== System V ABI syscall
+
+=== Function Naming Convention
+
+==== C Function Naming Convention
+
+==== MSVC C++ Function Naming Convention
+
+==== Rust Function Naming Convention
+
+==== Common Lisp Naming Convention
+
+=== Endian
+
+=== Dynamic Linked Library
+
+=== Static Linked Library
+
+=== fPIE, fPIC
 
 == Multiple File Compile
 
+=== Compile Unit
+
+=== Object
+
+== Build Systems
+
+=== C Project Management
+
+=== Makefiles
+
+=== AutoTools
+
+=== CMake
+
+=== VSXMake (VSProj)
+
+=== XMake
+
 == Variable Decorator
 
-== \_Generic
+== ```c asm volatile (assembly code : output operands : input operands : clobbers)```
+
+== ```c __attribute__((attribute))```
+
+== ```c _Generic```
+
+== ```c ..., va_start, va_arg, va_end``` Macro, stdarg.h
+
+== ```c __VA_ARGS__```
+
+== Variable Length Array
+
+== ASCII, EBCDIC, Unicode/UCS-II
