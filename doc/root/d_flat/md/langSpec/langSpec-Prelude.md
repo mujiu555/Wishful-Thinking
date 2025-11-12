@@ -50,7 +50,9 @@
 
 ``` scheme
 <lambda>         => 
-'(' 'lambda' <formals> [ ('#:returns' <returning>) | ('=>' <returning>) ] 
+'(' 'lambda' <formals> 
+    [ ('#:returns' <returning>) | ('=>' <returning>) ]
+    [ #:except <exceptions> ]
     <body> ')'
 <formals>        => '(' { <param> } ')'
                  |  <param>
@@ -68,6 +70,7 @@
 <returning>      => '(' { <type> } ')'
                  |  <nil>
                  |  <type>
+<exceptions>     => '(' { <except> } ')'
 <body>           => <expression>
 ```
 
