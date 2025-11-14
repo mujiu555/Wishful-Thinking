@@ -1,0 +1,106 @@
+#import "@preview/cetz:0.4.2" as cetz
+#import "@preview/cetz-plot:0.1.3"
+#import "@preview/cetz-venn:0.1.4"
+#import "@preview/finite:0.5.0": automaton
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+
+= MIT 18.404j Theory of Computation (junior)
+
+== Section I: Intro
+
+== Applications
+
+== Modules of computation
+
+Capture important aspect of thing we try to understand.
+
+=== Finite Automata
+
+Use less memory with limited ability of computation.
+
+#automaton(
+  (
+    q1: (q1: 0, q2: 1),
+    q2: (q1: 0, q3: 1),
+    q3: (q3: "0,1")
+  ),
+  final: ("q3",),
+  initial: "q1"
+)
+
+Each have different
+- Stats: $q_1, q_2, q_3$
+- Transitions: $arrow^1$
+- Start State: #automaton((q1:()), initial: "q1", final: ())
+- Accepted state: #automaton((q3:()), initial: (), final: ("q3"))
+
+Give finite string as input, and have output of accepted or reject.
+
+Begin at start state, read input symbols, follow corresponding transitions, Accept if end with accept state, Reject if not.
+
+We say that "M_1 accepts exactly those string in A where $A = {w | w "contains substing 11"}$".
+And, we have A that is the language accepted by the language $L(M_1)$.
+$M_1$ recognize A and $A = L(M_1)$.
+
+==== Define a finite automation
+
+Defn: A finite automaton M is a 5-tuple $(Q, Sigma, delta, q_0, F)$:
+- Q: finite set of states
+- $Sigma$: finite set of alphabet symbols
+- $delta$: transition function $delta: Q times Sigma -> Q$
+  $delta$, somehow is, a kind of relation, give a state and a accepted symbol, then returns a (maybe) new state.
+  Eg. $delta(q, a) = r =>$  #automaton((q: (r: "a"), r:()), initial: (), final: ())
+- $q_0$: start state
+- $F$: set of accept states
+
+For example above:
+- $M_1 = (Q, Sigma, delta, q_1, F)$,
+- $Q = {q_1, q_2, q_3}$,
+- $Sigma = {0, 1}$,
+- $F = {q_3}$.
+And have:
+
+#table(
+  columns: 3,
+  stroke: none,
+  table.hline(),
+  table.header([$delta=$], [0], [1]),
+  table.hline(stroke: 0.5pt),
+  $q_1$, $q_1$, $q_2$,
+  $q_2$, $q_1$, $q_3$,
+  $q_3$, $q_3$, $q_3$,
+  table.hline(),
+)
+
+==== String and languages
+
+- A string (word) is a finite sequence of symbols in $Sigma$ (alphabet),
+- A language is a set of strings (finite or infinite),
+- A empty string $epsilon$ is a string of length 0
+- The empty language $emptyset$ is the set with no strings.
+
+Defn: M accepts string $w = w_1 w_2 ... w_n$ each $w_i in Sigma$
+if there is a sequence of states $r_1, r_2, ... r_n in Q$
+where:
+- $r_0 = q_0$, state sequence starts at initial state,
+- $r_i = delta(r_(i-1), w_i) "for" i <= i <= n$, each state transition from previous one defined by transition functions,
+- $r_n in F$, whole sequence must be accepted.
+
+Recognizing languages:
+- $L(M) = {w|M "accepts" w}$,
+- $L(M) "is the language of" M$
+- M recognizes L(M)
+Every machine can accept many words, but only one language.
+
+Define: a language is regular if some finite automaton recognizes it.
+
+==== Regular Languages
+
+$L(M_1) = {w|w "contains substing 11"} = A$
+
+== Regular Expressions
+
+Let A, B be languages:
+- Union: $A union B = {w| w in A or w in B}$,
+- Concatenation: $A circle B = {x y | x in A and y in B} = A B$,
+- Kleene Star: Unary operation: $A^* = {x_1 ... x_k| "each" x_i in A "for" k >= 0}, epsilon in A^*$
