@@ -1,8 +1,12 @@
-# editor ui
+# editor UI
 
 ## components
 
-application (tool-bar + bottom) -> layer -> window -> tab (header + mod-line) -> buffer
+Application (tool-bar + bottom)
+-> layer
+-> window
+-> tab (header + mod-line)
+-> buffer
 
 Application:
 First line are tool-bar
@@ -11,10 +15,10 @@ Inner are layer(0), open only one window (editor window)
 editor window opened two tab, with no header but with mod-line
 buffer with line-number shown
 each buffer has its own editing-mode.
-editing-mode can affect key-maps, behaviour and completions.
-some editing-mode can share globally.
+Editing-mode can affect key-maps, behaviour and completions.
+Some editing-mode can share globally.
 
-```plain
+``` text
 [ED]|file|edit|view|options|help| ------------------------------------------------------------------------------------ [=][X]
 || main.c  * | [untitiled]  x |                                                                                      [0][<|>]
 |  0| #include <stdio.h>                                                                                                    |
@@ -49,7 +53,7 @@ some editing-mode can share globally.
 Default layout with Folder Browser and Symbol Viewer open.
 Totally three windows here.
 
-```plain
+``` text
 [ED]|file|edit|view|mode|options|help| ------------------------------------------------------------------------------- [=][X]
 |[ Folders      v ]| main.c  * | [untitiled]  x |                                                                    [0][<|>]
 | v src/           |  0| #include <stdio.h>                                                                                 |
@@ -89,7 +93,7 @@ Command Menu can be shown in three ways:
 
 Method I:
 
-```plain
+``` text
 |[ED]|file|edit|view|mode|options|help| ------------------------------------------------------------------------------ [=][X]
 |[ Folders      v ]| main.c  * | [untitiled]  x |                                                                    [0][<|>]
 |                  |  0| #include <stdio.h>                                                                                 |
@@ -123,7 +127,7 @@ Method I:
 
 Method II:
 
-```plain
+``` text
 |[ED]|file|edit|view|mode|options|help| ------------------------------------------------------------------------------ [=][X]
 |[ Folders      v ]| main.c  * | [untitiled]  x |                                                                    [0][<|>]
 |                  |  0| #include <stdio.h>                                                                                 |
@@ -158,7 +162,7 @@ Method II:
 Mthod III:
 If head-bar is not shown, the line 1 will be seen as head-bar area
 
-```plain
+``` text
 |[ED]|file|edit|view|mode|options|help| ------------------------------------------------------------------------------ [=][X]
 |[ Folders      v ]| main.c  * | [untitiled]  x |                                                                    [0][<|>]
 |                  |  0| #incl[ Command: edit I                                                            ]                |
