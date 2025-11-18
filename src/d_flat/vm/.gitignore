@@ -1,6 +1,7 @@
 # Xmake cache
 .xmake/
 .cache/
+target/
 build/
 
 # MacOS Cache
