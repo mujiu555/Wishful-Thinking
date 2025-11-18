@@ -100,7 +100,52 @@ $L(M_1) = {w|w "contains substing 11"} = A$
 
 == Regular Expressions
 
+=== Regular Operations
+
 Let A, B be languages:
 - Union: $A union B = {w| w in A or w in B}$,
 - Concatenation: $A circle B = {x y | x in A and y in B} = A B$,
 - Kleene Star: Unary operation: $A^* = {x_1 ... x_k| "each" x_i in A "for" k >= 0}, epsilon in A^*$
+Note., empty language won't accept empty string, but Kleene star of empty language will.
+
+=== Regular expression
+
+Like mathematical expression comes from combination of mathematical operations and mathematical elements,
+regular expression comes form combination of regular operations and languages.
+
+- Built form $Sigma$ (Alphabet), members $Sigma$, $emptyset$ (Empty language), $epsilon$ (empty word), [atomic]
+- Using $union$, $circle$, $*$, [Composite]
+
+E.g., $(0 union 1)^* = Sigma^*$ gives all strings over $Sigma$.
+
+Finite automata equivalent to regular expressions.
+
+== Closure Properties for regular languages
+
+If some set are closed under some operation, which means
+after applying those operations on objects, the result will still leave in the same class of objects.
+
+Union:
+If $A_1, A_2$ are regular languages, so is $A_1 union A_2$ (closure under $union$)
+
+Proof:
+let $M_1 = (Q_1, Sigma, delta_1, q_1, F_1) "recognize" A_1$,\
+and $M_2 = (Q_2, Sigma, delta_2, q_2, F_2) "recognize" A_2$.\
+Assuming $M = (Q, Sigma, delta, Q_0, F) "recognize" (A_1 union A_2)$,\
+$M$ should accept input $w$ if either $M_1$ or $M_2$ accept $w$.
+
+Compose $M_1 "and" M_2$ together,
+then components of M: $Q = Q_1 times Q_2 = { (q_1, q_2) | q_1 in Q_1 "and" q_2 in Q_2}$,
+$q_0 = (q_1, q_2)$
+And, $delta((q, r), a) = (delta_1(q, a), delta_2(r, a))$
+$F = (F_1 times Q_2) union (Q_1 times F_2)$
+
+Note., if $F = F_1 times F_2$, then it could be closure under intersection.
+
+Concatenation:
+If $A_1, A_2$ are regular languages, so is $A_1 circle A_2$ (closure under $circle$)
+
+Assuming $M$ accept input $w$, if $w = x y$ where, $M_1 "accepts" x$ and $M_2 "accepts" y$
+But failed.
+
+
