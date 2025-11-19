@@ -1884,21 +1884,514 @@ IP fragmentation, reassembly
   - IP header bits used to identify, order related fragments
 
 
+== Network-layer Services and Protocols
+
+Transport segment from sending host to receiving host
+- sender: encapsulates segments into datagrams, passes to link layer
+- receiver: delivers segments to transport layer protocol
+network layer protocols in every Internet device: hosts, routers
+
+router:
+- examines header fields in all IP datagrams passing through it
+- moves datagrams from input ports to output ports to transfer datagrams along end-end path
+
+network-layer functions:
+- forwarding: move packets from a router’s input link to appropriate router output link
+- routing: determine route taken by packets from source to destination: routing algorithms
+
+analogy: taking a trip
+- forwarding: process of getting through single interchange
+- routing: process of planning trip from source to destination
+
+Data plane:
+- local, per-router function
+- determines how datagram arriving on router input port is forwarded to router output port
+
+Control plane
+- network-wide logic
+- determines how datagram is routed among routers along end-end path from source host to destination host
+- two control-plane approaches:
+  - traditional routing algorithms: implemented in routers
+  - software-defined networking (SDN): implemented in (remote) servers
+
+== Internet
+
+```txt
++--------------------------------------+
+|     transport layer: TCP, UDP        |
++--------------------------------------+
+|                                      |  IP protocol:
+| +---------------------+ --.          |  - datagram format
+| | Path-selection:     |   v          |  - addressing
+| | - routing protocols | +----------+ |  - packaet handling conventions
+| |   (OSPF, BGP)       | |forwarding| |
+| | - SDN controller    | |  table   | |  ICMP protocol
+| +---------------------+ +----------+ |  - error reporting
+|                                      |  - router signaling
++--------------------------------------+
+|             link layer               |
++--------------------------------------+
+|            physical lyaer            |
++--------------------------------------+
+```
+
+IP Addressing: Introduction
+- Interface: connection between host/router and physical link
+- routers typically have multiple interfaces
+- host typically has one or two interfaces (e.g., wired Ethernet, wireless 802.11)
+- IP address: 32-bit identifier associated with each host or router interface
 
 
+Subnets
+- device interfaces that can physically reach each other without passing through an intervening router
+- IP addresses have two parts:
+  - subnet part: devices in same subnet have common high order bits
+  - host part: remaining low order bits
+Recipe for defining subnets:
+-detach each interface from its host or router, creating “islands” of isolated networks
+-each isolated network is called a subnet
 
+IP addressing: Network Classes
+Classful addressing:
+- The network portion of an IP address were constrained to be 8, 16, or 24 bits in length.
+- Subnets with 8-, 16-, and 24-bit subnet addresses were known as class A, B and C networks.
+- It became problematic: A class B (/16) subnet supporting 216 – 2 = 65,534 hosts, which is too large
 
+CIDR: Classless InterDomain Routing (pronounced “cider”)
+• subnet portion of address can have arbitrary length
+• address format: a.b.c.d/\#, where \# is \# bits in subnet portion of address
 
+```txt
+     1100'1000 0001'0111-0001'0000 0000'0000
+    |-------------23-------------|---- 9 ----|
+     1100'1000 0001'0111-0001'000 0 0000'0000
+    |-------- subnet part -------|--- host --|
+                  200.23.16.0/23
+```
 
+IP addresses: how to get one?
+Two questions:
+1. Q: How does a host get IP address within its network (host part of address)?
+2. Q: How does a network get IP address for itself (network part of address)
+How does host get IP address?
+- hard-coded by sysadmin in config file (e.g., Windows: control-panel->network->configuration->tcp/ip->properties, /etc/rc.config in UNIX)
+  PS., `resolve.conf` for linux, bsd and later \*nix
+- DHCP: Dynamic Host Configuration Protocol: dynamically get address from a server
 
+DHCP: Dynamic Host Configuration Protocol
+Goal: Allow host to dynamically obtain its IP address from network server when it “joins” network
+- can renew its lease on address in use
+- allows reuse of addresses (only hold address while connected/on)
+- support for mobile users who join/leave network
+DHCP overview:
+- host broadcasts DHCP discover msg [optional]
+- DHCP server responds with DHCP offer msg [optional]
+- host requests IP address: DHCP request msg
+- DHCP server sends address: DHCP ack msg
+DHCP can return more than just allocated IP address on subnet:
+- address of first-hop router for client
+- name and IP address of DNS sever
+- network mask (indicating network versus host portion of address)
 
+Connecting laptop will use DHCP to get IP address, address of first- hop router, address of DNS server.
+- DHCP REQUEST message encapsulated in UDP, encapsulated in IP, encapsulated in Ethernet
+- Ethernet frame broadcast (dest: FFFFFFFFFFFF) on LAN, received at router running DHCP server
+- Ethernet demux’ed to IP demux’ed, UDP demux’ed to DHCP
 
+Hierarchical addressing: more specific routes
+▪ Organization 1 moves from Fly-By-Night-ISP to ISPs-R-Us
+▪ ISPs-R-Us now advertises a more specific route to Organization 1
 
+#figure(image("./img/CAN201-L7-1.png"))
 
+IP addressing: last words ...
+Q: How does an ISP get block of addresses?
+A: ICANN: Internet Corporation for Assigned Names and Numbers http://www.icann.org/
+- allocates IP addresses, through 5 regional registries (RRs) (who may then allocate to local registries)
+- manages DNS root zone, including delegation of individual TLD (.com, .edu , …) management
+Q: Are there enough 32-bit IP addresses?
+- ICANN allocated last chunk of IPv4 addresses to RRs in 2011
+- NAT (next) helps IPv4 address space exhaustion
+- IPv6 has 128-bit address space
 
+== NAT: Network Address Translation
 
+NAT: All devices in the local network share just one IPv4 address as far as the outside world is concerned.
 
+#figure(image("./img/CAN201-L7-2.png"))
 
+all devices in local network have 32-bit addresses in a “private” IP address space (10/8, 172.16/12, 192.168/16 prefixes) that can only be used in local network
+
+advantages:
+- just one IP address needed from provider ISP for all devices
+- can change addresses of host in local network without notifying outside world
+- can change ISP without changing addresses of devices in local network
+- security: devices inside local network not directly addressable, visible by outside world
+
+implementation: NAT router must (transparently):
+- outgoing datagrams: replace (source IP address, port \#) of every outgoing datagram to (NAT IP address, new port \#)
+- remote clients/servers will respond using (NAT IP address, new port \#) as destination address
+- remember (in NAT translation table) every (source IP address, port \#) to (NAT IP address, new port \#) translation pair
+- incoming datagrams: replace (NAT IP address, new port \#) in destination fields of every incoming datagram with corresponding (source IP address, port \#) stored in NAT table
+
+#figure(image("./img/CAN201-L7-3.png"))
+
+NAT has been controversial:
+- routers “should” only process up to layer 3
+- address “shortage” should be solved by IPv6
+- violates end-to-end argument (port \# manipulation by network-layer device)
+- NAT traversal: what if client wants to connect to server behind NAT?
+but NAT is here to stay: extensively used in home and institutional nets, 4G/5G cellular nets
+
+== IPv6
+
+initial motivation: 32-bit IPv4 address space would be completely allocated
+
+Additional motivation:
+- Header format helps speed processing/forwarding
+- Header changes to facilitate QoS
+IPv6 datagram format:
+- Fixed-length 40-byte header
+- No fragmentation allowed (at intermediate routers, see “packet too big” new ICMP message type)
+
+IPv6 Datagram Format:
+
+```txt
+ 0                     15 16                     31
++-------------------------------------------------+
+| ver | pri |             flow label              |
++-------------------------------------------------+
+|       payload len      | next hdr |  hop limit  |
++-------------------------------------------------+
+|               source address(128)               |
++-------------------------------------------------+
+|            destination address(128)             |
++-------------------------------------------------+
+|                     payload                     |
+~                                                 ~
++-------------------------------------------------+
+```
+What’s missing (compared with IPv4):
+- no checksum (to speed processing at routers)
+- no fragmentation/reassembly
+- no options (available as upper-layer, next-header protocol at router)
+
+Transition from IPv4 to IPv6:
+- Tunneling: IPv6 datagram carried as payload in IPv4 datagram among IPv4 routers (“packet within a packet”): tunneling used extensively in other contexts (4G/5G)
+
+#figure(image("img/CAN201-L7-4.png"))
+#figure(image("img/CAN201-L7-5.png"))
+#figure(image("img/CAN201-L7-6.png"))
+#figure(image("img/CAN201-L7-7.png"))
+
+== Generalized Forwarding and SDN
+
+flow: defined by header field values (in link-, network-, transport-layer fields)
+
+generalized forwarding: simple packet-handling rules
+- match: pattern values in packet header fields
+- Pattern: match values in packet header fields
+- actions: for matched packet: drop, forward, modify, matched packet or send matched packet to controller
+- priority: disambiguate overlapping patterns
+- counters: \#bytes and \#packets
+
+#figure(image("img/CAN201-L7-8.png"))
+#figure(image("img/CAN201-L7-9.png"))
+#figure(image("img/CAN201-L7-10.png"))
+
+OpenFlow Abstraction: match+action: abstraction unifies different kinds of devices
+Router
+- match: longest destination IP prefix
+- action: forward out a link
+Switch
+- match: destination MAC address
+- action: forward or flood
+Firewall
+- match: IP addresses and TCP/UDP port numbers
+- action: permit or deny
+NAT
+- match: IP address and port
+- action: rewrite address and port
+
+== Routing Protocols
+
+Routing protocol goal: determine “good” paths (equivalently, routes), from sending host to receiving host, through network of routers
+- Path: sequence of routers packets will traverse in going from given initial source host to given final destination host
+- “good”: least “cost”, “fastest”, “least congested”
+- Routing: a “top-10” networking challenge!
+
+#figure(image("img/CAN201-L7-11.png"))
+#figure(image("img/CAN201-L7-12.png"))
+#figure(image("img/CAN201-L7-13.png"))
+
+Dijkstra’s algorithm:
+
+Net topology and link costs known to all nodes
+- Accomplished via “link state broadcast”
+- All nodes have same info
+
+Computes least cost paths from one node (“source”) to all other nodes: Gives forwarding table for that node
+
+Iterative: after k iterations, know least cost path to k dest.’s
+
+Notations:
+- c(x,y): link cost from node x to y; = ∞ if not direct neighbors
+- D(v): current value of cost of path from source to dest. v
+- p(v): predecessor node along path from source to dest. v
+- N': set of nodes whose least cost path is definitively known
+
+Distance Vector Algorithm
+Bellman-Ford equation (dynamic programming)
+
+let $d_x(y) := "cost of least-cost path from" x "to" y$\
+then $d_x(y) = min_v { c(x, v) + d_v(y) }$\
+$c(x, v)$:cost to neighbor v
+$min_v$ is taken over all neighbors v of x
+
+From time-to-time, each node sends its own distance vector estimate to neighbors
+
+When x receives new DV estimate from neighbor, it updates its own DV using B-F equation:
+$D_x(y) ← min_v{c(x,v) + D_v(y)} "for each node" y in N$
+
+❖ Under minor, natural conditions, the estimate Dx(y) converge to the
+actual least cost dx(y)
+
+== Making Routing Scalable
+
+our routing study thus far:
+idealized
+- all routers identical
+- network “flat”
+
+scale: billions of destinations:
+- can’t store all destinations in routing tables!
+- exchanging link-state or DV information would swamp links!
+
+administrative autonomy:
+- Internet: a network of networks
+- each network admin may want to control routing in its own network
+
+Internet Approach to Scalable Routing: Aggregate routers into regions known as “autonomous systems” (AS) (a.k.a. “domains”)
+
+Intra-AS (aka “intra-domain”): routing among routers within same AS (“network”)
+- all routers in AS must run same intra-domain protocol
+- routers in different AS can run different intra-domain routing protocols
+- gateway router: at “edge” of its own AS, has link(s) to router(s) in other AS’es
+
+Inter-AS (aka “inter-domain”): routing among AS’es
+- gateways perform inter-domain routing (as well as intra-domain routing)
+
+Forwarding table configured by both intra- and inter-AS routing algorithm
+- Intra-AS routing determines entries for destinations within AS
+- Inter-AS & intra-AS determine entries for external destinations
+
+Inter-AS tasks: Suppose router in AS1 receives datagram destined outside of AS1
+
+AS1 must:
+1. Learn which destinations are reachable through AS2, which through AS3
+2. Propagate this reachability info to all routers in AS1
+
+Routing Within an AS: most common intra-AS routing protocols:
+- RIP: Routing Information Protocol [RFC 1723]
+  - classic DV: DVs exchanged every 30 secs
+  - no longer widely used
+- OSPF: Open Shortest Path First [RFC 2328]
+  - classic link-state routing
+  - IS-IS protocol (ISO standard, not RFC standard) essentially same as OSPF
+- EIGRP: Enhanced Interior Gateway Routing Protocol
+  - DV based
+  - formerly Cisco-proprietary for decades
+  - became open in 2013 [RFC 7868])
+
+OSPF (Open Shortest Path First) Routing
+- “open”: publicly available
+- classic link-state
+  - each router floods OSPF link-state advertisements (directly over IP rather than using TCP/UDP) to all other routers in entire AS
+  - multiple link costs metrics possible: bandwidth, delay
+  - each router has full topology, uses Dijkstra’s algorithm to compute forwarding table
+- security: all OSPF messages authenticated (to prevent malicious intrusion)
+
+Hierarchical OSPF
+- two-level hierarchy: local area, backbone.
+  - link-state advertisements flooded only in area, or backbone
+  - each node has detailed area topology; only knows direction to reach other destinations
+
+#figure(image("./img/CAN201-L8-1.png"))
+
+== Internet inter-AS routing: BGP
+
+BGP (Border Gateway Protocol): the de facto inter-domain routing protocol: “glue that holds the Internet together”
+
+allows subnet to advertise its existence, and the destinations it can reach, to rest of Internet: “I am here, here is who I can reach, and how”
+
+BGP provides each AS router a means to:
+- obtain destination network reachability info from neighboring ASes (eBGP)
+- determine routes to other networks based on reachability information and policy
+- propagate reachability information to all AS-internal routers (iBGP)
+- advertise (to neighboring networks) destination reachability info
+
+#figure(image("./img/CAN201-L8-2.png"))
+
+BGP session: two BGP routers (“peers, speakers”) exchange BGP messages over semi-permanent TCP connection:
+- advertising paths to different destination network prefixes (e.g., to a destination/16 network)
+- BGP is a “path vector” protocol
+when AS3 gateway 3a advertises path AS3,X to AS2 gateway 2c: AS3 promises to AS2 it will forward datagrams towards X
+
+BGP messages exchanged between peers over TCP connection
+BGP messages [RFC 4371]:
+- OPEN: opens TCP connection to remote BGP peer and authenticates sending BGP peer
+- UPDATE: advertises new path (or withdraws old)
+- KEEPALIVE: keeps connection alive in absence of UPDATES; also ACKs OPEN request
+- NOTIFICATION: reports errors in previous message; also used to close connection
+
+BGP advertised path: prefix + attributes = “route”
+- path prefix: destination being advertised
+- two important attributes:
+  - AS-PATH: list of ASes through which prefix advertisement has passed
+  - NEXT-HOP: indicates specific internal-AS router to next-hop AS
+policy-based routing:
+- router receiving route advertisement to destination X uses policy to accept/reject a path (e.g., never route through AS W, or country Y).
+- router uses policy to decide whether to advertise a path to neighboring AS Z (does router want to route traffic forwarded from Z destined to X?)
+
+ISP only wants to route traffic to/from its customer networks (does not want to carry transit traffic between other ISPs – a typical “real world” policy)
+
+Populating Forwarding Tables:
+
+#figure(image("./img/CAN201-L8-3.png"))
+#figure(image("./img/CAN201-L8-4.png"))
+
+Hot Potato Routing
+
+#figure(image("./img/CAN201-L8-5.png"))
+
+Why Different Intra-, Inter-AS Routing ?
+
+policy:
+- inter-AS: admin wants control over how its traffic is routed, who routes through its network
+- intra-AS: single admin, so policy less of an issue 
+scale: reducing forwarding table size, routing update traffic
+- hierarchical routing: limiting the scope of full topological information
+- BGP routing to CIDRized destination networks (summarized routes)
+performance:
+- intra-AS: can focus on performance
+- inter-AS: policy dominates over performance
+
+== Software Defined Networking (SDN)
+
+Internet network layer: historically has been implemented via distributed, per-router approach
+- Monolithic router contains switching hardware, runs proprietary implementation of Internet standard protocols (IP, RIP, IS-IS, OSPF, BGP) in proprietary router OS (e.g., Cisco IOS)
+- Different “middleboxes” for different network layer functions: firewalls, load balancers, NAT boxes, ..
+\~2005: Renewed interest in rethinking network control
+plane
+
+Individual routing algorithm components in each and every router interact with each other in control plane to compute forwarding tables.
+
+Logically Centralized Control Plane:
+A distinct (typically remote) controller interacts with local control agents (CAs) in routers to compute forwarding tables
+
+Why a logically centralized control plane?
+- Easier network management: avoid router misconfigurations, greater flexibility of traffic flows
+- Table-based forwarding (recall OpenFlow API) allows “programming” routers
+  - Centralized “programming” easier: compute tables centrally and distribute
+  - Distributed “programming more difficult: compute tables as result of distributed algorithm (protocol) implemented in each and every router
+- Open (non-proprietary) implementation of control plane
+
+Data plane switches
+- Fast, simple, commodity switches implementing generalized data- plane forwarding in hardware
+- Switch flow table computed, installed by controller
+- API for table-based switch control (e.g., OpenFlow): defines what is controllable and what is not
+- Protocol for communicating with controller (e.g., OpenFlow)
+
+SDN controller (network OS):
+- Maintains network state information
+- Interacts with network control applications “above” via northbound API
+- Interacts with network switches “below” via southbound API
+- Implemented as distributed system for performance, scalability, fault-tolerance, robustness 
+
+Network-control apps:
+-“brains” of control: implement control functions using lower-level services, API provided by SDN controller
+-Open: can be provided by 3rd party: distinct from routing vendor, or SDN controller
+
+#figure(image("./img/CAN201-L8-6.png"))
+
+== OpenFlow Protocol
+
+- Operates between controller, switch
+- TCP used to exchange messages: optional encryption
+- Three classes of OpenFlow messages:
+  - controller-to-switch
+  - asynchronous (switch to controller)
+  - symmetric (misc)
+
+Key controller-to-switch messages
+- Features: controller queries switch features, switch replies
+- Configure: controller queries/sets switch configuration parameters
+- Modify-state: add, delete, modify flow entries in the OpenFlow tables
+- Packet-out: controller can send this packet out of specific switch port
+- Packet-in: transfer packet (and its control) to controller. See packet-out message from controller
+- Flow-removed: flow table entry deleted at switch
+- Port status: inform controller of a change on a port.
+
+#figure(image("./img/CAN201-L8-7.png"))
+
+== ICMP: Internet Control Message Protocol
+
+used by hosts and routers to communicate network-level information
+- error reporting: unreachable host, network, port, protocol
+- echo request/reply (used by ping)
+network-layer “above” IP: ICMP messages carried in IP datagrams, protocol number: 1
+
+ICMP message: type, code plus header and first 8 bytes of IP datagram causing error
+
+#table(
+  columns: 3,
+  stroke: none,
+  table.hline(),
+  table.header([Type], [Code], [description],),
+  table.hline(stroke: 0.5pt),
+  [0   ], [0   ], [echo reply (ping)],
+  [3   ], [0   ], [dest. network unreachable],
+  [3   ], [1   ], [dest host unreachable],
+  [3   ], [2   ], [dest protocol unreachable],
+  [3   ], [3   ], [dest port unreachable],
+  [3   ], [6   ], [dest network unknown],
+  [3   ], [7   ], [dest host unknown],
+  [4   ], [0   ], [source quench (congestion control - not used)],
+  [8   ], [0   ], [echo request (ping)],
+  [9   ], [0   ], [route advertisement],
+  [10  ], [0   ], [router discovery],
+  [11  ], [0   ], [TTL expired],
+  [12  ], [0   ], [bad IP header],
+  table.hline(),
+)
+
+Traceroute and ICMP:
+
+source sends sets of UDP segments to destination
+- 1st set has TTL =1, 2nd set has TTL=2, etc.
+datagram in nth set arrives to nth router:
+- router discards datagram and sends source ICMP message (type 11, code 0)
+- IP address of router where TTL expired is source IP address of datagram containing this ICMP message
+
+Stopping criteria:
+- UDP segment eventually arrives at destination host
+- destination returns ICMP “port unreachable” message (type 3, code 3)
+- source stops
+
+when ICMP message arrives at source: record RTTs
+
+== Network Management
+
+Autonomous systems (aka “network”): 1000s of interacting hardware/software components
+
+Other complex systems requiring monitoring, control:
+- Jet airplane
+- Nuclear power plant
+- others?
+
+"Network management includes the deployment, integration and coordination of the hardware, software, and human elements to monitor, test, poll, configure, analyze, evaluate, and control the network and element resources to meet the real-time, operational performance, and Quality of Service requirements at a reasonable cost." -- Saydam 1996
+
+#figure(image("./img/CAN201-L8-8.png"))
 
 
 
