@@ -1,0 +1,20 @@
+  .fold-container {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .hidden-content {
+    display: none;
+    transition: max-width 0.5s ease;
+    vertical-align: bottom;
+  }
+
+  .fold-container.open .hidden-content {
+    display: inline;
+  }
+
+  .ellipsis {
+    box-shadow: none;
+    text-decoration-line: underline;
+    text-decoration-style: wavy;
+  }

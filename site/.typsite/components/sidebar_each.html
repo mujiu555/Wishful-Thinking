@@ -1,0 +1,20 @@
+<head>
+</head>
+<!--
+Inline var could be used:
+- {children} - children of the current section
+- {numbering} - heading-numbering of the section
+- {title}    - title of the section
+- {anchor}   - anchor of the section
+- {show-children} - if show the children( if not, then `none` else `inline`)
+- Any meta contents.
+-->
+<body>
+  <li class="item-summary">
+    <a class="bullet">■</a>
+    <span class="link"><a href="#{anchor}">{numbering}{title}</a></span>
+    <ul class="block" style="display: {show-children};">
+      {children}
+    </ul>
+  </li>
+</body>

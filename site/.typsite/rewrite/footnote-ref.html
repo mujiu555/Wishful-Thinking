@@ -1,0 +1,11 @@
+<rewrite pass="footnote-ref"/>
+<head>
+</head>
+<!--
+Inline var could be used:
+- {name} - name of the footnote
+- {numbering} - numbering of the footnote
+-->
+<body>
+    <sup class="footnote-reference" id="{name}-back"><a href="#{name}">{numbering}</a></sup>
+</body>

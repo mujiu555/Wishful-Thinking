@@ -1,0 +1,96 @@
+.math-container {
+  display: grid;
+  place-items: center;
+  padding: 2rem 0;
+  overflow-x: auto;
+}
+
+.math-block {
+  --math-padding: 1.2rem;
+  display: inline-flex;
+  position: relative;
+  padding: var(--math-padding);
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.math-block[data-scale="1"] {
+  --math-ratio: 0.8
+}
+
+.math-block[data-scale="2"] {
+  --math-ratio: 1
+}
+
+.math-block svg {
+  transform: scale(2);
+  transform-origin: center;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: calc(100vw - 2 * var(--math-padding) - 4rem);
+  font-size: 2.5em;
+  overflow: visible;
+  font-family: "STIX Two Math", Symbola, serif;
+}
+
+.math-block svg text {
+  -webkit-user-select: text;
+  user-select: contain;
+  cursor: text;
+  paint-order: stroke;
+  stroke-linejoin: round;
+}
+
+.math-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -4px rgba(0, 32, 128, 0.12);
+}
+
+.math-block:active {
+  transition-duration: 0.08s;
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .math-container {
+    padding: 1rem 0
+  }
+
+  .math-block {
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+  }
+}
+
+.math-block::after {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--math-padding));
+  left: calc(-1 * var(--math-padding));
+  right: calc(-1 * var(--math-padding));
+  bottom: calc(-1 * var(--math-padding));
+  border: 1px solid transparent;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .math-block {
+    transform: scale(0.98);
+    transform-origin: center;
+  }
+
+  .math-block:hover {
+    transform: scale(1);
+  }
+}
+
+ul + pre {
+  margin-top: 0.65em;
+}
+
+ul + pre + pre {
+  margin-top: 0.65em;
+}
