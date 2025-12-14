@@ -1,0 +1,19 @@
+<head>
+</head>
+<!--
+Inline var could be used:
+- {level} - the heading level (from html)
+- {title}    - title of the section, MUST BE OCCURED EXACTLY ONCE
+- {content} - content of the current section, MUST BE OCCURED EXACTLY ONCE
+- {numbering} - heading-numbering of the section
+- Any meta contents.
+-->
+<body>
+  <section class="block">
+    <details open>
+      <summary style="font-size: 117%;">{numbering} {title}</summary>
+      {content}
+    </details>
+  </section>
+  <!-- you can do this: <h{level}>{content}</h{level}> -->
+</body>

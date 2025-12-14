@@ -1,0 +1,14 @@
+<rewrite pass="cite"/>
+<head>
+</head>
+<!-- 
+Inline var could be used:
+- {url} - dest
+- {body} - content of the cite, MUST OCCUR EXACTLY ONCE OR NOT 
+- Any meta contents of embeded article.
+-->
+<body>
+  <span class="link local"> 
+    <a href="{url}" title="{page-title} [{url}]">{title}</a>
+  </span>
+</body>

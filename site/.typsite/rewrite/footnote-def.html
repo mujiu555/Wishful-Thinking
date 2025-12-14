@@ -1,0 +1,14 @@
+<rewrite pass="footnote-def"/>
+<head>
+</head>
+<!--
+Inline var could be used:
+- {name} - name of the footnote
+- {numbering} - numbering of the footnote
+- {body} - content of the math, MUST OCCUR EXACTLY ONCE
+-->
+<body>
+  <div class="footnote-definition" id="{name}">
+    <sup class="footnote-definition-label"><a href="#{name}-back">{numbering}</a></sup>{body}
+  </div>
+</body>

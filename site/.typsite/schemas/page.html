@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{page-title}</title>
+  <link rel="stylesheet" href="../assets/schemas/page.css" />
+  <link rel="stylesheet" href="../assets/math-block.css" />
+  <link rel="stylesheet" href="../assets/math-inline.css" />
+  <link rel="stylesheet" href="../assets/mathyml.css" />
+  <link rel="stylesheet" href="../assets/inline-fold.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <header class="header" parent="{has-parent}">
+    <nav class="nav">
+      <div class="logo">
+        <span onclick="window.location.href='{slug@parent}'" title="{title@parent} [{slug@parent}]">« {title@parent}</span>
+      </div>
+    </nav>
+  </header>
+  <div id="grid-wrapper" sidebar="{sidebar}">
+    <article>
+      <section class="block" id="{slug@anchor}">
+        <details open>
+          <summary>
+            <header class="top-header" show-metadata="{show-metadata}">
+              <h1>
+                <metadata get="title" /> 
+              </h1>
+              <div class="metadata">
+                <ul>
+                  <li class="meta-item">
+                    <metadata get="author" />
+                  </li>
+                  <li class="meta-item">
+                    <metadata get="date" />
+                  </li>
+                  <li class="meta-item">
+                    <span class="link local"><a href="https://github.com/mujiu555/Wishful-Thinking/tree/main/site" title="Source [https://github.com/mujiu555/Wishful-Thinking/tree/main/site]">Source</a></span>
+                  </li>
+                </ul>
+              </div>
+            </header>
+          </summary>
+          <content /> <!-- Where to put Content-->
+        </details>
+      </section>
+      <footer></footer>
+    </article>
+    <sidebar /> <!-- Where to put sidebar -->
+  </div>
+
+</body>
+
+</html>

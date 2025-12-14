@@ -1,0 +1,448 @@
+:root {
+  color-scheme: light dark;
+  --content-gap: 15px;
+  --radius: 5px;
+
+  --text-color: black;
+  --background-color: white;
+
+  --background-color-pre: rgba(0, 100, 100, 0.04);
+  --background-color-code: rgba(0, 100, 100, 0.04);
+
+  --hover-color-block: rgba(0, 100, 255, 0.04);
+  --hover-color-link: rgba(0, 100, 255, 0.1);
+  --target-color: rgb(67, 92, 255);
+
+  --link-color: black;
+  --slug-color: gray;
+  --logo-color: #666;
+  --logo-hover-color: #aaa;
+  --span-taxon-color: #444;
+  --article-taxon-color: #888;
+  --mark-color: rgb(255, 255, 151);
+  --auto-filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: white;
+    --background-color: #2f2f2f;
+
+    --background-color-pre: rgba(100, 100, 100, 0.2);
+    --background-color-code: rgba(150, 150, 150, 0.2);
+
+    --hover-color-block: rgba(100, 162, 255, 0.06);
+    --hover-color-link: rgba(100, 162, 255, 0.2);
+    --target-color: rgb(255, 255, 151);
+
+    --link-color: white;
+    --slug-color: #aeaeae;
+    --logo-color: #999;
+    --logo-hover-color: #eee;
+    --span-taxon-color: #bbb;
+    --auto-filter: invert(100%);
+  }
+}
+
+body {
+  font-family: "Inria Sans", "Noto Sans SC", sans-serif;
+}
+
+pre,
+code {
+  font-family: monospace;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Inria Sans", sans-serif;
+}
+
+nav {
+  font-family: "Inria Sans", sans-serif;
+}
+
+thead {
+  font-family: "Inria Sans", sans-serif;
+}
+
+body {
+  font-optical-sizing: auto;
+  hyphens: auto;
+  background-color: var(--background-color);
+}
+p {
+  line-height: 1.55;
+  margin-bottom: 0.65em;
+}
+
+p + ul {
+  margin-top: -0.55em;
+}
+
+ul {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+ul + p {
+  margin-top: 0.15em;
+}
+
+/* !forest */
+table {
+  text-align: left;
+}
+
+/* !forest */
+th {
+  font-weight: normal;
+  padding: 0 1rem;
+}
+
+.auto-filter svg { 
+  filter: var(--auto-filter);
+}
+
+/* !forest */
+.footnote-definition:last-child {
+  margin-bottom: 1em;
+}
+
+/* !forest */
+.footnote-definition > p {
+  display: inline;
+}
+
+/* !forest */
+.footnote-definition-label {
+  margin-right: 4px;
+}
+
+/* !forest */
+.footnote-reference:target {
+  border: 1px solid var(--target-color);
+}
+
+.footnote-definition:target > .footnote-definition-label {
+  border: 1px solid var(--target-color);
+}
+
+.display-none {
+  display: none;
+}
+
+blockquote {
+  font-style: italic;
+}
+
+blockquote {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 40px;
+  margin-inline-end: 40px;
+  unicode-bidi: isolate;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+h5,
+h6,
+p {
+  margin-top: 0;
+}
+
+
+
+
+details > summary {
+  list-style-type: none;
+  outline: none;
+  margin-bottom: 0.25em;
+}
+
+details > summary > header {
+  display: inline;
+}
+
+/* no effect */
+details > summary::marker,
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details h1 {
+  font-size: 1.2em;
+  display: inline;
+}
+
+details > summary {
+  list-style-type: none;
+}
+
+header .metadata {
+  display: none;
+}
+
+header[show-metadata="true"] .metadata {
+  display: block;
+}
+
+span.taxon {
+  color: var(--span-taxon-color);
+  font-weight: 500;
+}
+
+section .block[data-taxon] details > summary > header > h1 {
+  font-size: 15pt;
+}
+
+article > section > details > summary > header > h1 {
+  font-size: 1.5em;
+}
+
+article > section > details > summary > header {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+article > section > details > summary > header > h1 > .taxon {
+  display: block;
+  font-size: 0.9em;
+  color: var(--article-taxon-color);
+  padding-bottom: 5pt;
+}
+
+section.block > details {
+  margin-bottom: 0.4em;
+}
+
+section.block > details[open] {
+  margin-bottom: 1em;
+}
+
+.link-list > section.block > details {
+  margin-bottom: 0.25em;
+}
+
+.block {
+  padding-left: 5px;
+  padding-right: 10px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+}
+
+.block {
+  width: 98%;
+  border-radius: var(--radius);
+}
+
+.block:hover {
+  background-color: var(--hover-color-block);
+}
+
+
+img {
+  object-fit: cover;
+  max-width: 100%;
+}
+
+figure {
+  text-align: center;
+}
+
+figcaption {
+  font-style: italic;
+  padding: 3px;
+}
+
+mark {
+  background-color: var(--mark-color);
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  background-color: gray;
+  border: 0 none;
+  width: 100%;
+  height: 1pt;
+}
+
+.logo > span {
+  color: var(--logo-color);
+  text-decoration: none;
+}
+
+.logo > span:hover {
+  color: var(--logo-hover-color);
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+footer > section {
+  margin-bottom: 1em;
+}
+
+footer h2 {
+  font-size: 14pt;
+}
+
+.top-header .metadata {
+  font-size: 90%;
+}
+
+.metadata {
+  font-size: 80%;
+}
+
+
+
+.metadata ul {
+  padding-left: 0;
+  display: inline;
+}
+
+.metadata li::after {
+  content: " · ";
+}
+
+.metadata li:last-child::after {
+  content: "";
+}
+
+.metadata * {
+  display: inline;
+}
+
+.link {
+  cursor: pointer;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: inherit;
+}
+
+a.slug:hover,
+a.bullet:hover,
+.edit-button:hover,
+.link:hover {
+  background-color: var(--hover-color-link);
+}
+
+.link.external {
+  text-decoration: underline;
+}
+
+span.link.local,
+.link.local span,
+a.slug {
+  box-shadow: none;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+}
+
+.slug,
+.doi,
+.orcid {
+  color: var(--slug-color);
+  font-weight: 200;
+}
+
+body > header {
+  margin-bottom: 0.5em;
+}
+* {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+#grid-wrapper[sidebar="false"]>article{
+  max-width: 100%;
+}
+
+#grid-wrapper>article {
+  max-width: 76%;
+  grid-column: 1;
+  font-size: 137%;
+  overflow-x: auto;
+}
+
+#grid-wrapper[sidebar="false"]>nav{
+  display: none;
+} 
+
+#grid-wrapper>nav {
+  width: fit-content;
+  max-width: 24%;
+  position: fixed;
+  left:76%; 
+  height: 100vh;
+  background-color: var(--background-color);
+  overflow-x: auto;
+  overflow-y: auto;
+  z-index: 1000;
+  font-size: 100%;
+}
+
+
+header[parent="false"] {
+  display: none;
+}
+
+@media only screen and (max-width: 1000px) {
+  body {
+    margin-top: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    transition: ease all 0.2s;
+  }
+
+  #grid-wrapper > article {
+    max-width: 100%;
+    grid-column: 1;
+  }
+
+  #grid-wrapper > nav {
+    display: none;
+    transition: ease all 0.2s;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  body {
+    margin-top: 2em;
+    margin-left: 2em;
+    transition: ease all 0.2s;
+  }
+
+  #grid-wrapper {
+    display: grid;
+  }
+}

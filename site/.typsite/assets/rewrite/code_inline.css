@@ -1,0 +1,19 @@
+code {
+  border-radius: var(--radius);
+  background-color: var(--background-color-code);
+  padding: 0.2em;
+  font-size: 0.9em;
+}
+
+@media (prefers-color-scheme: dark) {
+  code[color-scheme="light"] {
+    display: none;
+  }
+
+}
+
+@media (prefers-color-scheme: light) {
+  code[color-scheme="dark"] {
+    display: none;
+  }
+}

@@ -1,0 +1,14 @@
+<rewrite pass="code"/>
+<head>
+    <link rel="stylesheet" href="../assets/rewrite/code_inline.css">
+</head>
+<!-- 
+Inline var could be used:
+- {content-light} - content of the highlighted code for light 
+- {content-dark} - content of the highlighted code for dark
+-->
+<body>
+<!-- will set display: none based on the viewer's color-scheme , impl by ../assets/rewrite/code_inline.css -->
+<code color-scheme="light">{content-light}</code>
+<code color-scheme="dark">{content-dark}</code>
+</body>
