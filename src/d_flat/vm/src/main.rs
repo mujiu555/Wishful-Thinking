@@ -1,3 +1,5 @@
+mod instset;
+mod register;
 mod stack;
 
 fn main() {
