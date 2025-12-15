@@ -2,7 +2,7 @@
 #import "@preview/cetz-plot:0.1.3"
 #import "@preview/cetz-venn:0.1.4"
 #import "@preview/finite:0.5.0": automaton
-#import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 
 = MIT 18.404j Theory of Computation (junior)
 
@@ -22,17 +22,17 @@ Use less memory with limited ability of computation.
   (
     q1: (q1: 0, q2: 1),
     q2: (q1: 0, q3: 1),
-    q3: (q3: "0,1")
+    q3: (q3: "0,1"),
   ),
   final: ("q3",),
-  initial: "q1"
+  initial: "q1",
 )
 
 Each have different
 - Stats: $q_1, q_2, q_3$
 - Transitions: $arrow^1$
-- Start State: #automaton((q1:()), initial: "q1", final: ())
-- Accepted state: #automaton((q3:()), initial: (), final: ("q3"))
+- Start State: #automaton((q1: ()), initial: "q1", final: ())
+- Accepted state: #automaton((q3: ()), initial: (), final: "q3")
 
 Give finite string as input, and have output of accepted or reject.
 
@@ -49,7 +49,7 @@ Defn: A finite automaton M is a 5-tuple $(Q, Sigma, delta, q_0, F)$:
 - $Sigma$: finite set of alphabet symbols
 - $delta$: transition function $delta: Q times Sigma -> Q$
   $delta$, somehow is, a kind of relation, give a state and a accepted symbol, then returns a (maybe) new state.
-  Eg. $delta(q, a) = r =>$  #automaton((q: (r: "a"), r:()), initial: (), final: ())
+  Eg. $delta(q, a) = r =>$  #automaton((q: (r: "a"), r: ()), initial: (), final: ())
 - $q_0$: start state
 - $F$: set of accept states
 
@@ -125,7 +125,7 @@ Finite automata equivalent to regular expressions.
 If some set are closed under some operation, which means
 after applying those operations on objects, the result will still leave in the same class of objects.
 
-Union:
+=== Union:
 If $A_1, A_2$ are regular languages, so is $A_1 union A_2$ (closure under $union$)
 
 Proof:
@@ -142,10 +142,95 @@ $F = (F_1 times Q_2) union (Q_1 times F_2)$
 
 Note., if $F = F_1 times F_2$, then it could be closure under intersection.
 
-Concatenation:
+=== Concatenation:
 If $A_1, A_2$ are regular languages, so is $A_1 circle A_2$ (closure under $circle$)
 
 Assuming $M$ accept input $w$, if $w = x y$ where, $M_1 "accepts" x$ and $M_2 "accepts" y$
 But failed.
 
+Proof:
+Let $M_1 = (Q_1, Sigma, delta_1, q_1, F_1) "recognize" A_1$, and $M_2 = (Q_2, Sigma, delta_2, q_2, F_2) "recognize" A_2$.
+Construct $M = (Q, Sigma, delta, q_0, F) "recognize" (A_1 circle A_2)$.
 
+Then the machine $M$ should accept input $w$ if there is a split of w into $x y$ where $M_1$ accepts $x$ and $M_2$ accepts $y$.
+
+#figure(
+  automaton(
+    (
+      q1: (),
+      q2: (),
+      q3: (),
+      q4: (),
+      q5: (),
+    ),
+    final: ("q5", "q4"),
+  ),
+  caption: $M_1 "accepts" "language" A_1$,
+)
+
+#figure(
+  automaton(
+    (
+      q1: (),
+      q2: (),
+      q3: (),
+    ),
+    final: ("q3",),
+  ),
+  caption: $M_2 "accepts" "language" A_2$,
+)
+
+And then construct M:
+
+#figure(
+  automaton(
+    (
+      q1_1: (),
+      q1_2: (),
+      q1_3: (),
+      q1_4: (q2_1: "epsilon"),
+      q1_5: (q2_1: "epsilon"),
+      q2_1: (),
+      q2_2: (),
+      q2_3: (),
+    ),
+    final: ("q2_3",),
+    initial: "q1_1",
+  ),
+  caption: $M "accepts" "language" (A_1 circle A_2)$,
+)
+
+If there are input word $w$, then there should be a split point where $M_1$ reach accept state and jump to $M_2$ via $epsilon$ transition.
+
+Construct a new machine, concatenating $M_1$ and $M_2$ together with $epsilon$ transitions from each accept state of $M_1$ to the start state of $M_2$.
+
+But the first place machine reach accept state may not be the correct split point.
+M need to have a idea of all possible split points.
+
+== Non-determinism
+
+#figure(
+  automaton(
+    (
+      q1: (q2: "a", q1: "a"),
+      q2: (q1: "b", q3: "b"),
+      q3: (q4: "a, epsilon"),
+    ),
+    final: ("q4",),
+    initial: "q1",
+  ),
+  caption: "A non-deterministic finite automaton",
+)
+
+It is mostly same as deterministic finite automaton,
+In deterministic finite automaton, there is exactly one transition for each state and input symbol pair.
+
+The non-deterministic finite automaton may have different transitions for same state and input symbol pair, and this is so called non-determinism.
+
+You may have one transition to go to one state, or another transition to go to another state.
+
+It is also able to have epsilon transitions, which means it can go to another state without consuming any input symbol.
+
+For non-deterministic finite automaton, it can accept inputs if some paths leads to accept states.
+If there is one finite machine, accept always prior to reject.
+The only possible reject state is when all possible paths lead to non-accept states.
