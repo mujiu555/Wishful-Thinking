@@ -1,0 +1,43 @@
+pre,
+code {
+  font-optical-sizing: auto;
+}
+
+pre {
+  line-height: 1.55;
+  border-radius: var(--radius);
+  background-color: var(--background-color-pre);
+  padding: .5em;
+  margin-top: 0em;
+  margin-bottom: 0.65em;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 117%;
+}
+
+code {
+  border-radius: var(--radius);
+  background-color: var(--background-color-code);
+  padding: 0.2em;
+}
+
+@media (prefers-color-scheme: dark) {
+  pre[color-scheme="light"] {
+    display: none;
+  }
+
+}
+
+@media (prefers-color-scheme: light) {
+  pre[color-scheme="dark"] {
+    display: none;
+  }
+}
+
+/* !forest */
+pre>code {
+  border-radius: 0;
+  background-color: transparent;
+  padding: 0;
+}

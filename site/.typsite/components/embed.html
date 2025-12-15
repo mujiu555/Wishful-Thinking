@@ -1,0 +1,30 @@
+<head>
+</head>
+<!--
+Inline var could be used:
+- {content} - content of the embed section
+- {numbering} - heading-numbering of the section
+- {embed-title}    - title of the embed section (based on embed_title.html)
+- {open}    - whether the details should be open or closed
+- {show-metadata} - whether hide metadata
+- Any meta contents of embeded article.
+-->
+
+<body>
+  <section class="block" data-taxon="{taxon}">
+    <details {open}>
+      <summary style="font-size: 117%;">
+        <header show-metadata="{show-metadata}">
+          {numbering} {embed-title} <a class="slug" href="{slug}" title="{page-title} [{slug}]">[{slug-display}]</a>
+          <div class="metadata">
+            <ul>
+              <li class="meta-item">{date}</li>
+              <li class="meta-item">{author}</li>
+            </ul>
+          </div>
+        </header>
+      </summary>
+      {content}
+    </details>
+  </section>
+</body>

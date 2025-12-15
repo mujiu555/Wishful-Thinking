@@ -1,0 +1,37 @@
+
+/* 
+nav#toc li.item-summary li {
+  display: none;
+} */
+
+nav#toc ul {
+  list-style-type: none;
+}
+
+nav#toc li>ul {
+  padding-left: 1em;
+}
+
+
+nav#toc,
+nav#toc a {
+  color: light-dark(#555, white);
+}
+
+nav {
+  font-family: "Source Sans 3", sans-serif;
+  font-optical-sizing: auto;
+}
+
+nav .block{
+  width: fit-content;
+}
+
+nav#toc a.bullet {
+  opacity: 0.7;
+  margin-left: 0.4em;
+  margin-right: 0.3em;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  text-decoration: none;
+}
