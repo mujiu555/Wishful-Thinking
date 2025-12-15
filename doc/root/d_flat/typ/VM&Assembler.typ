@@ -126,6 +126,31 @@ There are some literal for `TEST`.
 - `Test#o`
 - `Test#no`
 
+
+```txt
+0x
+              00              08              10              18              20
+                                                                              40
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+            => 3 3 3 3 3 3 3 3|4 4 4 4 4 4 4 4|4 4 5 5 5 5 5 5|5 5 5 5 6 6 6 6|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+            => 2 3 4 5 6 7 8 9|0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|
+--------------------------------------------------------------------------------
+              00                              10                              20
+                                                                              40
+Default       |C|1|P|0|A|0|Z|S|T|I|D|O|IOP|N|0|R|V|A|V*V*I|                   |
+              |F| |F| |F| |F|F|F|F|F|F|L  |T| |F|M|C|F|P|D|                   |
+            =>                                                                |
+              |                                                               |
+* VF <- VIF; VP <- VIP
+```
+- CF: Carry Flag
+- PF: Parity Flag
+- AF: Auxiliary Carry Flag
+- ZF: Zero Flag
+- SF: Sign Flag
+- TF: Trap Flag
+
 ==== Jump To Pointer, Jump To Segment, Return Value Pointer: `Reg#Jmp`, `Reg#JS`, `Reg#RVP`
 
 `:JMP` instruction has three variant:
@@ -153,9 +178,22 @@ But `:IF` family only has one variant that behaviour like `:JMP:short`.
 
 === Literal Stack
 
+=== Heap
+
 === Snapshot
 
+=== Exception
+
+When a internal exception (interrupt) happens,
+`Reg#Jmp` will be set to address of interrupt handler in interrupt handler vector.
+
 == Datum
+
+=== Integer 64
+
+=== Float 64
+
+=== Pointer 12:4:48
 
 == Execution
 
@@ -209,16 +247,232 @@ An instruction have following variation:
 - Register, Addressing: Register
 - Addressing: Register, Register
 
+All Addressing and Literal cases will have special register join and Address.
+Which does not have any difference.
+
 First 6 bit used to represent operation.
-Following 4-bits to represent parameter type
-Only if the parameter is register then code will appeared in literal instruction.
+Following 3-bits to represent parameter type
+Following 6 bits and following 16 bits are reserved.
 
 ```txt
-00           06       0B       10                             18                             20
-|  operator  |  type  |reserved|                              |                              |
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+--------------------------------------------------------------------------------
+              00          06    09            10                              20
+Default       |  operator |type | Reserved    |                               |
+
+Zero          |  operator | Flags                                             |
+
+R             |  operator |k | Flags                          |   register    |
+A             |  operator |                                   |   register    |
+I             |  operator | Literal                                           |
+RR            |  operator |                   |   register    |   register    |
+RI            |  operator |           |offset |   literal     |   register    |
+RA            |  operator |             | sl* |   register    |   register    |
+AR            |  operator |       | ss* | dl* |   register    |   register    |
+AA            |  operator |       | dl  | sl  |   register    |   register    |
+LI            |  operator | Literal                           |   register    |
+
+J             |  operator |typ|                                               |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
 ```
 
 == Instruction Set
+
+VM CPU interruption:
+- `Int`: interruption
+- `Nop`: no operation
+
+Move:
+- `Mov`: move
+- `XChg`: swap
+
+Literal Load:
+- `LoadIL`: load integer low 18
+- `LoadIH`: load integer high 18
+- `LoadIM`: load integer maximum
+- `LoadUM`: load unsigned integer maximum
+
+Arithmetic:
+- `Add`: add
+- `Sub`: subtract
+- `Mul`: multiple
+- `Div`: divide
+
+Bitwise Shift:
+- `Shl`: shift left
+- `RShl`: shift left roll
+- `Shr`: shift right
+- `RShr`: shift right roll
+
+Bitwise Boolean:
+- `And`: and
+- `Or`: or
+- `Xor`: xor
+- `Not`: not
+
+Stack operations:
+- `Push`: push
+- `Pop`: pop
+- `Idx`: peek
+- `Dup`: duplicate
+
+Jump:
+- `Jmp`: jump to
+- `If`: if cond jump to
+- `Ifn`: if not cond jump to
+
+Conditional:
+- `Test`: test cond
+
+Loop:
+- `Loop`: go back to ... and contrast a loop
+
+Functional:
+- `Call`: function call, jump
+- `SysCall`: ffi
+- `Ret`: restore stack and return
+
+Continuous:
+- `SnapShot`
+
+Misc:
+- `Halt`: halt
+
+=== `Int`
+=== `Nop`
+
+=== `Mov`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+RR            |  operator | typ |s| SHL       |   register    |   register    |
+RI positive l |  operator | typ | literal                     |   register    |
+RI negative l |  operator | typ | literal                     |   register    |
+RI positive h |  operator | typ | literal                     |   register    |
+RI negative h |  operator | typ | literal                     |   register    |
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+`Mov` instruction:
+Move copies data from source to destination.
+- `MOV dst, src`
+- `MOV offset dst, immediate`
+- `MOV dst, ptr [src]`
+- `MOV ptr [dst], src`
+- `MOV ptr [dst], ptr [src]`
+
+Basically, `mov` instruction needs two argument.
+It could be two register, register-immediate, register-address, address-register or address-address pair.
+
+There are 32 bits totally for the instruction, 6 bits for operator, 3 bits to distinct which type the `mov` instruction is.
+Totally 8 types.
+
+For two register case:
+```txt
+              00          06    09 a          10                              20
+RR            |  operator | typ |i| SHL       |   register    |   register    |
+```
+Apart from 9 bits prefix, there are 7 bits flag and 16 bits registers information.
+
+Flag modify the behaviour of `mov`:
+- 1 bit `s` for sign.
+- 6 bits `SHL` for left shift counts.
+
+If `SHL` has value of nonzero, register `dst` will be assigned with value `src << SHL`.
+Padding with 0 on the right.
+Likely ```c dst = src << SHL;``` in C.
+
+If `s` has value of nonzero, register `dst` will be assigned with value `src << SHL`.
+Padding with 1 on the right.
+
+For case associated immediate:
+```txt
+              00          06    09            10                              20
+RI positive l |  operator | typ | literal                     |   register    |
+RI negative l |  operator | typ | literal                     |   register    |
+RI positive h |  operator | typ | literal                     |   register    |
+RI negative h |  operator | typ | literal                     |   register    |
+```
+Apart from 9 bits prefix, there are 15 bits literal and 8 bits registers information.
+
+If instruction has type low, literal will be written in low 16 bits with 16th bit controlled by type of instruction.
+If instruction has type h, literal will be written in 16-32 bits with 32 bit controlled by type of instruction.
+
+```txt
+              00          06    09 a    0d    10                              20
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+```
+
+
+
+
+
+
+
+
+
+
+=== `LoadIL`
+=== `LoadIH`
+=== `LoadIM`
+=== `LoadUM`
+
+=== `Add`
+=== `Sub`
+=== `Mul`
+=== `Div`
+=== `Addf`
+=== `Subf`
+=== `Mulf`
+=== `Divf`
+
+=== `Shl`
+=== `RShl`
+=== `Shr`
+=== `RShr`
+
+=== `And`
+=== `Or`
+=== `Xor`
+=== `Not`
+
+=== `Push`
+=== `Pop`
+
+=== `Jmp`
+
+```txt
+              00          06    09            10                              20
+J_near i      |  operator |00 | jump address                                  |
+J_short       |  operator |10 |               |               |   register    |
+J_far         |  operator |11 |               |   register    |   register    |
+```
+
+=== `Test`
+=== `If`
+=== `Ifn`
+
+=== `Loop`
+
+=== `Call`
+=== `Ret`
 
 == Assembly
 
