@@ -5,3 +5,6 @@ compiled/
 \#*
 .\#*
 tmp/*
+publish/*
+.cache/*
+.vscode/*

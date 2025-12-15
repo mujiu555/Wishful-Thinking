@@ -37,9 +37,6 @@ This is (probably) a plain-text project.
 
 I don't think it is worth to installing.
 
-But detailed instruction for installation will placed in `doc/<name>`, the
-documentation directory for each sub-project.
-
 ## Structure
 
 The whole project is organized in following structure:
@@ -47,10 +44,11 @@ The whole project is organized in following structure:
 ```txt
 Root: /                         ; Project root
 +- .git/                        ; git repository
++- .typsite/                    ; SSG configuration
 +- bin/                         ; build results
 +- doc/                         ; documentation & copyright information
-|  +- root/                     ; Documentation root for sub-projects
-|  +- licenses/                 ; when adopting other library, place open source license here
+|  +- licenses/                 ; when adopting other library, place license here
+|  +- root/                     ; detailed README for each subproject
 |  +- LICENSE                   ; copy of LICENSE adopted by the project
 |  +- LICENSE.apache            ; copy of original LICENSE
 |  +- README                    ; README for directory `doc`
@@ -59,8 +57,14 @@ Root: /                         ; Project root
 |  +- README.release.md         ; semantic versioning 
 +- inc/                         ; public header
 +- lib/                         ; public library, installed from bin
++- notes/                       ; notes not about to be published
++- publish/                     ; generated site
++- root/                        ; Site root
+|  +- lib/                      ;
+|  +- notes/                    ; notes to be published
 +- src/                         ; source code for each subproject
 +- tmp/                         ; temporay files
++- test/                        ; public test files
 +- .gitignore
 +- .gitmodules
 +- LICENSE
@@ -76,7 +80,7 @@ What's more, organize for those sub directory will be:
 
 ```txt
 Root: doc/root/<name>
-+- <ft>/
++- <ft>/                         ; link, probobly
 |  +- Sample.<ft>
 |  +- ...
 +- LICENSE
