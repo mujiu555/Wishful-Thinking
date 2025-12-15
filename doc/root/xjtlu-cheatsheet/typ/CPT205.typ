@@ -178,10 +178,13 @@ computation.
 - However this simply increases the computation and processing required by the algorithm.
 
 In polar co-ordinates
-$ cases(delim: brace,
-  x = x_c + r cos(theta),
-  y = y_c + r sin(theta)
-) $
+$
+  cases(
+    delim: brace,
+    x = x_c + r cos(theta),
+    y = y_c + r sin(theta)
+  )
+$
 - When a display is generated with these equations using a fixed angular step size, a circle is plotted with equally spaced points along the circumference.
 - To reduce calculations, a large angular separation can be used between points along the circumference and connect the points with straight-line segments to approximate the circle path.
 - For a more continuous boundary on a raster display, the angular step size can be set at 1/r. This plots pixel positions that are approximately one unit apart
@@ -225,6 +228,282 @@ Polygon fill is a sorting problem, where we sort all the pixels in the frame buf
   - Flood fill
   - Scanline fill
   - Odd–even fill
+
+== Geometric Transformation
+
+=== Translation
+
+Translating a point from P(x, y) to P’(x’, y’) along vector T
+
+Only transform the two endpoints of a line segment and let the
+implementation draw the line segment between the transformed endpoints.
+
+$
+  P = vec(x, y), P' = vec(x', y'), T = vec(t_x, t_y)
+$
+$=>$
+$
+  P'=P+T
+$
+
+=== Rotation
+
+Rotating a point from $P(x, y)$ to $P’(x’, y’)$ about the origin by
+angle $θ$ - radius stays the same, and angle increases by $θ$.
+
+$
+  x = r cos φ,\
+  y = r sin φ
+$
+$=>$
+$
+  x’ = r cos(φ + θ) = x cos(θ)- y sin(θ), \
+  y’ = r sin(φ + θ) = x sin(θ)+ y cos(θ)
+$
+$
+  x' = x cos(theta) - y sin(theta),\
+  y' = x sin(theta)+ y cos(theta)
+$
+
+Rotation about a fixed point rather than the origin
+- Move the fixed point to the origin
+- Rotate the object
+- Move the fixed point back to its initial position
+- $M = T(p_f) R(θ) T(-p_f)$
+
+=== Scaling
+
+$
+  x' = x dot s_x,\
+  y' = y dot s_y
+$
+
+$
+  P' = S dot P => vec(x', y') = mat(s_x, 0; 0, s_y) dot vec(x, y)
+$
+
+=== Reflection
+
+Corresponding to negative scale factors.
+
+=== Shearing
+
+$
+  x’ = x + y cot(θ),\
+  y’ = y,\
+  z’ = z
+$
+
+$
+  vec(x', y') = mat(1, cot(theta); 0, 1) dot vec(x, y)
+$
+
+== 2D homogeneous coordinates
+
+Regular 2d point, $vec(x, y) => vec(w x, w y, w)$
+- Translation: $vec(x', y', 1) = mat(1, 0, t_x; 0, 1, t_y; 0, 0, 1) dot vec(x, y, 1)$
+- Rotation: $vec(x', y', 1) = mat(cos(theta), -sin(theta), 0; sin(theta), cos(theta), 0; 0, 0, 1) dot vec(x, y, 1)$
+- Scaling: $vec(x', y', 1) = mat(s_x, 0, 0; 0, s_y, 0; 0, 0, 1) dot vec(x, y, 1)$
+- Shearing: $vec(x', y', 1) = mat(1, cot(theta), 0; 0, 1, 0; 0, 0, 1) dot vec(x, y, 1)$
+
+== 2D composite transformation
+
+=== General rotation about the origin
+
+A rotation by q about an arbitrary axis can be decomposed into the concatenation of rotations about
+the x, y, and z axes.
+$R(q) = R_z(q_z) R_y(q_y)R_x(q_x)$
+where $q_x$, $q_y$ and $q_z$ are called the Euler angles.
+
+== View
+
+Viewing requires three basic elements
+- One or more objects
+- A viewer with a projection surface
+- Projectors that go from the object(s) to the projection surface
+
+Classical views are based on the relationship among these elements
+The viewer picks up the object and orients the object in a way that it is to be seen.
+
+Each object is constructed from flat principal faces
+Buildings, polyhedra, manufactured objects, etc.
+
+#figure(image("./img/CPT205-L5-1.png"))
+
+=== Planar geometric projection
+
+Standard projections project onto a plane.
+
+Projectors are lines that either converge at a centre of projection or are parallel.
+Such projections preserve lines but not necessarily angles.
+Non-planar projections are needed for applications such as map construction.
+
+#figure(image("./img/CPT205-L5-2.png"))
+
+Perspective vs parallel
+投影透视 vs. 平行透视
+- Computer graphics treats all projections in the same way and implements them with a single pipeline.
+- Classical viewing has developed different techniques for drawing each type of projection.
+- The fundamental distinction is between parallel and perspective viewing even though mathematically parallel viewing is the limit of perspective viewing.
+
+==== Perspective
+
+Perspective projection generates a view of 3-dimensional scene by projecting points to the view plane along converging paths.
+投影到视平面
+
+This results in the objects further from the viewing position to be displayed smaller than the objects of the same size that are nearer to the viewing position.
+近大远小
+
+A scene generated using perspective projection appears more realistic since this is the way that human eyes and cameras form images.
+
+Vanishing points
+
+Parallel lines (not those parallel to the projection plane) on the object converge at a single point in the projection (the vanishing point).
+Drawing simple perspectives by hand uses the vanishing point(s).
+
+===== Frustum perspective projection
+
+By adding near and far clipping planes that are parallel to
+the viewing plane, parts of the infinite perspective view
+volume are chopped off to form a truncated pyramid or
+frustum.
+
+The near and far clipping planes can be used simply to
+enclose objects to be displayed. These clipping planes can
+be optional for some systems.
+
+The near clipping plane can be used to take out large
+objects close to the viewing plane, which could be projected
+into unrecognisable shapes in the clipping window.
+Likewise, the far clipping plane can cut out objects that may
+be projected to small blots.
+
+Some systems restrict the placement of the viewing plane
+relative to the near and far planes, and other systems allow it
+to be placed anywhere except at the position of the viewing
+origin (viewing point, viewing position, eye position or camera
+position).
+
+If the viewing plane is behind the viewing point, objects are
+inverted on the view plane.
+
+If the viewing plane is behind the objects, the objects are
+simply enlarged as they are projected away.
+
+When the viewing point is very far away from the view plane, a
+perspective projection approaches to a parallel projection.
+
+==== Parallel projection
+
+This method projects points on the object surface along parallel lines.
+It is usually used in engineering and architecture drawings to represent an object with a set of views showing accurate dimensions.
+
+==== 正交透视
+
+The projectors are orthogonal to projection surface
+
+Orthogonal (orthographic) projection is a
+transformation of object descriptions to a view plane
+along lines parallel to the view-plane normal vector N.
+
+It is often used to produce the front, side and top views
+of an object.
+
+Engineering and architectural drawings commonly
+employ these orthographic projections since the
+lengths and angles are accurately depicted and can be
+measured from the drawings.
+
+==== Axonometric projection
+轴测投影
+
+一个图像显示所有三围,
+
+Allow projection plane to move relative to the object.
+
+If the projection plane is placed symmetrically with respect to the three principal faces that meet at a corner of our rectangular object, then we have an isometric view.
+
+If the projection plane is placed symmetrically with respect to two of the principal faces, then the view is dimetric.
+
+The general case is a trimetric view.
+
+#figure(image("./img/CPT205-L5-3"))
+
+==== Oblique projection
+
+#figure(image("./img/CPT205-L5-4.png"))
+
+
+== 3D viewing co-ordinate parameters (1)
+
+A world co-ordinate position $P_0(x_0, y_0, z_0)$ is selected as the viewing origin
+(also called viewing point, viewing position, eye position or camera position).
+
+The direction from a reference point $P_"ref"(x_"ref", y_"ref", z_"ref" )$ to
+the viewing origin $P_0(x_0, y_0, z_0)$ can be taken as
+the viewing direction (vector),
+and the reference point is termed the look-at point.
+
+The viewing plane can then be defined with a normal vector N,
+which is the viewing direction, usually the negative $z_"view"$ axis.
+
+
+Once the viewing plane normal vector N is defined, the
+direction for view-up vector V can be set to establish the
+positive $x_"view"$ axis.
+
+Since N defines the direction for z view, V must be
+perpendicular to N (i.e., parallel to the xview -y view plane).
+
+But it is generally difficult to determine V precisely,
+so viewing routines typically adjust the user defined value of V
+(e.g., projecting it onto a plane perpendicular to N).
+
+Any direction can be used for V as long as it is not parallel to N.
+
+== Parametric curves
+
+Explicit representation: $y = a_0 + a_1 x$
+
+Parametric representation:
+$
+  x = x_1 + t(x_2 – x_1) (0 ≤ t ≤ 1),\
+  y = y_1 + t(y_2 – y_1)
+$
+when $t = 0, x = x_1$ and $y = y_1$,
+when $t = 1, x = x_2$ and $y = y_2$.
+
+Parametric equation of a circle:
+
+Implicit representation:
+$ x_2 + y_2 = r_2 (r = "radius") $
+
+Parametric equation:
+$ x = r cos(360t), y = r sin(360t), (0 ≤ t ≤ 1) $
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
