@@ -4,7 +4,7 @@
 
 #show raw: set text(font: (
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
-  "Noto Sans CJK SC"
+  "Noto Sans CJK SC",
 ))
 
 #show: doc => setup-base-fonts(doc)
@@ -16,7 +16,7 @@ Address: #link("https://github.com/mujiu555/Wishful-Thinking.git")[mujiu555/Wish
 The book, has not extracted from my Misc Repository.
 Waiting for finishing.
 
-#outline()
+#outline(depth: 2)
 
 == Section I: C Programming Language
 
@@ -64,7 +64,7 @@ C是一门高级语言, 但是何为高级语言?
 分别对应操作不同位数数据的汇编指令; 可以抽象出各种变量,
 直接对应内存中的一段空间.
 
-比如: 
+比如:
 如果只是以两数相加举例的话,
 对于C而言, 无论哪个平台的加法都可以通过 `a + b` 来完成, 但是对于
 `IBM` 兼容机型的 `x86_64` 架构 `intel` 语法宏汇编 (好长的定语) 而言,
@@ -99,7 +99,7 @@ CPU 实际上只能够理解和运行二进制的机器码.
   [$stretch(-->)^("汇编")$],
   rect[目标二进制],
   [$stretch(-->)^("链接")$],
-  rect[目标可执行]
+  rect[目标可执行],
 )
 
 
@@ -109,11 +109,7 @@ CPU 实际上只能够理解和运行二进制的机器码.
 
 #grid(
   columns: 7,
-  rect[源代码],
-  [$stretch(-->)$],
-  rect[解释器],
-  [$stretch(-->)$],
-  rect[输出]
+  rect[源代码], [$stretch(-->)$], rect[解释器], [$stretch(-->)$], rect[输出],
 )
 
 2. 解释, 则是不经过编译过程, 通过虚拟机, 或者解释器,
@@ -203,184 +199,11 @@ WSL的全称是 "Windows Subsystem for Linux",
 是微软创造出来, 用于提升开发者体验的一个工具.
 凭借WSL, 我们可以非常容易的, 像直接使用Linux一样的安装和管理开发环境.
 
-如果需要在Windows上安装WSL, 我们首先需要:
-+ 通过管理员权限, 打开一个控制台. ```cmd Windows+X A```, 
-  #figure(image("img/F1-Console.png"), caption: [Open a console])
-+ 在弹出的窗口中选择允许
-  #figure(image("img/F2-Admin-Console.png"), caption: [Opened console])
-+ 并输入 ```pwsh wsl --install``` 和 ```pwsh wsl --update```
-  #figure(image("img/F3-Install.png"), caption: [Install `WSL`])
-  #figure(image("img/F4-Update.png"), caption: [Check Update])
-+ 此时, 我们需要按照指示, 重新启动电脑, 以满足系统更新需求
-+ 完成后, 运行 `WSL` (或者, 在开始菜单找到`Ubunut`), 运行,
-  并按照指示, 创建初始用户, 注意:
-  输!入!密!码!的!时!候!并!不!会!显!示!已!经!输!入!了!多!少!
-  请盲打输入密码, 当完成一遍输入以后按下回车完成输入
-  一共需要输入两遍密码, 两遍输入的密码需要相同
-  #figure(image("img/F5-ubuntuinstall.png"), caption: [Initializing `WSL`])
-  - 以下为示例文本:
-    ```txt
-    Installing, this may take a few minutes...
-    Installation successful!
-    Please create a default UNIX user account. The username does not need to match you Windows username.
-    For more information visit: https://aka.ms/wslusers
-    Enter new UNIX username:
-    ```
-  - 看见这个界面, 或者文本, 即可开始输入用户名称, 如
-    ```txt
-    Enter new UNIX username: dot
-    ```
-  - 此时, dot即为我输入的用户名, 这个用户名不需要与Windows的用户名相同,
-    但是须满足, 
-    1) 仅包含小写字母, 下划线, 或数字, 
-    2) 数字不在开头,
-    3) 用户名中不包含空格.
-    当按下回车, 会显示:
-    ```txt
-    Enter new password:
-    ```
-  - 此时就应当开始输入密码:
-    输入完成后, 仍然只会呈现 `Enter new password:`字样,
-    此时按下回车, 就完成了第一遍的密码输入:
-    ```txt
-    Enter new password again:
-    ```
-  - 这时就需要开始进行第二次密码输入.
-  当输入完成后, 就会进入到我们的正常环境,
-  如果存在, 输入完成后, 用户为root的, 说明安装失败, 需要重新安装.
-  重新安装的步骤为:
-  - 打开任意终端:
-    按下 "Win键+R键", 看到运行窗口:
-    #figure(image("img/F6-Run.png"))
-    #figure(image("img/F7-cmd.png"), caption: [Run Cmd])
-  - 运行删除指令:
-    ```bat
-    wsl --unregister Ubuntu
-    ```
-    取消 `WSL` 发行版注册
-  - 再次运行安装指令
-    ```bat
-    wsl --install
-    ```
-    或,
-    打开微软商店, 搜索 "Ubuntu",
-    #figure(image("img/F9-Store.png"), caption: [Store])
-    选中 "Ubuntu", 或 "Ubuntu-24.04 lts", 此处以 "Ubuntu" 为例:
-    #figure(image("img/F10-Ubuntu.png"), caption: [Ubuntu `WSL`])
-    点击获取, 即可开始安装.
-+ 完成上述步骤, 即可开始环境配置:
-  + 第一步: "换源", Ubuntu默认获取软件的方式是从境外服务器拉取软件,
-    这样的速度非常缓慢, 因此, 需要将服务器切换回到中国提供商.
-
-    这里使用清华大学开源软件镜像站为我们提供的免费软件代理服务:
-    #link("https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/"),
-    在清华的站点, 可以看到, 它对于我们如何进行换源操作有完整的介绍:
-    注意: 对于安装了 "Ubuntu" 或 "Ubuntu-24.04 lts" 的同学而言,
-    需要使用的是清华镜像站使用帮助中的 "DEB822格式" 下的文本:
-    #figure(image("img/F11-Mirror.png"), caption: [tuna.Tsinghua mirror help])
-
-    - 打开Ubuntu, 输入指令:
-    ```bash
-    sudo su
-    ```
-    这时候会提示输入密码:
-    ```txt
-    [sudo] enter password for dot:
-    ```
-    因为我的用户名为"dot", 所以提示的是输入 "dot" 这个用户的密码.
-    当输入完成后, 就会进入 "root" 用户的终端中.
-    此时, 输入:
-    ```bash
-    cat > /etc/apt/sources.list.d/ubuntu.sources
-    ```
-    #figure(image("./img/F12-root.png"), caption: [Substitute Mirror])
-    运行完以后, 将从清华开源软件镜像站处拷贝的文本,
-    直接粘贴 (右键) 终端当中:
-    #figure(image("./img/F13-paste.png"))
-    当粘贴完成后, 按下回车, 同时按下 "Ctrl键+D键", 即可完成换源工作.
-    #figure(image("./img/F14-paste-result.png"), caption: [paste result])
-
-    最后, 需要输入 ```bash exit``` 退出 "root" 用户环境.
-
-  + 第二步是更新源信息: 刚刚的步骤仅仅只是告诉系统, 应该用哪里的服务器,
-    但是实际上, 并没有更新具体还可以安装哪些软件, 因此需要更新源信息:
-    ```bash
-    sudo apt update && sudo apt upgrade
-    ```
-    通过这个指令, 即可更新源信息. 在这以后, `WSL` 才真正可以正常使用.
-    #figure(image("img/F15-update.png"), caption: [Update repository information])
-    #figure(image("img/F16-upgrade.png"), caption: [Running update])
-
-    当更新进行一半的时候, 系统会提示是否确定更新, 此时直接按下回车即可:
-    #figure(image("img/F17-confirm.png"), caption: [Confirm])
-
-  + 完成初始之后, 就可以安装编程环境了:
-    ```bash sudo apt install build-essential gdb clang```
-    在这一步, 也是会提示输入密码的
-    #figure(image("img/F18-install.png"), caption: [Install required tools])
-
-    同样的, 在执行到一半的时候, 会要求确定操作, 直接回车即可.
-
-完成了上述的操作, 就可以架设自己的IDE了,
-比如, 可以使用 "Visual Studio Code", 并加装微软提供的 "C/C++" 插件.
-或者直接在WSL中安装 NeoVim, Emacs 等 Linux 传统开发工具.
-
-+ 对于 `VSCode`, 我们需要先安装好需要的插件 "C/C++",
-  #figure(image("img/F19-C_Cpp.png"), caption: [Install C/C++ Plugin])
-+ 然后选择界面左下角处的远程连接
-  + !第一步: 选择左下角按钮,
-  + !第二步: 选择Connect to WSL, 或 WSL, 后者会自动装插件
-  #figure(image("img/F20-Connect.png"), caption: [Connect to Ubuntu])
-  #figure(image("img/F21-Ubuntu-Vsc.png"), caption: [确认连接建立])
-+ 最后, 再次选中插件页面, 此时找到 "C/C++", 选择, "Install for Ubuntu"
-  安装完成以后, 应当可以看见如下图所示插件列表:
-  #figure(image("img/F22-Plugins.png"), caption: [Plugin lists])
-+ 然后打开终端:
-  - 通过Visual Studio Code 的 "终端-新建终端" 菜单, 创建新终端:
-    #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
-  - 然后找到终端(下图红框中), 并点击进入对终端的输入模式.
-    #figure(image("img/F24-Terminal.png"), caption: [Terminal])
-  - 输入 ```bash mkdir -p prj```
-+ 选择左侧文件浏览器 "File Explorer" 处的 "打开文件夹" (或 "Open folder").
-  #figure(image("img/F25-OpenFolder.png"), caption: [Open Folder])
-
 === Linux, MacOS & \*nix
 
 对于类Unix及Unix系统而言, 环境变量的修改往往和用户配置文件相关联. 不过,
 实际上, 要在这类系统上安装 C 的编程环境, 完全不需要对环境变量做过多修改,
 而可以简单通过几行命令完成.
-
-以下是一些参考:
-
-- MacOS:
-
-```sh
-xcode-select --install
-```
-
-- Linux (Debian & Ubuntu \*):
-
-```sh
-sudo apt install build-essential clang gdb
-```
-
-- Linux (Arch \*):
-
-```sh
-sudo pacman -Syy base-devel gcc make gdb clang
-```
-
-- Linux (RHEL & Fedora \*):
-
-```sh
-sudo dnf group install "Development Tools" clang
-```
-
-- FreeBSD:
-
-```sh
-pkg install gcc gdb clang
-```
 
 == Hello, World
 
@@ -404,29 +227,18 @@ int main(void) {
 
 大家可以用任何笔记本将这段代码写下, 将它保存 (不要放桌面) 为 `hello.c`.
 
-使用Visual Studio Code的同学可以选择,
-点击左侧文件浏览器中的 "新建文件"("New File") 按钮,
-#figure(image("img/F26-NewFile.png"), caption: ["New File" Button])
-创建名为 `hello.c` 的文件
-#figure(image("img/F27-Hello.c.png"), caption: [New file])
-并回车,
-在打开的文本编辑窗口中将以上代码写下并保存.
-
 然后, 我们就可以开始进行编译了:
-+ 通过Visual Studio Code 的 "终端-新建终端" 菜单, 创建新终端:
-  #figure(image("img/F23-Manual.png"), caption: [Open a new terminal])
-  然后找到终端(下图红框中), 并点击进入对终端的输入模式.
-  #figure(image("img/F24-Terminal.png"), caption: [Terminal])
-+ Enter `dir` to check if there exists file `hello.c`,
-  and then type `cat hello.c`,
-  just after the command has been inserted,
++ Open a terminal,
++ Enter `dir`: ```sh cd ${pwd}```, where `${pwd}` is the directory your file placed in,
++ check if there exists file `hello.c`, type `cat hello.c` and press `enter`.
+  Just after the command has been inserted,
   the content of whole file will be displayed.
   If the content printed in screen does not match the contents showing
   in your text input area, then you have not save the file properly.
   For example, the command will response with:
   ```txt
   #include <stdio.h>
-  
+
   int main(void) {
     printf("Hello, World");
     return 0;
@@ -453,7 +265,6 @@ Hello, World!
 这样, 你就可以自己尝试, 修改这个程序的内容,
 写出独属于自己的 "Hello World".
 
-(Ten mins break.)
 Try to change the source code and you may let it print your name.
 
 === Explanation
@@ -467,8 +278,6 @@ For example, we always have the three parts -- header file import, entry, and ex
 
 我们的 "Hello, World" 程序, 包含了几个部分,
 库文件的引入, 入口函数(main), 以及主要的表达式.
-
-
 
 === Library
 
@@ -612,27 +421,33 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 
 不过为什么需要将不同类型区别开来呢?
 很明显, 字符串是没有办法当作整数来处理的对吧!
-#text([
-  (除非你把它们当作范畴论范围上面的幺半群来看...
-  当然这样也只能统一操作而没有办法让字符串和数字相加哦\~)
-], size: 8pt)
+#text(
+  [
+    (除非你把它们当作范畴论范围上面的幺半群来看...
+    当然这样也只能统一操作而没有办法让字符串和数字相加哦\~)
+  ],
+  size: 8pt,
+)
 
 那么静态类型是什么呢?
 
-就像数学并不完全是数字的操作, 大部分时候也和未知数相关一样, 
+就像数学并不完全是数字的操作, 大部分时候也和未知数相关一样,
 计算机程序也有自己的 "未知数" 需要操作.
-当我们需要计算一些东西的时候, 很多时候都需要一个叫做 "变量" 
+当我们需要计算一些东西的时候, 很多时候都需要一个叫做 "变量"
 的东西存储中间结果.
 这个 "变量" 既然需要存储数据, 那么它就也需要一个类型.
 毕竟, 不同类型的数据, 就上上面刚刚说明的, 有着不同的属性, 完全没有办法用同样的方式存储.
 
 而 C语言 更进一步, 为了避免变量在多次赋值以后, 类型会不清,
 干脆让我们在定义变量的时候就固定它可以承载的数据类型了.
-#text([
-  (实际原因当然不是这样啦, 实际上 C语言 必须有类型的信息,
-  才能为变量分配空间, 而不同的类型一般而言需要的空间不同, 自然不可以混用,
-  后续将在 "内存模型" 部分详细解说喵\~ >w<)
-], size: 8pt)
+#text(
+  [
+    (实际原因当然不是这样啦, 实际上 C语言 必须有类型的信息,
+    才能为变量分配空间, 而不同的类型一般而言需要的空间不同, 自然不可以混用,
+    后续将在 "内存模型" 部分详细解说喵\~ >w<)
+  ],
+  size: 8pt,
+)
 这就是我们说的 "静态类型" 系统.
 
 === Literal
@@ -676,7 +491,7 @@ long long ll = 2147483648ll;
 
 不过这些数字前面的类型和等于号都有些什么作用呢... 大家马上也会明白!
 不过我们先来了解一下整数的变体们:
-- `signed`: 有符号前缀, 表示该类型是一个有符号的数据, 
+- `signed`: 有符号前缀, 表示该类型是一个有符号的数据,
   一般而言, 整型都是有符号的
 - `unsigned`: 有了上一条的提示, 当我们不需要表示数据的负数部分时,
   当然就可以用无符号类型了, 当我们用无符号来修饰一个变量的时候,
@@ -735,7 +550,7 @@ C语言中的常用浮点数一共有三种, 分别是:
 一般而言, 小数的位数不是无限的吗?
 这当然还是因为计算机表示的局限性.
 
-比如, 当我们需要表示金额的时候, 一般都可以写作 "XX元Y角Z分" 对不对, 
+比如, 当我们需要表示金额的时候, 一般都可以写作 "XX元Y角Z分" 对不对,
 那么当我们想要统一在 "元" 表示的时候, 就可以写作 "XX.YZ元" 了.
 那么这里, 我们相当于是将所有单位统一到 "元",
 而给 "角" 和 "分" 固定在了小数点后两位.
@@ -785,8 +600,8 @@ printf("%f", 1 / 2.0);
 #table(
   columns: 7,
   stroke: none,
-  table.cell(colspan: 7, )[small `------------------------------------------------------->` large] ,
-  [char, short, int], [unsigned int], [long], [long long], [float], [double], [long double]
+  table.cell(colspan: 7)[small `------------------------------------------------------->` large],
+  [char, short, int], [unsigned int], [long], [long long], [float], [double], [long double],
 )
 从左到右, 类型依次自动提升.
 
@@ -797,9 +612,9 @@ printf("%f", 1 / 2.0);
 均提升到int类型的大小来参与运算.
 
 #block[
-无论使用什么整数, 都可以在表达式中使用char, short int或 int字段(全部带符号或没有符号)或枚举类型的对象.
-如果一个int可以代表原始类型的所有值, 则该值将转换为int;
-否则, 该值将转换为unsigned int, 这个过程称为整体提升.
+  无论使用什么整数, 都可以在表达式中使用char, short int或 int字段(全部带符号或没有符号)或枚举类型的对象.
+  如果一个int可以代表原始类型的所有值, 则该值将转换为int;
+  否则, 该值将转换为unsigned int, 这个过程称为整体提升.
 ]
 
 这从汇编的角度来看, 其实就是将寄存器由小寄存器, 拼接到相对大的寄存器.
@@ -837,7 +652,7 @@ printf("This Is A String");
 - `L'\ooo'`: 单引号包括的8进制表示长字符
 - `L'\xhhhh'`: 单引号包括的16进制长字符
 
-大家其实也可以看出来, 
+大家其实也可以看出来,
 长字符字面量实际上就是给普通的字符字面量添加了一个"L"前缀罢了.
 那么实际上, 我们也可以用同样的方式, 把一个普通的字符串字面量变成长字符串:
 
@@ -897,7 +712,7 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
   [`+`], [两数相加, 并返回新的相加后的值], [```c A + B```], [],
   [`-`], [从前数中减去后数, 并返回新的相减后的值], [```c A - B```], [],
   [`*`], [两数相乘, 并返回新的乘积], [```c A * B```], [],
-  [`/`], [前数除以后数, 并返回除商],[```c A / B```], [],
+  [`/`], [前数除以后数, 并返回除商], [```c A / B```], [],
   table.hline(),
 )
 
@@ -1124,17 +939,17 @@ PS. 另一个比较重要的则是赋值运算符家族, 将在重新完整介�
 如:
 我们有二进制数 $1011$, 那么它的十进制就是:
 $
-(1011)_((2)) =
-1 times 2^3 + 0 times 2^2 + 1 times 2^1 + 1 times 2^0 = 
-(11)_((10))
+  (1011)_((2)) =
+  1 times 2^3 + 0 times 2^2 + 1 times 2^1 + 1 times 2^0 =
+  (11)_((10))
 $
 
 二进制转换为十进制也是类似的, 就是不断将十进制数除二取余数即可:
 $
-11 / 2 = 5 ... 1 \
-5  / 2 = 2 ... 1 \
-2  / 2 = 1 ... 0 \
-1  / 2 = 0 ... 1
+  11 / 2 = 5 ... 1 \
+  5 / 2 = 2 ... 1 \
+  2 / 2 = 1 ... 0 \
+  1 / 2 = 0 ... 1
 $
 最后将余数从下向上写出即可得到对应二进制数.
 
@@ -1448,7 +1263,7 @@ i
 10
 ;
 ```
-They are illegal as well.
+They are legal as well.
 
 But, we'll not write code in this way.
 More common usage of this feature will be:
@@ -1462,7 +1277,7 @@ int i = 10,
 As we have known statement, another import part of c program is
 expression.
 
-From which, a expression is some form that contains different 
+From which, a expression is some form that contains different
 operation.
 
 Most basic expression we'd used in program are calculation.
@@ -1474,7 +1289,7 @@ printf("Hello, World")
 
 They all expressions, and finally get the result of those operation.
 
-Statements may contains expression, but expression cannot construct a 
+Statements may contains expression, but expression cannot construct a
 statement.
 
 Also, most of the time, a expression will generate some value, that
@@ -1650,7 +1465,7 @@ Here are some mainly used keywords and reserved names:
 auto, break, case, char, const, continue, default, do, double, else, enum, extern, float, for, goto, if, inline, int, long, register, restrict, return, short, signed, sizeof, static, struct, switch, typedef, typeof, union, unsigned, void, volatile, while, _Generic
 ```
 
-Outside those keywords that cannot use, we also have extra naming 
+Outside those keywords that cannot use, we also have extra naming
 rules.
 
 Names starts with two underscore ('\_') and those start with one
@@ -1928,7 +1743,10 @@ Here are flags part:
   [`-`], [Align left, default right], [```c %-d```], [None],
   [`+`], [Force output '+', default not show for positive], [```c %+d```], [None],
   [` `], [Insert a space before output], [```c % d```], [None],
-  [`#`], [Show '0', '0x' or '0X' with 'o', 'x', 'X' descriptor \ force show decimal point with 'e', 'E', 'f' \ or, not remove tailed zero with 'g', 'G'], [```c %#d```], [None],
+  [`#`],
+  [Show '0', '0x' or '0X' with 'o', 'x', 'X' descriptor \ force show decimal point with 'e', 'E', 'f' \ or, not remove tailed zero with 'g', 'G'],
+  [```c %#d```],
+  [None],
   [`0`], [Padding 0 instead of space], [```c %0d```], [None],
   table.hline(),
 )
@@ -1940,16 +1758,34 @@ Width, .precision and length:
   table.hline(),
   table.header([flags], [Description], [Form], [Expected Data]),
   table.hline(stroke: 0.5pt),
-  [`(number)`], [minimal number of character to print, padding with space, if output longer than this value, output will not be truncated], [```c %8d```], [None],
-  [`*`], [width not specified in format string, but obtained as parameter before argument to be formatted], [```c %*d```], [Integer: char, short, int],
+  [`(number)`],
+  [minimal number of character to print, padding with space, if output longer than this value, output will not be truncated],
+  [```c %8d```],
+  [None],
+  [`*`],
+  [width not specified in format string, but obtained as parameter before argument to be formatted],
+  [```c %*d```],
+  [Integer: char, short, int],
   table.hline(stroke: 0.5pt),
-  [`.number`], [for integers (d, i, o, u, x, X): minimal digits to be written, less than this value will padding by 0. Longer than this value will affect nothing. 0 means nothing to print \ for e, E, f: digits after decimal point \ for g, G: maximal digits to be printed \ s: maximal length of a sting, default, all character will be printed, until '\0' \ c: nothing affected \ nothing placed will introduce a 1], [```c %.10d %.f```], [None],
-  [`.*`], [precision not specified, but obtained as parameter before argument to be formatted], [```c %.10d %.f```], [Integer: char, short, int],
+  [`.number`],
+  [for integers (d, i, o, u, x, X): minimal digits to be written, less than this value will padding by 0. Longer than this value will affect nothing. 0 means nothing to print \ for e, E, f: digits after decimal point \ for g, G: maximal digits to be printed \ s: maximal length of a sting, default, all character will be printed, until '\0' \ c: nothing affected \ nothing placed will introduce a 1],
+  [```c %.10d %.f```],
+  [None],
+  [`.*`],
+  [precision not specified, but obtained as parameter before argument to be formatted],
+  [```c %.10d %.f```],
+  [Integer: char, short, int],
   table.hline(stroke: 0.5pt),
   [`h`], [parameter as short, for i, d, o, u, x, X], [```c %hd```], [None],
-  [`l`], [parameter as long, for i, d, o, u, x, X \ double, for f \ wide char, for c \ wchar string, for s], [```c %ld```], [None],
+  [`l`],
+  [parameter as long, for i, d, o, u, x, X \ double, for f \ wide char, for c \ wchar string, for s],
+  [```c %ld```],
+  [None],
   [`ll`], [parameter as long long, for i, d, o, u, x, X \ long double, for e, E, f, g, G], [```c %lld```], [None],
-  [`L`], [parameter as long long, for e, E, f, g, G \ parameter as long long, for i, d, o, u, x, X], [```c %Lf```], [None],
+  [`L`],
+  [parameter as long long, for e, E, f, g, G \ parameter as long long, for i, d, o, u, x, X],
+  [```c %Lf```],
+  [None],
   table.hline(),
 )
 
@@ -2013,11 +1849,17 @@ Some kind of like to `printf`, right?
   table.header([part], [Description], [Form], [Expected Data]),
   table.hline(stroke: 0.5pt),
   [`a`, `A`], [floats], [```c scanf("%a", &f)```], [floats],
-  [`c`], [characters, if width is not 0, read width character and set to parameter], [```c scanf("%c", &c), scanf("%3c", &c1, &c2, &c3)```], [char],
+  [`c`],
+  [characters, if width is not 0, read width character and set to parameter],
+  [```c scanf("%c", &c), scanf("%3c", &c1, &c2, &c3)```],
+  [char],
   [`d`], [integer written in decimal, '+' or '-' are optional], [```c scanf("%d", &i)```], [int],
   [`ld`], [integer written in decimal, '+' or '-' are optional], [```c scanf("%ld", &l)```], [long],
   [`lld`], [integer written in decimal, '+' or '-' are optional], [```c scanf("%lld", &ll)```], [long long],
-  [`e`, `E`, `f`, `F`, `g`, `G`], [real numbers, '+' or '-' are optional, 'e' for exponent are optional], [```c scanf("%f", &f)```], [float],
+  [`e`, `E`, `f`, `F`, `g`, `G`],
+  [real numbers, '+' or '-' are optional, 'e' for exponent are optional],
+  [```c scanf("%f", &f)```],
+  [float],
   [`i`], [integer], [```c scanf("%i", &i)```], [int],
   [`o`], [integer written octal], [```c scanf("%o", &i)```], [int],
   [`s`], [string, separated by blanks], [```c scanf("%s", s)```], [`char[]`],
@@ -2499,7 +2341,43 @@ it make nonsense to prevent a function calling it self.
 
 A function that calling it self are called recursion function.
 
+For example, factorial function can be defined using recursion:
+
+```c
+int factorial(int n) {
+  if (n == 0) {
+    return 1;
+  } else {
+    return n * factorial(n - 1);
+  }
+}
+```
+
+The basic structure of recursion function is similar to normal function,
+the only difference is that it calls itself within its body.
+
+But since recursion function may call itself infinite times,
+it must have a terminal condition to stop further calls.
+
+Here the if statement works as terminal condition.
+When n equals to 0, the function will return 1 directly, without further calling itself.
+
 === Function Tail Call Optimization
+
+In some case, a function's last operation is calling another function,
+which is called tail call.
+
+And if a function's last operation is calling itself, it is called tail recursion.
+
+In most case, a infinite tail recursion will result in stack overflow,
+but with tail call optimization, the compiler can optimize tail calls to avoid the case.
+
+The common way to implement tail call optimization is Continuous Passing Style.
+
+==== Continuous Passing Style
+
+Continuous Passing Style (CPS) is a style of programming where control is passed explicitly in the form of a continuation.
+
 
 == Assembly
 
@@ -2700,7 +2578,7 @@ A function that calling it self are called recursion function.
 
 ==== `thiscall`
 
-==== Microsoft 4-register fastcall `__vectorcall` 
+==== Microsoft 4-register fastcall `__vectorcall`
 
 ==== System V ABI syscall
 
