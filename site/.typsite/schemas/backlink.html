@@ -1,0 +1,32 @@
+<head>
+</head>
+<!--
+Inline var could be used:
+- {slug} - The slug of the backlink article.
+- <content/> - The content of the backlink article.
+- Any meta contents of this backlink article.
+-->
+
+<body>
+  <section class="block">
+    <details open>
+      <summary id="{slug}">
+        <header>
+          <h1><span class="taxon">{taxon}</span>{title} <a class="slug" href="{slug}" title="{page-title} [{slug}]">[{slug-display}]</a></h1>
+          <div class="metadata">
+            <ul>
+              <li class="meta-item">
+                <metadata get="author" />
+              </li>
+              <li class="meta-item">
+                <metadata get="date" />
+              </li>
+            </ul>
+          </div>
+
+        </header>
+      </summary>
+      <content /> <!-- Where to put Content-->
+    </details>
+  </section>
+</body>

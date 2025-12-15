@@ -1,0 +1,117 @@
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>name</key>
+    <string>One Dark</string>
+
+    <key>uuid</key>
+    <string>0729B712-31C6-4BBF-B47D-ONE-DARK-THEME</string>
+
+    <key>settings</key>
+    <array>
+      <dict>
+        <key>settings</key>
+        <dict>
+          <key>background</key>
+          <string>#282C34</string>
+          <key>foreground</key>
+          <string>0b0b0b</string>
+          <key>caret</key>
+          <string>#528BFF</string>
+          <key>invisibles</key>
+          <string>#3B4048</string>
+          <key>lineHighlight</key>
+          <string>#2F333B</string>
+          <key>selection</key>
+          <string>#3E4451</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>Comment</string>
+        <key>scope</key>
+        <string>comment</string>
+        <key>settings</key>
+        <dict>
+          <key>fontStyle</key>
+          <string>italic</string>
+          <key>foreground</key>
+          <string>#5C6370</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>String</string>
+        <key>scope</key>
+        <string>string</string>
+        <key>settings</key>
+        <dict>
+          <key>foreground</key>
+          <string>#98C379</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>Keyword &amp; Control</string>
+        <key>scope</key>
+        <string>keyword, storage.type</string>
+        <key>settings</key>
+        <dict>
+          <key>foreground</key>
+          <string>#C678DD</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>Function</string>
+        <key>scope</key>
+        <string>entity.name.function, meta.function-call</string>
+        <key>settings</key>
+        <dict>
+          <key>foreground</key>
+          <string>#61AFEF</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>Variable</string>
+        <key>scope</key>
+        <string>variable, meta.definition.variable</string>
+        <key>settings</key>
+        <dict>
+          <key>foreground</key>
+          <string>#E06C75</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>Constant &amp; Number</string>
+        <key>scope</key>
+        <string>constant, support.constant, constant.numeric</string>
+        <key>settings</key>
+        <dict>
+          <key>foreground</key>
+          <string>#D19A66</string>
+        </dict>
+      </dict>
+
+      <dict>
+        <key>name</key>
+        <string>Type &amp; Class</string>
+        <key>scope</key>
+        <string>entity.name.type, entity.name.class, support.class</string>
+        <key>settings</key>
+        <dict>
+          <key>foreground</key>
+          <string>#E5C07B</string>
+        </dict>
+      </dict>
+    </array>
+  </dict>
+</plist>
