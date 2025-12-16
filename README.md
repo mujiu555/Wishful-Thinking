@@ -44,8 +44,12 @@ The whole project is organized in following structure:
 ```txt
 Root: /                         ; Project root
 +- .git/                        ; git repository
++- .github/
+|  +- workflows/                ; CI/CD configuration
 +- .typsite/                    ; SSG configuration
 +- bin/                         ; build results
+|  +- deploy.sh
+|  +- gen-todos.sh
 +- doc/                         ; documentation & copyright information
 |  +- licenses/                 ; when adopting other library, place license here
 |  +- root/                     ; detailed README for each subproject
@@ -63,8 +67,9 @@ Root: /                         ; Project root
 |  +- lib/                      ;
 |  +- notes/                    ; notes to be published
 +- src/                         ; source code for each subproject
-+- tmp/                         ; temporay files
 +- test/                        ; public test files
++- tmp/                         ; temporay files
++- todos/                       ; todo list, from git commit
 +- .gitignore
 +- .gitmodules
 +- LICENSE
