@@ -1,0 +1,20 @@
+name: Depolyment for blog
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  depoly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Set up Typst
+        uses: typst-community/setup-typst@v4
