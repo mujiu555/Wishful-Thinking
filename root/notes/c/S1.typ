@@ -1,3 +1,4 @@
+/// TAG: c, programming theory, computation theory
 #import "@preview/zh-kit:0.1.0": *
 #import "/lib/lib.typ": *
 

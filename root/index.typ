@@ -45,3 +45,5 @@ I can do anything for you!
 
 = Works
 
+
+== #embed("/contents.typ")

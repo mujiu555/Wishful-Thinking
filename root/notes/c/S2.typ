@@ -1,3 +1,4 @@
+/// TAG: c, programming theory, computation theory
 #import "/lib/lib.typ": *
 
 #show: schema.with("page")
