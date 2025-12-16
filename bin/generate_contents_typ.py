@@ -65,6 +65,36 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
     # Sort entries for deterministic output by path
     entries = sorted(index.keys())
 
+    # Build tag -> list[path] mapping using 'tags' property from JSON metadata.
+    # Accept either a list of tags or a single string tag. Keep insertion deterministic
+    # by using sorted lists when writing output below.
+    tag_map: Dict[str, list] = {}
+    files_with_tags = set()
+    for rel in entries:
+        meta = index.get(rel, {})
+        tags = meta.get("tags") or meta.get("tag")
+        if tags is None:
+            continue
+        # normalize single string to list
+        if isinstance(tags, str):
+            tags_list = [tags]
+        elif isinstance(tags, (list, tuple)):
+            tags_list = list(tags)
+        else:
+            # unknown format; skip
+            continue
+
+        for t in tags_list:
+            if t is None:
+                continue
+            t_str = str(t).strip()
+            if not t_str:
+                continue
+            if lowercase_tags:
+                t_str = t_str.lower()
+            tag_map.setdefault(t_str, []).append(rel)
+            files_with_tags.add(rel)
+
     # Header per user request
     from datetime import datetime
 
@@ -80,6 +110,7 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
     lines.append('#author(link("https://github.com/mujiu555")[GitHub\\@mujiu555])')
     lines.append("\n")
 
+    lines.append("= Overview\n")
     for rel in entries:
         p = Path(rel)
         # Make the link path start with a leading slash so it matches other files (e.g. /root/notes/...)
@@ -96,8 +127,41 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
         # Escape double-quotes in path and title (typst link expects string literal)
         link_path_escaped = link_path.replace('"', '\\"')
         lines.append(
-            f'= #embed("{link_path_escaped}", sidebar: "only_title", open: false)\n'
+            f'== #embed("{link_path_escaped}", sidebar: "only_title", open: false)\n'
         )
+
+    # Add tag-based sections
+    if tag_map:
+        lines.append("\n= Tags\n")
+        for tag in sorted(tag_map.keys()):
+            lines.append(f"== {tag}\n")
+            for rel in sorted(tag_map[tag]):
+                p = Path(rel)
+                link_path = "/" + str(p).lstrip("./")
+                if link_path.startswith("/root"):
+                    link_path = link_path[len("/root"):]
+                    if not link_path.startswith("/"):
+                        link_path = "/" + link_path
+                link_path_escaped = link_path.replace('"', '\\"')
+                lines.append(
+                    f'=== #embed("{link_path_escaped}", sidebar: "only_title", open: false)\n'
+                )
+
+    # Files without tags
+    untagged = [rel for rel in entries if rel not in files_with_tags]
+    if untagged:
+        lines.append("\n= Uncategorized\n")
+        for rel in untagged:
+            p = Path(rel)
+            link_path = "/" + str(p).lstrip("./")
+            if link_path.startswith("/root"):
+                link_path = link_path[len("/root"):]
+                if not link_path.startswith("/"):
+                    link_path = "/" + link_path
+            link_path_escaped = link_path.replace('"', '\\"')
+            lines.append(
+                f'=== #embed("{link_path_escaped}", sidebar: "only_title", open: false)\n'
+            )
 
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
