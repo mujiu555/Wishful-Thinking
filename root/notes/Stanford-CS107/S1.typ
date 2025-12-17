@@ -1,8 +1,15 @@
+/// TAG: c, programming paradigm, computer architecture
 #import "@preview/zh-kit:0.1.0": *
+#import "/lib/lib.typ": *
+
+#show: schema.with("page")
+
+#title[Stanford CS107: Programming Paradigm]
+#date[2025-12-17 15:56]
+#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
+#parent("/index.typ")
 
 #show: doc => setup-base-fonts(doc)
-
-= Stanford CS107: Programming Paradigm
 
 = Data Types and Conversion
 
