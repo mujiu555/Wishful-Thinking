@@ -396,4 +396,114 @@ pushing argument to stack for `foo`:
         | argument| &i   <- sp
 ```
 
+= Section XI: Swap, call in assembly
 
+```c
+void foo() {
+  int x = 11;
+  int y = 17;
+  swap(&x, &y);
+}
+```
+
+In assembly, `_cdecl`, arguments are pushed in reverse order:
+
+```asm
+_foo:
+  push rbp
+  mov rbp, rsp
+
+  sub rsp, 8              ; x, y are 4 bytes each, total 8 bytes
+  mov dword [rsp + 4], 11 ; x = 11
+  mov dword [rsp], 17     ; y = 17
+
+  push qword [rsp]
+  add rsp, 8              ; clean up stack after call
+
+  mov rax, 60
+  mov rdi, 0
+  syscall
+
+  mov rsp, rbp
+  pop rbp
+```
+
+While `swap` may written as:
+
+```c
+void swap(int * a, int * b) {
+  int tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
+```
+
+8 bytes are reserved for `saved pc` and 16 bytes for 2 arguments.
+`a` for `rsp - 8`, `b` for `rsp - 16`
+since the program runs in x86_64 machine.
+Left most parameter lays at the button of stack frame.
+
+
+In c:
+```c
+void __attribute__((naked)) swap(int *ap, int *bp) {
+
+  asm volatile(
+      // fetch arguments from stack
+      "mov rbx, [rsp + 8];\n"
+      "mov eax, [rbx];\n"
+      "mov rbx, [rsp + 16];\n"
+      "xchg eax, [rbx];\n"
+      "mov rbx, [rsp + 8];\n"
+      "mov [rbx], eax;\n"
+
+      "ret;\n"
+      :
+      :
+      : "rsi", "rdi", "memory");
+}
+
+void __attribute__((naked)) foo() {
+
+  asm volatile(
+      // initialize variables
+      // push rbp;
+      // mov rbp, rsp;
+      // for better if possible
+      "sub rsp, 8;\n"
+      "mov dword ptr [rsp + 4], 11;\n"
+      "mov dword ptr [rsp], 17;\n"
+
+      "lea rax, [rsp + 4];\n"
+      "push rax;\n"
+      "lea rax, [rsp];\n"
+      "push rax;\n"
+
+      "call swap;\n"
+
+      "add rsp, 16;\n" // clean up calling
+
+      // clean up stack
+      // also possible to use
+      // `mov rsp, rbp; push rbp;`
+      // if bp is set
+      "add rsp, 8;\n"
+      "ret;\n"
+      :
+      :
+      : "memory");
+}
+
+int main(int argc, char *argv[]) {
+  foo();
+  return 0;
+}
+```
+
+`swap` function does not implemented as code shown in c, but use `xchg`.
+
+== Compiler, Linker
+
+== preprocessor
+
+`#define`,
