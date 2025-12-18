@@ -502,8 +502,31 @@ int main(int argc, char *argv[]) {
 
 `swap` function does not implemented as code shown in c, but use `xchg`.
 
-== Compiler, Linker
+= Pre-process, Compile, Assemble, Link
 
-== preprocessor
+Code -> Processed Code -> Assembled Code -> Objected File -> Executable File
 
-`#define`,
+== Preprocessor
+
+=== `#define`
+
+Replacement of text appear in source file.
+
++ constant replacement
+
+  ```c
+  #define SIZE 1024
+  char buf[SIZE];
+  ```
+
++ parameterized macro
+
+  ```c
+  #define MAX(a, b) ((a) > (b) ? (a) : (b))
+  int x = MAX(3, 5);
+  ```
+
+=== `#include`
+
+== compiler
+
