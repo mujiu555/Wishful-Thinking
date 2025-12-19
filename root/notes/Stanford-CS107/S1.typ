@@ -530,3 +530,15 @@ Replacement of text appear in source file.
 
 == compiler
 
+= Section XIII:
+
+What if comment `#include <stdio.h>`?
+
+The program can probably still be compiled.
+
+What if comment `#include <stdlib.h>`?
+
+`assert` will be seen as a function and the final object file will miss the symbol.
+
+
+
