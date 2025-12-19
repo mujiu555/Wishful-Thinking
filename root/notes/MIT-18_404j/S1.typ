@@ -15,8 +15,6 @@
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
 #parent("/index.typ")
 
-= Section I: Intro
-
 = Applications
 
 = Modules of computation
@@ -217,9 +215,7 @@ If there are input word $w$, then there should be a split point where $M_1$ reac
 
 Construct a new machine, concatenating $M_1$ and $M_2$ together with $epsilon$ transitions from each accept state of $M_1$ to the start state of $M_2$.
 
-But the first place machine reach accept state may not be the correct split point.
-M need to have a idea of all possible split points.
-
+But the first place machine reach accept state may not be the correct split point. M need to have a idea of all possible split points.
 = Non-determinism
 
 #html.align(center, inline(scale: 200%, figure(
@@ -348,7 +344,7 @@ E.g., for NFA above:
   columns: 5,
   stroke: none,
   table.hline(),
-  table.header([type], [states], $delta(Q, 0)=$, $delta(Q, 1)=$, [explain]),
+  table.header([type], [states], $delta(Q, a)=$, $delta(Q, b)=$, [explain]),
   table.hline(stroke: 0.5pt),
   [start $->$], $q_1$, ${q_1, q_2}$, $emptyset$, [],
   [], ${q_2}$, $emptyset$, ${q_1, q_3, q_4}$, [q_2 reaches q_3, and then via epsilon to q_4],
@@ -357,10 +353,17 @@ E.g., for NFA above:
   //
   table.hline(stroke: 0.5pt),
   [],
-  ${q_1, q_2}$, ${q_1, q_2}$, $q_1, q_3, q_4$,
+  ${q_1, q_2}$, ${q_1, q_2}$, ${q_1, q_3, q_4}$,
   [q_1 and q_2 can only reach q_1 via a;\
-    q_2 can reach to q_1 via b, and q_3 via b, then via epsilon to q_4],
-  [accepted:], ${q_1, q_3, q_4}$, ${q_1, q_2}$, $emptyset$, [accepted because contains q_4],
+    q_2 can reach to q_1 via b, and q_3 via b,\
+    then via epsilon to q_4],
+  [accepted:], ${q_1, q_3, q_4}$, ${q_1, q_2, q_4}$, $emptyset$, [accepted because contains q_4],
+  [accepted:],
+  ${q_1, q_2, q_4}$,
+  ${q_1, q_2}$,
+  ${q_1, q_3, q_4}$,
+  [since q_2 can never reach q_3 via a, \
+    but b, and then epsilon to q_4],
   table.hline(),
 )))
 
@@ -375,7 +378,8 @@ Which have a image like:
       //"{q2}": ("{q1, q3, q4}": "b"),
       //"{q3}": ("{q4}": "a"),
       "{q1, q2}": ("{q1, q2}": "a", "{q1, q3, q4}": "b"),
-      "{q1, q3, q4}": ("{q1, q2}": "a"),
+      "{q1, q3, q4}": ("{q1, q2, q4}": "a"),
+      "{q1, q2, q4}": ("{q1, q2}": "a", "{q1, q3, q4}": "b"),
     ),
     final: ("{q1, q3, q4}",),
     initial: "{q1}",
@@ -431,3 +435,129 @@ Basically, Convert R to equivalent NFA $M$,
     ))
 
 Then, by structural induction on R, we can show that NFA $M$ recognizes A.
+
+== Generalize NFA
+
+Similar to NFA, but will more complex transitions.
+GNFA allow transitions labeled with regular expressions.
+
+Assume:
+- one accept state, separate from the start state:
+  connect all old accept states to new accept state via epsilon transitions,
+  and treat old accept states as normal states.
+- one arrow from each state to each state, except:
+  - only existing the start state
+  - only entering the accept state
+  - connect states without stransitions via emptyset transitions.
+
+== NFA to regular
+
+Inverse, if a language L is regular, then there is a regexpr R such that $L = L(R)$.
+
+Lemma: Every GNFA G has an equivalent regular expression R.
+
+Proof:
+
+By induction on the number of states in GNFA G.
+
+
+Basic(k = 2): G = #inline(automaton((q_start: (q_accept: "r"), q_accept: ()), final: ("q_accept",), initial: "q_start")).
+Let R = r
+
+Induction step(k > 2): Assume Lemma true for k - 1 states and prove for k states.
+
+Convert k-state GNFA G to (k - 1)-state GNFA G' by removing one state q_rip that neither start nor accept states.
+And repair all path may go through q_rip.
+
+= Non-regular languages
+
+== Pumping Lemma for regular languages
+
+To show a language is regular, just give a finite automaton or a regular expression.
+
+To show a language is non-regular, give a proof by contradiction with pumping lemma.
+
+Pumping lemma for regular languages describes a property that all regular languages must satisfy.
+If a language fail to satisfy this property, then it is non-regular.
+
+Pumping Lemma: For every regular language A,
+there is a number p (the pumping length) such that
+if $s in A and |s| >= p$ then $s = x y z$ where
+- $x y^i z in A$ for all $i >= 0$,
+- $y eq.not epsilon$ (y is not empty),
+- $|x y| <= p$,
+
+Informally, any sufficiently long string in a regular language can be pumped (have a middle section repeated any number of times) and still be in the language.
+
+Or, If there is a substring that can be repeated any number of times to produce new strings in the language,
+then the language may be regular.
+
+Pumping lemma depends on the fact that if M has p states, and it runs for more than p steps will enter some state at least twice (by pigeonhole principle).
+
+== Using pumping lemma to show non-regularity
+
+=== $D = {0^n 1^n | n >= 0}$
+
+Let $D = {0^n 1^n | n >= 0}$
+show: D is not regular.
+
+Proof by contradiction:
+Assume D is regular.
+Then, by pumping lemma, there is a pumping length p.
+Let $s = 0^p 1^p in D$ thus $|s| = 2 p >= p$.
+
+And pumping lemma says that $s = x y z$ where
+- $x y^i z in D$ for all $i >= 0$,
+- $y eq.not epsilon$,
+- $|x y| <= p$,
+
+Assuming $x, y$ contains all 0s, then $y = 0^k$ for some $k >= 1$.
+But $x y y z$ has excess 0s than 1s, thus $x y y z in.not D$, contradiction.
+
+Therefore the assumption is false, D is not regular.
+
+=== $F = {w w|w in Sigma^*}$, Sigma = {0, 1}.
+
+Let $F = {w w|w in Sigma^*}$, Sigma = {0, 1}.
+Show F is not regular.
+
+Proof by contradiction:
+Assume F is regular.
+Then, by pumping lemma, there is a pumping length p.
+Let $s = 0^p 1 0^p 1 in F$
+
+According to pumping lemma, $s = x y z$ where
+- $x y$ holds all 0s in the first half of s,
+
+And $x y y z$ has excess 0s in the first half than the second half,
+
+Contradiction found, thus F is not regular.
+
+=== $B = {w | w "has equal number of" 0's "and" 1's}$
+
+Let $B = {w | w "has equal number of" 0's "and" 1's}$.
+Show B is not regular.
+
+Proof by contradiction:
+Assume B is regular.
+Then, by pumping lemma, there is a pumping length p.
+
+Since we know that $0^* 1^*$ is regular, thus $C = B inter 0^* 1^* = {0^n 1^n | n >= 0}$ is also regular (by closure under intersection).
+
+But for language C, we have already shown it is not regular.
+
+Contradiction found, thus B is not regular.
+
+= Context-free languages
+
+Context free grammar are more powerful than finite machines.
+
+Composed of variables and rules.
+- rule: variable -> string of variables and terminals
+- variable: non-terminal symbol, appear on left side of some rule
+- terminal: symbol in the alphabet or epsilon, appear in only right side of rules
+- start variable: special variable that appear in the left side of no rule
+
+Grammar can generate strings by starting with start variable,
+then repeatedly replacing some variable with the right side of one of its rules,
+until there is no variable left.
