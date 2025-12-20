@@ -267,13 +267,14 @@ Zero          |  operator | Flags                                             |
 
 R             |  operator |k | Flags                          |   register    |
 A             |  operator |                                   |   register    |
-I             |  operator | Literal                                           |
+I             |  operator |                   | Literal                       |
 RR            |  operator |                   |   register    |   register    |
 RI            |  operator |           |offset |   literal     |   register    |
+IR            |  operator |           |offset |   literal     |   register    |
 RA            |  operator |             | sl* |   register    |   register    |
 AR            |  operator |       | ss* | dl* |   register    |   register    |
 AA            |  operator |       | dl  | sl  |   register    |   register    |
-LI            |  operator | Literal                           |   register    |
+LI            |  operator | Literal                                           |
 
 J             |  operator |typ|                                               |
 
@@ -301,6 +302,11 @@ Arithmetic:
 - `Sub`: subtract
 - `Mul`: multiple
 - `Div`: divide
+
+- `Addf`: add float
+- `Subf`: subtract float
+- `Mulf`: multiple float
+- `Divf`: divide float
 
 Bitwise Shift:
 - `Shl`: shift left
@@ -335,6 +341,7 @@ Functional:
 - `Call`: function call, jump
 - `SysCall`: ffi
 - `Ret`: restore stack and return
+- `IRet`: interrupt return
 
 Continuous:
 - `SnapShot`
@@ -343,7 +350,48 @@ Misc:
 - `Halt`: halt
 
 === `Int`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+I             |  operator |t|                 | Literal                       |
+R             |  operator |t|                 |k | Flags      |   register    |
+```
+
+Corresponding instruction written in format:
+- `Int reg`
+- `Int immediate`
+
+If `t` is 0, the instruction is called with immediate.
+If `t` is 1, the instruction is called with register.
+
+Basically, `Int` instruction invoke interrupt functions.
+- Called with immediate, invoke corresponding interruption by id.
+- Called with register, call function according to the address stored in register, the function must be interruption handler.
+
 === `Nop`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+Zero          |  operator | Flags                                             |
+```
+
+Corresponding instruction written in format: `Nop`
+
+Do nothing.
 
 === `Mov`
 
@@ -380,13 +428,16 @@ Basically, `mov` instruction needs two argument.
 It could be two register, register-immediate, register-address, address-register or address-address pair.
 
 There are 32 bits totally for the instruction, 6 bits for operator, 3 bits to distinct which type the `mov` instruction is.
-Totally 8 types.
+Totally 9 types.
 
 For two register case:
 ```txt
               00          06    09 a          10                              20
-RR            |  operator | typ |i| SHL       |   register    |   register    |
+RR            |  operator | typ |s| SHL       |   register    |   register    |
 ```
+
+Corresponding instruction written in format: `MOV dst, src`
+
 Apart from 9 bits prefix, there are 7 bits flag and 16 bits registers information.
 
 Flag modify the behaviour of `mov`:
@@ -400,7 +451,16 @@ Likely ```c dst = src << SHL;``` in C.
 If `s` has value of nonzero, register `dst` will be assigned with value `src << SHL`.
 Padding with 1 on the right.
 
-For case associated immediate:
+If `dst` has a prefix `-`, the s will be set.
+If `src` written in form of `shl(src)` instead of regular `src`, `SHL` will be set.
+`dst` and `src` can only be string that represent registers.
+E.g.,
+- `mov Reg#1, Reg#a`
+- `mov -Reg#2, Reg#1`
+- `mov Reg#3, 2(Reg#2)`
+- `mov -Reg#4, 1(Reg#3)`
+
+For cases associated immediate:
 ```txt
               00          06    09            10                              20
 RI positive l |  operator | typ | literal                     |   register    |
@@ -408,11 +468,32 @@ RI negative l |  operator | typ | literal                     |   register    |
 RI positive h |  operator | typ | literal                     |   register    |
 RI negative h |  operator | typ | literal                     |   register    |
 ```
+
+Corresponding instruction written in format: `MOV offset dst, immediate`
+
 Apart from 9 bits prefix, there are 15 bits literal and 8 bits registers information.
 
-If instruction has type low, literal will be written in low 16 bits with 16th bit controlled by type of instruction.
-If instruction has type h, literal will be written in 16-32 bits with 32 bit controlled by type of instruction.
+If instruction has type l, for low, literal will be written in low 16 bits with 16th bit controlled by type of instruction.
+If instruction has type h, for high, literal will be written in 16-32 bits with 32 bit controlled by type of instruction.
 
+If instruction has type positive, sign bit will be set as 0.
+If instruction has type negative, sign bit will be set as 1.
+
+So that a instruction can fulfill the assignment of 16bits.
+
+According to `offset`, l, or h version of `mov` will be chosen.
+According to `immediate`, positive of negative version of `mov` will be chosen.
+
+`dst` can only be string that represent registers.
+`immediate` can only be number literal.
+
+E.g.,
+- `mov Reg#1, 12345`
+- `mov Reg#2, -12345`
+- `mov h Reg#3, 12345`
+- `mov l Reg#4, 65535`
+
+For cases associated addresses:
 ```txt
               00          06    09 a    0d    10                              20
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
@@ -420,24 +501,403 @@ AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
 ```
 
+Corresponding instruction written in format:
+- `MOV dst, ptr [src]`
+- `MOV ptr [dst], src`
+- `MOV ptr [dst], ptr [src]`
 
+Apart from 9 bits prefix, there are 7 bits flag and 16 bits register, address information.
 
+Flag modify the behaviour of `MOV` instruction:
+- `k`: reserved
+- `sl`: source data length, how much data are there, can be 1, 2, 4, 0 (0 for 8), or for special cases, can be any between 0\~7.
+- `ss`: source offset, copy which part of data to destination, can be 0, 1, 2, 4, or for special cases, can be any between 0\~4.
+- `dl`: destination data length, how much data can be written, can be 1, 2, 4, 0 (0 for 8), or for special cases, can be any between 0\~7.
+For all instructions, `sl` must have same value as `dl`.
+For all instructions, 8 - `ss` must have same value as `dl`.
 
+The register corresponding to address should store the address information.
+This move instruction will dereference the address and copy value to `dst`.
 
-
-
-
-
+E.g.,
+- `mov Reg#1, ptr [Reg#2]`: `sl` 0
+- `mov Reg#3, dword ptr [Reg#4]`: `sl` 4
+- `mov ptr [Reg#5], Reg#6`: `ss` 0, `dl` 0
+- `mov byte ptr [Reg#7], Reg#8`: `ss` 0, `dl` 1
+- `mov byte ptr [Reg#9], 1(Reg#10)`: `ss` 1, `dl` 4, likely `mov [...], ah`
+- `mov ptr [Reg#11], ptr [Reg#12]`: `sl` 0, `dl` 0
 
 === `LoadIL`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+LI            |  operator | Literal                                           |
+```
+
+Corresponding instruction written in format: `LoadIL literal`
+
+Load a 26-bit integer literal into register `Reg#a` (low 32-bit).
+
 === `LoadIH`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+LI            |  operator | Literal                                           |
+```
+
+Corresponding instruction written in format: `LoadIH literal`
+
+Load a 26-bit integer literal into register `Reg#a` (high 32-bit).
+
 === `LoadIM`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+Zero          |  operator | Flags                                             |
+```
+
+Corresponding instruction written in format: `LoadIM`
+
+Load a signed 64-bit integer maximum into register `Reg#a`
+
 === `LoadUM`
 
-=== `Add`
-=== `Sub`
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+Zero          |  operator | Flags                                             |
+```
+
+Corresponding instruction written in format: `LoadUM`
+
+Load a unsigned 64-bit integer maximum into register `Reg#a`
+
+=== `Add`, `Sub`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+RR            |  operator | typ |s| SHL       |   register    |   register    |
+RI positive l |  operator | typ | literal                     |   register    |
+RI negative l |  operator | typ | literal                     |   register    |
+RI positive h |  operator | typ | literal                     |   register    |
+RI negative h |  operator | typ | literal                     |   register    |
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+`Add` instruction:
+Adds two values and store result into register `Reg#a`.
+- `ADD dst, src`
+- `ADD dst, immediate`
+- `ADD immediate, src`
+- `ADD immediate1, immediate2`
+- `ADD dst, ptr [src]`
+- `ADD ptr [dst], src`
+- `ADD ptr [dst], ptr [src]`
+Add instruction has almost same format as `Mov` instruction.
+If overflow happens, the carry flag (CF) in `Reg#FLAGS` will be set, overflowed value stored in `Reg#R`, reminder register.
+`src` and `dst` for adder and addend respectively.
+
+`Sub` instruction:
+Subtracts two values and store result into register `Reg#a`.
+- `SUB dst, src`
+- `SUB dst, immediate`
+- `SUB immediate, src`
+- `SUB immediate1, immediate2`
+- `SUB dst, ptr [src]`
+- `SUB ptr [dst], src`
+- `SUB ptr [dst], ptr [src]`
+Sub instruction has almost same format as `Mov` instruction.
+If carry happens, the carry flag (CF) in `Reg#FLAGS` will be set, overflowed value stored in `Reg#R`, reminder register.
+`src` and `dst` for minuend and subtrahend respectively.
+
+Basically, `Add` and `Sub` instruction needs two argument.
+It could be two register, register-immediate, register-address, address-register or address-address pair.
+
+There are 32 bits totally for the instruction, 6 bits for operator, 3 bits to distinct which type the `Add`/`Sub` instruction is.
+
+For two register case:
+```txt
+              00          06    09 a          10                              20
+RR            |  operator | typ |             |   register    |   register    |
+```
+
+Corresponding instruction written in format:
+- `ADD dst, src`
+- `SUB dst, src`
+
+E.g.,
+- `add Reg#1, Reg#2`
+- `sub Reg#3, Reg#2`
+
+For cases associated immediate:
+```txt
+              00          06    09            10                              20
+RI            |  operator | typ | literal                     |   register    |
+IR            |  operator | typ | literal                     |   register    |
+II            |  operator | typ |k| literal             | literal             |
+```
+
+Corresponding instruction written in format:
+- `ADD dst, immediate`
+- `SUB dst, immediate`
+- `ADD immediate, src`
+- `SUB immediate, src`
+- `ADD immediate1, immediate2`
+- `SUB immediate1, immediate2`
+
+Apart from 9 bits prefix, there are 15 bits literal and 8 bits registers information.
+Or, 1-bits reserved and two 11-bits literal for `II` type.
+
+E.g.,
+- `add Reg#1, -2`
+- `sub Reg#2, 10`
+
+For cases associated addresses:
+```txt
+              00          06    09 a    0d    10                              20
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k|     | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+```
+
+Corresponding instruction written in format:
+- `ADD dst, ptr [src]`
+- `SUB dst, ptr [src]`
+- `ADD ptr [dst], src`
+- `SUB ptr [dst], src`
+- `ADD ptr [dst], ptr [src]`
+- `SUB ptr [dst], ptr [src]`
+
+Apart from 9 bits prefix, there are 7 bits flag and 16 bits register, address information.
+
+Falg modify the behaviour of `ADD`/`SUB` instruction:
+- `k`: reserved
+- `sl`: source data length, how much data are there, can be 1, 2, 4, 0 (0 for 8), or for special cases, can be any between 0\~7.
+- `dl`: destination data length, how much data can be written, can be 1, 2, 4, 0 (0 for 8), or for special cases, can be any between 0\~7.
+For all instructions, `sl` must have same value as `dl`.
+
+The register corresponding to address should store the address information.
+This `ADD`/`SUB` instruction will dereference the address and do addition/subtraction.
+
+E.g.,
+- `add Reg#1, ptr [Reg#2]`: `sl` 0
+- `sub Reg#3, dword ptr [Reg#4]`: `sl` 4
+- `add ptr [Reg#5], Reg#6`: `ss` 0, `dl` 0
+- `sub byte ptr [Reg#7], Reg#8`: `ss` 0, `dl` 1
+- `add ptr [Reg#9], ptr [Reg#10]`: `sl` 0, `dl` 0
+
 === `Mul`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+RR            |  operator | typ |s| SHL       |   register    |   register    |
+RI positive l |  operator | typ | literal                     |   register    |
+RI negative l |  operator | typ | literal                     |   register    |
+RI positive h |  operator | typ | literal                     |   register    |
+RI negative h |  operator | typ | literal                     |   register    |
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+`Mul` instruction:
+Multiplies two values and store result into register `Reg#a`.
+- `MUL dst, src`
+- `MUL dst, immediate`
+- `MUL immediate, src`
+- `MUL immediate1, immediate2`
+- `MUL dst, ptr [src]`
+- `MUL ptr [dst], src`
+- `MUL ptr [dst], ptr [src]`
+Mul instruction has almost same format as `Add` instruction.
+`src` and `dst` for multiplicand and multiplier respectively.
+
+Basically, `Mul` instruction needs two argument.
+It could be two register, register-immediate, register-address, address-register or address-address pair.
+
+There are 32 bits totally for the instruction, 6 bits for operator, 3 bits to distinct which type the `Mul` instruction is.
+
+For two register case:
+```txt
+              00          06    09 a          10                              20
+RR            |  operator | typ |             |   register    |   register    |
+```
+Corresponding instruction written in format:
+- `MUL dst, src`
+
+For cases associated immediate:
+```txt
+              00          06    09            10                              20
+RI            |  operator | typ | literal                     |   register    |
+IR            |  operator | typ | literal                     |   register    |
+II            |  operator | typ |k| literal             | literal             |
+```
+
+Corresponding instruction written in format:
+- `MUL dst, immediate`
+- `MUL immediate, src`
+- `MUL immediate1, immediate2`
+
+Apart from 9 bits prefix, there are 15 bits literal and 8 bits registers information.
+Or, 1-bits reserved and two 11-bits literal for `II` type.
+
+For cases associated addresses:
+
+```txt
+              00          06    09 a    0d    10                              20
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k|     | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+```
+
+Corresponding instruction written in format:
+- `MUL dst, ptr [src]`
+- `MUL ptr [dst], src`
+- `MUL ptr [dst], ptr [src]`
+
+Apart from 9 bits prefix, there are 7 bits flag and 16 bits register, address information.
+- `k`: reserved
+- `sl`: source data length, how much data are there, can be 1, 2, 4, 0 (0 for 8), or for special cases, can be any between 0\~7.
+- `dl`: destination data length, how much data can be written, can be 1
+For all instructions, `sl` must have same value as `dl`.
+
+The register corresponding to address should store the address information.
+This `MUL` instruction will dereference the address and do multiplication.
+
 === `Div`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+RR            |  operator | typ |s| SHL       |   register    |   register    |
+RI positive l |  operator | typ | literal                     |   register    |
+RI negative l |  operator | typ | literal                     |   register    |
+RI positive h |  operator | typ | literal                     |   register    |
+RI negative h |  operator | typ | literal                     |   register    |
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+`Div` instruction:
+Divides two values and store result into register `Reg#a`, store remainder into `Reg#R`.
+- `DIV dst, src`
+- `DIV dst, immediate`
+- `DIV immediate, src`
+- `DIV immediate1, immediate2`
+- `DIV dst, ptr [src]`
+- `DIV ptr [dst], src`
+- `DIV ptr [dst], ptr [src]`
+Div instruction has almost same format as `Add` instruction.
+`src` and `dst` for divisor and dividend respectively.
+
+Basically, `Div` instruction needs two argument.
+It could be two register, register-immediate, register-address, address-register or address-address pair.
+
+there are 32 bits totally for the instruction, 6 bits for operator, 3 bits to distinct which type the `Div` instruction is.
+
+For two register case:
+```txt
+              00          06    09 a          10                              20
+RR            |  operator | typ |             |   register    |   register    |
+```
+Corresponding instruction written in format:
+- `DIV dst, src`
+
+For cases associated immediate:
+```txt
+              00          06    09            10                              20
+RI            |  operator | typ | literal                     |   register    |
+IR            |  operator | typ | literal                     |   register    |
+II            |  operator | typ |k| literal             | literal             |
+```
+
+Corresponding instruction written in format:
+- `DIV dst, immediate`
+- `DIV immediate, src`
+- `DIV immediate1, immediate2`
+
+Apart from 9 bits prefix, there are 15 bits literal and 8 bits registers information.
+Or, 1-bits reserved and two 11-bits literal for `II` type.
+
+For cases associated addresses:
+
+```txt
+              00          06    09 a    0d    10                              20
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k|     | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+```
+
+Corresponding instruction written in format:
+- `DIV dst, ptr [src]`
+- `DIV ptr [dst], src`
+- `DIV ptr [dst], ptr [src]`
+
+Apart from 9 bits prefix, there are 7 bits flag and 16 bits register, address information.
+- `k`: reserved
+- `sl`: source data length, how much data are there, can be 1, 2, 4, 0 (0 for 8), or for special cases, can be any between 0\~7.
+- `dl`: destination data length, how much data can be written, can be 1
+For all instructions, `sl` must have same value as `dl`.
+
+The register corresponding to address should store the address information.
+This `DIV` instruction will dereference the address and do division.
+
 === `Addf`
 === `Subf`
 === `Mulf`
@@ -473,6 +933,12 @@ J_far         |  operator |11 |               |   register    |   register    |
 
 === `Call`
 === `Ret`
+
+=== `SysCall`
+
+=== `SnapShot`
+
+=== `Halt`
 
 == Assembly
 
