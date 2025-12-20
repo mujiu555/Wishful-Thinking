@@ -540,5 +540,47 @@ What if comment `#include <stdlib.h>`?
 
 `assert` will be seen as a function and the final object file will miss the symbol.
 
+```c
+void foo() {
+  int i;
+  int array[4];
+  for (i = 0; i <= 7 /* for 32-bit alignment requirement in x86_64 Linux, there are 3-bits padding */; i ++) {
+    array[i] = 0;
+  }
+}
+```
+Will loop, forever.
 
+What will happen if
+```c
+int Declare() {
+  int array[100];
+  for (int i = 0; i < 100; i ++) {
+    array[i] = i;
+  }
+}
 
+int Print() {
+  int array[100];
+  for (int i = 0; i < 100; i ++) {
+    printf("%d", array[i]);
+  }
+}
+```
+
+Two function have same memory structure so that the Print can work correctly,
+since the function `Declare` will not clean whole bit pattern after returning.
+
+The technology is called "Channeling".
+
+== multiple arguments
+
+Push arguments from right to left.
+For better organization of compiler.
+
+= Multiple Threads
+
+Operating systems give different process a virtual memory.
+So that the program can assuming it holds all memory.
+
+Kernel trace and maintaining Virtual Memory Mapping Table and calls MMU to map virtual memory of each process to real memory.
