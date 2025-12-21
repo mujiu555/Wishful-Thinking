@@ -611,10 +611,9 @@ Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
 Default       |  operator |type | Reserved    |                               |
 ----------------------------------------------------------------------------------
 RR            |  operator | typ |s| SHL       |   register    |   register    |
-RI positive l |  operator | typ | literal                     |   register    |
-RI negative l |  operator | typ | literal                     |   register    |
-RI positive h |  operator | typ | literal                     |   register    |
-RI negative h |  operator | typ | literal                     |   register    |
+RI            |  operator | typ | literal                     |   register    |
+IR            |  operator | typ | literal                     |   register    |
+II            |  operator | typ | literal                     |   register    |
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
 AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
@@ -736,10 +735,9 @@ Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
 Default       |  operator |type | Reserved    |                               |
 ----------------------------------------------------------------------------------
 RR            |  operator | typ |s| SHL       |   register    |   register    |
-RI positive l |  operator | typ | literal                     |   register    |
-RI negative l |  operator | typ | literal                     |   register    |
-RI positive h |  operator | typ | literal                     |   register    |
-RI negative h |  operator | typ | literal                     |   register    |
+RI            |  operator | typ | literal                     |   register    |
+IR            |  operator | typ | literal                     |   register    |
+II            |  operator | typ | literal                     |   register    |
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
 AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
@@ -823,10 +821,9 @@ Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
 Default       |  operator |type | Reserved    |                               |
 ----------------------------------------------------------------------------------
 RR            |  operator | typ |s| SHL       |   register    |   register    |
-RI positive l |  operator | typ | literal                     |   register    |
-RI negative l |  operator | typ | literal                     |   register    |
-RI positive h |  operator | typ | literal                     |   register    |
-RI negative h |  operator | typ | literal                     |   register    |
+RI            |  operator | typ | literal                     |   register    |
+IR            |  operator | typ | literal                     |   register    |
+II            |  operator | typ | literal                     |   register    |
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
 AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
