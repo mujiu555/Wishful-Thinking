@@ -584,3 +584,40 @@ Operating systems give different process a virtual memory.
 So that the program can assuming it holds all memory.
 
 Kernel trace and maintaining Virtual Memory Mapping Table and calls MMU to map virtual memory of each process to real memory.
+
+Program execution is sequential.
+
+When multiple processes share one shared data,
+it may manipulate the data after other process manipulate it already.
+E.g., read a variable and check it already fit the requirement, when it about to do operation on it, it was switched to another process by
+scheduler, and the other process do operation on the variable successfully.
+When the time scheduler dispatch back to original one, it will never able to validate the variable and do same operation to the variable.
+Which cause the error.
+
+The condition happened here called race condition.
+
+There always be some critical section in code, when code executing in critical section, it will never able to validate the shared data again.
+
+The solution is to use semaphore or lock to protect critical section.
+When a process want to enter critical section, it will try to acquire the lock.
+
+Semaphore is a integer variable with atomic operation ability,
+when it is 0, the process can not enter critical section,
+else if it is greater than 0, the process can enter critical section and decrease the semaphore by 1 atomically.
+When leaving critical section, add the semaphore, release the resource.
+
+Semaphore operations acquire resources.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
