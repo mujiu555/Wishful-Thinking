@@ -185,3 +185,28 @@ On my poor stupid.
 ]
 
 多么想要, 知道如何活下去啊
+
+= 2025-12-22 17:52: We choose to give up
+
+You shall understand,
+the emotions called love is coming from the chemical reaction in brain.
+Something not logical, not rational.
+
+The purpose of life, born with, assigned by the creator, to survive, to reproduce.
+It's not our choice to make.
+
+We choose to give up,
+we choose to fight for myself,
+we choose to discard the natural selection.
+
+The idea is,
+the emotions, derived from the chemical reaction in brain,
+affected by the hormones,
+distorted by the environment,
+drive us crazy,
+make us nonsensical.
+
+The history won't remember us,
+but ourselves.
+
+
