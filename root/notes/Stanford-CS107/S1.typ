@@ -608,8 +608,33 @@ When leaving critical section, add the semaphore, release the resource.
 
 Semaphore operations acquire resources.
 
+== Producer Consumer Problem
 
+Producer generates data, puts into a buffer.
+Consumer takes data from buffer, process it.
 
+Consumer should not take data when buffer is empty.
+Producer should not put data when buffer is full.
+
+Use two semaphores to track the number of empty slots and full slots in buffer.
+
+== Reader Writer Problem
+
+Reader Writer problem is a classic synchronization problem.
+With two types of processes, readers and writers,
+readers can read shared data simultaneously,
+writers need exclusive access to shared data.
+
+== Philosophers Dining Problem
+
+Every philosopher needs two forks to eat.
+Five philosophers sitting around a table,
+when a philosopher wants to eat,
+it will try to pick up the left and right forks.
+But if all philosophers pick up the left fork first,
+then they will never able to pick up the right fork,
+
+This is a deadlock.
 
 
 
