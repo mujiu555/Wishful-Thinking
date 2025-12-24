@@ -4,79 +4,104 @@
 
 == Virtual Machine Design
 
-The virtual machine works just similar to real CPU.
+The virtual machine works just similar to real CPU-memory.
 
-The virtual machine have:
-- $2^7$ general-purposed register
-- SP, BP, SS, PC, DS, ES, and other special-purposed register
-- Almost infinite Stack for Data
-- Literal Pool
-- Almost infinite Calling Stack
+The virtual machine have following properties:
+- 32-bit instruction width
+- 64-bit register size
+- 32 general-purposed registers
+- 32 special-purposed registers
+The virtual machine adopt a new designed instruction set.
+
+=== Architecture Overview
+
+The virtual machine works in a register-memory architecture.
+For each function unit, there are several sections:
+- Text Section: for instructions, read-only, executable
+- Data Section: for function global data, read-write
+- Constant Section: for constant values, read-only, non-executable
+- Closure Section: for closure data, read-only, non-executable, maps outer scope variable to inner function unit
+When execution, there are several section will be loaded into memory:
+- text segment: for instructions, read directly from text section, read-only, executable
+- data segment: for function data, read directly from data section, closure variables will be mapped here, read-write, modify using load / store instructions
+- literal segment: for literal data, read directly from constant section, read-only, load using load / mov instructions
+
+For the global virtual machine, there are several segment:
+- heap segment: for dynamic allocated data, read-write
+- stack segment: for data stack, read-write
+- execution stack: for function execution stack frames, pointers point to function units, read-write
+- data segment: global data stack, read-write, modify using load / store instructions
+- function unit segment: for function units, read-only, executable
 
 === Register
 
 The register can be divided into two kinds:
 - General Purposed Registers
 - Special Purposed Registers
+All registers are 64 bits length.
+And can be represented use 6 bits number.
 
-The general-purposed registers may appear directly in instructions.
-Most special-purposed registers can only update automatically by instructions call.
+General-purposed registers can be visited by user freely, and can be updated by any instruction.
+Change a general-purposed register will not affect any other register or virtual machine execution status.
 
-The name of registers start as "`Reg#`", and following are its name.
+Special-purposed registers reflects the execution status of virtual machine.
+The value of special-purposed registers may be changed by virtual machine automatically.
+Or changed by instructions automatically.
+
+It is not recommended to change special-purposed registers directly,
+though all special-purposed register can be read and write as general-purposed registers.
+
+The name of registers start as "`Reg#`", and following are its name, a number or a string.
 
 General-purposed registers may have only numbers as their name.
 For example: `Reg#0`, `Reg#1`, ...
-There are only 128 general-purposed registers available.
+There are only 32 general-purposed registers available.
 
-Special-purposed registers have their own name, and their own code (number).
-
-First one is used to discard result:
-- Ignore: `Reg#Ign`, code `0xff`
-
-Second three are register for calculation:
-- Accumulator: `Reg#A`, code `0xfe`
-- Counter: `Reg#C`, code `0xfd`
-- Reminder: `Reg#R`, code `0xfc`
-
-Third two used to instruct execution status:
-- Program Counter `Reg#PC`, code `0xfb`
-- Execution Stack Pointer `Reg#EP`, code `0xfa`
-
-Forth three used to direct data stack:
-- Stack Base Pointer `Reg#BP`, code `0xf9`
-- Stack Top Pointer `Reg#SP`, code `0xf8`
-- Stack Segment `Reg#SS`, code `0xf7`
-
-Fifth two used to locate literal:
-- Literal Segment `Reg#LS`, code `0xf6`
-- Literal Pointer `Reg#LP`, code `0xf5`
-
-Sixth two used for test:
-- flags: `Reg#FLAGS`, code `0xf4`
-- tests: `Reg#TESTS`, code `0xf3`
-
-Seventh three used for function calling:
-- Jump To Pointer: `Reg#Jmp`, code `0xf2`
-- Jump To Segment: `Reg#JS`, code `0xf1`
-- Return Value Pointer: `Reg#RVP`, code `0xf0`
+Special-purposed registers have their own name, and their own code (number):
+- Result discarding used:
+  - Ignore: `Reg#Ign`, code `0x3f`, any value move into will be ignored.
+- Arithmetic computation, Result used:
+  - Accumulator: `Reg#A`, code `0x3e`, for result of `ADD`, `SUB`, `MUL`, and `DIV`, or return value
+  - Counter: `Reg#C`, code `0x3d`, for loop counts
+  - Reminder: `Reg#R`, code `0x3c`, for reminder of `DIV`, or return value
+- Execution locating used:
+  - Program Counter `Reg#PC`, code `0x3b`, for next instruction to be executed
+  - Execution Stack Pointer `Reg#EP`, code `0x3a`, for current execution frame in execution stack
+- Stack locating used:
+  - Stack Base Pointer `Reg#BP`, code `0x39`, for current stack frame base
+  - Stack Top Pointer `Reg#SP`, code `0x38`, for current stack frame top
+  - Stack Segment `Reg#SS`, code `0x37`, for stack segment
+- Condition reflecting used:
+  - flags: `Reg#FLAGS`, code `0x34`, for flags after instruction execution
+  - tests: `Reg#TESTS`, code `0x33`, for test condition
+- Control flow jump used:
+  - Jump To Pointer: `Reg#Jmp`, code `0x32`, for jump address
+  - Jump To Segment: `Reg#JS`, code `0x31`, for function segment
 
 ==== General Purposed Registers: `Reg#n`, n for number
+
+General-purposed registers, from `Reg#0` to `Reg#1F` (31).
+Can be visited by user freely.
 
 ==== Ignore: `Reg#Ign`
 
 Ignore all value move into.
 
 Assign-only register, special-purposed register that can be visited by user.
+If user try to read value from it, always get zero.
 
 ==== Accumulator, Counter, Reminder: `Reg#A`, `Reg#C`, `Reg#R`
 
 Every Result of `ADD`, `SUB`, `MUL`, and `DIV`, may assigned into `Reg#A`, accumulator.
 
-Loop counts may relay on `Reg#C`.
+Loop counts may relay on `Reg#C`, counter. If `LOOP` instruction used, `Reg#C` will be decremented by one automatically.
 
-Reminder of `DIV` may assigned into `Reg#R`
+Reminder of `DIV` may assigned into `Reg#R`, reminder.
 
 Fetch-only register, special-purposed register that can be visited by user.
+Write operation on them will not have any effect.
+
+It is possible to not use stack to pass return value between functions, then `Reg#A` and `Reg#R` used for return value passing.
 
 ==== Program Counter, Execution Stack Pointer: `Reg#PC`, `Reg#EP`
 
@@ -86,11 +111,17 @@ Fetch-only register, special-purposed register that can be visited by user.
 
 Also used for provide unwind information.
 
-May have their value available to user by instruction calling.
+Read only register, not recommended to write directly.
+Write operation on them will affect the execution status of virtual machine.
+If value written into `Reg#PC` is within corresponding text segment of current function frame, the next instruction to be executed will be changed.
+If value written into `Reg#EP` is out of range, virtual machine will raise exception.
+If value written into `Reg#EP` is less than current top of execution stack, virtual machine will unwind execution stack to the target frame.
+If value written into `Reg#EP` is larger than current top of execution stack, virtual machine will raise exception.
 
 ==== Stack Segment, Stack Pointer, Base Pointer: `Reg#SS`, `Reg#SP`, `Reg#BP`
 
 `Reg#SS` referencing Data Stack Segment, with offset $2^32$ (P.S., 4 GiB).
+In most cases, `Reg#SS` won't be changed, since data stack works like normal stack, with a small size.
 
 `Reg#SP` referencing Stack Top for current Function Frame.
 
@@ -99,11 +130,13 @@ May have their value available to user by instruction calling.
 `Reg#SP` and `Reg#BP` won't less than 0, and won't larger than Segment length,
 though they are 64 bit (52 bit for addressing) pointer.
 
-==== Literal Segment, Literal Pointer: `Reg#LS`, `Reg#LP`
+Read Write register, not recommended to write directly.
+The value of `Reg#SP` and `Reg#BP` will be changed automatically when push / pop / call / ret instructions executed.
+The value of `Reg#SS` usually won't be changed, unless user allowed for a extremely large stack dynamically allocated.
 
-`Reg#LS` referencing Literal Stack Segment, with offset $2^32$ (P.S., 4 GiB).
-
-`Reg#LP` referencing target Literal.
+User can write `Reg#SP` and `Reg#BP` directly to change the stack frame.
+User can write `Reg#SS` directly to change the stack segment base.
+If `Reg#SS` changed and not restored before returning from function, the behaviour of other function frame may be not correct.
 
 ==== Flags, Test: `Reg#FLAGS`, `Reg#TESTS`
 
@@ -151,7 +184,9 @@ Default       |C|1|P|0|A|0|Z|S|T|I|D|O|IOP|N|0|R|V|A|V*V*I|                   |
 - SF: Sign Flag
 - TF: Trap Flag
 
-==== Jump To Pointer, Jump To Segment, Return Value Pointer: `Reg#Jmp`, `Reg#JS`, `Reg#RVP`
+Write operation on them will not have any effect.
+
+==== Jump To Pointer, Jump To Segment: `Reg#Jmp`, `Reg#JS`
 
 `:JMP` instruction has three variant:
 - `:JMP:near dest`: for short jump with offset
@@ -165,9 +200,6 @@ But `:IF` family only has one variant that behaviour like `:JMP:short`.
 
 `Reg#JS` used for addressing function segment
 
-`Reg#RVP` used for return value passing.
-`Reg#RVP` always points to base of return value stack, a place within data stack.
-
 === Function Execution Stack
 
 === Addressing
@@ -177,6 +209,8 @@ But `:IF` family only has one variant that behaviour like `:JMP:short`.
 === Data Stack
 
 === Literal Stack
+
+=== Function Unit
 
 === Heap
 
@@ -265,17 +299,16 @@ Default       |  operator |type | Reserved    |                               |
 
 Zero          |  operator | Flags                                             |
 
-R             |  operator |k | Flags                          |   register    |
-A             |  operator |                                   |   register    |
+R             |  operator |k | Flags                              | register  |
+A             |  operator |                                       | register  |
 I             |  operator |                   | Literal                       |
-RR            |  operator |                   |   register    |   register    |
-RI            |  operator |           |offset |   literal     |   register    |
-IR            |  operator |           |offset |   literal     |   register    |
-RA            |  operator |             | sl* |   register    |   register    |
-AR            |  operator |       | ss* | dl* |   register    |   register    |
-AA            |  operator |       | dl  | sl  |   register    |   register    |
+RR            |  operator |                   |       | register  | register  |
+RI            |  operator |           |offset |       | literal   | register  |
+IR            |  operator |           |offset |       | literal   | register  |
+RA            |  operator |             | sl* |       | register  | register  |
+AR            |  operator |       | ss* | dl* |       | register  | register  |
+AA            |  operator |       | dl  | sl  |       | register  | register  |
 LI            |  operator | Literal                                           |
-
 J             |  operator |typ|                                               |
 
 * ss for start at (where to read), and dl for dest length (how much byte to write)
@@ -285,17 +318,14 @@ J             |  operator |typ|                                               |
 
 VM CPU interruption:
 - `Int`: interruption
-- `Nop`: no operation
 
 Move:
 - `Mov`: move
 - `XChg`: swap
 
 Literal Load:
-- `LoadIL`: load integer low 18
-- `LoadIH`: load integer high 18
-- `LoadIM`: load integer maximum
-- `LoadUM`: load unsigned integer maximum
+- `LoadIL`: load integer (or data in format of integer) from constant vector, each function unit has a constant vector
+- `LoadM`: load pre-defined data according to flags
 
 Arithmetic:
 - `Add`: add
@@ -303,16 +333,22 @@ Arithmetic:
 - `Mul`: multiple
 - `Div`: divide
 
-- `Addf`: add float
-- `Subf`: subtract float
-- `Mulf`: multiple float
-- `Divf`: divide float
+- Float Computation family:
+  - `Addf`: add float
+  - `Subf`: subtract float
+  - `Mulf`: multiple float
+  - `Divf`: divide float
+  - `Modf`: mod float
 
-Bitwise Shift:
-- `Shl`: shift left
-- `RShl`: shift left roll
-- `Shr`: shift right
-- `RShr`: shift right roll
+- Bitwise Shift family:
+  - `Shl`: shift left
+  - `Sal`: shift arithmetic left
+  - `RShl`: shift left roll
+  - `Shr`: shift right
+  - `Sal`: shift arithmetic right
+  - `RShr`: shift right roll
+  - `SShr`: shift signed right
+  - `UShr`: shift unsigned right
 
 Bitwise Boolean:
 - `And`: and
@@ -324,15 +360,14 @@ Stack operations:
 - `Push`: push
 - `Pop`: pop
 - `Idx`: peek
+- `RIdx`: peek from bottom
 - `Dup`: duplicate
-
-Jump:
-- `Jmp`: jump to
-- `If`: if cond jump to
-- `Ifn`: if not cond jump to
 
 Conditional:
 - `Test`: test cond
+
+Jump:
+- `Jmp`: jump to
 
 Loop:
 - `Loop`: go back to ... and contrast a loop
@@ -348,6 +383,7 @@ Continuous:
 
 Misc:
 - `Halt`: halt
+- `Op`: do operation and save result into
 
 === `Int`
 
@@ -374,24 +410,6 @@ If `t` is 1, the instruction is called with register.
 Basically, `Int` instruction invoke interrupt functions.
 - Called with immediate, invoke corresponding interruption by id.
 - Called with register, call function according to the address stored in register, the function must be interruption handler.
-
-=== `Nop`
-
-```txt
-0x
-              00              08              10              18              20
-              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
-Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
-              00          06    09            10                              20
-----------------------------------------------------------------------------------
-Default       |  operator |type | Reserved    |                               |
-----------------------------------------------------------------------------------
-Zero          |  operator | Flags                                             |
-```
-
-Corresponding instruction written in format: `Nop`
-
-Do nothing.
 
 === `Mov`
 
@@ -541,29 +559,11 @@ Default       |  operator |type | Reserved    |                               |
 LI            |  operator | Literal                                           |
 ```
 
-Corresponding instruction written in format: `LoadIL literal`
+Corresponding instruction written in format: `LoadIL idx`.
 
-Load a 26-bit integer literal into register `Reg#a` (low 32-bit).
+Load a integer from constant value vector and assign to `Reg#a`.
 
-=== `LoadIH`
-
-```txt
-0x
-              00              08              10              18              20
-              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
-Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
-              00          06    09            10                              20
-----------------------------------------------------------------------------------
-Default       |  operator |type | Reserved    |                               |
-----------------------------------------------------------------------------------
-LI            |  operator | Literal                                           |
-```
-
-Corresponding instruction written in format: `LoadIH literal`
-
-Load a 26-bit integer literal into register `Reg#a` (high 32-bit).
-
-=== `LoadIM`
+=== `LoadM`
 
 ```txt
 0x
@@ -577,27 +577,23 @@ Default       |  operator |type | Reserved    |                               |
 Zero          |  operator | Flags                                             |
 ```
 
-Corresponding instruction written in format: `LoadIM`
+Corresponding instruction written in format: `LoadIM type`.
+Flag can be a integer only.
+- `type`: which pre-defined data to load.
+  - `0`: Load a signed 64-bit integer minimum into register `Reg#a`
+  - `1`: Load a signed 64-bit integer maximum into register `Reg#a`
+  - `2`: Load a signed 64-bit integer zero into register `Reg#a`
+  - `3`: Load a unsigned 64-bit integer maximum into register `Reg#a`
+  - `4`: Load a float 64 zero into register `Reg#a`
+  - `5`: Load a float 64 minimum into register `Reg#a`
+  - `6`: Load a float 64 maximum into register `Reg#a`
+  - `7`: Load a float 32 zero into register `Reg#a`
+  - `8`: Load a float 32 minimum into register `Reg#a`
+  - `9`: Load a float 32 maximum into register `Reg#a`
+  - `10`: Load a true boolean into register `Reg#a`
+  - `11`: Load a false boolean into register `Reg#a`
 
-Load a signed 64-bit integer maximum into register `Reg#a`
-
-=== `LoadUM`
-
-```txt
-0x
-              00              08              10              18              20
-              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
-Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
-              00          06    09            10                              20
-----------------------------------------------------------------------------------
-Default       |  operator |type | Reserved    |                               |
-----------------------------------------------------------------------------------
-Zero          |  operator | Flags                                             |
-```
-
-Corresponding instruction written in format: `LoadUM`
-
-Load a unsigned 64-bit integer maximum into register `Reg#a`
+Load pre-defined data according to flags into register `Reg#a`.
 
 === `Add`, `Sub`
 
@@ -610,10 +606,10 @@ Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
 ----------------------------------------------------------------------------------
 Default       |  operator |type | Reserved    |                               |
 ----------------------------------------------------------------------------------
-RR            |  operator | typ |s| SHL       |   register    |   register    |
+RR            |  operator | typ |             |   register    |   register    |
 RI            |  operator | typ | literal                     |   register    |
 IR            |  operator | typ | literal                     |   register    |
-II            |  operator | typ | literal                     |   register    |
+II            |  operator | typ |k| literal             | literal             |
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
 AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
@@ -734,10 +730,10 @@ Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
 ----------------------------------------------------------------------------------
 Default       |  operator |type | Reserved    |                               |
 ----------------------------------------------------------------------------------
-RR            |  operator | typ |s| SHL       |   register    |   register    |
+RR            |  operator | typ |             |   register    |   register    |
 RI            |  operator | typ | literal                     |   register    |
 IR            |  operator | typ | literal                     |   register    |
-II            |  operator | typ | literal                     |   register    |
+II            |  operator | typ |k| literal             | literal             |
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
 AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
@@ -820,10 +816,10 @@ Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
 ----------------------------------------------------------------------------------
 Default       |  operator |type | Reserved    |                               |
 ----------------------------------------------------------------------------------
-RR            |  operator | typ |s| SHL       |   register    |   register    |
+RR            |  operator | typ |             |   register    |   register    |
 RI            |  operator | typ | literal                     |   register    |
 IR            |  operator | typ | literal                     |   register    |
-II            |  operator | typ | literal                     |   register    |
+II            |  operator | typ |k| literal             | literal             |
 RA            |  operator | typ |k|     | sl  |   register    |   register    |
 AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
 AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
@@ -895,23 +891,189 @@ For all instructions, `sl` must have same value as `dl`.
 The register corresponding to address should store the address information.
 This `DIV` instruction will dereference the address and do division.
 
-=== `Addf`
-=== `Subf`
-=== `Mulf`
-=== `Divf`
+=== Float Computation Family: `Addf`, `Subf`, `Mulf`, `Divf`, `Modf`
 
-=== `Shl`
-=== `RShl`
-=== `Shr`
-=== `RShr`
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+RR            |  operator | typ     | e | f | |   register    |   register    |
+RA            |  operator | typ     | e | f | |   register    |   register    |
+AR            |  operator | typ     | e | f | |   register    |   register    |
+AA            |  operator | typ     | e | f | |   register    |   register    |
 
-=== `And`
-=== `Or`
-=== `Xor`
-=== `Not`
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+Instruction format for floating point arithmetic operations.
+- `ADDF dst, src`
+- `SUBF dst, src`
+- `MULF dst, src`
+- `DIVF dst, src`
+- `MODF dst, src`
+- `ADDF dst, ptr [src]`
+- `SUBF dst, ptr [src]`
+- `MULF dst, ptr [src]`
+- `DIVF dst, ptr [src]`
+- `MODF dst, ptr [src]`
+- `ADDF ptr [dst], src`
+- `SUBF ptr [dst], src`
+- `MULF ptr [dst], src`
+- `DIVF ptr [dst], src`
+- `MODF ptr [dst], src`
+- `ADDF ptr [dst], ptr [src]`
+- `SUBF ptr [dst], ptr [src]`
+- `MULF ptr [dst], ptr [src]`
+- `DIVF ptr [dst], ptr [src]`
+- `MODF ptr [dst], ptr [src]`
+
+Do floating point arithmetic operation and store result into register `Reg#a` and `Reg#r`.
+In most cases, `Reg#R` will be cleared to zero.
+Only if float 128 is used, `Reg#R` will store the overflowed part, higher 64 bits.
+
+Basically, floating point arithmetic instructions needs two argument.
+It could be two register, register-address, address-register or address-address pair.
+
+All floating point arithmetic instructions share same operator number, distinct by type field.
+There are 32 bits totally for the instruction, 6 bits for operator, 5 bits to distinct which type the instruction is,
+2 bits for exponent size, 2 bits for fraction size.
+- `e`: exponent size
+  - `00`: 8 bits
+  - `01`: 11 bits
+  - `10`: 15 bits
+- `f`: fraction size
+  - `00`: 23 bits
+  - `01`: 52 bits
+  - `10`: 112 bits
+`e` with `f` combination decide which floating point format to use.
+1010 for `e` and `f` only available for `AA` type, which means decimal arithmetic with arbitrary precision.
+
+=== Bitwise Shift family: `Shl`, `Sal`, `RShl`, `Shr`, `Sar` `RShr`, `SShr`, `UShr`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+RR            |  operator | ty|p|r| s |       |   register    |   register    |
+RI            |  operator | ty|p|r| s |       |   literal     |   register    |
+RA            |  operator | ty|p|r| s |       |   register    |   register    |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+Corresponding instructions written in format:
+- `SHL dst, src`
+- `SAL dst, src`
+- `RSHL dst, src`
+- `SHR dst, src`
+- `SAR dst, src`
+- `RSHR dst, src`
+- `SSHR dst, src`
+- `USHR dst, src`
+- `SHL dst, immediate`
+- `SAL dst, immediate`
+- `RSHL dst, immediate`
+- `SHR dst, immediate`
+- `SAR dst, immediate`
+- `RSHR dst, immediate`
+- `SSHR dst, immediate`
+- `USHR dst, immediate`
+- `SHL dst, ptr [src]`
+- `SAL dst, ptr [src]`
+- `RSHL dst, ptr [src]`
+- `SHR dst, ptr [src]`
+- `SAR dst, ptr [src]`
+- `RSHR dst, ptr [src]`
+- `SSHR dst, ptr [src]`
+- `USHR dst, ptr [src]`
+Shift instructions shift bits to left or right, rolling or not, arithmetic or logical.
+The change will be saved into register `Reg#a`.
+All shift instructions share same operator number, distinct by type field.
+
+Basically , shift instructions needs two argument.
+It could be two register, register-immediate, or register-address pair.
+
+There are 32 bits totally for the instruction, 6 bits for operator, 2 bits to distinct which type the instruction is,
+1 bit for shift destination, 1 bit for roll or not, 2 bit for arithmetic or logical, or padding with 1 or 0.
+- `ty`: type of shift
+  - `00`: RR type
+  - `01`: RI type
+  - `10`: RA type
+- `p`: destination
+  - `0`: left
+  - `1`: right
+- `r`: roll
+  - `0`: no roll
+  - `1`: roll
+- `s`: shift
+  - `00`: logical
+  - `01`: arithmetic
+  - `10`: padding 0 only
+  - `11`: padding 1 only
+If `r` set, `s` must be 00.
+
+`SH*` will shift bits padding with 0 only.
+`RSH*` will shift bits rolling.
+`SA*` will shift bits arithmetically.
+`USH*` will shift bits padding with 0 only.
+`SSH*` will shift bits padding with 1 only.
+
+=== `And`, `Or`, `Xor`, `Not`
+
+```txt
+0x
+              00              08              10              18              20
+              |0 0 0 0 0 0 0 0|0 0 1 1 1 1 1 1|1 1 1 1 2 2 2 2|2 2 2 2 2 2 3 3|
+Decimal       |0 1 2 3 4 5 6 7|8 9 0 1 2 3 4 5|6 7 8 9 0 1 2 3|4 5 6 7 8 9 0 1|
+              00          06    09            10                              20
+----------------------------------------------------------------------------------
+Default       |  operator |type | Reserved    |                               |
+----------------------------------------------------------------------------------
+R             |  operator |k | Flags                          |   register    |
+A             |  operator |                                   |   register    |
+RR            |  operator | typ |             |   register    |   register    |
+RA            |  operator | typ |k|     | sl  |   register    |   register    |
+AR            |  operator | typ |k| ss  | dl  |   register    |   register    |
+AA            |  operator | typ |k| dl  | sl  |   register    |   register    |
+
+* ss for start at (where to read), and dl for dest length (how much byte to write)
+```
+
+Corresponding instructions written in format:
+- `AND dst, src`
+- `OR dst, src`
+- `XOR dst, src`
+- `AND dst, immediate`
+- `OR dst, immediate`
+- `XOR dst, immediate`
+- `AND dst, ptr [src]`
+- `OR dst, ptr [src]`
+- `XOR dst, ptr [src]`
+- `AND ptr [dst], src`
+- `OR ptr [dst], src`
+- `XOR ptr [dst], src`
+- `AND ptr [dst], ptr [src]`
+- `OR ptr [dst], ptr [src]`
+- `XOR ptr [dst], ptr [src]`
+- `NOT dst`
+- `NOT ptr [dst]`
+
 
 === `Push`
 === `Pop`
+=== `Idx`
+=== `RIdx`
+=== `Dup`
 
 === `Jmp`
 
@@ -936,6 +1098,7 @@ J_far         |  operator |11 |               |   register    |   register    |
 === `SnapShot`
 
 === `Halt`
+=== `Op`
 
 == Assembly
 
