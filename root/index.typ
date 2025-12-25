@@ -43,7 +43,23 @@ Here is a brief introduction about myself:
 Follow please!
 I can do anything for you!
 
+=== We are proud of being sick
+
+WE ARE NERD, FREAK, GEEK, OTaku, WEIRDO, LONER, SOCIALLY AWKWARD, ASPERGER, AUTISTIC, ADHD, ETC.
+
+But the reason why is that we have our interests, our passion, our dreams.
+
+The world does not understand us, but we understand ourselves.
+
+We are not afraid of being different.
+
+We are proud of being sick, being special.
+Wondering our future, dreaming our future.
+
+We are not the losers, we are doing what we love.
+
 = Works
 
 
 == #embed("/contents.typ")
+
