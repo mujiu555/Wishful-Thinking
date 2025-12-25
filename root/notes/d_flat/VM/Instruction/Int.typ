@@ -1,5 +1,12 @@
 
-=== Instruction: `Int`
+#import "/lib/lib.typ": *
+
+#show: schema.with("page")
+
+#title[Instruction: `Int`]
+#date[2025-12-14 23:46]
+#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
+#parent("/notes/d_flat/VM/Instruction.typ")
 
 `Int` instruction is used to invoke interrupt.
 

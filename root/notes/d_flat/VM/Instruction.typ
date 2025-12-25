@@ -1,5 +1,12 @@
 
-== Instruction Specification
+#import "/lib/lib.typ": *
+
+#show: schema.with("page")
+
+#title[Instruction Specification]
+#date[2025-12-14 23:46]
+#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
+#parent("/notes/d_flat/VM&Assembler.typ")
 
 All Instruction adopted in the virtual machine are 32-bits length-fixed.
 
@@ -54,3 +61,25 @@ RIR           | register  | register  | literal       |flags| typ | operator  |
 * RI and IR are two variant of same instruction pattern, distinguish by instruction type
 * RRI and RIR are two variant of same instruction pattern, distinguish by instruction type
 ```
+
+
+= #embed("./Instruction/IS.typ")
+= #embed("./Instruction/Int.typ")
+= #embed("./Instruction/Snap.typ")
+= #embed("./Instruction/Raise.typ")
+= #embed("./Instruction/Mov.typ")
+= #embed("./Instruction/LSD.typ")
+= #embed("./Instruction/OpI.typ")
+= #embed("./Instruction/OpF.typ")
+= #embed("./Instruction/OpB.typ")
+= #embed("./Instruction/OpS.typ")
+= #embed("./Instruction/Test.typ")
+= #embed("./Instruction/Jmp.typ")
+= #embed("./Instruction/Loop.typ")
+= #embed("./Instruction/Call.typ")
+= #embed("./Instruction/Ret.typ")
+= #embed("./Instruction/IRet.typ")
+= #embed("./Instruction/RegF.typ")
+= #embed("./Instruction/Stack.typ")
+
+
