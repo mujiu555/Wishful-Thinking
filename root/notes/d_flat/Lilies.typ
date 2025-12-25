@@ -1,3 +1,11 @@
+#import "/lib/lib.typ": *
+
+#show: schema.with("page")
+
+#title[GitHub\@mujiu555's page]
+#date[2025-12-14 23:46]
+#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
+#parent("/index.typ")
 = D-Flat Spec
 
 == Lilies: S-Expression Language Build Upon D-Flat System
@@ -35,60 +43,60 @@
 
 === Object System
 
-  - Basic Class & Meta Class
-    - Parent & Final
-    - Extend Base Class
-  - Fields
-  - Properties
-  - Interface
-    + Implement Interface
-    + Default Implement
-    + Cross-domain Interface
-  + Methods
-    + Method for objects
-    + Method for classes
-    + Implement Methods
-    + Inherit Methods
-    + Call the Method
-      + Static Dispatch
-      + Method visit Syntax Sugar
-      + Dynamic Dispatch
-      + Invoke
-  + Generic Functions
-    + History: `CLOS`
-    + Define Generic Function:
-      广义函数允许方法调用以普通函数的方式被使用:
+- Basic Class & Meta Class
+  - Parent & Final
+  - Extend Base Class
+- Fields
+- Properties
+- Interface
+  + Implement Interface
+  + Default Implement
+  + Cross-domain Interface
++ Methods
+  + Method for objects
+  + Method for classes
+  + Implement Methods
+  + Inherit Methods
+  + Call the Method
+    + Static Dispatch
+    + Method visit Syntax Sugar
+    + Dynamic Dispatch
+    + Invoke
++ Generic Functions
+  + History: `CLOS`
+  + Define Generic Function:
+    广义函数允许方法调用以普通函数的方式被使用:
 
-      ``` scheme
-      (define foo:constraint
-        (interface ()
-          (define bar (function (self)))
+    ``` scheme
+    (define foo:constraint
+      (interface ()
+        (define bar (function (self)))
 
-      (define foo
-        (generic bar () #:implement foo:constraint))
+    (define foo
+      (generic bar () #:implement foo:constraint))
 
-      (define zoo
-        (class
-          #:self this))
+    (define zoo
+      (class
+        #:self this))
 
-      (implement zoo foo:constraint
-        (define bar
-          (lambda ()
-            (display 1))))
+    (implement zoo foo:constraint
+      (define bar
+        (lambda ()
+          (display 1))))
 
-      (implement zoo new
-        (define new
-          (lambda (self)
-            (alloc:heap (this))))
+    (implement zoo new
+      (define new
+        (lambda (self)
+          (alloc:heap (this))))
 
-      (define a (new zoo))
+    (define a (new zoo))
 
-      ({bar a})
-      ;; equal to
-      (foo a)
-      ```
+    ({bar a})
+    ;; equal to
+    (foo a)
+    ```
 
-    + Trait Shadow
+  + Trait Shadow
 
 === Expression
 
@@ -165,7 +173,7 @@
 === Continuations
 
 === Exception Handling
-  + Condition System
++ Condition System
 
 === Module & Library
 

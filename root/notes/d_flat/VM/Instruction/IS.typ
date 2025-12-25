@@ -1,5 +1,12 @@
 
-=== Instruction Set
+#import "/lib/lib.typ": *
+
+#show: schema.with("page")
+
+#title[Instruction Set]
+#date[2025-12-14 23:46]
+#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
+#parent("/notes/d_flat/VM/Instruction.typ")
 
 The instruction set includes following instructions:
 - Interrupt and Exception Handling
