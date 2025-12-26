@@ -2,37 +2,34 @@
 
 #show: schema.with("page")
 
-#title[GitHub\@mujiu555's page]
+#title[Lilies: S-Expression Language Build Upon D-Flat System]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
 #parent("/index.typ")
-= D-Flat Spec
 
-== Lilies: S-Expression Language Build Upon D-Flat System
-
-== Abstract 摘要
+= Abstract 摘要
 
 // TODO:
 
-== Introduction 引言
+= Introduction 引言
 
 // TODO:
 
-=== Background 背景
+== Background 背景
 
 // TODO:
 
-=== Guiding Principle 指导方略
+== Guiding Principle 指导方略
 
 // TODO:
 
-== Overview 语言总览
+= Overview 语言总览
 
 本章用于描述语言的基本概念, 以帮助了解后续章节.
 本章依据语法条目以帮助手册的方式被组织起来, 并非完整对于语言的描述.
 在某些地方也不会完善和规范.
 
-=== Type System 类型系统
+== Type System 类型系统
 
 - Basic Types
 - Symbols
@@ -41,7 +38,7 @@
 - Syntax Types
 - Auto Type Detection
 
-=== Object System
+== Object System
 
 - Basic Class & Meta Class
   - Parent & Final
@@ -98,9 +95,9 @@
 
   + Trait Shadow
 
-=== Expression
+== Expression
 
-=== Apply & Evaluation
+== Apply & Evaluation
 
 + Apply & Evaluation
   + Value Pass
@@ -109,7 +106,7 @@
     + Move
     + Brought
 
-=== Variable, Binding & Reference
+== Variable, Binding & Reference
 
 - Variable, Definition & Binding
   - Dynamic Scope
@@ -120,7 +117,7 @@
 - Form
 - Assignment
 
-=== Procedure, Function & Method
+== Procedure, Function & Method
 
 - Functions
   - Parameters
@@ -131,14 +128,14 @@
   - Function Call
   - Multiple Value for Function Call
 
-=== Name Space, Lexical Scope, Dynamic Scope, Closure
+== Name Space, Lexical Scope, Dynamic Scope, Closure
 
-=== Generics
+== Generics
 
 + Generics: Template
   + Generic Macro
 
-=== Macro
+== Macro
 
 + Macro
   + History: Compile-time calculation
@@ -147,13 +144,13 @@
   + Procedure Macro
   + Hygiene for the Unhygienic Macro
 
-=== Syntax Rules
+== Syntax Rules
 
 + Syntax Rules
   + History: Hygiene Macro
   + Syntax Object
 
-=== Memory Management
+== Memory Management
 + Pointer
   + Reference Count
   + Unique Ownership
@@ -168,15 +165,15 @@
   + `new`: Object creation
 + Auto Life-cycle Detection
 
-=== Expression Tree
+== Expression Tree
 
-=== Continuations
+== Continuations
 
-=== Exception Handling
+== Exception Handling
 + Condition System
 
-=== Module & Library
+== Module & Library
 
-=== Top-Level
+== Top-Level
 
-== ...
+= ...

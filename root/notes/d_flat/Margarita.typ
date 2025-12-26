@@ -2,10 +2,16 @@
 
 #show: schema.with("page")
 
-#title[GitHub\@mujiu555's page]
+#title[Margarita: Language as extension for Lilies in M-Expression]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
 #parent("/index.typ")
-= D-Flat Spec
 
-== Margarita: Language as extension for Lilies in M-Expression
+= Abstract
+
+= Introduction
+
+== Background
+
+== Guiding Principle
+

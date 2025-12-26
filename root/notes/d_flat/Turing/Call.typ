@@ -6,7 +6,7 @@
 #title[Call Convention]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/VM&Assembler.typ")
+#parent("/notes/d_flat/Turing.typ")
 
 When a function about to be called, the caller must do following steps:
 + Reverse return value space allocation in global data stack
