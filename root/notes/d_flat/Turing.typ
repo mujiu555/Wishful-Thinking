@@ -2,14 +2,12 @@
 
 #show: schema.with("page")
 
-#title[VM & Assembler for Project D-Flat]
+#title[Turing Machine Simulator (R-M) for Project D-Flat]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
 #parent("/index.typ")
 
-= Virtual Machine & Assembler
-
-= Virtual Machine Design
+= Turing Machine Virtual Machine Design
 
 The virtual machine works just similar to real CPU-memory.
 

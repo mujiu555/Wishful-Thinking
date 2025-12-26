@@ -6,7 +6,7 @@
 #title[Instruction Specification]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/VM&Assembler.typ")
+#parent("/notes/d_flat/Turing.typ")
 
 All Instruction adopted in the virtual machine are 32-bits length-fixed.
 
@@ -70,6 +70,7 @@ RIR           | register  | register  | literal       |flags| typ | operator  |
 = #embed("./Instruction/Mov.typ")
 = #embed("./Instruction/LSD.typ")
 = #embed("./Instruction/OpI.typ")
+= #embed("./Instruction/OpU.typ")
 = #embed("./Instruction/OpF.typ")
 = #embed("./Instruction/OpB.typ")
 = #embed("./Instruction/OpS.typ")

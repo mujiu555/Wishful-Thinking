@@ -6,7 +6,7 @@
 #title[Architecture Overview]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/VM&Assembler.typ")
+#parent("/notes/d_flat/Turing.typ")
 
 The virtual machine works in a register-memory architecture.
 

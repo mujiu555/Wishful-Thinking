@@ -53,6 +53,18 @@ The instruction set includes following instructions:
     - `sub`: subtraction
     - `mul`: multiplication
     - `div`: division
+  - `OpU`: arithmetic unsigned integer computation
+    - RR, `:opi op dst, src`: perform arithmetic operation `op` on integer `dst` and `src`, store result into `Reg#A`, carry or reminder into `Reg#R`
+    - RI, `:opi op dst, val`: perform arithmetic operation `op` on integer `dst` and immediate value `val`, store result into `Reg#A`, carry or reminder into `Reg#R`
+    - IR, `:opi op val, src`: perform arithmetic operation `op` on integer `src` and immediate value `val`, store result into `Reg#A`, carry or reminder into `Reg#R`
+    - RR, `:opi op dst, ptr[src]`: perform arithmetic operation `op` on integer `dst` and memory address `src`, store result into `Reg#A`, carry or reminder into `Reg#R`
+    - RR, `:opi op ptr[dst], src`: perform arithmetic operation `op` on integer memory address `dst` and integer `src`, store result into `Reg#A`, carry or reminder into `Reg#R`
+    - RR, `:opi op prt[dst], [src]`: perform arithmetic operation `op` on integer memory address `dst` and integer memory address `src`, store result into `Reg#A`, carry or reminder into `Reg#R`
+    `op` can be one of following:
+    - `add`: addition
+    - `sub`: subtraction
+    - `mul`: multiplication
+    - `div`: division
   - `OpF`: arithmetic floating-point computation
     - RR, `:opf op dst, src`: perform arithmetic operation `op` on floating-point `dst` and `src`, store result into `Reg#A`
     - RR, `:opf op dst, ptr[src]`: perform arithmetic operation `op` on floating-point `dst` and memory address `src`, store result into `Reg#A`
