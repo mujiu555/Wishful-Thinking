@@ -18,9 +18,11 @@ The virtual machine has following properties:
 - 32 special-purposed registers
 The virtual machine adopt a new designed instruction set.
 
-= #embed("VM/Overview.typ")
+= #embed("Turing/Overview.typ")
 
-= #embed("VM/Register.typ")
+= #embed("Turing/Register.typ")
+
+= #embed("Turing/Pointer.typ")
 
 = Interrupt and Exception Handling
 
@@ -65,7 +67,7 @@ When function return invoked, virtual machine will do following steps:
 When snapshot exception invoked, virtual machine will do following steps:
 + Duplicate current global data stack segment, execution stack segment, and register records.
 
-= #embed("VM/Call.typ")
+= #embed("Turing/Call.typ")
 
-= #embed("VM/Instruction.typ")
+= #embed("Turing/Instruction.typ")
 

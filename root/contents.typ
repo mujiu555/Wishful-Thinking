@@ -1,7 +1,7 @@
 #import "/lib/lib.typ": *
 #show: schema.with("page")
 #title[Contents]
-#date[2025-12-21 00:56]
+#date[2026-01-10 05:22]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
 
 
@@ -23,7 +23,22 @@
 
 == #embed("/notes/c/S2.typ", sidebar: "only_title", open: false)
 
-== #embed("/notes/d_flat/VM&Assembler.typ", sidebar: "only_title", open: false)
+== #embed("/notes/d_flat/Compiler.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/D_Flat.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/Editor&IDE.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/Lambda.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/Lilies.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/Margarita.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/StandardLibrary.typ", sidebar: "only_title", open: false)
+
+== #embed("/notes/d_flat/Turing.typ", sidebar: "only_title", open: false)
+
 
 = Tags
 
@@ -67,4 +82,20 @@
 === #embed("/notes/Missing-Semester/S1.typ", sidebar: "only_title", open: false)
 
 === #embed("/notes/c/S-1.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/Compiler.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/D_Flat.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/Editor&IDE.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/Lambda.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/Lilies.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/Margarita.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/StandardLibrary.typ", sidebar: "only_title", open: false)
+
+=== #embed("/notes/d_flat/Turing.typ", sidebar: "only_title", open: false)
 

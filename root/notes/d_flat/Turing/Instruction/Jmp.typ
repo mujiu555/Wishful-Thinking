@@ -6,7 +6,7 @@
 #title[Instruction: `Jmp`]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/VM/Instruction.typ")
+#parent("/notes/d_flat/Turing/Instruction.typ")
 
 `Jmp` instruction is used to jump to target address unconditionally.
 
