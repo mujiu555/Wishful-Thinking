@@ -13,38 +13,34 @@ The virtual machine works in a register-memory architecture.
 ```txt
 File:                                                 Memory:
 +--------------------------------------+      +-------------------------------+
-| Archive                              |      |  +--------------------+++     |
-| +----------+    +---------------+++  |      |  |                    |||     |
-| | Global   | +->| Function Unit |||| |      |  | Global Data Stack  |||     |
-| | +--+++   | |  | +--+++  +-++  |||| |      |  |                    |||     |
-| | | D |||  | |  | | T ||| |D||| |||| |      |  +--------------------+++     |
-| | | a |||  | |  | | e ||| |a||| |||| |      |  +-----------------------+    |
-| | | t |||  | |  | | x ||| |t||| |||| |      |  |                       |    |
-| | | a |||  | |  | | t ||| |a||| ||||==========>| Function Unit Vector  |<-+ |
-| | +--+++   | |  | +--+++  +-++  |||| |      |  | +-------------------++|  | |
-| | +--+++   | |  | +--+++  +-++  |||| |      |  | | +---------------+ |||  | |
-| | | E |||  | |  | | C ||| |C||| |||| |      |  | | | Data Vector   | |||  | |
+| Archive                              |      |  +--------------------++++    |
+| +----------+    +---------------+++  |      |  | Global Data Stack  ||||    |
+| | Global   | +->| Function Unit |||| |      |  |--------------------++++    |
+| | +--+++   | |  | +--+++  +-++  |||| |      |  | Text Vector           |    |
+| | | D |||  | |  | | T ||| |D||| |||| |      |  +-----------------------+    |
+| | | a |||  | |  | | e ||| |a||| ||||==========>| Function Unit Vector  |<-+ |
+| | | t |||  | |  | | x ||| |t||| |||| |      |  | +-------------------++|  | |
+| | | a |||  | |  | | t ||| |a||| |||| |      |  | | +---------------+ |||  | |
+| | +--+++   | |  | +--+++  +-++  |||| |      |  | | | Data Vector   | |||  | |
+| | +--+++   | |  | +--+++  +-++  |||| |      |  | | | +---------+++ | |||  | |
+| | | E |||  | |  | | C ||| |C||| |||| |      |  | | | | Literal ||| | |||  | |
 | | | n |||  | |  | | o ||| |l||| |||| |      |  | | | +---------+++ | |||  | |
-| | | t -------+  | | s ||| |o||| |||| |      |  | | | | Literal ||| | |||  | |
+| | | t -------+  | | s ||| |o||| |||| |      |  | | | | capture ||| | |||  | |
 | | | e |||  |    | | t ||| |s||| |||| | Load |  | | | +---------+++ | |||  | |
-| | | r |||  |    | | a ||| |u||| |||| | ===> |  | | | | capture ||| | |||  | |
+| | | r |||  |    | | a ||| |u||| |||| | ===> |  | | | | data    ||| | |||  | |
 | | | y |||  |    | | n ||| |r||| |||| |      |  | | | +---------+++ | |||  | |
-| | +--+++   |    | | t ||| |e||| |||| |      |  | | | | data    ||| | |||  | |
-| |          |    | +--+++  +-++  |||| |      |  | | | +---------+++ | |||  | |
+| | +--+++   |    | | t ||| |e||| |||| |      |  | | +---------------+ |||  | |
+| |          |    | +--+++  +-++  |||| |      |  | | | Text          | |||  | |
 | |          |    |               |||| |      |  | | +---------------+ |||  | |
-| +----------+    +---------------+++  |      |  | | | Text          | |||  | |
-|                                      |      |  | | +---------------+ |||  | |
-+--------------------------------------+      |  | +------------------+++|  | |
-                                              |  +-----------------------+  | |
-                                              |  +----------------------+++ | |
-                                              |  | Execution Stack      ||| | |
-                                              |  | +---------+++        ||| | |
+| +----------+    +---------------+++  |      |  | +------------------+++|  | |
+|                                      |      |  +---------------------+++  | |
++--------------------------------------+      |  | Execution Stack     |||  | |
+                                              |  | +---------+++       |||  | |
                                               |  | | Pointer ---------------+ |
-                                              |  | +---------+++        |||   |
-                                              |  +----------------------+++   |
-                                              |  +--------------------+++     |
-                                              |  | Register Records   |||     |
-                                              |  +--------------------+++     |
+                                              |  | +---------+++       |||    |
+                                              |  +---------------------+++    |
+                                              |  | Register Records    |||    |
+                                              |  +---------------------+++    |
                                               +-------------------------------+
 ```
 
@@ -68,16 +64,24 @@ In memory, there are three segments:
   The global data stack may be duplicated and stored in new data stack segment, when continuous, fork, extremely large stack allocation invoked.
   And the `Reg#SS` will be updated to point to new data stack segment base.
   It is also possible to use the data stack duplicate for snapshot purpose.
+- Text Vector: Every function's text segment is loaded into text vector.
+  Text Vector stores all text segments in the program.
 - Function Unit Vector: every function has its own function unit, including text segment and data segment
   Function Unit Vector stores all function units in the program.
   Function Unit Vector maps function index to function unit, a pointer points to corresponding function unit in function unit.
+  If a Function unit is not be referenced by any pointer, the slot for the function unit is freed and can be reused.
   Function Unit includes:
-  - Text Segment: every function have its own text segment, storing instructions to be executed.
-    Same instance of a function shares same text segment.
+  - Text Segment: A pointer points to text segment in text vector.
   - Data Segment: every function have its own data segment, storing literal data and captured data, which are pointers to global data stack.
-    - Literal Data: literal are constant may used in function or for instruction parameter.
-    - Capture Data: capture data are pointers to global data stack, used for closure variable access,
-      When a function is a closure, a new instance of function unit will be created, with capture data initialized.
+    - Literal Section: literal are constant may used in function or for instruction parameter, not able to be embedded in instruction directly.
+    - Capture Section: Captured data are pointers, points to global data stack or heap data.
+      Every pointer must be pushed into capture section and deleted when the function does not hold it.
+      If the parameter is a captured pointer, the pointer must be pushed into capture section.
+      No pointer is allowed to be stored in global data stack except argument passing area.
+    - Data Section: other data used in function.
+  Literal Section is loaded from file into data segment directly.
+  Capture Section is constructed when function unit constructed.
+  Data section is loaded from file into data segment directly.
 - Execution Stack: every function call will push a pointer points to corresponding function unit in function unit vector into execution stack.
   Execution stack stores function call frame pointer.
   The Execution Stack can be duplicated and stored in new execution stack segment, when continuous, fork invoked.

@@ -6,7 +6,7 @@
 #title[Instruction: `RegF`]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/VM/Instruction.typ")
+#parent("/notes/d_flat/Turing/Instruction.typ")
 
 `RegF` instruction is used to register a new function.
 
