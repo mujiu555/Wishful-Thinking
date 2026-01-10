@@ -68,71 +68,101 @@ Lilies 应设计完整的续体/延续（continuation）系统，包含续体的
 
 = Introduction 引言
 
-A generic programming language cannot satisfy all the needs of all programmers.
-Thus reduce the complexity of the language is important.
-Keeping the least core language and giving users the ability to extend the language.
+A single generic programming language cannot satisfy all needs of all programmers.
+Therefore reducing language complexity is important:
+keep a small core and give users the ability to extend the language.
 
-A simple and clear expression syntax and the unlimited combinability of expressions can thus  construct a practical and effective programming language.
+A simple, clear expression syntax and unlimited composability of expressions make it possible to construct a practical and effective programming language.
 
-Lilies have many design from earlier Lisps and Scheme dialects.
-First-class functions(procedures), lexical scope, continuations, macros.
-Syntax are also a objects that can be manipulated programmatically.
-But in contrast to them, Lilies is designed to be with a strong static type system.
+Lilies draws many design ideas from earlier Lisps and Scheme dialects:
+first-class functions (procedures), lexical scope, continuations, and macros.
+Syntax objects can be manipulated programmatically.
+In contrast to those languages, Lilies is designed with a strong static type system.
 
-Lilies meant to be a native language competed with c.
-Or be like a compile target, so that other languages can be implemented upon it.
-In D-Flat system, Marguerite is implemented upon Lilies.
+Lilies is intended to be a native language that can compete with C,
+or a compilation target upon which other languages can be implemented.
+In the D-Flat system, Marguerite is implemented on top of Lilies.
 
-Every symbols in Lilies sharing same namespace, no matter they are variables, functions, classes, interfaces, modules or so.
-In each expression, operators and operands are distinguished by their position.
+All symbols in Lilies share a single namespace, whether they are variables, functions, classes, interfaces, modules, or other entities.
+In each expression, operators and operands are distinguished by their positions.
 
-Though other lisp dialects use function application to archive loop, Lilies provides full functional loop constructs as built-in syntax extension other than core language.
-The tail call optimization is also provided to make sure loops are efficient.
+Unlike some Lisp dialects that use function application to implement loops,
+Lilies provides full functional loop constructs as built-in syntax extensions (outside the minimal core).
+Tail-call optimization is provided to ensure loops are efficient.
 
-Classes for the object-oriented programming paradigm are provided.
-Everything in Lilies is an object, including functions, classes, interfaces, modules, and so on.
-Classes can be computed at compile-time, allowing for powerful metaprogramming capabilities and generic programming.
-Lilies supports monomorphized generics, allowing for efficient code generation and type safety.
+Object-oriented classes are supported.
+Everything in Lilies is an object, including functions, classes, interfaces, and modules.
+Classes can be computed at compile time, enabling powerful metaprogramming and generic programming.
 With traits and interfaces, Lilies supports polymorphism and code reuse.
-With contracts, Lilies supports design by contract programming.
-There also provided with full compile-time type checking and type inference capabilities.
+Contracts enable design-by-contract programming.
+The language also provides full compile-time type checking and type inference.
 
-Modules in Lilies are first-class citizens.
-Modules can be defined, imported, and exported.
+Modules are first-class citizens: they can be defined, imported, and exported.
 
-The language is able to capture every continuation, which is "rest of the computation" at any point in the program. For which advanced control flow constructs can be built upon.
-When a continuation is captured, it will be saved as "escape procedure", a function that can be invoked later to resume the computation from the point where the continuation was captured.
-Markable, there exists a special kind of continuation, "delimited continuation", which will also be supported in Lilies.
+The language can capture continuations
+--- the "rest of the computation" at any point ---
+allowing advanced control-flow constructs to be built on top.
+When a continuation is captured it is saved as an "escape procedure",
+a function that can be invoked later to resume execution at the capture point.
+Delimited continuations are also supported.
 
-For a higher-level logical, algebraic effects can be also handled with Lilies.
-The effect handlers can be implemented with continuations, but in Lilies, it will be treated as a separate construct to provide better syntax and semantics.
+For higher-level control, algebraic effects and handlers are supported.
+Although effect handlers can be implemented with continuations,
+Lilies treats them as a distinct construct with dedicated syntax and semantics.
 
-A full functional exception handling system is provided.
-With conditional system, exceptions can be defined, raise, caught, and propagated.
-Allowing users to resume from exceptions or handle them in a flexible way.
-For non-local control flow, a simpler and lighter exceptions system can be used to implement coroutines, generators, and other advanced control flow constructs.
+A full functional exception system is provided.
+Exceptions can be defined, raised, caught, propagated, and in some cases resumed, allowing flexible handling.
 
-There are various ways to extend the language.
-Macros are the most powerful one.
-Macros in Lilies are hygienic and provide user with the ability to parse AST, fetch or drop context information, and generate new syntax trees.
-Thus new syntax constructed can be hygienic or unhygienic as needed.
-Syntax objects are first-class in Lilies, provides the ability to parse, manipulate, and generate syntax trees, especially in macros.
-The other way to extend the language is through symbol generation.
-It is possible to generate new expressions with given symbols or attributes at compile-time (likely Ksp for kotlin or Roslyn for c\#).
+There are several ways to extend the language;
+macros are the most powerful.
+Lilies’ macros are hygienic and let users parse ASTs, access or drop contextual information, and generate new syntax trees.
+Macro-generated syntax can be hygienic or intentionally unhygienic as needed.
+Syntax objects are first-class, permitting parsing, manipulation, and generation of syntax trees,
+especially within macros.
+Another extension mechanism is symbol generation: new expressions can be generated at compile time with specific symbols or attributes
+(similar in spirit to KSP for Kotlin or Roslyn for C\#).
 
-Macros system for Lilies must ensure that macros used in the program can provide same information as built-in syntax at compile-time.
-So that the compiler can provide full error information for user.
+The macro system must ensure that macros can provide the same compile-time information as built-in syntax so the compiler can produce full error diagnostics.
 
-The language is built with attribute grammar.
-So that every syntax can be associated with attributes, which can be used to store type information, scope information, or other metadata.
+The language is built on an attribute grammar so that each syntax node can carry attributes used to store type information, scope information, and other metadata.
 
-Everything except `define` cannot create new bindings directly in the current scope.
-`let` and `let:` family are used to create new bindings through closure capture.
-Thus, the language is designed to be referentially transparent.
-Everything including variables, functions, classes, modules, and macros should be defined before use.
+Except for `define`, no construct may directly create new bindings in the current scope.
+The `let` and `let:` families create bindings through closure capture.
+The language is designed to be referentially transparent: variables, functions, classes, modules, and macros should be defined before use.
 
-Those features make Lilies a powerful tool for building complex software systems.
-Furthermore, a research for computer program theory.
+These features make Lilies a powerful tool for building complex software systems and a fertile platform for research in programming theory.
+
+单一的通用编程语言无法满足所有程序员的所有需求。因此，简化语言复杂性很重要：保留最小核心，并赋予用户扩展语言的能力。
+
+简单清晰的表达式语法以及表达式的无限可组合性，使得构建实用且高效的编程语言成为可能。
+
+Lilies 在设计上借鉴了早期的 Lisp 和 Scheme 方言的许多思想：一等函数（过程）、词法作用域、continuations（续延/延续）和宏。语法对象可以以编程方式进行操作。与这些语言不同，Lilies 设计为具有强静态类型系统的语言。
+
+Lilies 的目标是成为一门可与 C 竞争的本地语言，或作为其他语言的编译目标。在 D-Flat 系统中，Marguerite 就是建立在 Lilies 之上的。
+
+在 Lilies 中所有符号共享同一个命名空间，不论它们是变量、函数、类、接口、模块或其他实体。在每个表达式中，运算符和操作数由其位置来区分。
+
+不同于某些 Lisp 方言通过函数调用实现循环的做法，Lilies 提供完整的函数式循环构造，作为内建的语法扩展（而非核心）。同时提供尾调用优化以保证循环的高效性。
+
+支持面向对象的类。Lilies 中的一切都是对象，包括函数、类、接口和模块。类可以在编译期计算，从而支持强大的元编程能力和泛型编程。通过 trait（特征）和接口，Lilies 支持多态和代码重用。通过契约（contracts），支持契约式设计。语言同时提供完整的编译时类型检查和类型推断能力。
+
+模块是第一类公民：可以定义、导入和导出。
+
+语言能够捕获任意时刻的 continuation（程序剩余计算），从而可以构建高级控制流构造。捕获的 continuation 会被保存为“逃逸过程”（escape procedure），这是一个可以稍后调用以从捕获点恢复计算的函数。Lilies 也支持定界（delimited）continuation。
+
+为了实现更高层次的控制，Lilies 也支持代数效果（algebraic effects）及其处理器。虽然效果处理器可以用 continuation 来实现，但 Lilies 将它们作为独立的构造来提供，以便拥有更好的语法和语义支持。
+
+提供了完整的函数式异常处理系统。异常可以定义、抛出、捕获和传播，并在某些情况下支持恢复，从而灵活地处理错误。
+
+有多种方式扩展语言，其中宏是最强大的。Lilies 的宏是“卫生”的（hygienic），并允许用户解析抽象语法树（AST）、获取或丢弃上下文信息、生成新的语法树。宏生成的语法可以根据需要是卫生的或有意非卫生的。语法对象在 Lilies 中是一等公民，便于在宏中解析、操作和生成语法树。另一种扩展方式是符号生成：可以在编译时根据给定的符号或属性生成新的表达式（类似于 Kotlin 的 KSP 或 C\# 的 Roslyn）。
+
+宏系统必须确保程序中使用的宏在编译时能提供与内建语法相同的信息，以便编译器能给出完整的错误诊断。
+
+该语言基于属性文法构建，每个语法节点都可以关联属性，用于存储类型信息、作用域信息或其他元数据。
+
+除 `define` 外，任何构造都不能直接在当前作用域创建新的绑定。`let` 和 `let:` 系列通过闭包捕获来创建绑定。因此语言被设计为引用透明：变量、函数、类、模块和宏应在使用前定义。
+
+这些特性使 Lilies 成为构建复杂软件系统的强大工具，同时也是计算机程序理论研究的良好平台。
 
 == Background 背景
 
@@ -180,7 +210,7 @@ It is able to define new types by combining existing types (structures) or induc
 
 Each type are individual, defined by its name, structure, and behavior.
 But types can also have hierarchical relationships with other types through inheritance and subtyping.
-A type can be a subtype of another type, if and only if it inherits from that type and implement all traits and interfaces defined the type implemented.
+A type can be a subtype of another type, if and only if it inherits from that type and implement all traits and interfaces the type implemented.
 
 Supertype doesn't means that all values of the subtype can be treated as values of the supertype.
 The only guarantee is that when a constraint requires a value of the supertype, a value of the subtype can be used instead.
@@ -203,6 +233,8 @@ Primitive types for Lilies language include:
 - Any
 - None
 - Ignore
+- Meta
+- Unit
 
 ==== Number Tower 数字类型层次
 
@@ -316,6 +348,20 @@ In practice, Ignore type is used to indicate that a value should be ignored or d
 
 Ignore type is the default empty type for itself.
 
+==== Meta 元类型
+
+Meta type is the type of types in Lilies.
+Meta type may be structure description or type generator.
+
+Meta type always promises to be non-empty, thus has no default empty type.
+
+==== Unit 单元类型
+
+Every structure that has no fields is considered as Unit type.
+Thus unit type is not a primitive type, but a special structure type.
+
+Unit types cannot have instances, thus has no default empty type.
+
 === Syntax Object 语法类型
 
 Syntax objects in Lilies are representations of code as data structures, together with contextual information such as scope and source location.
@@ -350,6 +396,9 @@ There are composite type constructors provided in Lilies language, including:
 Some of them are built-in primitive types with generic type parameters, such as tuple, pair, and vector.
 Others are constructed through type definition syntax, such as structures, unions, and recursive types.
 
+Use `type` to define new recursive types by creating type generators that can produce types based on type parameters.
+The type described by `type` will not create a new type indeed, rather a new type checker that can check whether a value is of the described type or not will be implemented.
+
 === Enum Types 枚举类型
 
 Enumeration types in Lilies are special form of tagged unions, which represent a set of named values.
@@ -372,6 +421,14 @@ including:
 - canonicalization
 In the Lilies language, compile-time type computation is main approach used to implement generics.
 
+=== Traits 特征与接口
+
+Traits are a way to define shared behavior that can be implemented by multiple types.
+Furthermore, traits can be composed together to create new traits.
+
+Traits can be used to constraint generic types, ensuring that a type parameter implements a specific set of behaviors.
+Traits can be used to define dynamic dispatch rule, allowing methods to be called on values of different types that implement the same trait.
+
 === Type Dispatch 类型分派
 
 When a value is used in an expression, the type of the value is determined through type dispatch.
@@ -380,68 +437,159 @@ When a value is used in an expression, the type of the value is determined throu
 
 When defining variables, functions, classes, and so on, if the type is not explicitly specified, the type will be inferred from the context.
 
-== Object System
+== Object System 对象系统
 
-- Basic Class & Meta Class
-  - Parent & Final
-  - Extend Base Class
-- Fields
-- Properties
-- Interface
-  + Implement Interface
-  + Default Implement
-  + Cross-domain Interface
-+ Methods
-  + Method for objects
-  + Method for classes
-  + Implement Methods
-  + Inherit Methods
-  + Call the Method
-    + Static Dispatch
-    + Method visit Syntax Sugar
-    + Dynamic Dispatch
-    + Invoke
-+ Generic Functions
-  + History: `CLOS`
-  + Define Generic Function:
-    广义函数允许方法调用以普通函数的方式被使用:
+Object is the core concept of Lilies language.
+Though types in Lilies can not inherit from other types in the traditional sense,
+objects system for Lilies still provides other way to archive polymorphism and code reuse.
 
-    ``` scheme
-    (define foo:constraint
-      (interface ()
-        (define bar (function (self)))
+The class defines only the structure of a object, but methods are implemented separately.
+With traits, it becomes possible to share method implementations across different classes and extend object behaviour outside the class definition.
 
-    (define foo
-      (generic bar () #:implement foo:constraint))
+A concept of generic function is borrowed from CLOS and it is renamed to `interface` in Lilies.
+With interface, user-defined methods can be called in a uniform way as traditional functions.
+Another benefit is that interfaces are all static dispatched by default, making them more efficient than traditional methods.
 
-    (define zoo
-      (class
-        #:self this))
+`implement` syntax will create methods for a specific class, and assign the method to corresponding class.
 
-    (implement zoo foo:constraint
-      (define bar
-        (lambda ()
-          (display 1))))
+There are still some special concept borrowed form traditional OOP languages:
+- Fields: named slots associated with a specific object instance.
+- Properties: named slots that used for value fetching only.
 
-    (implement zoo new
-      (define new
-        (lambda (self)
-          (alloc:heap (this))))
+All objects in lilies are referenced by value by default.
+To have a object referenced by reference, use type wrappers.
 
-    (define a (new zoo))
+Type wrapper can be ownership, garbage collected or reference counted pointer.
 
-    ({bar a})
-    ;; equal to
-    (foo a)
-    ```
+This part describes the object system, definition of classes, and their possible literals.
 
-  + Trait Shadow
-=== Traits 特征
+=== Primitive Object 原始对象
 
-=== Implementation 实现
+Primitive objects in Lilies are build upon primitive types.
+Some of primitive objects can be written in literal syntax.
 
-=== Generic 广义函数
+Primitive objects cannot be split into smaller parts.
 
+For which, there are:
+- Integer Object
+  - `[1-9][0-9]*`
+  - `0b[01]+`
+  - `0o[0-7]+`
+  - `0x[0-9a-fA-F]+`
+- Float Object
+  - `[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?`
+  - `\.[0-9]+([eE][+-]?[0-9]+)?`
+  - `[0-9]+[eE][+-]?[0-9]+`
+- Character Object
+  - `#\descrition`
+  - `#\'character`
+  - `#\uXXXX`
+- String Object
+  - `"string content"`
+  - `#f"string content with escapes"`
+  - `#b"raw string content"`
+- Symbol Object
+  - `'symbol-name`
+- Boolean Object
+  - `#True`
+  - `#False`
+- Pair Object
+  - `'(first . second)`
+
+Above, quote syntax is used to create literal syntax for symbols and pairs.
+
+=== Classes, Fields, Properties & Traits 类, 字段, 属性与特征
+
+Classes are user defined types for structure types.
+
+A classes can declare it inherits from a parent class explicitly,
+but that will not change the class structure.
+If a class is declared to have a parent class, it must implement all traits that its parent class implements.
+
+Fields are named slots associated with a specific object instance.
+Each field has its own name and type.
+In class definition, fields are declared with `define` syntax.
+
+Properties are named slots that used for value fetching only.
+The method to declare a field as property can be various,
+Use setter and getter methods is one of the common way.
+However, it is encouraged to manually assign accessibility attributes to fields to control read and write access right for internal, class internal, package internal, and public access levels.
+
+Traits are used to define shared behavior that can be implemented by multiple classes.
+Traits can be implemented manually for a class,
+and user defined traits can be used to extend class behavior for a library defined class.
+
+==== Definition of Classes 类的定义
+
+Define a new class with `class` syntax.
+E.g., to define a new class `Point` with two fields `x` and `y` of type `Integer`:
+```lisp
+(define Point
+  (class
+    #:self this
+    (define x Integer)
+    (define y Integer))))
+```
+Here, `define` syntax used to declare Point as the class we defined using `class` syntax.
+And `define` syntax inside the class body used to declare fields `x` and `y` of type `Integer`.
+`#:self this` declares that within the class body, `this` refers to the current instance of the class.
+Symbols starts with `#:` are keywords annotations, for which pass some attributes when function or macro application.
+Another special keyword annotations are start with `#&`, for passing some attributes when function or macro definition.
+Most generic annotations are written as `#@[attributes]`, and is assigned to expressions.
+Later there will be a chapter describing all these annotations in detail.
+
+Full syntax of class definition is described as:
+```lisp
+class-definition ::=
+'(' 'class' <inherits>
+   [ '#:self' <self> ]
+   [ '#:type <Self> ]
+   { <fields> } ')'
+
+<inherits>       => '(' { <class> } ')'
+<fields>         =>
+'(' ':fields' { <deffield> } ')'
+
+<deffield>       =>
+'(' 'define' <name> [ '#:type' ] <type> [ <init> ] ')'
+```
+
+Inherits clause declares the super classes of the class being defined.
+Self clause declares the symbol that refers to the current instance of the class within the class body.
+Type clause declares the type of the class being defined.
+
+==== Definition of Traits 特征的定义
+
+Define a new trait with `trait` syntax.
+E.g., to define a new trait `Drawable` with a method `draw`:
+```lisp
+(define Drawable
+  #:self self
+  (trait
+    (define draw (function (self)))))
+```
+==== Method and Trait Implementation 方法与特征实现
+
+Both Methods and Traits are implemented with `implement` syntax.
+
+==== Generic Function & Interface 泛义函数与接口
+
+
+==== Method Dispatch 方法分派
+
+When a method is called on an object, the method to be executed is determined through method dispatch.
+
+===== Dynamic Dispatch 动态分派
+
+===== Static Dispatch 静态分派
+
+===== Method Access 语法糖方法调用
+
+===== Invoke 调用
+
+==== Field & Property Access 字段与属性访问
+
+==== Traits Shadowing 特征遮蔽
 
 == Expression
 
@@ -491,12 +639,13 @@ When defining variables, functions, classes, and so on, if the type is not expli
   + History: `defmacro`
   + Procedure Macro
   + Hygiene for the Unhygienic Macro
-
-== Syntax Rules
-
 + Syntax Rules
   + History: Hygiene Macro
   + Syntax Object
+
+== Symbol Generation
+
+=== Expression Tree
 
 == Memory Management
 + Pointer
@@ -512,8 +661,6 @@ When defining variables, functions, classes, and so on, if the type is not expli
   + `alloc:heap`: Object Allocated in Heap
   + `new`: Object creation
 + Auto Life-cycle Detection
-
-== Expression Tree
 
 == Continuations
 
