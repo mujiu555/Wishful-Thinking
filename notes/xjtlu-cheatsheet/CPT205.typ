@@ -9,6 +9,15 @@
 
 = CPT205 Computer Graphics
 
+A subject concerning will all aspect of producing pictures or images using a computer.
+- The image you see on the screen
+- the computer code that is used to create the image
+- a mathematical model of the real-world, virtual world
+
+重要, 考过定义, 无语
+
+== Input -> Process -> Output pipeline
+
 == Frame Buffer
 
 - Frame Buffer: A block of memory, dedicated to graphics output, that holds the content of what will  be displayed.
@@ -23,6 +32,14 @@ True Colour: 32 bits RGBA
 Framebuffer -> monitor:
 - The values in the framebuffer are converted from a digital (1s and 0s representation, the bits) to an analog signal that goes out to the monitor.
 - This is done automatically (not controlled by your code), and the conversion can be done while writing to the framebuffer.
+
+Image quality:
+- Screen resolution
+- Colour
+- Refresh rate
+- Brightness
+- Contrast
+- Sensitivity of display to viewing angle
 
 == Pixels
 
@@ -86,7 +103,9 @@ Also divided into pixels, but without an electron gun firing at a screen; LCDs h
 === OpenGL
 
 - First introduced in 1992.
+
 - The OpenGL graphics system is a software interface to graphics hardware (GL stands for Graphics Library).
+
 - For interactive programs that produce colour images of moving three-dimensional objects.
 - It consists of over 400 distinct commands that you can use to specify the objects and operations needed to produce interactive three-dimensional applications.
 - OpenGL is designed as a streamlined, hardware-independent interface to be implemented on many different hardware platforms.
@@ -94,6 +113,20 @@ Also divided into pixels, but without an electron gun firing at a screen; LCDs h
 - With OpenGL, you must build up your desired model from a small set of geometric primitives - points, lines, and polygons.
 - With OpenGL, you can control computer-graphics technology to produce realistic pictures or ones that depart from reality in imaginative ways.
 - OpenGL has become the industry standard for graphics applications and games.
+
+== In OpenGL, mathmatics
+
+x-axis: front to camera,
+y-axis: left to right,
+z-axis: bottom to top.
+
+$gradient A B = (Delta a) / (Delta x)$
+
+If product of gradient is -1, lines are perpendicular.
+
+Vectors:
+- $v_1 dot v_2 = |v_1| |v_2| cos(alpha) = v_1i * v_2i + v_1j * v_2j$
+- $v_1 times v_2 = - v_2 times v_1 = |v_1| |v_2| sin(alpha) arrow(u)$
 
 == Line
 
@@ -106,7 +139,7 @@ Also divided into pixels, but without an electron gun firing at a screen; LCDs h
 - Same line for $P_0 P_1$ as for $P_1 P_0$
 - Double pixels stacked up?
 
-Line algorithms
+Line algorithms: drawing a horizontal line
 
 "while" loop
 ```c
@@ -127,13 +160,18 @@ generator
 DrawLine(x1 to x2, y)
 ```
 
-Drawing a horizontal line from (x1,y) to (x2,y) are easy ... just increment along x
+Just increment along x
 
-DA – Digital Differential Algorithm
+
+DDA: Digital Differential Algorithm
+
 $ y = m x + b $
 $ m = (y_2 – y_1 ) / (x_2 – x_1) = Delta y / Delta x $
 $ ∆y = m ∆x $
 As we move along x by incrementing $x, Delta x = 1$, so $Delta y = m$
+
+通过x计算y的增量:
+
 When $0 <= |m| <= 1$
 ```c
 int x;
@@ -145,6 +183,9 @@ for(x=x1; x<=x2; x++){
 ```
 
 When |m| > 1, we swap the roles of x and y ($∆y = m∆x "so" ∆x = ∆y/m = 1/m$).
+
+对于x取样和y取样计算增量, 结果不同, 需要按m的模取值
+
 ```c
 int y;
 float x=x1;
@@ -215,6 +256,7 @@ Determining pixel positions along a circle circumference using symmetry and the 
 - Because triangular polygons are always flat
 
 == Scan conversion - rasterization
+
 • The output of the rasterizer is a set of potential pixels (fragments) for each primitive, which carry information for colour and location in the frame buffer, and depth information in the depth buffer for further processing.
 • The 3D to 2D projection gives us 2D vertices (points) to define 2D graphic primitives.
 • We need to fill in the interior
@@ -229,11 +271,51 @@ Polygon fill is a sorting problem, where we sort all the pixels in the frame buf
   - Scanline fill
   - Odd–even fill
 
+光栅化器输出的是一组潜在的像素(片段), 每个像素携带颜色和位置的信息, 以及深度信息用于进一步处理.
+而3D到2D的投影给我们提供了定义2D图形原语的2D顶点(点).
+
+光栅化器需要填充多边形的内部.
+
 == Geometric Transformation
+
+Pipeline: a series of transformations that must be applied to an object before it can be displayed on the screen.
+
+流水线实际上是通过连续一系列变换的组合, 使得多个属性一致的不同对象可以高效同步地被操作, 以至于可以被渲染到屏幕上.
+课件上面写的就是屎, 背课件, 这里中文全是吐槽
+
+- If a stage is omitted, very often the object will not look correct.
+
+Once an object has passed through the pipeline it is ready to be displayed as either a wire-frame item or as a solid item.
+
+- Modeling transformation: to place an object into the Virtual World
+- Viewing transformation: to view the object from a different vantage point in the virtual
+- projection transformation: to see depth in the object
+- viewport transformation: to temporarily map the volume define by the window of interest plus the front and rear clipping planes into a unit cube. When this is the case, certain other operations are easier to perform.
+- Device Transformation: to map the user defined "Window of interest" to the dimensions of the display area.
+
+Modeling将物体放置到虚拟世界中, 建模, 建模坐标通过平移缩放旋转, 放置模型到世界坐标xyz:
+$ M_"modeling" = T(x_0, y_o, z_0) times R("axis", theta) times S(s.x, s.y, s.z) $.
+
+viewing, 放置相机, 到e, 朝向g, 头顶t, 到世界坐标xyz, 将几何体确定到观察坐标uvw.
+
+构造uvw观察坐标:
+- $w = - g / (|g|)$: 视角正朝向
+- $u = (t times w) / (|t times w|)$: 右方向
+- $v = w times u$: 上方向
+
+projection, 投影, 透视投影和平行投影, 将观察坐标uvw映射到裁剪平面.
+- 正交投影: $ P_"ortho" = mat(1, 0, 0, 0; 0, 1, 0, 0; 0, 0, 0, 0; 0, 0, 0, 1) $, 沿投影平面法向量变换
+  选择近平面和远平面裁剪, 远近平面之间的物体被投影到裁剪平面上.
+
+- 透视投影: $ P_"persp" = mat(1, 0, 0, 0; 0, 1, 0, 0; 0, 0, (f+n)/(f-n), -2 f n/(f-n); 0, 0, 1, 0) $, f远裁剪面,n近裁剪面
+  视锥体模型, 物体汇聚到镜头, 投影参考点, 投影到剪切平面, 远近平面之间的物体被投影到剪切平面.
+  FOV: field of view, 视角
+
+viewport, 视口变换, 将裁剪坐标映射到设备坐标, 映射到屏幕像素坐标.
 
 === Translation
 
-Translating a point from P(x, y) to P’(x’, y’) along vector T
+Translating a point from $P(x, y)$ to $P’(x’, y’)$ along vector T
 
 Only transform the two endpoints of a line segment and let the
 implementation draw the line segment between the transformed endpoints.
@@ -260,9 +342,14 @@ $
   x’ = r cos(φ + θ) = x cos(θ)- y sin(θ), \
   y’ = r sin(φ + θ) = x sin(θ)+ y cos(θ)
 $
+finally translate $x'$ and $y'$ using $x$, $y$, rather than $r$ and $φ$:
 $
   x' = x cos(theta) - y sin(theta),\
   y' = x sin(theta)+ y cos(theta)
+$
+Thus the rotation matrix is:
+$
+  mat(cos(theta), -sin(theta); sin(theta), cos(theta))
 $
 
 Rotation about a fixed point rather than the origin
@@ -306,7 +393,14 @@ Regular 2d point, $vec(x, y) => vec(w x, w y, w)$
 - Scaling: $vec(x', y', 1) = mat(s_x, 0, 0; 0, s_y, 0; 0, 0, 1) dot vec(x, y, 1)$
 - Shearing: $vec(x', y', 1) = mat(1, cot(theta), 0; 0, 1, 0; 0, 0, 1) dot vec(x, y, 1)$
 
+多加一维, 让平移可以用矩阵表示
+
+变换都是对于点而进行的, 每个矩阵中的元素都表示一个对于x, 或y的变换
+第一列表示x的变换, 第二列表示y的变换, 第三列表示平移变换
+
 == 2D composite transformation
+
+对于没有变换的矩阵, 组合变换矩阵是单位矩阵.
 
 === General rotation about the origin
 
@@ -329,6 +423,13 @@ Each object is constructed from flat principal faces
 Buildings, polyhedra, manufactured objects, etc.
 
 #figure(image("./img/CPT205-L5-1.png"))
+
+- front elevation: 正视图, looking directly at one face of the object
+- elevation oblique: 斜视图, looking at an angle to one face of the object
+- plan oblique: 俯视图, looking down at an angle to the top face of the object
+- isometric: 等轴测图, looking down equally on three faces of the object
+- one-point perspective: 单点透视, looking directly at one face of the object with the projectors converging to a single point
+- three-point perspective: 三点透视, looking at the object with the projectors converging to a single point but not directly at any face of the object
 
 === Planar geometric projection
 
@@ -360,6 +461,17 @@ Vanishing points
 
 Parallel lines (not those parallel to the projection plane) on the object converge at a single point in the projection (the vanishing point).
 Drawing simple perspectives by hand uses the vanishing point(s).
+
+Advantages, disadvantages:
+- Objects further from the viewer are projected smaller then the same sied objects closer to the viewer, aka., realistic,
+- equal distances along a line are not projected into equal distances, aka., non-uniform foreshortening,
+- angles preserved only in planes parallel to the projection plane
+- more difficult to construct by hand than parallel projection
+
+pipeline:
+- position camera and setting model-view matrix,
+- select lines, setting projection matrix,
+- clipping, and setting the view volume
 
 ===== Frustum perspective projection
 
@@ -398,7 +510,7 @@ perspective projection approaches to a parallel projection.
 This method projects points on the object surface along parallel lines.
 It is usually used in engineering and architecture drawings to represent an object with a set of views showing accurate dimensions.
 
-==== 正交透视
+==== 正交投影
 
 The projectors are orthogonal to projection surface
 
@@ -429,10 +541,25 @@ The general case is a trimetric view.
 
 #figure(image("./img/CPT205-L5-3"))
 
+Advantages, disadvantages:
+- Lines are scaled, foreshortened, but can find scaling factors,
+- Lines preserved but angles are not, e.g., a circle in a plane not parallel to the projection plane becomes an ellipse,
+- can see three principal faces of a box-like object in one view,
+- some optical illusions possible, e.g., parallel lines appear to diverge
+- does not look real, far objects not smaller than near objects.
+- used in CAD applications
+
+重要, 前两年没考
+
 ==== Oblique projection
+斜投影, 平行投影的一种特殊形式
 
 #figure(image("./img/CPT205-L5-4.png"))
 
+Advantages, disadvantages:
+- Can pick the angles to emphasise a particular face, plan oblique, elevation oblique
+- Angles in faces parallel to the projection plane are preserved while we can still see around side
+- not real
 
 == 3D viewing co-ordinate parameters (1)
 
@@ -461,6 +588,9 @@ so viewing routines typically adjust the user defined value of V
 
 Any direction can be used for V as long as it is not parallel to N.
 
+选视角原点, 选参考点, 有视角方向N, 视平面法向量即为N
+
+
 == Parametric curves
 
 Explicit representation: $y = a_0 + a_1 x$
@@ -482,8 +612,61 @@ Parametric equation:
 $ x = r cos(360t), y = r sin(360t), (0 ≤ t ≤ 1) $
 
 
+== 3D modeling
+
+=== Wireframe models
+
+oldest and simplest representation of 3D objects,
+a finite set of points and curves,
+
+ambiguity of the model and the severe difficulties in validating the model,
+not provide surface and volume information,
+
+=== Surface models
+
+generates objects with a more complete and less ambiguous representation.
+
+points and curves.
+a closed loop of curves with skin
+
+=== solid models
+
+csg: constructive solid geometry
+
+ordered binary tree, non-terminal nodes represent the operators and the terminal nodes are the primitives or transformation leaves
+
+primitive leaf is a primitivesolid in the modelling space; transformation leaf defines the arguments of a rigid motion
+
+each has local coordinate frame.
+
+B-rep: boundary representation
+
+segment solid's boundary into a finite number of bounded subsets.
+
+geometry shape and size,
+topology connectivity of the boundary entities
+
+topologically explicit representation, info in data structure,
+
+types:
+- manifold: each edge is shared by exactly two faces, a vertex connects at least three edges
+- nonmanifold: dangling faces, edges and vertices
 
 
+
+
+==== Euler's law
+
+To ensure the topological validity for a solid (i.e., manifold
+model), a manifold model must satisfy the following Euler
+(Leonhard Euler, 1707-1783) formula,
+
+$ V - E + F - R + 2H - 2S = 0 $
+
+where V, E, F, R, H and S are the numbers of vertices,
+edges, faces, rings (inner loops on faces),
+passages/through-holes (genus) and shells (disjoint
+bodies), respectively.
 
 
 

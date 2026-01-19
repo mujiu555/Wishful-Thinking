@@ -16,7 +16,7 @@
 - Hosts: terminal systems
 - Packet switches: forward packages, chunks of data
   - routers, switches
-- Communication links: 
+- Communication links:
   - fiber, radio, satellite
   - transmission rate: bandwidth
 - Networks: collections of devices, routers, links
@@ -229,9 +229,9 @@ ISP互联: 对等链路, IXP
   /     /    \   +-------------+       |
  /     /      \    |                   |
 /     /        \   |                   |
-+------------+  +------------+ +------------+ 
-| Access ISP |  | Access ISP | | Access ISP | 
-+------------+  +------------+ +------------+ 
++------------+  +------------+ +------------+
+| Access ISP |  | Access ISP | | Access ISP |
++------------+  +------------+ +------------+
 ```
 At “center”: small \# of well-connected large networks
 - “tier-1” commercial ISPs (e.g., Level 3, Sprint, AT&T, NTT), national & international coverage
@@ -257,7 +257,7 @@ At “center”: small \# of well-connected large networks
       - check bit errors
       - determine output link
       - typically < msec
-    - $d_"queue": $queueing delay.
+    - $d_"queue":$queueing delay.
       - time waiting at output link for transmission
       - depends on congestion level of router
     - $d_"trans"$: transmission delay:
@@ -329,7 +329,7 @@ Host     +-------------+ Source
          +-------------+   |
          |  physical   |   |
          +-------------+   v
-         
+
 Switch   +-------------+   |
          |    link     |   |
          +-------------+   |
@@ -457,13 +457,13 @@ UDP service:
   table.hline(),
   table.header([Application], [App layer protocol], [Underlying transport Protocol]),
   table.hline(stroke: 0.5pt),
-  [E-mail                  ],[SMTP [RFC 2821], POP3, IMAP],[TCP       ],
-  [Remote terminal Access  ],[Telnet [RFC 854], SSH      ],[TCP       ],
-  [Web                     ],[HTTP [RFC 2616] HTTPS      ],[TCP       ],
-  [File Transfer           ],[FTP [RFC 959], SFTP        ],[TCP       ],
-  [Multimedia              ],[HTTP / RTP [RFC 1889]      ],[TCP or UDP],
-  [VoIP                    ],[SIP, RTP or proprietary    ],[TCP or UDP],
-  [],[],[],
+  [E-mail                  ], [SMTP [RFC 2821], POP3, IMAP], [TCP       ],
+  [Remote terminal Access  ], [Telnet [RFC 854], SSH      ], [TCP       ],
+  [Web                     ], [HTTP [RFC 2616] HTTPS      ], [TCP       ],
+  [File Transfer           ], [FTP [RFC 959], SFTP        ], [TCP       ],
+  [Multimedia              ], [HTTP / RTP [RFC 1889]      ], [TCP or UDP],
+  [VoIP                    ], [SIP, RTP or proprietary    ], [TCP or UDP],
+  [], [], [],
   table.hline(),
 )
 
@@ -641,14 +641,14 @@ Persistent HTTP issues:
 
 The Status-Code element is a 3-digit integer result code of the attempt to understand and satisfy the request. These codes are fully defined in section 10. The Reason-Phrase is intended to give a short textual description of the Status-Code. The Status-Code is intended for use by automata and the Reason-Phrase is intended for the human user. The client is not required to examine or display the Reason- Phrase.
 
-The first digit of the Status-Code defines the class of response. The last two digits do not have any categorization role. There are 5 values for the first digit: 
+The first digit of the Status-Code defines the class of response. The last two digits do not have any categorization role. There are 5 values for the first digit:
 - 1xx: Informational - Request received, continuing process
 - 2xx: Success - The action was successfully received, understood, and accepted
 - 3xx: Redirection - Further action must be taken in order to complete the request
 - 4xx: Client Error - The request contains bad syntax or cannot be fulfilled
 - 5xx: Server Error - The server failed to fulfill an apparently valid request
 
-The individual values of the numeric status codes defined for HTTP/1.1, and an example set of corresponding Reason-Phrase's, are presented below. The reason phrases listed here are only recommendations -- they MAY be replaced by local equivalents without affecting the protocol. 
+The individual values of the numeric status codes defined for HTTP/1.1, and an example set of corresponding Reason-Phrase's, are presented below. The reason phrases listed here are only recommendations -- they MAY be replaced by local equivalents without affecting the protocol.
 
 ```txt
 Status-Code    =
@@ -793,7 +793,7 @@ Why not centralize DNS?
 
 DNS
 - Humongous distributed database:
-  - \~ billion records, each simple 
+  - \~ billion records, each simple
 - handles many trillions of queries/day:
   - many more reads than writes
   - performance matters: almost every Internet transaction interacts with DNS - msecs count!
@@ -1076,7 +1076,7 @@ Provide logical communication between app processes running on different hosts
 - Transport protocols run in end systems
   - Send side: breaks app msg into segments, passes to network layer
   - Rcv side: reassembles segments into messages, passes to app layer
-- Transport-layer protocols for Internet: TCP and UDP 
+- Transport-layer protocols for Internet: TCP and UDP
 
 Transport layer: logical communication between processes: Relies on, enhances, network layer services
 
@@ -1089,7 +1089,7 @@ Network layer: logical communication between hosts
 - Transport protocol = Ann and Bill who demux to in-house siblings
 - Network-layer protocol = postal service
 
-Sender: 
+Sender:
 - pass an application-layer message
 - determines segment header fields values
 - creates segment
@@ -1143,10 +1143,10 @@ host receives UDP segment:
 IP datagrams with same dest. port \#, but different source IP addresses and/or source port numbers will be directed to same socket at dest
 
 TCP socket identified by 4-tuple:
-  - source IP address
-  - source port number
-  - dest IP address
-  - dest port number
+- source IP address
+- source port number
+- dest IP address
+- dest port number
 - Demux: receiver uses all four values to direct segment to appropriate socket
 - Server host may support many simultaneous TCP sockets: each socket identified by its own 4-tuple
 - Web servers have different sockets for each connecting client: non-persistent HTTP will have different socket for each request
@@ -1168,7 +1168,7 @@ Reliable transfer over UDP:
 - Add reliability at application layer
 - Application-specific error recovery!
 
-UDP sender actions: 
+UDP sender actions:
 - pass an application-layer message
 - determines UDP segment header fields values
 - creates UDP segment
@@ -1192,7 +1192,7 @@ UDP
 ~                                               ~
 |        application data (payload)             |
 ```
- Goal: detect “errors” in transmitted segment
+Goal: detect “errors” in transmitted segment
 Sender:
 - Treat segment contents, including header fields, as sequence of 16-bit integers
 - Checksum: addition (one’s complement sum) of pseudo header, UDP header and UDP data
@@ -1311,7 +1311,7 @@ rdt2.2: a NAK-free protocol
 #figure(image("./img/CAN201-L4-4.png"))
 
 rdt3.0: Channels with errors and loss
-New assumption: Underlying channel can also lose packets (data, ACKs): Checksum, seq. \#, ACKs, retransmissions will be of help … but not enough 
+New assumption: Underlying channel can also lose packets (data, ACKs): Checksum, seq. \#, ACKs, retransmissions will be of help … but not enough
 Approach: Sender waits “reasonable” amount of time for ACK
 - Retransmits if no ACK received in this time
 - If pkt (or ACK) just delayed (not lost):
@@ -1380,7 +1380,7 @@ Sender:
 
 data from above:
 - If next available seq \# in window, send pkt timeout(n):
-- Resend pkt n, restart timer 
+- Resend pkt n, restart timer
 ACK(n) in [sendbase, sendbase+N-1]:
 - Mark pkt n as received
 - If n smallest unACKed pkt, advance window base to next unACKed seq \#
@@ -1453,9 +1453,9 @@ TCP round trip time, timeout
 • Estimate SampleRTT deviation from EstimatedRTT:
 
 $
-"DevRTT" = (1-beta)*"DevRTT" +
-beta*|"SampleRTT"-"EstimatedRTT"|
-("typically", beta = 0.25)
+  "DevRTT" = (1-beta)*"DevRTT" +
+  beta*|"SampleRTT"-"EstimatedRTT"|
+  ("typically", beta = 0.25)
 $
 
 ```txt
@@ -1572,7 +1572,7 @@ AIMD – a distributed, asynchronous algorithm – has been shown to:
 TCP sending behavior:
 
 ▪ roughly: send cwnd bytes, wait RTT for ACKS, then send more bytes
-$ "TCP rate" approx "cwnd" / "RTT" "bytes"\/"sec"$
+$"TCP rate" approx "cwnd" / "RTT" "bytes"\/"sec"$
 
 TCP sender limits transmission: `LastByteSent - LastByteAcked <= cwnd`: cwnd is dynamically adjusted in response to observed network congestion (implementing TCP congestion control)
 
@@ -1600,7 +1600,7 @@ TCP throughput
 - avg. thruput is 3/4W per RTT
 
 $
-"avg TCP thruput" = 3/4 W/ "RTT" "bytes"\/"sec"
+  "avg TCP thruput" = 3/4 W/ "RTT" "bytes"\/"sec"
 $
 
 === Evolving transport-layer functionality
@@ -1618,16 +1618,16 @@ different “flavors” of TCP developed, for specific scenarios:
   table.hline(),
   table.header([Scenario], [Challenges]),
   table.hline(stroke: 0.5pt),
-[Long, fat pipes (large data transfers)],
-[Many packets “in flight”; loss shuts down pipeline],
-[Wireless networks],
-[Loss due to noisy wireless links, mobility; TCP treat this as congestion loss],
-[Long-delay links],
-[Extremely long RTTs],
-[Data center networks],
-[Latency sensitive],
-[Background traffic flows],
-[Low priority, “background” TCP flows],
+  [Long, fat pipes (large data transfers)],
+  [Many packets “in flight”; loss shuts down pipeline],
+  [Wireless networks],
+  [Loss due to noisy wireless links, mobility; TCP treat this as congestion loss],
+  [Long-delay links],
+  [Extremely long RTTs],
+  [Data center networks],
+  [Latency sensitive],
+  [Background traffic flows],
+  [Low priority, “background” TCP flows],
   table.hline(),
 )
 
@@ -1730,12 +1730,12 @@ No guarantees on:
 Network       Service Model        Bandwidth       Loss       Order     Timing
 Architecture
 ------------  -------------------  --------------  --------  ---------  ------
-Internet      best effort          none            no         no        no    
-ATM           Constant Bit Rate    Constant rate   yes        yes       yes   
-ATM           Available Bit Rate   Guaranteed min  no         yes       no    
-Internet      Intserv Guaranteed   yes             yes        yes       yes   
+Internet      best effort          none            no         no        no
+ATM           Constant Bit Rate    Constant rate   yes        yes       yes
+ATM           Available Bit Rate   Guaranteed min  no         yes       no
+Internet      Intserv Guaranteed   yes             yes        yes       yes
               (RFC 1633)
-Internet      Diffserv (RFC 2475)  possible        possibly   possibly  no    
+Internet      Diffserv (RFC 2475)  possible        possibly   possibly  no
 ```
 Reflections on best-effort service:
 - simplicity of mechanism has allowed Internet to be widely deployed adopted
@@ -1750,7 +1750,7 @@ High-level view of generic router architecture:
 
 #figure(image("./img/CAN201-L6-5.png"))
 
-Input port functions: 
+Input port functions:
 
 
 ```txt
@@ -2268,7 +2268,7 @@ Why Different Intra-, Inter-AS Routing ?
 
 policy:
 - inter-AS: admin wants control over how its traffic is routed, who routes through its network
-- intra-AS: single admin, so policy less of an issue 
+- intra-AS: single admin, so policy less of an issue
 scale: reducing forwarding table size, routing update traffic
 - hierarchical routing: limiting the scope of full topological information
 - BGP routing to CIDRized destination networks (summarized routes)
@@ -2306,7 +2306,7 @@ SDN controller (network OS):
 - Maintains network state information
 - Interacts with network control applications “above” via northbound API
 - Interacts with network switches “below” via southbound API
-- Implemented as distributed system for performance, scalability, fault-tolerance, robustness 
+- Implemented as distributed system for performance, scalability, fault-tolerance, robustness
 
 Network-control apps:
 -“brains” of control: implement control functions using lower-level services, API provided by SDN controller
@@ -2347,7 +2347,7 @@ ICMP message: type, code plus header and first 8 bytes of IP datagram causing er
   columns: 3,
   stroke: none,
   table.hline(),
-  table.header([Type], [Code], [description],),
+  table.header([Type], [Code], [description]),
   table.hline(stroke: 0.5pt),
   [0   ], [0   ], [echo reply (ping)],
   [3   ], [0   ], [dest. network unreachable],
@@ -2393,6 +2393,45 @@ Other complex systems requiring monitoring, control:
 
 #figure(image("./img/CAN201-L8-8.png"))
 
+== Parity Bit Checking
+
+Single-bit error detection:
+- Even parity:
+  set parity bit so that total number of 1 bits in data + parity bit is even
+- Odd parity:
+  set parity bit so that total number of 1 bits in data + parity bit is odd
+
+At receiver:
+compute parity of received data bits + parity bit
+
+2D parity checking:
+treat data bits as matrix
+detect errors by computing parity bits for rows and columns
+
+== Checksum
+
+Internet checksum algorithm:
+- Sender:
+  - treat segment contents as sequence of 16-bit integers
+  - checksum: 1’s complement of sum of segment contents
+- Receiver:
+  - compute sum of received segment contents, including checksum
+  - check if result is all 1’s
+
+Add carries to least significant bit,
+then take 1’s complement
+Until no more carries
+
+== Cyclic Redundancy Check (CRC)
+
+D: data bits to be transmitted, viewed as a polynomial
+G: generator polynomial, agreed upon by sender, receiver
+d: data bits
+r: r bit CRC
+$<D, R> = D * 2^r "xor" R$ is exactly divisible by G
+Sender: given D and G+1 bits, append r bits R such that $<D, R>$ exactly divisible by G
+Receiver: given $<D, R>$ and G, check if exactly divisible by G
+$ R = "remainder of" (D * 2^r) / G $
 
 
 
