@@ -278,6 +278,16 @@ Default Empty type for characters is the null character type EOF, which has the 
 Strings in Lilies are represented by the type `String`, which represents a sequence of objects, typically characters.
 Default Empty type for strings is the Empty type, for which the only instance is the empty string `""`.
 
+String are some serialized data, a continuous sequence of bytes.
+No matter it is encoded utf-8 ro raw bytes, even integers or complex objects.
+
+In Lilies, there are different kinds of continuous data:
+- Strings, which is described here,
+- Vector, fixed-size sequence of same-type elements,
+- Tuple, fixed-size sequence of potentially different-type elements,
+- Array, variable-size sequence of same-type elements,
+- List, variable-size sequence of potentially different-type elements, as a linked list,
+
 ==== Symbols 符号类型
 
 Symbols is a unique and immutable identifier used to represent names or labels in Lilies.
@@ -526,7 +536,6 @@ E.g., to define a new class `Point` with two fields `x` and `y` of type `Integer
 ```lisp
 (define Point
   (class
-    #:self this
     (define x Integer)
     (define y Integer))))
 ```
@@ -542,8 +551,6 @@ Full syntax of class definition is described as:
 ```lisp
 class-definition ::=
 '(' 'class' <inherits>
-   [ '#:self' <self> ]
-   [ '#:type <Self> ]
    { <fields> } ')'
 
 <inherits>       => '(' { <class> } ')'
@@ -558,19 +565,45 @@ Inherits clause declares the super classes of the class being defined.
 Self clause declares the symbol that refers to the current instance of the class within the class body.
 Type clause declares the type of the class being defined.
 
+With annotations, the accessibility of fields can be controlled:
+E.g.,
+```lisp
+(define Point
+  (class
+    #@[accessibility x (read :public) (write :private)]
+    #@[accessibility y (read :public) (write :private)]
+    (define x Integer)
+    (define y Integer))))
+```
+
+To define filed to be variable, wrap type with `variable`.
+
 ==== Definition of Traits 特征的定义
 
 Define a new trait with `trait` syntax.
 E.g., to define a new trait `Drawable` with a method `draw`:
 ```lisp
 (define Drawable
-  #:self self
   (trait
+    #:self self
     (define draw (function (self)))))
 ```
 ==== Method and Trait Implementation 方法与特征实现
 
 Both Methods and Traits are implemented with `implement` syntax.
+
+`implement` unwraps namespace of a class, and then methods defined within the body are assigned to the class function table.
+Furthermore, traits can unwrap namespace of a object, and then anything inside will only extend the object behavior.
+
+```lisp
+(implement Point (Drawable)
+  #:self self
+  #:Type Self
+  (define draw
+    (lambda (self)
+      #:returns (None)
+      (print f"x: {(field self 'x)}; y: {(field self 'y)}"))))
+```
 
 ==== Generic Function & Interface 泛义函数与接口
 
@@ -581,7 +614,19 @@ When a method is called on an object, the method to be executed is determined th
 
 ===== Dynamic Dispatch 动态分派
 
+```lisp
+((method object 'method-name') ...args)
+;; or
+({method-name object} ...args) ; for short
+```
+
 ===== Static Dispatch 静态分派
+
+```lisp
+((method Class 'method-name') ...args)
+;; or
+({method-name Class} ...args) ; for short
+```
 
 ===== Method Access 语法糖方法调用
 
