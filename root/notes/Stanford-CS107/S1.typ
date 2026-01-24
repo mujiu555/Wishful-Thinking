@@ -636,8 +636,25 @@ then they will never able to pick up the right fork,
 
 This is a deadlock.
 
+== Ice cream Shop Problem
 
+= Functional Programming Paradigm
 
+In functional programming paradigm, each function are treated as regular mathematical function.
+Which accepts some input and produce some output.
+
+```lisp
+;car
+;cdr
+```
+
+`car` in scheme extracts the first element of a list.
+While `cdr` extracts the rest of the list.
+
+Known already, so for short, Mujiu will not explain more about scheme here.
+
+In scheme, or in lisp, car and cdr comes from lisp machine assembly instruction.
+There are two registers, address register and data register, which is the `ar` and `dr` where `car` and `cdr` comes from.
 
 
 
