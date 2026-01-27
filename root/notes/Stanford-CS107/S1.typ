@@ -657,6 +657,12 @@ In scheme, or in lisp, car and cdr comes from lisp machine assembly instruction.
 There are two registers, address register and data register, which is the `ar` and `dr` where `car` and `cdr` comes from.
 
 
+Eval & Apply loop:
+`Eval` represents evaluation in lisp, which is the process of parsing the list and evaluating it.
+And then, when a application is found, `Apply` will be called to apply the function to the arguments.
+Apply reduce the expression with function and it also need eval to evaluate the arguments and function body.
+
+Then eval and apply loops over and over until the expression is fully evaluated.
 
 
 
