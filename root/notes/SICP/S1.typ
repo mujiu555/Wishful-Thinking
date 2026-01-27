@@ -39,7 +39,7 @@ A ideal system.
 
 = Preface
 
-= Section 1: Building Abstractions with Procedures
+= Section I: Building Abstractions with Procedures
 
 The first way to build abstraction is black boxes, aka., procedures.
 Which accepts some inputs, and produce some outputs, without revealing the internal details of how the procedure works.
@@ -73,8 +73,39 @@ P.S., in compiler, such tree structure is called Abstract Syntax Tree (AST).
 The way to build new abstractions is using `define`.
 By extract general ideas from specific examples, it is possible to create new procedures.
 
+= Section II: Procedure and Processes, Substitution Model
 
+To write effective and usable programs,
+it is necessary to have a overall understanding of relationship between procedures and processes.
 
+The model to explain such relationship here is called substitution model,
+which is not exactly how the computer works, but a idealized model that helps us understand how procedures work.
+
+In Lisp expressions, there exists NUMBERS, SYMBOLS, LAMBDAS, DEFINITIONS, and CONDITIONALS.
+But how to evaluate such expressions?
+In substitution model, the way is to
+- Evaluate the operator to get the procedure
+- Evaluate the operands to get the arguments
+- Apply the procedure to the arguments,
+  Which is: Copy the body of the procedure, substitute the arguments for the parameters, and evaluate the resulting expression.
+
+The key to computation is ignore unnecessary details, and focus on the important parts.
+
+Two kind of processes:
+- Iteration: time grows linearly with the number of steps, and the space required remains constant.
+- Recursion: both time and space grow linearly with the number of steps.
+
+The recursion for processes is not the same as recursion for procedures.
+Recursive procedures are those that call themselves.
+
+For Iteration processes, it is possible to store the thoughts in a fixed number of state variables.
+However, for Recursive processes, it is necessary to keep track of all the previous states, which is the implicitly stored information in the control stack.
+
+As the growth of recursive processes, the time complexity will grow exponentially, since sometimes a already done computation is repeated again and again.
+With memorization, it is possible to store the results of such computations, and reuse them later, thus a recursive process can be transformed into an iterative one.
+Normally, transforming a recursive process into an iterative one is not trivial,
+since it requires to find a way to store the necessary information in a fixed number of state variables.
+Thus memorization is a easier way to achieve this.
 
 
 
