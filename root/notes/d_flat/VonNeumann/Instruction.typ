@@ -6,7 +6,7 @@
 #title[Instruction Specification]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/Turing.typ")
+#parent("/notes/d_flat/VonNeumann.typ")
 
 All Instruction adopted in the virtual machine are 32-bits length-fixed.
 

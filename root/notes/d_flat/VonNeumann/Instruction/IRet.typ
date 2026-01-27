@@ -3,12 +3,12 @@
 
 #show: schema.with("page")
 
-#title[Instruction: `Ret`]
+#title[Instruction: `IRet`]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/Turing/Instruction.typ")
+#parent("/notes/d_flat/VonNeumann/Instruction.typ")
 
-`Ret` instruction is used to return from function call.
+`IRet` instruction is used to return from interruption handler.
 
 ```txt
 0x
@@ -21,12 +21,12 @@ Zero          | flags                                       | typ | operator  |
 * flags: reserved space, for instruction extension use
 ```
 
-The `Ret` instruction have no parameters.
-- Syntax: `:ret`
-- Description: return from current function call to caller function
+The `IRet` instruction have no parameters.
+- Syntax: `:iret`
+- Description: return from current interruption handler to interrupted context
 - Flags: none
 
-Basically, `ret` instruction provides a way to return from function call.
-When `ret` instruction executed, current execution context is popped from execution stack,
-`Reg#PC` and `Reg#EP` restored to caller function's context.
+Basically, `iret` instruction provides a way to return from interruption handler.
+When `iret` instruction executed, register information stored when interruption occurs is restored.
+Execution stack pop and continues execution of previous executed function.
 

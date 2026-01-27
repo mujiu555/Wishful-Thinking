@@ -2,7 +2,7 @@
 
 #show: schema.with("page")
 
-#title[Turing Machine Simulator (R-M) for Project D-Flat]
+#title[Turing Machine Simulator (R-M Von-Neumann Simulator) for Project D-Flat]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
 #parent("/index.typ")
@@ -18,11 +18,11 @@ The virtual machine has following properties:
 - 32 special-purposed registers
 The virtual machine adopt a new designed instruction set.
 
-= #embed("Turing/Overview.typ")
+= #embed("VonNeumann/Overview.typ")
 
-= #embed("Turing/Register.typ")
+= #embed("VonNeumann/Register.typ")
 
-= #embed("Turing/Pointer.typ")
+= #embed("VonNeumann/Pointer.typ")
 
 = Interrupt and Exception Handling
 
@@ -67,7 +67,7 @@ When function return invoked, virtual machine will do following steps:
 When snapshot exception invoked, virtual machine will do following steps:
 + Duplicate current global data stack segment, execution stack segment, and register records.
 
-= #embed("Turing/Call.typ")
+= #embed("VonNeumann/Call.typ")
 
-= #embed("Turing/Instruction.typ")
+= #embed("VonNeumann/Instruction.typ")
 

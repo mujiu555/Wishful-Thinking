@@ -6,7 +6,7 @@
 #title[Instruction: `Loop`]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/Turing/Instruction.typ")
+#parent("/notes/d_flat/VonNeumann/Instruction.typ")
 
 
 
