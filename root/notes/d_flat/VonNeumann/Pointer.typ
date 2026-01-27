@@ -5,7 +5,7 @@
 #title[Pointer Specification]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/Turing.typ")
+#parent("/notes/d_flat/VonNeumann.typ")
 
 A pointer in this virtual machine is a 64-bit unsigned integer that stored in the capture section of function unit.
 

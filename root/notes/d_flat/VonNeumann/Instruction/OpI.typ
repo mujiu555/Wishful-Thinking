@@ -3,12 +3,12 @@
 
 #show: schema.with("page")
 
-#title[Instruction: `OpU`]
+#title[Instruction: `OpI`]
 #date[2025-12-14 23:46]
 #author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/notes/d_flat/Turing/Instruction.typ")
+#parent("/notes/d_flat/VonNeumann/Instruction.typ")
 
-`OpU` instruction is used to perform arithmetic integer computation, treat as unsigned integer.
+`OpI` instruction is used to perform arithmetic integer computation.
 
 ```txt
 0x
@@ -27,9 +27,9 @@ IR            | register  | literal                     | op| typ | operator  |
 * RI and IR are two variant of same instruction, distinguish by instruction type
 ```
 
-The `OpU` instruction have following variants:
+The `OpI` instruction have following variants:
 - Register-Register variant:
-  - Syntax: `:opu op dst, src`
+  - Syntax: `:opi op dst, src`
   - Type code: 0, `RR`
   - Description: perform arithmetic operation `op` on integer `dst` and `src`, store result into `Reg#A`, carry or reminder into `Reg#R`
     - `dst`: target register
@@ -38,7 +38,7 @@ The `OpU` instruction have following variants:
   - Flags:
     - `op`: 2 bits operation code
 - Register-Immediate variant:
-  - Syntax: `:opu op dst, val`
+  - Syntax: `:opi op dst, val`
   - Type code: 1, `RI`, `val` can be at most 15 bits integer, or 14 bits signed integer
   - Description: perform arithmetic operation `op` on integer `dst` and immediate value `val`, store result into `Reg#A`, carry or reminder into `Reg#R`
     - `dst`: target register
@@ -47,7 +47,7 @@ The `OpU` instruction have following variants:
   - Flags:
     - `op`: 2 bits operation code
 - Immediate-Register variant:
-  - Syntax: `:opu op val, src`
+  - Syntax: `:opi op val, src`
   - Type code: 2, `IR`, `val` can be at most 15 bits integer, or 14 bits signed integer
   - Description: perform arithmetic operation `op` on integer `src` and immediate value `val`, store result into `Reg#A`, carry or reminder into `Reg#R`
     - `src`: source register
@@ -56,7 +56,7 @@ The `OpU` instruction have following variants:
   - Flags:
     - `op`: 2 bits operation code
 - Register-Address(Register) variant:
-  - Syntax: `:opu op dst, ptr[src]`
+  - Syntax: `:opi op dst, ptr[src]`
   - Type code: 3, `RR(1)`
   - Description: perform arithmetic operation `op` on integer `dst` and memory address `src`, store result into `Reg#A`, carry or reminder into `Reg#R`, `ptr` can be `qword`(`0`), `bytes`(`1`), `word`(`2`), `dword`(`4`) for data size
     - `dst`: target register
@@ -70,7 +70,7 @@ The `OpU` instruction have following variants:
       - `10`: word
       - `11`: dword
 - Address(Register)-Register variant:
-  - Syntax: `:opu op ptr[dst], src`
+  - Syntax: `:opi op ptr[dst], src`
   - Type code: 4, `RR(1)`
   - Description: perform arithmetic operation `op` on integer memory address `dst` and integer `src`, store result into `Reg#A`, carry or reminder into `Reg#R`, `ptr` can be `qword`(`0`), `bytes`(`1`), `word`(`2`), `dword`(`4`) for data size
     - `dst`: target memory address register
@@ -84,7 +84,7 @@ The `OpU` instruction have following variants:
       - `10`: word
       - `11`: dword
 - Address(Register)-Address(Register) variant:
-  - Syntax: `:opu op prt[dst], [src]`
+  - Syntax: `:opi op prt[dst], [src]`
   - Type code: 5, `RR`
   - Description: perform arithmetic operation `op` on integer memory address `dst` and integer memory address `src`, store result into `Reg#A`, carry or reminder into `Reg#R`, `ptr` can be `qword`(`0`), `bytes`(`1`), `word`(`2`), `dword`(`4`) for data size
     - `dst`: target memory address register
@@ -104,9 +104,9 @@ The `OpU` instruction have following variants:
 - `mul`: multiplication
 - `div`: division
 
-After `OpU` instruction executed, original `Reg#A` and `Reg#R` values are overwritten.
+After `OpI` instruction executed, original `Reg#A` and `Reg#R` values are overwritten.
 
-Basically, `OpU` instruction performs arithmetic operation on integer data.
+Basically, `OpI` instruction performs arithmetic operation on integer data.
 And store result into `Reg#A`, carry or reminder into `Reg#R`.
 For addition operation,
 `dst` treated as addend, `src` treated as addor,
