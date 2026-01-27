@@ -41,54 +41,6 @@
 
 == #embed("/notes/d_flat/Turing.typ", sidebar: "only_title", open: false)
 
-== #embed("/notes/d_flat/Turing/Call.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Call.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/IRet.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/IS.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Int.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Jmp.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/LSD.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Loop.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Mov.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/OpB.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/OpF.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/OpI.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/OpS.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/OpU.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Raise.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/RegF.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Ret.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Snap.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Stack.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Instruction/Test.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Overview.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Pointer.typ", sidebar: "only_title", open: false)
-
-== #embed("/notes/d_flat/Turing/Register.typ", sidebar: "only_title", open: false)
-
 
 = Tags
 
@@ -155,51 +107,4 @@
 
 === #embed("/notes/d_flat/Turing.typ", sidebar: "only_title", open: false)
 
-=== #embed("/notes/d_flat/Turing/Call.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Call.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/IRet.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/IS.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Int.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Jmp.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/LSD.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Loop.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Mov.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/OpB.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/OpF.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/OpI.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/OpS.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/OpU.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Raise.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/RegF.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Ret.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Snap.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Stack.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Instruction/Test.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Overview.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Pointer.typ", sidebar: "only_title", open: false)
-
-=== #embed("/notes/d_flat/Turing/Register.typ", sidebar: "only_title", open: false)
 
