@@ -107,6 +107,52 @@ Normally, transforming a recursive process into an iterative one is not trivial,
 since it requires to find a way to store the necessary information in a fixed number of state variables.
 Thus memorization is a easier way to achieve this.
 
+= Section III: Higher-Order Procedures
+
+Extract a procedure as a parameter and then it enhance extensibility since the procedure can be customized by modifying the procedure taken as argument.
+
+As for square-root procedure, it can be written as a function that
+$
+  f(y): R^+ -> R^+ = (y + x / y) / 2
+$
+Thus, there exists a fix point for such function, which is the square root of x.
+A fix-point is something that has the property that applying the function to it returns the same value.
+
+The idea is that if there exists a procedure that can find the fix point of a function, then it is possible to use such procedure to find the square root of a number.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
