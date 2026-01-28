@@ -664,6 +664,18 @@ Apply reduce the expression with function and it also need eval to evaluate the 
 
 Then eval and apply loops over and over until the expression is fully evaluated.
 
+== Power Set
+
+If it is required to generate power set of a set.
+Concerning all subsets with and without each element.
+Then the process can be divided into two branches at each element.
+Which is a recursive division.
+
+With `let`, it is possible to store intermediate result temporarily.
+Thus it decrease the computation time since it avoid recomputation of same subproblem.
+Though it cannot decrease the time and space complexity of a recursive process indeed.
+
+`let` is equivalent to lambda expression application, with parameters bind to arguments like regular values bind to let variables.
 
 
 
