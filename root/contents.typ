@@ -39,7 +39,7 @@
 
 == #embed("/notes/d_flat/StandardLibrary.typ", sidebar: "only_title", open: false)
 
-== #embed("/notes/d_flat/Turing.typ", sidebar: "only_title", open: false)
+== #embed("/notes/d_flat/VonNeumann.typ", sidebar: "only_title", open: false)
 
 
 = Tags
@@ -105,6 +105,6 @@
 
 === #embed("/notes/d_flat/StandardLibrary.typ", sidebar: "only_title", open: false)
 
-=== #embed("/notes/d_flat/Turing.typ", sidebar: "only_title", open: false)
+=== #embed("/notes/d_flat/VonNeumann.typ", sidebar: "only_title", open: false)
 
 
