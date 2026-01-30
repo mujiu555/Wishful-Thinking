@@ -120,8 +120,22 @@ A fix-point is something that has the property that applying the function to it 
 
 The idea is that if there exists a procedure that can find the fix point of a function, then it is possible to use such procedure to find the square root of a number.
 
+= Section IV: Compound Data
 
+Divorce the task of building data structures from the task of implementing them.
+The key idea is to build the system in layers, and setup abstraction barriers that isolate the details at the lower layers.
 
+Same for building of data.
+The data can be built from primitive data, and combined into compound data using constructors.
+To access the data, selectors are used to extract the necessary information from the compound data.
+
+The lisp provides a way to build compound data using pairs.
+`cons`, constructs a pair from two elements.
+`car`, selects the first element of a pair. Contents of the Address part of Register.
+`cdr`, selects the second element of a pair. Contents of the Decrement part of Register.
+
+When define a new data by `cons`, it is treated as box and pointer notion.
+By which concatenate conses, Cons cell chain, it is possible to build more complex data structures, such as lists, trees, and so on.
 
 
 
