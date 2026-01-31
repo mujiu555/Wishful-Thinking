@@ -677,6 +677,13 @@ Though it cannot decrease the time and space complexity of a recursive process i
 
 `let` is equivalent to lambda expression application, with parameters bind to arguments like regular values bind to let variables.
 
+= Python: Script Language Paradigm
+
+Python is a imperative, object-oriented, and functional programming language.
+
+All paradigms may be used by the user using python.
+Thus the paradigm python represents is script style paradigm.
+Which means you may work with python without really design a program structure.
 
 
 
