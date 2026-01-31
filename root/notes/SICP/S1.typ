@@ -137,6 +137,15 @@ The lisp provides a way to build compound data using pairs.
 When define a new data by `cons`, it is treated as box and pointer notion.
 By which concatenate conses, Cons cell chain, it is possible to build more complex data structures, such as lists, trees, and so on.
 
+= Section V: Escher
+
+Pair is closed under the operation of `cons`.
+It is able to concatenate data using Pairs.
+
+List is built from nested Pairs. All pairs that have cdr be another pair are treated as lists.
+
+As for map in scheme, it is able to concerning only operations on aggregates, without worrying about the details of how the data is represented.
+Another case is the use of stream.
 
 
 
