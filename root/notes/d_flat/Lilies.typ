@@ -409,9 +409,17 @@ Others are constructed through type definition syntax, such as structures, union
 Use `type` to define new recursive types by creating type generators that can produce types based on type parameters.
 The type described by `type` will not create a new type indeed, rather a new type checker that can check whether a value is of the described type or not will be implemented.
 
+=== List Types 表类型
+
+In Lilies, same as other Lisp dialect, the List is composited by Pairs that have second element be another List.
+
 === Enum Types 枚举类型
 
 Enumeration types in Lilies are special form of tagged unions, which represent a set of named values.
+Furthermore, if a enum is not defined to have variants with specified type, the variants can be assigned with any constant value with same type.
+Though it is just be done by translating Enum index to corresponding value, it will be obviously use-friendly.
+
+=== Sealed Classes 密封类
 
 === Internal Types 内部类型
 
@@ -577,6 +585,10 @@ E.g.,
 ```
 
 To define filed to be variable, wrap type with `variable`.
+Otherwise, the field is not assignable after object creation.
+
+Define syntax vary depend on the context it appears, thus the `define` we used here is not suitable for other case in Lilies.
+But, it is clear that, there can be only `define` or `lambda` to have the ability to create a new binding.
 
 ==== Definition of Traits 特征的定义
 
@@ -595,6 +607,9 @@ Both Methods and Traits are implemented with `implement` syntax.
 `implement` unwraps namespace of a class, and then methods defined within the body are assigned to the class function table.
 Furthermore, traits can unwrap namespace of a object, and then anything inside will only extend the object behavior.
 
+Empty implementation list indicates the methods defined inside this `implement` are for the class itself, not for a trait.
+
+E.g., Implement Drawable for Point:
 ```lisp
 (implement Point (Drawable)
   #:self self
@@ -604,6 +619,8 @@ Furthermore, traits can unwrap namespace of a object, and then anything inside w
       #:returns (None)
       (print f"x: {(field self 'x)}; y: {(field self 'y)}"))))
 ```
+
+Since `implement` syntax unwraps the namespace of a class or object only, it is possible to define variables associated with the class or object inside.
 
 ==== Generic Function & Interface 泛义函数与接口
 
@@ -615,7 +632,7 @@ When a method is called on an object, the method to be executed is determined th
 ===== Dynamic Dispatch 动态分派
 
 ```lisp
-((method object 'method-name') ...args)
+((invoke object 'method-name') object ...args)
 ;; or
 ({method-name object} ...args) ; for short
 ```
@@ -658,16 +675,50 @@ When a method is called on an object, the method to be executed is determined th
 - Form
 - Assignment
 
+Assignment is a trait that must be implemented by any type that supports assignment operation.
+There are three types of assignment:
+- Move: move the ownership
+- Clone: clone the object
+- Reference: assign by reference
+
 == Procedure, Function & Method
 
 - Functions
   - Parameters
   - Rest Parameters
   - Parameter Stack
+  - Function body
   - Return Values
   - Multiple Values Returning
   - Function Call
   - Multiple Value for Function Call
+  - Returning
+
+
+```lisp
+(define foo
+  (lambda ((param #:ref (int 8) #:init 0))
+    #:returns ()
+    '()))
+;; param with type of `(int 8)', signed integer length 8bits, passed by reference (borrow in rust),
+;; initial default value 0
+(define bar
+  (lambda ((param (String)))
+    #:returns ()
+    '()))
+;; param with type of `String`, passed by value, deep clone needed
+(define baz
+  (lambda ((param #:in (Vector (int 32) 4)))
+    #=> ()
+    '())))
+;; param with type of `Vector` of 4 elements, each element is signed integer length 32bits,
+;; passed by ownership movement
+
+;; `#:returns ()` here is the returning value list for each function
+```
+
+Procedures can have their returning value list have named values or just types, which declare the types of returning values.
+If named values are provided, the returning values can be accessed by name, and they can be used as ordinary variables in the function body.
 
 == Name Space, Lexical Scope, Dynamic Scope, Closure
 
