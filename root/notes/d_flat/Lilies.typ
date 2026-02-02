@@ -586,6 +586,7 @@ E.g.,
 
 To define filed to be variable, wrap type with `variable`.
 Otherwise, the field is not assignable after object creation.
+All assignment traits for that field will be dropped.
 
 Define syntax vary depend on the context it appears, thus the `define` we used here is not suitable for other case in Lilies.
 But, it is clear that, there can be only `define` or `lambda` to have the ability to create a new binding.
@@ -653,6 +654,18 @@ When a method is called on an object, the method to be executed is determined th
 
 ==== Traits Shadowing 特征遮蔽
 
+==== Predefined Traits 预定义特征
+
+Assignment:
+- Clone (Deep clone all fields)
+- Move (Move the ownership)
+- Reference (Borrow the visibility)
+
+Comparison:
+- Strict Equal (Compare whether two value have same type and value in bitwise)
+- Value Equal (Compare whether two value is same logically, in this case, two children that treat as same parent type may be equal)
+- Identity Equal (Compare whether two bindings reference to the same object)
+
 == Expression
 
 == Apply & Evaluation
@@ -670,6 +683,8 @@ When a method is called on an object, the method to be executed is determined th
   - Dynamic Scope
   - Lexical Scope
   - `define`
+    You can have a optional `#:mut` that indicates a variable bind is mutable, otherwise assignment traits of the variable and its fields will be dropped.
+    You can have a optional `#:type <type>` to declare the type of variable, otherwise it will be inducted automatically
   - `let` & `let:` family
   - Dynamic In Lexical Scope
 - Form
