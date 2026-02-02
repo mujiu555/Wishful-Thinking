@@ -147,6 +147,37 @@ List is built from nested Pairs. All pairs that have cdr be another pair are tre
 As for map in scheme, it is able to concerning only operations on aggregates, without worrying about the details of how the data is represented.
 Another case is the use of stream.
 
+= Section VI: Symbolic Differentiation System: Quotation
+
+To some some large problems, it is not the best way to solve them directly, even with divide and conquer.
+
+It mathematics, it is easier to do differentiation, while integration is harder.
+
+```lisp
+(define (deriv exp var)
+  (cond
+    ((constant? exp var) 0)
+    ((same? exp var) 1)
+    ((sum? exp)
+     (make-sum
+       (deriv (a1 exp) var)
+       (deriv (a2 exp) var)))
+    ((product? exp)
+     (make-sum
+       (make-product
+         (m1 exp)
+         (deriv (m2 exp) var))
+       (make-product
+         (deriv (m1 exp) var)
+         (m2 exp))))
+    (t '())))
+```
+
+In lisp predicate is naming with suffix '?'. A conversion.
+
+With quote, it is able to prevent a expression from being evaluated.
+Which embraces the expression as data.
+And build a more powerful language upon the lisp, interpreting such data as expressions in the new language.
 
 
 
