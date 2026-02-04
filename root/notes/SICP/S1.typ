@@ -218,6 +218,43 @@ We then can build a simplification system that can simplify the expression after
 If the expression is a unit, then process it using unit simplification rules.
 Else, extract all components, simplify them recursively, and then reassemble the expression.
 
+= Section VIII: Generic Operators
+
+In previous sections, there introduced a key idea that create abstraction barriers to separate different layers of the system.
+When something is used in upper layers, it is not needed to know how it is implemented in lower layers.
+By which separate the tasks of implementation and usage.
+
+However, it is not that effective in develop large systems.
+Thus there must have a barrier that not only separates different layers,
+but also create barriers that separate different implementations of the same abstraction.
+
+E.g., interface of numbers.
+We have polar and rectangular representation of complex numbers.
+And we'd build operations upon such numbers, such as addition, multiplication, and so on.
+
+Thus, we shall have typed data, which contains type tags to indicate the type of the data.
+
+This method, is called "dispatch on type tag".
+However, such method increases the complexity of the system, without providing much benefit.
+
+To solve such problem, we can build a generic operator system.
+Operators, or interfaces in OOP, are defined in terms of the operations they support.
+
+The organization of such system is not unique.
+From above we use a table, a manager, to manage the relationships between types and operations.
+However it is also possible to associate operations directly with types and objects.
+The second method here is called message passing, which is widely used in OOP.
+P.S., In c++, such mechanism is called virtual functions.
+
+
+
+
+
+
+
+
+
+
 
 
 
