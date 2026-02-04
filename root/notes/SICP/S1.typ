@@ -179,13 +179,44 @@ With quote, it is able to prevent a expression from being evaluated.
 Which embraces the expression as data.
 And build a more powerful language upon the lisp, interpreting such data as expressions in the new language.
 
+= Section VII: Pattern-Matching: Rule-Based Substitution
 
+Since the differentiation rules distinguished by the form of the expression.
+And each rule is dispatched based on the pattern of the expression.
 
+Thus we can find the rules can be described as "Pattern => Skeleton".
+And after matching the pattern, the variables in the skeleton can be replaced by the corresponding parts in the expression, instantiate.
 
+In contrast to build such system using conditionals,
+make computer understand such rules directly by build a pattern-matching system is a more general and powerful way.
 
+So we can have (伪代码):
+```lisp
+(define derive-rules
+  `(((dd (?c c) (? v)) 0)
+    ((dd (?v v) (? v)) 1) ;; ? is the pattern variable
+    ((dd (?v u) (? v)) 0)
 
+    ((dd (+ (? x1) (? x2)) (? v))
+     (+ (dd (: x1) (: v))
+        (dd (: x2) (: v))))
+   ...
+  ))
+```
+For which we can define some rules that describes pattern matching syntax.
+For the rule part, we can have symbol matches itself,
+pattern variable matches any sub-expression and binding it to some variable, and finally
+`?v` matches the variable v.
+For the skeleton part, `(: x1)` means to substitute the variable x1 with the corresponding part in the expression.
 
+There are two parts in such system:
+- A pattern-matching engine that can match an expression against a pattern, and extract the bindings for the pattern variables.
+- A substitution engine that can take a skeleton and a set of bindings, and produce a new expression by substituting the pattern variables in the skeleton with their corresponding values from the bindings.
 
+But since we cannot promise that the expression always simplest form,
+We then can build a simplification system that can simplify the expression after each differentiation step.
+If the expression is a unit, then process it using unit simplification rules.
+Else, extract all components, simplify them recursively, and then reassemble the expression.
 
 
 
