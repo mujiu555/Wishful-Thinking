@@ -258,6 +258,9 @@ It can be used to construct other numeric types.
 
 Default Empty type for numbers is Zero.
 
+`Integer` is the short name for signed most used integer type, which is `(int 32)` in Lilies.
+`Size` is the short name for longest unsigned integer type, which is `(uint 64)` in Lilies.
+
 ==== Booleans 布尔类型
 
 Booleans in Lilies are represented by the type `Boolean`, which has two possible values: `#True` (true) and `#False` (false).
@@ -544,8 +547,8 @@ E.g., to define a new class `Point` with two fields `x` and `y` of type `Integer
 ```lisp
 (define Point
   (class
-    (define x Integer)
-    (define y Integer))))
+    (define x (constant Integer))
+    (define y (constant Integer))))
 ```
 Here, `define` syntax used to declare Point as the class we defined using `class` syntax.
 And `define` syntax inside the class body used to declare fields `x` and `y` of type `Integer`.
@@ -580,12 +583,12 @@ E.g.,
   (class
     #@[accessibility x (read :public) (write :private)]
     #@[accessibility y (read :public) (write :private)]
-    (define x Integer)
-    (define y Integer))))
+    (define x (constant Integer))
+    (define y (constant Integer))))
 ```
 
 To define filed to be variable, wrap type with `variable`.
-Otherwise, the field is not assignable after object creation.
+Otherwise, if type is wrapped with `constan`, the field is not assignable after object creation.
 All assignment traits for that field will be dropped.
 
 Define syntax vary depend on the context it appears, thus the `define` we used here is not suitable for other case in Lilies.
@@ -748,17 +751,32 @@ If named values are provided, the returning values can be accessed by name, and 
   + History: Compile-time calculation
   + History: C-Style Macro
   + History: `defmacro`
-  + Procedure Macro
+  + Unhygienic Expender Macro
+  + Semi-Hygienic Procedure Macro
+  + Hygienic Pattern-Matching Macro
   + Hygiene for the Unhygienic Macro
 + Syntax Rules
   + History: Hygiene Macro
   + Syntax Object
+  + Contextual Information
+  + Pattern Matching
+  + Template Generation
++ Macro Application
+  + Macro Expansion Syntax
+    ```lisp (macro! macro params...)```
+  + Compile-Time Evaluation
+  + Compile-Time Function Call
+  + How can we have macro understand the types of expressions?
+  + Evaluate while expanding
+
+== Annotations and Annotation processing
 
 == Symbol Generation
 
 === Expression Tree
 
 == Memory Management
+
 + Pointer
   + Reference Count
   + Unique Ownership
@@ -770,7 +788,9 @@ If named values are provided, the returning values can be accessed by name, and 
 + Allocation
   + `alloc:stack`: Object Allocated in Stack
   + `alloc:heap`: Object Allocated in Heap
-  + `new`: Object creation
+  + `new`: Object creation, with initialization
+  + `variable`: Variable Wrapper, define a space in structures
+  + `constant`: Constant Wrapper, define a constant space in structures
 + Auto Life-cycle Detection
 
 == Continuations
