@@ -186,11 +186,16 @@ For real world programming, the following principles are also important:
 + Allowing for efficient code generation and execution.
 + Support multiple programming paradigms, including functional, imperative, and declarative programming styles.
 
+== Section Description 章节描述
+
+In the specification of Lilies language, each topic is described in a separate chapter.
+
 = Overview 语言总览
 
 本章用于描述语言的基本概念, 以帮助了解后续章节.
 本章依据语法条目以帮助手册的方式被组织起来, 并非完整对于语言的描述.
 在某些地方也不会完善和规范.
+在后续章节中, 每个主题都会被单独描述, 并且附带推荐实现细节.
 
 == Variable, Slots & Fields 变量, 插槽与字段
 
@@ -420,7 +425,7 @@ In Lilies, same as other Lisp dialect, the List is composited by Pairs that have
 
 Enumeration types in Lilies are special form of tagged unions, which represent a set of named values.
 Furthermore, if a enum is not defined to have variants with specified type, the variants can be assigned with any constant value with same type.
-Though it is just be done by translating Enum index to corresponding value, it will be obviously use-friendly.
+Though it is just be done by translating Enum index to corresponding value, it will be obviously user-friendly.
 
 === Sealed Classes 密封类
 
@@ -649,7 +654,7 @@ When a method is called on an object, the method to be executed is determined th
 ({method-name Class} ...args) ; for short
 ```
 
-===== Method Access 语法糖方法调用
+===== Method Access 方法调用语法糖
 
 ===== Invoke 调用
 
@@ -688,7 +693,12 @@ Comparison:
   - `define`
     You can have a optional `#:mut` that indicates a variable bind is mutable, otherwise assignment traits of the variable and its fields will be dropped.
     You can have a optional `#:type <type>` to declare the type of variable, otherwise it will be inducted automatically
+    In some Environment such as class body, `define` may have different syntax.
   - `let` & `let:` family
+    - `let`: `let` in scheme, which creates a new scope and binds variables in that scope.
+    - `let:fwd`: `let*` in scheme, which creates a new scope and binds variables in that scope, but the bindings are visible to the rest of the body. Sequential bindings are supported, which means that the value of a variable can be used in the initialization of another variable defined later in the same `let:fwd` expression.
+    - `let:rec`: `letrec` in scheme, which creates a new scope and binds variables in that scope, but the bindings are visible to the rest of the body. Recursive bindings are supported, which means that the value of a variable can be used in the initialization of itself or another variable defined later in the same `let:rec` expression.
+    - `let:seq:rec`: `letrec*` in scheme, which creates a new scope and binds variables in that scope, but the bindings are visible to the rest of the body. Sequential and recursive bindings are supported, which means that the value of a variable can be used in the initialization of itself or another variable defined later in the same `let:seq:rec` expression.
   - Dynamic In Lexical Scope
 - Form
 - Assignment
@@ -738,6 +748,38 @@ There are three types of assignment:
 Procedures can have their returning value list have named values or just types, which declare the types of returning values.
 If named values are provided, the returning values can be accessed by name, and they can be used as ordinary variables in the function body.
 
+== Conditional & Control Flow
+
+=== Conditionals 条件语句
+
++ `if`
++ `cond`
++ `case`
++ `switch`
+
+=== Loops 循环语句
+
+Traditional loops provided in Lilies are:
++ `loop`: infinite loop
++ `while`: condition loop
++ `for`: named recursive loop, which similar to named-let in Scheme
++ `foreach`: iterate over each element in a collection
+
+And lisp style loops are also provided:
++ `map`: apply a function to each element in a collection and return a new collection
++ `filter`: filter elements in a collection based on a predicate function and return a new collection
++ `reduce`: reduce a collection to a single value by applying a binary function
++ `fold`: fold a collection to a single value by applying a binary function with an initial value
++ `scan`: scan a collection to produce a new collection by applying a binary function with an initial value
+
+=== Try With Pattern 匹配尝试
+
+Similar to Rust, the Lilies supports tagged union types and pattern matching.
+`try` works similar to `if let` in Rust.
+When the pattern matches, control-flow goes to then part, otherwise goes to else part.
+
+=== Control Flow 控制流
+
 == Name Space, Lexical Scope, Dynamic Scope, Closure
 
 == Generics
@@ -769,6 +811,8 @@ If named values are provided, the returning values can be accessed by name, and 
   + How can we have macro understand the types of expressions?
   + Evaluate while expanding
 
+== Pattern-Matching
+
 == Annotations and Annotation processing
 
 == Symbol Generation
@@ -793,7 +837,7 @@ If named values are provided, the returning values can be accessed by name, and 
   + `constant`: Constant Wrapper, define a constant space in structures
 + Auto Life-cycle Detection
 
-== Continuations
+== Continuations & Effects
 
 == Exception Handling
 + Condition System
