@@ -246,13 +246,53 @@ However it is also possible to associate operations directly with types and obje
 The second method here is called message passing, which is widely used in OOP.
 P.S., In c++, such mechanism is called virtual functions.
 
+= Section IX: Assignment, State & Side Effects
 
+Functional programming is a kind of encoding of mathematical facts.
+But it's stateless.
+In real world programming, it is necessary to have state to record the changes of the system over time.
 
+== Environment Model
 
+We say that a variable v is bound in an expression E if
+the meaning of E is unchanged
+by the uniform replacement of a variable w that not occurring in E
+for every occurrence of v in E.
 
+P.S., The semantic context of a variable is not determined solely by its name, but the environment in which it is evaluated.
+P.S., Alpha conversion in lambda calculus.
 
+With the lambda, we can define the scope of variables as the body of the lambda that they appears.
 
+One lambda expression may have is own environment,
+all bounded variables in such lambda expression are defined in such environment,
+and other free variables are defined in the environment where such lambda expression is defined,
+and thous environments are linked together to form a chain of environments, which is called the environment model.
 
+When we search for a symbol that appears in an expression, we search for it in the current environment,
+if not found, then search in the parent environment, and so on, until we reach the global environment,
+which is the top-level environment that contains all the global definitions.
+
+== Object
+
+When organize the data into objects, it can have its own state,
+thus states we need to represent the state of the system, and the changes of the system over time is less than
+those we coupling different objects as a whole.
+
+When the two variables are combined together, we may need totally product of the states, the Cartesian product.
+However, if we can separate the two variables into two objects, then the state of the system is the sum of the states of the two objects, which is much smaller than the Cartesian product.
+
+Most objects are independent of each other, and they have no necessary to take care of the states of other objects.
+But when two objects have interactions, some of their states are coupled together.
+
+How can we distinct two objects?
+Change one and the other does not change, thus they are different objects.
+
+In real world, if we want a random number generator,
+if we treat it as a pure function, then it will always return the same number, which is not what we want.
+However, if we treat it as an object, which has its own state, then it can return different numbers each time we call it.
+But it is not a pure function, since it has side effects, which is the change of the state of the object.
+And when it is called at multiple place, the result may be unexpected, since the state of the object always change in between.
 
 
 
