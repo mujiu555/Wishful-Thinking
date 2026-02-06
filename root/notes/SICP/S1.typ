@@ -294,7 +294,73 @@ However, if we treat it as an object, which has its own state, then it can retur
 But it is not a pure function, since it has side effects, which is the change of the state of the object.
 And when it is called at multiple place, the result may be unexpected, since the state of the object always change in between.
 
+= Section X: Computational Objects
 
+Assume that we have a physical world and each object in that world is independent and have their own properties,
+we can then have a clear relationship between each pair of objects.
+
+We can build a system, a new language that built upon the lisp, embedded in the lisp, to describe such objects and their interactions.
+In contrast to the pattern-matching system, which is a external dsl that is interpreted by the lisp, the system here is an internal dsl that is directly executed by the lisp.
+
+In which, we can build a circuit system that can describe the behavior of the circuit
+by connecting each component with wires, letting each component has the ability to send and receive signals through the wires,
+broadcasting the signals to all connected components, and update the state of the component based on the received signals.
+With event-driven programming, the states stored by each component can be updated when a wire have updated.
+
+All this includes the use of assignment, to update the state of the component, and side effects, to change the state of the system over time.
+When input signals updated and the state of the components changes, broadcast to all connected components, which then update their states, and so on, thus the system can have a complex behavior.
+
+In real world, the idea is similar.
+The changes of states that happening in the real world in time is organized as the time in computer.
+Thus when a even happened after another, the corresponding events happens in the same order in the computer.
+
+By adopting assignment, we can organize time in the computer.
+Agenda.
+
+We still needs assignments.
+
+After introduced assignment, the regular substitution model is no longer valid, since the value of a variable can change over time.
+With the ability to share data, assignment can lead to unintended consequences, since the change of one variable can affect other variables that share the same data.
+
+In scheme, we can assign cons with `set-car!` and `set-cdr!`,
+
+In mathematics, with Church encoding, it is possible to represent data using functions.
+```lisp
+(define (cons car cdr)
+  (lambda (M) (M car cdr))
+
+(define (car x)
+  (x (lambda (a d) a)))
+
+(define (cdr x)
+  (x (lambda (a d) d)))
+```
+However, instead of the original definition of cons, we can add some assignments:
+```lisp
+(define (cons car cdr)
+  (lambda (M)
+    (M car
+       cdr
+       (lambda (val) (set! car val))
+       (lambda (val) (set! cdr val))))
+
+(define (car x)
+  (x (lambda (a d sa sd) a)))
+
+(define (cdr x)
+  (x (lambda (a d sa sd) d)))
+```
+Above all, we have same properties as the original cons, but we can also change the value of car and cdr by calling the corresponding setter functions:
+We can assume the thing provided for cons is a permission, a permission to change the value of car and cdr, which is similar to the getter and setter in OOP languages.
+P.S., in those languages we use properties to control the access to the internal state of the object,
+however, in this case, any one that have the permission can change the value of car and cdr.
+```lisp
+(define (set-car! x val)
+  (x (lambda (a d sa sd) (sa val))))
+
+(define (set-cdr! x val)
+  (x (lambda (a d sa sd) (sd val))))
+```
 
 
 
