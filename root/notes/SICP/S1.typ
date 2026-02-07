@@ -362,6 +362,37 @@ however, in this case, any one that have the permission can change the value of 
   (x (lambda (a d sa sd) (sd val))))
 ```
 
+= Section XI: Stream
+
+Instead of concerning a object as the sequences of states in time and space, a discrete entity.
+Concerning it as a continuous representation of real world the object itself is the process of the changes of states.
+From which, we invent the concept of stream, make the program more uniform.
+
+As we construct a stream, we can have many procedures that combine and manipulate streams, such as map, filter, and so on.
+By construct a program with those procedures, it is possible to build a program that can generate a stream of data, and then process such stream of data to get the desired result.
+
+However, organize programs as a stream, may consume a lot of memory, since the stream can be infinite and then implement such program become impossible.
+Thus, we have the idea that unless we try to pull a new value, then it will not compute the next value from the stream.
+This case, we apply a technology called lazy evaluation, which is a evaluation strategy that delays the evaluation of an expression until its value is needed.
+
+If we treat a stream as regular list, when we provide a pipeline that combined by procedures that can process the stream,
+each procedure will try to process the whole stream, and generate another stream, which will then be processed by the next procedure, and so on, thus the whole stream will be generated in memory, which is not what we want.
+Thus, the idea to connect all pipeline and each element in the pipeline processes one element in the stream at a time.
+When final processor in the pipeline processes one element, it will pull the next element from the stream, which will then be processed by the previous processor, and so on, thus only one element in the stream is generated in memory at a time.
+
+The stream should be a data structure that can sort of computes itself incrementally, a sort of on-demand data structure.
+The basic idea is that there is no firm distinction between data and process, and as for the stream, it is a data structure but also a procedure that can compute the next element in the stream when needed.
+
+```lisp
+(define (cons-stream x y) (cons x (delay y)))
+(define (head s) (car s))
+(deifne (tail s) (force (cdr s)))
+```
+
+Thus the lazy evaluated stream can generate required elements on demand.
+But for real world programming, sometimes we may need to fetch same element in the stream multiple times,
+and if we evaluate the stream each time we fetch such element, it will be inefficient.
+So we can use memorization to store the value of such element after it is computed for the first time, and then reuse it later when needed, thus it will not be computed again.
 
 
 
