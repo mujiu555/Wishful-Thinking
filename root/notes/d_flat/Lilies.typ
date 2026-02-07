@@ -633,6 +633,18 @@ Since `implement` syntax unwraps the namespace of a class or object only, it is 
 
 ==== Generic Function & Interface 泛义函数与接口
 
+With generic function, methods can be called in a uniform way as traditional functions.
+
+For example, if we'd define a new generic method called `draw` that is contained in `Drawable`,
+we can have:
+```lisp
+(define draw
+  (generic (Drawable)
+    #:self self
+    (function (self)
+      #:returns (None)))))
+```
+And then we can call `draw` on any object that implements `Drawable` trait, and the corresponding method will be called.
 
 ==== Method Dispatch 方法分派
 
