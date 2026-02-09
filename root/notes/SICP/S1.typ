@@ -394,6 +394,172 @@ But for real world programming, sometimes we may need to fetch same element in t
 and if we evaluate the stream each time we fetch such element, it will be inefficient.
 So we can use memorization to store the value of such element after it is computed for the first time, and then reuse it later when needed, thus it will not be computed again.
 
+= Section XII: Stream II
+
+Stream is a way to decouple the apparent order of events from the actual order of computation.
+Thus it is able to generate very long or even infinite sequences of data as demanded.
+
+Previously, we always treat stream as a generator that generates the next element and concatenate it to the rest of the stream recursively.
+Another way we can treat program not only process the stream sequentially, but process the stream in a whole.
+
+Likely, we can define `add-stream` and `scale-stream` that accepts two or more streams as arguments and do operations on them like we process regular data.
+Procedure can be defined recursively and the definition of stream suggests that the data can be defined recursively as well.
+There is no difference between procedures and data.
+
+For a integral, the stream does not make sense, since when we want to define the definition:
+```lisp
+(define y
+  (integeral dy 1 .001))
+(define dy
+  (map square y))
+```
+For which, the definition of y depends on the definition of dy, and the definition of dy depends on the definition of y, thus it is a circular definition.
+
+But why definition for `ones` works?
+```lisp
+(define ones
+  (cons-stream 1 ones))
+```
+The rest part of the stream is not needed for define the whole stream.
+
+By change the definition of `integral`, from:
+```lisp
+(define (integral s initial-value dt)
+  (define int
+    (cons-stream
+      initial-value
+      (add-streams
+        (scale-stream dt s)
+        int)))
+  int)
+```
+to:
+```lisp
+(define (integral delayed-s initial-value dt)
+  (define int
+    (cons-stream
+      initial-value
+      (let ((s (force delayed-s))
+        (add-streams
+          (scale-stream dt s)
+          int)))))
+  int)
+```
+
+Since the delay evaluation may be forgotten in some large system and it may cause the system crash, we may need to modify the language to fit the request of lazy evaluation.
+The process that evaluate a expression when it is needed is called normal-order evaluation, contrary to the applicative-order evaluation that taken as default in scheme.
+
+The problem normal-order evaluation meet is that it abandon the idea of time, and thus it is not possible to have states and side effects.
+Every time we define something that has side effects, it is not reflecting the change of the system in time, but change the state after the promise invoked.
+This can cause serious problems when debugging.
+Everything is in a mass.
+
+This phenomenon introduces the idea of functional programming.
+
+= Section XIII: Metacircular Evaluator
+
+```lisp
+(define (eval expr env)
+  (cond
+    ((number? expr) expr)                   ; E.g., 3 -> 3
+    ((symbol? expr) (lookup expr env))      ; E.g., car -> car
+    ((eq? (car expr) 'quote) (cadr expr))   ; (quote foo) -> foo
+    ((eq? (car exp) 'lambda)
+     (list 'closure (cdr exp) env))         ; (lambda (x) (+ x x)) -> (closure ((x) (+ x x)) env)
+    ((eq? (car expr) 'cond)
+     (evcond (cdr expr) env))               ; (cond ...)
+    (else
+     (apply
+       (eval (car expr) env)
+       (evlist (cdr expr) env)))))
+```
+We treat upper part as special form and the rest as default expression.
+Traditionally, we shall use combinator to match special forms.
+
+```lisp
+(define apply
+  (lambda (proc args)
+    (cond
+      ((primitive? proc)
+       (apply-primop proc args))
+      ((eq? (car proc) 'closure)            ; compound procedures:
+       ;; to evaluating the body of the procedure in the environment
+       ;; resulting form extending the environment of the procedure
+       ;; with the bindings of the formal parameters of the procedure to the arguments that were passed to it.
+       (eval (cadadr proc)
+             (bind (caadr proc)
+                   args
+                   (caddr proc))))
+      (else 'error))))
+```
+
+Evlist in lisp used to evaluate argument list for procedures application.
+```lisp
+(define (evlist l env)
+  (cond
+    ((eq? nil l) nil)
+    (else
+     (cons (eval (car l) env)
+           (evlist (cdr l) env)))))
+
+(define evcond
+  (lambda (clauses env)
+    (cond
+      ((eq? clauses '()) '())
+      ((eq? (caar  clauses) 'else)
+       (eval (cadar clauses) env))
+      ((false? (eval (caar clauses) env))
+       (evcond (cdr clauses) env))
+      (else (eval (cadar clauses) env)))))
+```
+
+The "eval & apply" process of lisp can be treat as the eval & apply process of lambda calculus.
+In fact, the lisp based on the lambda calculus.
+
+Eval generates procedures and arguments for apply,
+and for apply if any part of procedure and arguments is not primitive,
+it pass them to do evaluate.
+
+Since if we have some equations, then we can have the solution by find the fix point of function.
+
+Assume function $F$:
+```lisp
+(define F
+  (lambda (g)
+    (lambda (x n)
+      (cond
+        ((= n 0) 1)
+        (else (* x (g x (- n 1))))))))
+```
+And thus, for the function F, if we have g as a function that deal with $n-1$ power of x correctly, and then the function F can deal n power of x correctly.
+The exponent function is the fix-point for F.
+
+Indeed,
+```lisp
+((lambda (x) (x x)) (lambda (x) (x x)))
+```
+Is a infinite loop.
+
+And then we can introduce a new operator, Y, Curry's Paradoxical Combinator of y.
+That is:
+```lisp
+Y = (lambda (f)
+      ((lambda (x) (f (x x))
+       (lambda (x) (f (x x))))))
+```
+If we have ```lisp (Y F)```, then
+```lisp
+(Y F) = ((lambda (x) (F (x x)))
+         (lambda (x) (F (x x))))
+      = (F ((lambda (x) (F (x x)))
+            (lambda (x) (F (x x)))))
+(Y F) = (F (Y F))
+```
+If we pass any function to y combinator, then it returns the fix point of the function.
+However, this can only ensure the function is able to be defined recursively, whether it have the solution is still unclear.
+
+In., Joy Stoy, The Scott-Strachey Method of Denotational Semantics. MIT Press.
+
 
 
 
