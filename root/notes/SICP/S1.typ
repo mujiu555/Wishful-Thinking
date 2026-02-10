@@ -560,6 +560,30 @@ However, this can only ensure the function is able to be defined recursively, wh
 
 In., Joy Stoy, The Scott-Strachey Method of Denotational Semantics. MIT Press.
 
+= Section XIV: Metacircular Evaluator II
+
+If a language is designed to have many features built-in that may 1) take account without really concerning, 2) have specification function addition to what a language should do.
+
+To have the lambda expression accepts variable number of arguments, we can modify the definition of parameter list in the lambda expression.
+From regular `(x y z)` or something similar to a "list" with last element be a symbol.
+Thus, when we provide arguments to such lambda expression, the first part of the arguments will be bound to the corresponding parameters in the parameter list, and the rest of the arguments will be bound to the last symbol in the parameter list as a list.
+Since the list is combined by cons, and the argument list is also a list, thus the rest part of the arguments are bound to the last symbol in the parameter list as a list.
+E.g., bind `(a b c d)` to parameter list `(x . z)`,
+actually, `(a b c d)` is `(a . (b . (c . (d . nil))))`, and `(x . z)` is `(x . z)`,
+thus x matches a in argument list and z matches `(b . (c . (d . nil)))`.
+Furthermore, if the parameter list is just a symbol, then all arguments are bound to such symbol as a list.
+
+Semantically, the way to evaluate such lambda expression is bind the arguments to the parameters according to the rule described above
+and evaluate the body of the lambda expression just as the rule previously described.
+
+Another feature to be added is the binding in dynamic scope.
+In this case, the variables are no longer binding to the value in the environment where the lambda expression is defined,
+but binding to the value in the environment where the lambda expression is called.
+
+Formally, dynamic binding, a free variable in a procedure has its value defined in the chain of callers, rather than where the procedure is defined.
+In the case of dynamic scope, when a procedure is called, to find the value of a free variable, it must search up chain of callers.
+On the other hand, in where we worked on for now, the environment model describe the lexical scope or so called static scope,
+in which a free variable is always lookup in the environment where the procedure is defined.
 
 
 
