@@ -670,6 +670,10 @@ When a method is called on an object, the method to be executed is determined th
 
 ===== Invoke 调用
 
+==== Chain Call & Chain Methods 链式调用与链式方法
+
+===== Syntax Sugar for Chain Methods Definition 链式方法定义的语法糖
+
 ==== Field & Property Access 字段与属性访问
 
 ==== Traits Shadowing 特征遮蔽
@@ -723,16 +727,9 @@ There are three types of assignment:
 
 == Procedure, Function & Method
 
-- Functions
-  - Parameters
-  - Rest Parameters
-  - Parameter Stack
-  - Function body
-  - Return Values
-  - Multiple Values Returning
-  - Function Call
-  - Multiple Value for Function Call
-  - Returning
+- Function Call
+- Multiple Value for Function Call
+- Returning
 
 
 ```lisp
@@ -749,7 +746,7 @@ There are three types of assignment:
 ;; param with type of `String`, passed by value, deep clone needed
 (define baz
   (lambda ((param #:in (Vector (int 32) 4)))
-    #=> ()
+    #:returns ()
     '())))
 ;; param with type of `Vector` of 4 elements, each element is signed integer length 32bits,
 ;; passed by ownership movement
@@ -757,8 +754,46 @@ There are three types of assignment:
 ;; `#:returns ()` here is the returning value list for each function
 ```
 
+=== Procedures
+
+To define a procedure, binding a lambda expression to a name.
+A lambda expression is composed of a parameter list, an optional returning value list, and a function body.
+
+In parameter list, each parameter is defined with its name, type, and some optional annotations.
+If the parameter list is empty, the function takes no parameters.
+If the parameter list have last element not None, it is treated as rest parameter, which can take variable number of arguments.
+The type for rest parameter must be able to be inducted from the context, thus it is not required to be explicitly declared.
+If the parameter list is a single parameter, no positional (and named) parameters are supported.
+
+For each parameter, it should be still lists.
+First element is the parameter name, which is a symbol.
+Then it is optional to declare the calling method, which can be `#:ref` for borrowing, `#:in` for ownership movement, and `#:val` or default for calling by value.
+Particularly, if `#:naming` is declared, the parameter is treated as lazy-evaluated expression.
+Next part of parameter declaration is the type of the parameter, the type must be defined before.
+Last part is optional initial value.
+
 Procedures can have their returning value list have named values or just types, which declare the types of returning values.
 If named values are provided, the returning values can be accessed by name, and they can be used as ordinary variables in the function body.
+The returning value list is provided using `#:returns` and corresponding returning value list.
+
+For each returning value, still, it should be a list.
+First element is the optional returning value name, which is a symbol.
+Second element is the optional returning method, which can be `#:ref` for returning by reference, `#:out` for returning by ownership movement, and `#:val` or default for returning by value.
+Lastly, the type of the returning value.
+
+The body of lambda expression must be a single one expression.
+
+You can exit a function without executing rest part of the body by invoke built-in function `:return`, this is a function that only can be called within a function body,
+and it will return the values passed to it as the returning values of the function.
+
+=== Functions
+
+Each lambda expression has its own type, which is a closure type that includes the types of its parameters and returning values.
+When a lambda expression is defined, a new function object is created and bound to the name of the procedure.
+
+However the need to define types that can represent some common function signatures make Lilies have some special types for functions, which are called function types.
+Firstly, every lambda type is derived from a generic function type.
+If you'd declare a function holder or delegate, you may have to use generic callable trait.
 
 == Conditional & Control Flow
 
@@ -792,7 +827,25 @@ When the pattern matches, control-flow goes to then part, otherwise goes to else
 
 === Control Flow 控制流
 
-== Name Space, Lexical Scope, Dynamic Scope, Closure
+== Name Space, Lexical Scope, Dynamic Scope, Closure 命名空间, 词法作用域, 动态作用域, 闭包
+
+=== `sequence`, Sequence Point & Evaluation Order 序列, 序列点与求值顺序
+
+In Lilies, the code block is called `sequence`,
+basically, the sequence is a list of expressions that are evaluated in order, and the value of the sequence is the value of the last expression in the sequence.
+The sequence can have a name and then return through the name.
+To exit a sequence, use `:break` and the output value will be the value passed to `:break`.
+If optional label is provided, the `:break` will jump out of the sequence with the label, otherwise it will jump out of the nearest sequence.
+
+=== `dynamic` & Dynamic Binding
+
+=== Environment & Context 环境与上下文
+
+== Lazy Evaluation & Call by Name 惰性求值与按名调用
+
+By default, Lilies uses eager evaluation and call by value.
+No matter `#:ref`, `#:in` or `#:val` is used, the arguments will be evaluated before being passed to the function.
+If `#:naming` is used, the argument will be treated as a lazy-evaluated expression.
 
 == Generics
 
@@ -849,7 +902,15 @@ When the pattern matches, control-flow goes to then part, otherwise goes to else
   + `constant`: Constant Wrapper, define a constant space in structures
 + Auto Life-cycle Detection
 
-== Continuations & Effects
+== CPS, Continuations & Delimited Continuations
+
+== Side Effects & Algebraic Effects
+
+== Yield, Suspend, Resume & Stream (Engine)
+
+== Threads & Subprocedures
+
+== Async, Await & Coroutines
 
 == Exception Handling
 + Condition System
