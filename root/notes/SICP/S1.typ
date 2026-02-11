@@ -585,6 +585,29 @@ In the case of dynamic scope, when a procedure is called, to find the value of a
 On the other hand, in where we worked on for now, the environment model describe the lexical scope or so called static scope,
 in which a free variable is always lookup in the environment where the procedure is defined.
 
+= Section XV: Logical Programming
+
+Sometimes designing a new language can help reduce the complexity of the system.
+
+In even a simple language, there is also eval & apply loop.
+
+In the new kind of language, we try to have the facts and let the programs find the solution using those facts.
+
+P.S., in prolog, the facts are called clauses, and the process of finding the solution is called resolution.
+The declarative programming paradigm.
+
+Three part of the language:
+- to check whether a statement is true,
+- to determine what is true,
+- to find something that make it true.
+
+Key part of the language is,
+- primitive
+- combination
+- abstraction
+
+By combine rules and logical operations, the language can define relations and then find the solution by searching through the space of possible solutions.
+
 
 
 
