@@ -59,7 +59,9 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
         index: Dict[str, dict] = json.loads(proc.stdout)
     except Exception as exc:
         raise RuntimeError(
-            f"failed to parse JSON from parser output: {exc}\nstdout:\n{proc.stdout[:2000]}"
+            f"failed to parse JSON from parser output: {exc}\nstdout:\n{
+                proc.stdout[:2000]
+            }"
         )
 
     # Sort entries for deterministic output by path
@@ -104,7 +106,7 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
     # Required header order
     lines.append('#import "/lib/lib.typ": *')
     lines.append('#show: schema.with("page")')
-    lines.append("#title[Contents]")
+    lines.append("#title[My Works]")
     lines.append(f"#date[{now}]")
     # note: include backslash before @ as requested
     lines.append('#author(link("https://github.com/mujiu555")[GitHub\\@mujiu555])')
@@ -118,7 +120,7 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
         # If the path starts with /root, remove that prefix so links become /notes/...
         if link_path.startswith("/root"):
             # remove just the '/root' prefix; keep the leading slash for the rest of the path
-            link_path = link_path[len("/root"):]
+            link_path = link_path[len("/root") :]
             if not link_path.startswith("/"):
                 link_path = "/" + link_path
         # Resolve the file path to extract title
@@ -139,12 +141,14 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
                 p = Path(rel)
                 link_path = "/" + str(p).lstrip("./")
                 if link_path.startswith("/root"):
-                    link_path = link_path[len("/root"):]
+                    link_path = link_path[len("/root") :]
                     if not link_path.startswith("/"):
                         link_path = "/" + link_path
                 link_path_escaped = link_path.replace('"', '\\"')
                 lines.append(
-                    f'=== #embed("{link_path_escaped}", sidebar: "only_title", open: false)\n'
+                    f'=== #embed("{
+                        link_path_escaped
+                    }", sidebar: "only_title", open: false)\n'
                 )
 
     # Files without tags
@@ -155,12 +159,14 @@ def build_contents(root_notes: Path, out: Path, lowercase_tags: bool = False) ->
             p = Path(rel)
             link_path = "/" + str(p).lstrip("./")
             if link_path.startswith("/root"):
-                link_path = link_path[len("/root"):]
+                link_path = link_path[len("/root") :]
                 if not link_path.startswith("/"):
                     link_path = "/" + link_path
             link_path_escaped = link_path.replace('"', '\\"')
             lines.append(
-                f'=== #embed("{link_path_escaped}", sidebar: "only_title", open: false)\n'
+                f'=== #embed("{
+                    link_path_escaped
+                }", sidebar: "only_title", open: false)\n'
             )
 
     out.parent.mkdir(parents=True, exist_ok=True)
