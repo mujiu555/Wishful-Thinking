@@ -197,6 +197,67 @@ In the specification of Lilies language, each topic is described in a separate c
 在某些地方也不会完善和规范.
 在后续章节中, 每个主题都会被单独描述, 并且附带推荐实现细节.
 
+== Comment 注释
+
+In the language Lilies, there are three main types of comments:
++ Documentation: Every Piece of code can have its own documentation, and accessed through documentation family functions.
++ Code Block Comment: A block of code, each part of which is parsed as normal code, but without semantic meaning. Code block comments are used to temporarily disable a block of code or to provide examples of code usage.
++ Normal Comment: A comment that is ignored by the compiler and is used to provide explanations for code.
+
+In documentation, there is a special syntax for written sample code that can be executed and tested.
+Documentation starts with `#;|` and ends with `|#;`,
+at the beginning of each line, there must be a `;` to indicate that this line is part of the documentation.
+Within documentation, there are some annotations for describing the properties of a function, variable, or symbol:
+- `#name`
+- `#param`
+- `#return`
+And for sample code part, `#;code|` and `|#;` are used to indicate the beginning and end of the code part respectively.
+
+For code block comments, the syntax is `#;` followed by a normal code block.
+
+Normal comments can be either line comments,
+starting with `;` and ending at the end of the line,
+or block comments, starting with `#|` and ending with `|#`.
+Similar to other Lisp dialects, comments can be nested.
+
+There are some simple conventions for single line comments:
+- `;;` is used for comments that describe the following code.
+- `;` is used for comments that describe the current line of code.
+- `;;;` is used for comments that describe a block of code.
+- `;;; %` and followed by a symbol, is used to split different sections of code, and the symbol is used to indicate the section name.
+
+Except three main types of comments, there are some documentation comments' variants:
+- todo comments, `#;TODO:`, a kind of single line documentation comment, indicates that there is still work to be done in this part of code.
+- fixme comments, `#;FIXME:`, a kind of single line documentation comment, indicates that there is a known issue in this part of code that needs to be fixed.
+- note comments, `#;NOTE:`, a kind of single line documentation comment, indicates that there is an important note or explanation about this part of code.
+- hack comments, `#;HACK:`, a kind of single line documentation comment, indicates that there is a hack or workaround in this part of code that should be improved in the future.
+- benchmark comments, `#;BENCHMARK:`, a kind of single line documentation comment, indicates that there is a benchmark or performance test related to this part of code.
+- reference comments, `#;REF:`, a kind of single line documentation comment, indicates that there is a reference or related information about this part of code.
+- test comments, `#;TEST:`, a kind of single line documentation comment, indicates that there is a test case or test code related to this part of code.
+
+E.g., a function with documentation:
+```lisp
+#;|
+ ; #name add
+ ; #param a: Integer, the first number to add
+ ; #param b: Integer, the second number to add
+ ; #return Integer, the sum of a and b
+ ;
+ ; add for Church numerals
+ ;
+ ; #;code|
+ ;  ; (add 1 2) ; => 3
+ ;  |#;
+ |#;
+(define add
+  (lambda ((a (dyn Integer)) (b (dyn Integer)))
+    #:returns (Integer)
+    ;; increse a by one and decrese b by one until b is zero
+    (if (equal b 0)
+      a
+      (add (succ a) (pred b)))))
+```
+
 == Variable, Slots & Fields 变量, 插槽与字段
 
 Variables in Lilies are some space allocated to store values.
@@ -876,9 +937,25 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
   + How can we have macro understand the types of expressions?
   + Evaluate while expanding
 
+=== Built-in Macros 内建宏
+
+- `todo`: a simple macro to indicate that there is still work to be done in this part of code.
+- `assert`: a simple macro to check if a condition is true, and if not,
+- `unreachable`: a simple macro to indicate that the code is unreachable and should not be executed.
+- `debug`: a simple macro to print debug information during development.
+
 == Pattern-Matching
 
 == Annotations and Annotation processing
+
+`#@[attributes]` is the general syntax for annotations in Lilies.
+
+=== Built-in Annotations
+
+- `wip`: a simple annotation to indicate that the annotated code is still a work in progress and may not be complete or fully functional.
+- `deprecated`: a simple annotation to indicate that the annotated code is deprecated and should not be
+- `experimental`: a simple annotation to indicate that the annotated code is experimental and may be subject to change or removal in future versions.
+- `internal`: a simple annotation to indicate that the annotated code is intended for internal use only and should not be used by external code.
 
 == Symbol Generation
 
