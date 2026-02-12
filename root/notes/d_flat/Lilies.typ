@@ -212,6 +212,9 @@ Within documentation, there are some annotations for describing the properties o
 - `#param`
 - `#return`
 And for sample code part, `#;code|` and `|#;` are used to indicate the beginning and end of the code part respectively.
+In each code part, the code this documentation belongs is imported automatically, and all code blocks in same documentation
+is treated as if they are in the same scope, thus can refer to each other.
+Tough each code block is seen as individual parse unit.
 
 For code block comments, the syntax is `#;` followed by a normal code block.
 
