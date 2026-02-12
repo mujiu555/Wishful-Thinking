@@ -608,9 +608,18 @@ Key part of the language is,
 
 By combine rules and logical operations, the language can define relations and then find the solution by searching through the space of possible solutions.
 
+= Section XVI: Logical Programming II
 
+To implement the language in lisp, it will use `match` procedure introduced before.
 
+```lisp
+(match pat data dictionary)
+```
 
+Order matters in logical programming since the search process determined by them.
+
+In the language, `NOT` is not for "not true", but for "not provable".
+If i have no idea about a statement, `NOT` such statement is true.
 
 
 
