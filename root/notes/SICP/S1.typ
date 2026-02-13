@@ -621,6 +621,39 @@ Order matters in logical programming since the search process determined by them
 In the language, `NOT` is not for "not true", but for "not provable".
 If i have no idea about a statement, `NOT` such statement is true.
 
+= Section XVII: Register based Machine
+
+Each procedure represented here is able to be translated into real machine.
+
+```lisp
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+```
+
+Then we can have a machine that composed of two components, which are controller and data.
+
+The data part we can have some operations, and read the value of some data.
+The controller do those operations according to some specific rules, and order.
+
+To represent the machine, we can have something like programming language.
+
+```lisp
+(define-machine gcd
+  (registers a b t)
+  (controller
+    loop
+    (branch (zero? (fetch b)) done)
+    (assign t (remainder (fetch a) (fetch b)))
+    (assign a (fetch b))
+    (assign b (fetch t))
+    (goto loop)
+    done))
+```
+
+The machine can be build upon finite states controller and datapath that direct the data stack.
+
 
 
 
