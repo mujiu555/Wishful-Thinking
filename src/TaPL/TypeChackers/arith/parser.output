@@ -1,0 +1,317 @@
+   0  $accept : %entry% $end
+
+   1  toplevel : EOF
+   2           | Command SEMI toplevel
+
+   3  Command : IMPORT STRINGV
+   4          | Term
+
+   5  Term : AppTerm
+   6       | IF Term THEN Term ELSE Term
+
+   7  AppTerm : ATerm
+   8          | SUCC ATerm
+   9          | PRED ATerm
+  10          | ISZERO ATerm
+
+  11  ATerm : LPAREN Term RPAREN
+  12        | TRUE
+  13        | FALSE
+  14        | INTV
+
+  15  %entry% : '\001' toplevel
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . toplevel  (15)
+
+	IMPORT  shift 3
+	IF  shift 4
+	TRUE  shift 5
+	FALSE  shift 6
+	SUCC  shift 7
+	PRED  shift 8
+	ISZERO  shift 9
+	INTV  shift 10
+	EOF  shift 11
+	LPAREN  shift 12
+	.  error
+
+	toplevel  goto 13
+	Command  goto 14
+	Term  goto 15
+	AppTerm  goto 16
+	ATerm  goto 17
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	Command : IMPORT . STRINGV  (3)
+
+	STRINGV  shift 18
+	.  error
+
+
+state 4
+	Term : IF . Term THEN Term ELSE Term  (6)
+
+	IF  shift 4
+	TRUE  shift 5
+	FALSE  shift 6
+	SUCC  shift 7
+	PRED  shift 8
+	ISZERO  shift 9
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	Term  goto 19
+	AppTerm  goto 16
+	ATerm  goto 17
+
+
+state 5
+	ATerm : TRUE .  (12)
+
+	.  reduce 12
+
+
+state 6
+	ATerm : FALSE .  (13)
+
+	.  reduce 13
+
+
+state 7
+	AppTerm : SUCC . ATerm  (8)
+
+	TRUE  shift 5
+	FALSE  shift 6
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	ATerm  goto 20
+
+
+state 8
+	AppTerm : PRED . ATerm  (9)
+
+	TRUE  shift 5
+	FALSE  shift 6
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	ATerm  goto 21
+
+
+state 9
+	AppTerm : ISZERO . ATerm  (10)
+
+	TRUE  shift 5
+	FALSE  shift 6
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	ATerm  goto 22
+
+
+state 10
+	ATerm : INTV .  (14)
+
+	.  reduce 14
+
+
+state 11
+	toplevel : EOF .  (1)
+
+	.  reduce 1
+
+
+state 12
+	ATerm : LPAREN . Term RPAREN  (11)
+
+	IF  shift 4
+	TRUE  shift 5
+	FALSE  shift 6
+	SUCC  shift 7
+	PRED  shift 8
+	ISZERO  shift 9
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	Term  goto 23
+	AppTerm  goto 16
+	ATerm  goto 17
+
+
+state 13
+	%entry% : '\001' toplevel .  (15)
+
+	.  reduce 15
+
+
+state 14
+	toplevel : Command . SEMI toplevel  (2)
+
+	SEMI  shift 24
+	.  error
+
+
+state 15
+	Command : Term .  (4)
+
+	.  reduce 4
+
+
+state 16
+	Term : AppTerm .  (5)
+
+	.  reduce 5
+
+
+state 17
+	AppTerm : ATerm .  (7)
+
+	.  reduce 7
+
+
+state 18
+	Command : IMPORT STRINGV .  (3)
+
+	.  reduce 3
+
+
+state 19
+	Term : IF Term . THEN Term ELSE Term  (6)
+
+	THEN  shift 25
+	.  error
+
+
+state 20
+	AppTerm : SUCC ATerm .  (8)
+
+	.  reduce 8
+
+
+state 21
+	AppTerm : PRED ATerm .  (9)
+
+	.  reduce 9
+
+
+state 22
+	AppTerm : ISZERO ATerm .  (10)
+
+	.  reduce 10
+
+
+state 23
+	ATerm : LPAREN Term . RPAREN  (11)
+
+	RPAREN  shift 26
+	.  error
+
+
+state 24
+	toplevel : Command SEMI . toplevel  (2)
+
+	IMPORT  shift 3
+	IF  shift 4
+	TRUE  shift 5
+	FALSE  shift 6
+	SUCC  shift 7
+	PRED  shift 8
+	ISZERO  shift 9
+	INTV  shift 10
+	EOF  shift 11
+	LPAREN  shift 12
+	.  error
+
+	toplevel  goto 27
+	Command  goto 14
+	Term  goto 15
+	AppTerm  goto 16
+	ATerm  goto 17
+
+
+state 25
+	Term : IF Term THEN . Term ELSE Term  (6)
+
+	IF  shift 4
+	TRUE  shift 5
+	FALSE  shift 6
+	SUCC  shift 7
+	PRED  shift 8
+	ISZERO  shift 9
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	Term  goto 28
+	AppTerm  goto 16
+	ATerm  goto 17
+
+
+state 26
+	ATerm : LPAREN Term RPAREN .  (11)
+
+	.  reduce 11
+
+
+state 27
+	toplevel : Command SEMI toplevel .  (2)
+
+	.  reduce 2
+
+
+state 28
+	Term : IF Term THEN Term . ELSE Term  (6)
+
+	ELSE  shift 29
+	.  error
+
+
+state 29
+	Term : IF Term THEN Term ELSE . Term  (6)
+
+	IF  shift 4
+	TRUE  shift 5
+	FALSE  shift 6
+	SUCC  shift 7
+	PRED  shift 8
+	ISZERO  shift 9
+	INTV  shift 10
+	LPAREN  shift 12
+	.  error
+
+	Term  goto 30
+	AppTerm  goto 16
+	ATerm  goto 17
+
+
+state 30
+	Term : IF Term THEN Term ELSE Term .  (6)
+
+	.  reduce 6
+
+
+54 terminals, 7 nonterminals
+16 grammar rules, 31 states
