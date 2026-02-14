@@ -27,3 +27,5 @@
 
 == #embed("/notes/Annoying/diary.typ", sidebar: "only_title", open: false)
 
+== #embed("/notes/TaPL/S1.typ", sidebar: "only_title", open: false)
+
