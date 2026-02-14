@@ -654,9 +654,25 @@ To represent the machine, we can have something like programming language.
 
 The machine can be build upon finite states controller and datapath that direct the data stack.
 
+= Explicit Control Evaluation
 
+Previously, we have analyzed the Escher Pic, Digital Logical, Query Based languages.
+They all build upon the lisp, which, a language that aims to build another language, a meta language.
 
+Lisp is a fix-point of the language.
 
+Since register machines that have a infinite stack can be controlled by a finite state machine,
+thus if we can translate the lisp into such machine, the behaviour of the lisp system is determined.
+
+A tradition lisp system is composed of
++ READER, take character stream and generates a data structure called list structured memory
++ EVAL, take lists that have pointers points to concrete data, and do operations on such data,
++ PRINTER, take the result of EVAL and print it out back to character stream.
+
+You can handle last expression so that tail recursion can be optimized into iteration,
+as those recursive procedures creates iterative processes indeed.
+
+Or you may break the tail recursion optimization, just process the last expression as a regular expression.
 
 
 
