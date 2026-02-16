@@ -45,3 +45,12 @@ Compiler is not the only thing helps to execute a program,
 
 = Chapter II: Lox
 
+`print` is a built-in keyword.
+
+Lox is a high-level dynamic type language that can check types at runtime.
+The memory management of a programming language can be reference counting or garbage collection.
+Though reference counting is easier way to implement memory management, it sometimes meets the problem of circular references.
+
+To have our language have the OOP features, there are two approaches:
+- Class-based:
+- Prototype-based:

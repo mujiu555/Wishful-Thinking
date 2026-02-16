@@ -21,6 +21,7 @@
 ## Dependencies
 
 - Clang-20
+- [Lox](https://github.com/munificent/craftinginterpreters)
 
 ## Install
 
