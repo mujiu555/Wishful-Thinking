@@ -674,10 +674,38 @@ as those recursive procedures creates iterative processes indeed.
 
 Or you may break the tail recursion optimization, just process the last expression as a regular expression.
 
+= Compile
 
+Previous strategies to implement the lisp system is to build an interpreter, in hardware or software, to directly execute the lisp code.
 
+Here we have another method to implement a lisp system, compile the lisp to target machine code.
 
+In the interpreter, we raising the machine to the level of the lisp while we lower the lisp to the level of the machine in the compiler.
 
+The compiler can generate more efficient code.
+A worse but workable compiler is called zeroth-order compiler,
+which is a compiler that generates code that directly execute the lisp code, but without really executing the lisp code.
+
+= Memory management and Garbage Collection
+
+It is able to place the list data structure in the sequential memory.
+
+Then, how to allocate lists?
+Treat free memories as a linked list, and when allocate a new list, take the first free memory and update the free memory pointer to the next free memory.
+When we have a lot of lists allocated, some of them may be no longer used, thus we can reclaim such memory for future use.
+This method is called free list.
+
+The memory of a computer is finite, thus we need to organize them wisely, to arrange them, so that we can use them when needed.
+Thus we can assume the memory is infinite in such case.
+The one algorithm to reclaim the memory is mark-sweep, which is a two-pass algorithm that first mark all the memory that is still in use, and then sweep through the memory to reclaim the unmarked memory.
+Another one is Minsky-Fenichel-Yocelson algorithm, which copies currently used memory to a new location, and then reclaim the old memory.
+Henry Baker helps improve the algorithm so that it can be done without shutdown the world.
+
+= Not Everything Can Be Computed
+
+P.S.,
+The limitation of computation.
+References to Computation Theory.
 
 
 
