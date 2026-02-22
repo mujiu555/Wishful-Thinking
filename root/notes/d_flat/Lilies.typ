@@ -527,6 +527,10 @@ When a value is used in an expression, the type of the value is determined throu
 
 When defining variables, functions, classes, and so on, if the type is not explicitly specified, the type will be inferred from the context.
 
+=== Type Inference 类型推断
+
+==== Type Family 类型族
+
 == Object System 对象系统
 
 Object is the core concept of Lilies language.
@@ -740,6 +744,8 @@ When a method is called on an object, the method to be executed is determined th
 
 ==== Field & Property Access 字段与属性访问
 
+`ref`
+
 ==== Traits Shadowing 特征遮蔽
 
 ==== Predefined Traits 预定义特征
@@ -789,12 +795,83 @@ There are three types of assignment:
 - Clone: clone the object
 - Reference: assign by reference
 
+== Vectors(Matrix), Tuples, Arrays, Lists, dictionaries & Index
+
+There are some built-in composite types in Lilies, including:
+- Vectors, which is a fixed-size sequence of same-type elements, and can be indexed by integers.
+- Tuples, which is a fixed-size sequence of potentially different-type elements, and can be indexed by integers.
+- Arrays, which is a variable-size sequence of same-type elements, and can be indexed by integers.
+- Lists, which is a variable-size sequence of potentially different-type elements, and can be indexed
+- Dictionaries, which is a collection of key-value pairs, and can be indexed by keys.
+
+=== Vector
+
+In Lilies, one-dimension vectors can be written in the form of `[element1 element2 ...]`,
+Furthermore, vector type have its own literal syntax rather than regular type application syntax like `(int 8)`,
+E.g., a vector of 4 signed 32bit integers can be written as `[(int 32): 4]`, similar to array type in Rust.
+Multiple dimension vectors is also exists, and can be written as `[(int 32): 4 4]` for a 4x4 matrix of signed 32bit integers.
+
+To index a vector, use `index`, which accepts a vector and an vector of integers as index, and returns the variable element at the corresponding position.
+`(index obj indexs)`.
+E.g., to index the element at position (1, 2) in a 4x4 matrix `mat`, we can write `(index mat [1 2])`.
+
+In other case, something like jagged array can be implemented by using vector of vectors, which is also a vector.
+However, only vector slice is able to used as type argument for vector without really declare the length of a vector.
+It will never behaviour like jagged array in C Sharp.
+
+=== Tuple
+
+Tuple is another fixed-length sequence in Lilies.
+Compared to vector, tuple is slightly more flexible.
+In practical, returning value list can be seen as implemented using tuple.
+
+Tuple can be written as `<element1 element2 ...>` in Lilies for short.
+
+Tuple is obviously able to contains another tuple.
+
+Tuple is indexed still by `index`.
+
+=== Array
+
+Contracts to other languages, array in Lilies behaviours like `std::vector` in c++ or `ArrayList` in Java,
+which is a data type that can contains variable number of elements of the same type, and can be indexed by integers.
+
+=== List
+
+List is a traditional data structure in Lisp dialects, which is a variable-length sequence of potentially different-type elements.
+Since the list is a type derived from pairs, determined in compilation time, it is not difficult to check the safety of list operations and optimize the code for list operations.
+
+List, a kind of recursive type, defined in the form of `(cons element list)`, where `cons` is a constructor for pairs, and `element` is the first element of the list, and `list` is the rest of the list, is able to be visited using traditional `car` and `cdr` functions, and furthermore, `index` for `nth` in common lisp.
+All those operations is determined in compilation time, thus the visiting of list have the same efficiency as visiting vector.
+
+=== Dictionary
+
+Dictionary is a collection of key-value pairs,
+in common lisp, it is called `associative list`,
+while scheme defines it as `hash table`.
+
+In Lilies, dictionary provides a simple way to store and retrieve values based on keys,
+a corresponding built-in library for export dictionary and array to json format is also provided.
+
+Similar to classes and other structures that have names associated with fields, dictionary uses `ref` to access the value of a key.
+
+== Reference
+
+Actually, define something directly to another variable creates a new reference to the same object.
+Thus if you'd like to define reference to a variable defined within same scope, or same structures,
+just write something like `(define refe var)` and then `refe` is associated with the same object as `var`.
+
+However, sometime we may want to have the variable reference another object as another type,
+e.g., access a vector of 32 bit integer as a vector of 8 bit integer.
+If create raw pointer, it costs space to store the pointer, and it is not safe to use.
+Thus Lilies provides a way to create reference without creating a new variable,
+with definition like `(define refe (reference var #:type <type>))`, which creates a new reference to the same object as `var`, but with a different type.
+
 == Procedure, Function & Method
 
 - Function Call
 - Multiple Value for Function Call
 - Returning
-
 
 ```lisp
 (define foo
