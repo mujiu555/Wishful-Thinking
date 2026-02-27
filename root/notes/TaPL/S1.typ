@@ -29,7 +29,7 @@ The meta variable is a placeholder for any valid type, and it allows us to defin
 
 The formal definition for the grammar is defined by induction.
 + ${"true", "false", 0} subset.eq Tau$
-+ if $t_1 in Tau$, then ${"succ" t_1, pred t_1, "iszero" t_1} subset.eq Tau$
++ if $t_1 in Tau$, then ${"succ" t_1, "pred" t_1, "iszero" t_1} subset.eq Tau$
 + If $t_1 in Tau$, $t_2 in Tau$, $t_3 in Tau$, then $"if" t_1 "then" t_2 "else" t_3 in Tau$
 
 
