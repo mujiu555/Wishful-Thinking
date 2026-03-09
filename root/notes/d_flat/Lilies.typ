@@ -389,7 +389,7 @@ Vectors in Lilies are represented by the type `Vector`, which represents a fixed
 Vectors is a type as primitive type but with two generic type parameters: the type of the elements and the size of the vector.
 
 Default Empty type for vectors is the `Vector::Empty` type, a vector type that has size of 0 and type of None.
-The only instance of this type is the empty vector `#()`.
+The only instance of this type is the empty vector `[]`.
 
 ==== Tuples 元组类型
 
@@ -397,7 +397,7 @@ Tuples in Lilies are represented by the type `Tuple`, which represents a fixed-s
 Tuples is a type as primitive type but with a variable number of generic type parameters, each representing the type of an element in the tuple.
 
 Default Empty type for tuples is the `Tuple::Empty` type, a tuple type that has no elements.
-The only instance of this type is the empty tuple `#<>`.
+The only instance of this type is the empty tuple `<>`.
 
 ==== Any 任意类型
 
@@ -566,31 +566,12 @@ Primitive objects cannot be split into smaller parts.
 
 For which, there are:
 - Integer Object
-  - `[1-9][0-9]*`
-  - `0b[01]+`
-  - `0o[0-7]+`
-  - `0x[0-9a-fA-F]+`
 - Float Object
-  - `[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?`
-  - `\.[0-9]+([eE][+-]?[0-9]+)?`
-  - `[0-9]+[eE][+-]?[0-9]+`
 - Character Object
-  - `#\descrition`
-  - `#\'character`
-  - `#\uXXXX`
 - String Object
-  - `"string content"`
-  - `#f"string content with escapes"`
-  - `#b"raw string content"`
 - Symbol Object
-  - `'symbol-name`
 - Boolean Object
-  - `#True`
-  - `#False`
 - Pair Object
-  - `'(first . second)`
-
-Above, quote syntax is used to create literal syntax for symbols and pairs.
 
 === Classes, Fields, Properties & Traits 类, 字段, 属性与特征
 
@@ -760,6 +741,11 @@ Comparison:
 - Value Equal (Compare whether two value is same logically, in this case, two children that treat as same parent type may be equal)
 - Identity Equal (Compare whether two bindings reference to the same object)
 
+== Generic Programming 泛型编程
+
+// TODO: refactor Type System, Object System and Generic Programming sections
+// Add type family support and type-level programming support in Type System section
+
 == Expression
 
 == Apply & Evaluation
@@ -795,9 +781,48 @@ There are three types of assignment:
 - Clone: clone the object
 - Reference: assign by reference
 
-== Vectors(Matrix), Tuples, Arrays, Lists, dictionaries & Index
+== Built-in Data Types and Literals 内建数据类型与字面量
+
+=== Primitive Types and Literals 基本类型与字面量
+
+- Integer Object
+  - `[1-9][0-9]*`
+  - `0b[01]+`
+  - `0o[0-7]+`
+  - `0x[0-9a-fA-F]+`
+- Float Object
+  - `[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?`
+  - `\.[0-9]+([eE][+-]?[0-9]+)?`
+  - `[0-9]+[eE][+-]?[0-9]+`
+- Character Object
+  - `#\descrition`
+  - `#\'character`
+  - `#\uXXXX`
+- String Object
+  - `"string content"`
+  - `#f"string content with escapes"`
+  - `#b"raw string content"`
+  - ```lisp
+    #"|
+     " string content with newlines
+     " Each line begins with a space, which will be removed in the final string
+     " Though it is not necessary, it is recommended to have a space before every line
+     |#"
+    ```
+- Symbol Object
+  - `'symbol-name`
+- Boolean Object
+  - `#True`
+  - `#False`
+- Pair Object
+  - `'(first . second)`
+
+Above, quote syntax is used to create literal syntax for symbols and pairs.
+
+=== Vectors(Matrix), Tuples, Arrays, Lists, dictionaries & Index
 
 There are some built-in composite types in Lilies, including:
+
 - Vectors, which is a fixed-size sequence of same-type elements, and can be indexed by integers.
 - Tuples, which is a fixed-size sequence of potentially different-type elements, and can be indexed by integers.
 - Arrays, which is a variable-size sequence of same-type elements, and can be indexed by integers.
@@ -927,6 +952,13 @@ The body of lambda expression must be a single one expression.
 You can exit a function without executing rest part of the body by invoke built-in function `:return`, this is a function that only can be called within a function body,
 and it will return the values passed to it as the returning values of the function.
 
+=== Positional, Named or Rest Parameters
+
+By default, Lilies will never provide positional parameters.
+All parameters are matched by name, and the order of parameters in function call is not important.
+
+// TODO:
+
 === Functions
 
 Each lambda expression has its own type, which is a closure type that includes the types of its parameters and returning values.
@@ -943,6 +975,7 @@ If you'd declare a function holder or delegate, you may have to use generic call
 + `if`
 + `cond`
 + `case`
+
 + `switch`
 
 === Loops 循环语句
@@ -1072,8 +1105,124 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
 == Exception Handling
 + Condition System
 
+== Top-Level
+
+For each file, the top-level is the outermost level of code that is not nested inside any other expression or structure.
+Briefly, the definition and expression at the top-level is treated to be executed in order.
+
+Top-level is the smallest unit of code, defines the entry point, global environment and the module of a lilies program.
+
+Each file is encouraged to have only one expression at the top-level (except for the main file).
+
+=== Entry Point
+
+The entry point of a lilies program is a function provided directly at the top-level.
+
+Main function must be a function that takes one `(Optional (Vector String))` parameter, which is the command line arguments,
+and returns `(Result Integer (impl Error))`, which gives the feedback of the program execution,
+where `Integer` is the exit code, and `impl Error` is the error information when the program execution fails.
+
 == Module & Library
 
-== Top-Level
+// TODO:
+
+=== Provide & Require
+
+In each file, it is possible and only to have only one provide form, which declares what objects are provided by this file.
+And these objects can be loaded by other file with `require` form.
+
+Provide accepts a symbol as the module name, and a object to be provided.
+Require needs the name of the module to be loaded, and returns the provided object of the module.
+The search path of require is relative to the file that required.
+Other search path for standard libraries and third-party libraries can be configured in the compiler.
+
+Even it is not encouraged, you can still define something out side of the provide form,
+thus, though those objects maybe used by functions in the module, they are not possible to be loaded by other modules.
+This can remove the unnecessary module definition.
+Some times, the trick is useful in main file.
+
+Name provided by a file must be same as the file name, without the file extension and prefixed with `:`,
+thus, for example, if a file is named `foo.l`, it must provide a module named `:foo`.
+
+E.g., Traditional module definition:
+```lisp
+(provide :foo
+  (module
+    #:export (main)
+    (import (:ns (require :std)))
+
+    (define main
+      (lambda ((args (Optional (Vector String))))
+        #:returns (Result Integer (impl Error))
+        (Ok 0)))))
+```
+Main file without module definition:
+```lisp
+(import
+  (:ns (require :std))
+  (:ns (require :foo)))
+
+(define main)
+  (lambda ((args (Optional (Vector String))))
+    #:returns (Result Integer (impl Error))
+    (Ok 0))))
+
+(provide :main main)
+```
+
+Formally, the syntax of provide and require is described as:
+```lisp
+provide ::=
+'(' 'provide' <module-name> <provided-object> ')'
+
+require ::=
+'(' 'require' <module-name> ')'
+;; require => <provided-object>
+```
+
+=== Module & Library System
+
+Module is a way to organize code into separate namespaces, and to control the visibility and accessibility of code.
+Each top-level is able to define multiple modules, but only one of them can be provided for other modules to require.
+
+A file that provide a module is called a library, and a file that require only modules is called the client.
+There are three type of client:
+- Executable client, which is a file that provides the main function as the entry point of the program.
+- Test client, which is a file that provides test class.
+- Script client, no provide form needed, and the code at the top-level will be executed directly when the file is run.
+
+Module is also a special form like `define`.
+
+E.g., to define a empty module:
+```lisp
+(module
+  #:export ())
+```
+
+The module definition syntax is described as:
+```lisp
+module ::=
+'(' 'module'
+  [ <export-list> ]
+  { <expressions> } ')'
+
+export-list ::=
+'#:export' '(' { <exported-object> } ')'
+```
+
+=== Import & :Export
+
+Provide simply declare the object to be provided, and require simply load the provided object and returns it.
+So, it must have some special syntax for bind the provided object to a name.
+
+Define form is usable but if the object provided is a module, it is not possible to unwrap the module namespace and use objects exported by the module.
+
+Import form is a special form that can import a module and bind the exported objects to names in the current namespace.
+- `:ns` sub-form is used to import a module and bind its exported objects to names in the current namespace, with prefix same as the library name.
+- `:some` sub-from can extract some of the exported objects from a module and bind them to names in the current namespace.
+- `:ren` sub-form can rename some of the exported objects from a module and bind them to names in the current namespace.
+Each sub-from can be combined together to import a module in a flexible way.
+
+Export form is a sub-form of module definition, which is used to declare which objects are exported by the module.
 
 = ...
