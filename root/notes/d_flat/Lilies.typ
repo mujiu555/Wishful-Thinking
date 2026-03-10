@@ -300,10 +300,11 @@ Primitive types for Lilies language include:
 - Vector
 - Tuples
 - Any
-- None
+- Nothing
 - Ignore
 - Meta
 - Unit
+- Empty
 
 ==== Number Tower 数字类型层次
 
