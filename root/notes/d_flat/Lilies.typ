@@ -372,7 +372,7 @@ Symbols are interned, meaning that there is only one instance of a symbol with a
 When a symbol is created, the system checks if a symbol with the same name already exists, and if so, returns the existing symbol instead of creating a new one.
 
 Symbols has their own type, `Symbol`.
-None default empty type for symbols.
+Nothing default empty type for symbols.
 
 ==== Pairs 对偶类型
 
@@ -410,15 +410,15 @@ In practice, Any type is used as a placeholder type when the specific type of a 
 
 Any type has no default empty type.
 
-==== None 空类型
+==== Nothing 无类型
 
-None type is the subtype of all types in Lilies.
-None represents the absence of a value.
-None type can hold only one value, which is also called None.
+Nothing type is the subtype of all types in Lilies.
+Nothing represents the absence of a value.
+Nothing type can hold nothing.
 
-In practice, None type is used to indicate that a value is missing or not applicable.
+In practice, Nothing type is used to indicate that a value is missing or not applicable.
 
-None type is the default empty type for Symbols, and itself.
+Nothing have no empty type since it have never own a instance.
 
 ==== Ignore 忽略类型
 
@@ -443,7 +443,19 @@ Meta type always promises to be non-empty, thus has no default empty type.
 Every structure that has no fields is considered as Unit type.
 Thus unit type is not a primitive type, but a special structure type.
 
-Unit types cannot have instances, thus has no default empty type.
+Sometimes Unit type is used to represent a function is finished and has no meaningful return value.
+
+All unit type shares same instance, which is also called Unit.
+
+Unit is the default empty type for itself.
+
+==== Empty 空类型
+
+Empty type is a special type that has no instances.
+
+Empty type always used to indicate a function will never return.
+
+Empty have no default empty type.
 
 === Syntax Object 语法类型
 
@@ -456,6 +468,14 @@ Functions in Lilies represents a mapping from a set of input values (parameters)
 And can capture the lexical scope in which they are defined, forming closures.
 
 Closure type constructs the type of a function, including the types of its parameters and return values.
+
+=== Continuation Type 续体类型
+
+=== Annotation Type 注解类型
+
+=== Contracts 契约
+
+=== Contravariance, Covariance, and Invariance 逆变, 协变与不变
 
 === Composite Types 复合类型
 
@@ -493,6 +513,16 @@ Furthermore, if a enum is not defined to have variants with specified type, the 
 Though it is just be done by translating Enum index to corresponding value, it will be obviously user-friendly.
 
 === Sealed Classes 密封类
+
+=== Record Classes 记录类
+
+=== Enum Classes 枚举类
+
+Similar to enum types, but enum class definition can make the enumeration with newly defined type,
+and the variants of the enumeration can only be assigned with values of that type.
+
+Behaviour like enum classes in Java, enum class in Lilies is a syntax sugar for enum type definition,
+with enum classes, it is free to define enumeration with any newly defined type, without really defining that type elsewhere.
 
 === Internal Types 内部类型
 
@@ -1099,7 +1129,7 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
 
 == Yield, Suspend, Resume & Stream (Engine)
 
-== Threads & Subprocedures
+== Threads & Subroutines
 
 == Async, Await & Coroutines
 
@@ -1227,3 +1257,9 @@ Each sub-from can be combined together to import a module in a flexible way.
 Export form is a sub-form of module definition, which is used to declare which objects are exported by the module.
 
 = ...
+
+...
+
+...
+
+= Code Generation
