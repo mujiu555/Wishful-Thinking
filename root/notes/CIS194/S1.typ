@@ -153,3 +153,78 @@ f x y z = x + y + z
 ```
 
 == Combining functions
+
+= Algebraic Data Types
+
+#link("book.realworldhaskell.org")[Real World Haskell]
+
+== Enumeration Types
+
+```hs
+data Thing = Shoe
+           | Ship
+           | SealingWax
+           | Cabbage
+           | King
+   deriving Show
+```
+
+Declares a new type called `Thing` with 5 data constructors. They are only values of type `Thing`.
+`deriving Show` is a magical incantation to generate code automatically.
+
+```hs
+shoe :: Thing
+shoe = Shoe
+
+list0'Things :: [Thing]
+list0'Things = [Shoe, Ship, SealingWax, Cabbage, King]
+```
+
+Thus we can have functions:
+```hs
+isSmall :: Thing -> Bool
+isSmall Shoe = True
+isSmall Ship = False
+isSmall SealingWax = True
+isSmall Cabbage = True
+isSmall King = False
+```
+Which can be simplified to:
+```hs
+isSmall :: Thing -> Bool
+isSmall Ship = False
+isSmall King = False
+isSmall _    = True
+```
+
+Haskell provides more general algebraic data types,
+```hs
+data FailableDouble = Failure
+                   | OK Double
+   deriving Show
+```
+Failure takes no argument, while OK takes a Double as argument.
+Thus Failure is a value of type `FailableDouble`, OK not.
+
+Data constructors can have more than one arguments.
+
+== Pattern Matching
+
+To match a constructor with more than one parameter, wrap entire pattern with parentheses.
+Underscore `_` is a wildcard pattern, which matches anything but doesn't bind to a name.
+To match whole pattern while each part of it is still matched by `pat`, using `x@pat`.
+Patterns can be nested.
+
+== Case
+
+```hs
+case "Hello" of
+  []    -> 3
+  (x:s) -> length s
+  _     -> 7
+```
+
+== Recursive data types
+
+Define data types in terms of themselves.
+
