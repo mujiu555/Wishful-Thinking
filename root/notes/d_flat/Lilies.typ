@@ -506,10 +506,13 @@ The type described by `type` will not create a new type indeed, rather a new typ
 
 In Lilies, same as other Lisp dialect, the List is composited by Pairs that have second element be another List.
 
+=== Union Types 联合类型
+
+Union types in Lilies are special form of tagged unions, which represent a set of named values.
+
 === Enum Types 枚举类型
 
-Enumeration types in Lilies are special form of tagged unions, which represent a set of named values.
-Furthermore, if a enum is not defined to have variants with specified type, the variants can be assigned with any constant value with same type.
+If a enumeration type is not defined to have variants with specified type, the variants can be assigned with any constant value with same type.
 Though it is just be done by translating Enum index to corresponding value, it will be obviously user-friendly.
 
 === Sealed Classes 密封类
@@ -949,6 +952,13 @@ with definition like `(define refe (reference var #:type <type>))`, which create
 ;; passed by ownership movement
 
 ;; `#:returns ()` here is the returning value list for each function
+
+(define bzz
+  (lambda
+    (case
+      (() #:returns () '())
+      (((x Integer)) #:returns (x Integer) x)
+      (((x Integer) (y Integer)) #:returns (sum Integer) (add x y)))))
 ```
 
 === Procedures
