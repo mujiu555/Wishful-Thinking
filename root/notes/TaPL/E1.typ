@@ -90,3 +90,45 @@ when depth of n is 1, then s is a constant, thus Q(s) holds.
 Then, assume $Q(n)$ holds for all n < k, we need to show that $Q(k)$ holds.
 When P(r) holds for all r with depth(r) < depth(s), we have P(s) holds, thus Q(k) holds.
 Then by natural number induction, we have Q(n) holds for all n, thus P(s) holds for all s.
+
+=== 3.5.10 Exercise: Rephrase Definition 3.5.9 as a set of inference rules.
+
+Given definition:
+- Def: The multiple step evaluation relation $->*$ is the reflexive, transitive closure of one-step evaluation.
+  + if $t -> t'$, then $t ->* t'$
+  + $t->* t$ for all $t$
+  + if $t ->* t'$ and $t' ->* t''$, then $t ->* t''$
+
+Then we have:
+```txt
+    t -> t'     (premise)
+--------------- rule 1
+   t -> * t'
+--------------- rule 2
+    t ->* t
+
+  t ->* t'    t' ->* t''
+-------------------------
+         t->*t''
+
+```
+
+=== 3.5.13 Exercise:
+
+Suppose we add a new rule:
+$ "if" #true "then" t_2 "else" t_3 -> t_3 $[E-Funny]
+to
+$ "if" #true "then" t_2 "else" t_3 -> t_2 $[E-IfTrue]
+$ "if" #false "then" t_2 "else" t_3 -> t_3 $[E-IfFalse]
+$ (t_1 -> t'_1) / ("if" t_1 "then" t_2 "else" t_3 -> "if" t'_1 "then" t_2 "else" t_3) $[E-If]
+
+Which of the theorems remain valid?
+
+Answer:
+
+
+Suppose add a new rule:
+$ (t_2 -> t'_2) / ("if" t_1 "then" t_2 "else" t_3 -> "if" t_1 "then" t'_2 "else" t_3) $
+Which of the theorems remain valid?
+
+
