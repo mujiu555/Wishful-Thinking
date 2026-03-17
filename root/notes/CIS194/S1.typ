@@ -215,6 +215,13 @@ Underscore `_` is a wildcard pattern, which matches anything but doesn't bind to
 To match whole pattern while each part of it is still matched by `pat`, using `x@pat`.
 Patterns can be nested.
 
+e.g., to match failable double:
+```hs
+f :: FailableDouble -> Double
+f Failure = 0
+f (OK d) = d
+```
+
 == Case
 
 ```hs
@@ -227,4 +234,30 @@ case "Hello" of
 == Recursive data types
 
 Define data types in terms of themselves.
+
+= Recursion patterns, polymorphism, and the Prelude.
+
+`map`, `filter`, `foldr`, `zip`...
+
+== Polymorphism
+
+=== Polymorphic data types
+
+With free variable in data definition, for which, those variables are called type parameter,
+we can define polymorphic data types.
+
+=== polymorphic functions
+
+When writing polymorphic functions, it is needed to keep in mind that caller can determine the type of callee.
+
+So polymorphic functions must work for every possible input type.
+
+== Total and partial functions.
+
+Functions which are well defined for every possible input and respond with a value of the correct type are called total functions.
+
+Functions which may crash with some specified input or may recurse forever are called partial functions.
+
+It is never suggested to write partial functions.
+
 
