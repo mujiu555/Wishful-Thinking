@@ -355,3 +355,45 @@ Spend for more than 5 hours, doing nothing.
 2026-03-15 23:59: 摆烂, TaPL看不完了
 
 2026-03-16 02:47: 结束,
+
+= 2026-03-16 15:39:
+
+12点醒而至今才洗漱, 你真的想要这样的生活吗
+
+2026-03-16 16:42: back
+
+2026-03-16 22:12: lunch & gaming
+
+2026-03-16 23:38: gaming & prepare to sleep
+
+Nothing worthy recording.
+
+2026-03-17 00:31: zhihu
+
+2026-03-17 01:19: finish CIS194 II
+
+= 2026-03-17 13:36:
+
+8:40 醒, 回笼觉
+
+12:30~, 醒, 上厕所,
+
+2026-03-17 13:37: 准备去上课
+
+2026-03-17 14:00: sa169
+
+2026-03-17 16:25: back and skip cpt202
+
+2026-03-17 19:04: still
+
+2026-03-17 19:56: eat
+
+2026-03-17 20:28: back
+
+2026-03-17 20:58: end
+
+2026-03-17 23:03: 摆烂, gaming
+
+2026-03-18 02:23: finish CIS194 while doing something else.
+
+2026-03-18 03:27: finish TaPL Chapter III
