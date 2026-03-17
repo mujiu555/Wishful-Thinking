@@ -190,4 +190,60 @@ Formally, we can define the evaluation relation:
   + Case `E-If`, the conclusion is determined by the evaluation of $t_1$, thus $t' = t''$.
 - Def: If a term $t$ has no evaluation rule applies to it, it is in normal form.
 - Theorem: Every value is in normal form.
+- Theorem: IF t is in normal form, then t is a value.
+- Def: The multiple step evaluation relation $->*$ is the reflexive, transitive closure of one-step evaluation.
+  + if $t -> t'$, then $t ->* t'$
+  + $t->* t$ for all $t$
+  + if $t ->* t'$ and $t' ->* t''$, then $t ->* t''$
+- Theorem: If $t->*u$ and $t ->* u'$, where u and $u'$ are both normal forms, then $u = u'$.
+- Theorem: For every term t there is some normal form $t'$ such that $t ->* t'$.
 
+Add new definition to previous syntax:
+```txt
+t ::=                             ;; terms
+  true                            ;; constant true
+  | false                         ;; constant false
+  | if t then t else t            ;; conditional
+  | 0                             ;; zero
+  | succ t                        ;; successor
+  | pred t                        ;; predecessor
+  | iszero t                      ;; zero test
+
+v ::=                             ;; values
+  true                            ;; true value
+  | false                         ;; false value
+  | nv                            ;; numeric value
+
+nv ::=                            ;; numeric values
+  0                               ;; zero
+  | succ nv                       ;; successor of a numeric value
+```
+
+Rules:
+$ "if" #true "then" t_2 "else" t_3 -> t_2 $[E-IfTrue]
+$ "if" #false "then" t_2 "else" t_3 -> t_3 $[E-IfFalse]
+$ (t_1 -> t'_1) / ("if" t_1 "then" t_2 "else" t_3 -> "if" t'_1 "then" t_2 "else" t_3) $[E-If]
+$ (t_1 -> t'_1) / ("succ" t_1 -> "succ" t'_1) $[E-Succ]
+$ "pred" 0 -> 0 $[E-PredZero]
+$ "pred" ("succ" "nv") -> "nv" $[E-PredSucc]
+$ (t_1 -> t'_1) / ("pred" t_1 -> "pred" t'_1) $[E-Pred]
+$ "iszero" 0 -> #true $[E-IsZeroZero]
+$ "iszero" ("succ" "nv") -> #false $[E-IsZeroSucc]
+$ (t_1 -> t'_1) / ("iszero" t_1 -> "iszero" t'_1) $[E-IsZero]
+
+The "pred (succ nv) -> nv" rule indicates that there does not exist something like "pred (succ (pred 0)) -> pred 0",
+thus, the evaluation of this term will have following derivation tree:
+```txt
+
+--------------------------------------- E-PredZero
+               pred 0 -> 0
+--------------------------------------- E-Succ
+          succ (pred 0) -> succ 0
+--------------------------------------- E-Pred
+ pred (succ (pred 0)) -> pred (succ 0)
+
+```
+
+- Def: A closed term is stuck if it is in normal form but not a value.
+  If a term is stuck, it means that the evaluation of the term cannot proceed, but it is not a value, thus it is an error.
+- Another way to deal with stuck is introducing an explicit error term, and add rules to propagate the error.
