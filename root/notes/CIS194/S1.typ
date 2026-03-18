@@ -260,4 +260,38 @@ Functions which may crash with some specified input or may recurse forever are c
 
 It is never suggested to write partial functions.
 
+= Higher-order programming and type inference
+
+Anonymous function:
+Beginning with `\` and any number of parameters,
+the body of lambda is just after `->`.
+
+E.g., to have
+`greaterThan100 :: [Int] -> [Int]`
+we can write:
+```hs
+greaterThan100 xs = filter (\x -> x > 100) xs
+```
+
+Another way to do that is provide `(> 100)`, which is same as `\x -> x > 100`.
+`(?y)` is same as `\x -> x ? y`, while `(y?)` is same as `\x -> y ? x`.
+
+== function composition
+
+Function x dot (`.`) function y, gives function x (function y).
+
+== Currying and partial application
+
+Every function in Haskell is lambda expression that accepts only one argument,
+thus multiple parameter functions are curried.
+
+Thus if we provides only some of the arguments, we get back a function that takes the remaining arguments.
+This is called partial application.
+
+== Wholemeal programming
+
+Prefer to combine functions rather than work deep inside.
+
+Point-free style says that define a function without reference to its arguments.
+
 
