@@ -294,4 +294,69 @@ Prefer to combine functions rather than work deep inside.
 
 Point-free style says that define a function without reference to its arguments.
 
+= more polymorphism and type classes
+
+Haskell has a special type of polymorphism called parametric polymorphism.
+Which means that polymorphic functions must work uniformly for any input type.
+
+== Parametricity
+
+With type mentioned before: `a -> a -> a`, since `a` is a lowercase parameter, it is not a Type but a type variable, which can stand for any type.
+
+The problem is that, if we have something like:
+```hs
+f :: a -> a -> a
+f x y = x && y
+```
+Which will throw an error, since `&&` only works for `Bool`, but `a` can be any type.
+As the `a -> a -> a` is just a promise, that a function with this signature will work no matter what type the caller chooses.
+
+== Type Classes
+
+Double arrow like `(+) :: Num a => a -> a -> a` is type-class-constrainted type signature.
+E.g., in definition of `Eq`,
+```hs
+class Eq a where
+  (==) :: a -> a -> Bool
+  (/=) :: a -> a -> Bool
+```
+Eq is declared to be a type class with a single parameter, `a`.
+Any type `a` that wants to be an instance of `Eq` must provide definitions for `(==)` and `(/=)`.
+
+So,
+when any type class method is called, the compiler will infer which implementation of that method will be used.
+Likely overloaded method in OOP.
+
+And what if we'd implement a new instance?
+```hs
+data Foo = F Int | G Double
+
+instane Eq Foo where
+  (F i1) == (F i2) = i1 == i2
+  (G c1) == (G c2) = c1 == c2
+  _ == _ = False
+
+  foo1 /= foo2 = not (foo1 == foo2)
+```
+
+For which, it is also possible to define default implementations of methods in terms of other methods.
+
+Thus `Eq` can be defined as:
+```hs
+class Eq a where
+  (==) :: a -> a -> Bool
+  (/=) :: a -> a -> Bool
+  x /= y = not (x == y)
+```
+And the actually declaration of `Eq` in Prelude is:
+```hs
+class Eq a where
+  (==), (/=) :: a -> a -> Bool
+  x == y = not (x /= y)
+  x /= y = not (x == y)
+```
+
+Type classes can have more parameters than only one.
+Which looks like generic function in Common Lisp CLOS.
+
 
