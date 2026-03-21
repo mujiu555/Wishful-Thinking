@@ -359,4 +359,24 @@ class Eq a where
 Type classes can have more parameters than only one.
 Which looks like generic function in Common Lisp CLOS.
 
+= Lazy Evaluation
+
+== Strict evaluation
+
+Contrast to lazy evaluation, strict evaluation means that an expression is evaluated as soon as it is bound to a variable.
+When we try to call a function with strict evaluation, the arguments will be evaluated before the function is called.
+
+The strict evaluation policy, aka. call-by-value may lead to some side effects, since we cannot control when the arguments are evaluated as lazy evaluation does.
+
+== Side effects and purity
+
+Side effects are anything chat causes evaluation of an expression to interact with something outside itself.
+The root issue is that sch outside interactions are time-sensitive.
+
+== Lazy evaluation
+
+Arguments in lazy evaluation strategy are not evaluated until they are actually used in the body of the function.
+
+== Pattern matching drives evaluation
+
 
