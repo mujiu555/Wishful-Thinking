@@ -444,4 +444,60 @@ is equivalent to:
 (fun_a (fun_b (fun_c a))) b
 ```
 
+= IO
 
+With lazy evaluation, Haskell is purely functional, however it means that any Haskell program can do nothing but waste CPU time.
+Since functional can have no external effects and shall not depend on any external state or stuffs.
+
+== The IO type
+
+To solve the problem, there is a special type called `IO`.
+Values of type `IP a` are descriptions of effectful computations (多副作用表达式计算),
+which, will generate some IO operations and produce a value of type `a` when those operations are performed.
+
+A value of type `IO a` is a safe thing with no side effects.
+It is a description of a computation.
+Likely, first-class instructions program. (imperative program)
+
+It is a recipe for generate a value of type `a` when executed.
+
+For ```hs main :: IO ()``` we can pass other IO to `main`.
+
+== Combining IO
+
+To combine two IO computations, we can use `>>` operator, "and then".
+It has the type `(>>) :: IO a -> IO b -> IO b`,
+
+It creates an IO computation consists of performing the first computation, discarding its result, and then performing the second computation, in sequence.
+
+Or, we can have `(>>=) :: IO a -> (a -> IO b) -> IO b`, "bind", which is more powerful than `>>` since it allows us to use the result of the first computation to determine the second computation.
+
+== Record syntax
+
+Suppose we have a data type:
+```hs
+data D = C T1 T2 T3
+```
+which is not very convenient to use, since we have to remember the order of the fields and their types.
+Thus we can use record syntax to define a data type:
+```hs
+data D = C { field1 :: T1}
+           , field2 :: T2
+           , field3 :: T3
+           }
+```
+Which assigns not only the type of each field, but also a name for them.
+We can still construct C in pattern matching, but there are some extra benefits:
+- field names are automatically defined as functions that extract the corresponding field from a value of type D.
+  ```hs
+  field1 :: D -> T1
+  ```
+- Construct, modify, and pattern match on values of type D using field names instead of positional syntax.
+  ```hs
+  c = C { field1 = v1, field2 = v2, field3 = v3 }
+  --
+  c' = c { field2 = new_v2 }
+  --
+  case c of
+    C { field1 = f1, field3 = f3 } -> ... f1 ...
+  ```
