@@ -682,8 +682,13 @@ All assignment traits for that field will be dropped.
 Define syntax vary depend on the context it appears, thus the `define` we used here is not suitable for other case in Lilies.
 But, it is clear that, there can be only `define` or `lambda` to have the ability to create a new binding.
 
+// TODO: Type family, first-class classes
+
 ==== Definition of Traits 特征的定义
 
+// TODO: multiple-dispatch support,
+//       behaviours like Haskell type classes,
+//       add support for concepts
 Define a new trait with `trait` syntax.
 E.g., to define a new trait `Drawable` with a method `draw`:
 ```lisp
@@ -717,6 +722,8 @@ Since `implement` syntax unwraps the namespace of a class or object only, it is 
 ==== Generic Function & Interface 泛义函数与接口
 
 With generic function, methods can be called in a uniform way as traditional functions.
+
+// TODO: multiple-dispatch support
 
 For example, if we'd define a new generic method called `draw` that is contained in `Drawable`,
 we can have:
