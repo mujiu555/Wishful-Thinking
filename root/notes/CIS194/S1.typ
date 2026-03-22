@@ -379,4 +379,69 @@ Arguments in lazy evaluation strategy are not evaluated until they are actually 
 
 == Pattern matching drives evaluation
 
+= Folds and monoids
+
+Monoids, in Chinese, is called "幺半群", which is a set with an associative binary operation and an identity element.
+
+== Folds, again
+
+For each `Fold*` function, that there is a take-away message that we can implement a fold for may data types.
+The fold for T will take one higher-order argument for each of T's constructors,
+encoding how to turn the values stored by that constructor into a value of the result type.
+
+Assuming that any recursive occurrences of T have already been folded into a result.
+
+== Monoids
+
+In `Data.Monoid`, there is a type class `Monoid`,
+where there are:
+```hs
+class Monoid m where
+  mempty  :: m -- m empty
+  mappend :: m -> m -> m -- m append, which is associative
+
+  mconcat :: [m] -> m
+  mconcat = foldr mappend mempty
+
+(<>) :: Monoid m => m -> m -> m
+(<>) = mappend
+```
+
+New type:
+```hs
+newtype Sum a = Sum a
+  deriving (Eq, Ord, Read, Show, Num)
+
+getSum :: Sum a -> a
+getSum (Sum x) = x
+
+instance Num a => Monoid (Sum a) where
+  mempty  = Sum 0
+  mappend = (+)
+
+newtype Product a = Product a
+  deriving (Eq, Ord, Read, Show, Num)
+
+getProduct :: Product a -> a
+getProduct (Product x) = x
+
+instance Num a => Monoid (Product a) where
+  mempty  = Product 1
+  mappend = (*)
+```
+
+P.S., `newtype` is used for defining a new type that has exactly one constructor with exactly one field.
+It is used to add type class instances to an existing type without having to define a new data type and wrap it in a constructor.
+
+P.S., `type` can be used to define a type synonym, which is just an alias for an existing type. It does not create a new type, but simply gives a new name to an existing type.
+
+P.S.,
+```hs
+fun_a . fun_b . fun_c a $ b
+```
+is equivalent to:
+```hs
+(fun_a (fun_b (fun_c a))) b
+```
+
 
