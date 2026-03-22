@@ -397,3 +397,31 @@ Nothing worthy recording.
 2026-03-18 02:23: finish CIS194 while doing something else.
 
 2026-03-18 03:27: finish TaPL Chapter III
+
+= 2026-03-18 16:29:
+
+13 wake up and does nothing until 16:30:09.
+
+= 2026-03-19 14:50: 又没坚持下来,
+
+2026-03-19 14:51: at sa169
+
+2026-03-19 21:27: back from eating, gaming
+
+2026-03-20 01:28:
+
+= 2026-03-20 22:40: nothing done, even not this fncking diary
+
+= 2026-03-22 02:48: surely, today, nothing
+
+2026-03-22 04:49: finish Haskell, section VI, one problem left
+
+= 2026-03-23 00:23: forgot to write diary again.
+
+因为一些原因, 现在几乎难以写这个狗屎日记,
+每天做事总没有办法集中注意力, 随随便便就去干其他事情了,
+
+而且还有雅思, 范畴论也没看, 群论也没搞完, Haskell倒是一直有进度, 但是其他东西都没动确实挺烦.
+
+se依托史, 项目规划也是依托史.
+XJTLU你就是折磨人来的.
