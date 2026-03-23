@@ -501,3 +501,49 @@ We can still construct C in pattern matching, but there are some extra benefits:
   case c of
     C { field1 = f1, field3 = f3 } -> ... f1 ...
   ```
+
+= Functors
+
+What if we can treat types that accepts some type variable as something function-like?
+Can we apply some function-like type variables when defining variables?
+E.g., can we have ```hs thingMap :: (a -> b) -> f a -> f b```.
+In some repeated patterns, the part that is different, is the container being "mapped over", which is what we want.
+
+== Kinds
+
+Types themselves have types, which is called `Kinds` in Haskell.
+P.S., There are some other level beyond kinds outside of the Haskell, for example maybe pure type system or universe.
+
+With internal command `:kind` or `:k` in ghci, we can have the type of some types.
+
+Most types that are just concrete types have the kind of `*`, while those who have type parameters may have kind
+`* -> *` or more, this is vary similar to functions.
+
+`(->)` have the type of `* -> * -> *`, which means it accepts two types and generates a new one.
+
+What's more, if we have some type like:
+```hs
+data Funny f a = Funny a (f a)
+```
+the kind of `f` is `* -> *` and thus, Funny is a higher-order type constructor, just like `map`, a higher-order function.
+
+Kinds can be partially applied, too.
+
+== Functor
+
+The essence (本质) of the mapping pattern we saw was a higher-order function with a type like
+```hs thingMap :: (a->b) -> f a -> f b``` where `f` is a type variable standing in for some type of kind `* -> *`.
+
+But how can we use it.
+
+Indeed, we may create a type class called `Functor` traditionally since `thingMap` has to work differently for each `f`.
+```hs
+class Functor f where
+  fmap :: (a -> b) -> f a -> f b
+```
+
+Even, we can have
+```hs
+instance Functor ((->) e) where
+  fmap = (.)
+```
