@@ -425,3 +425,46 @@ Nothing worthy recording.
 
 se依托史, 项目规划也是依托史.
 XJTLU你就是折磨人来的.
+
+#chat[
+  我当死去, 因不为自己所理解.
+]
+
+= 2026-03-23 18:23:
+
+Wake up in 14:00~,
+
+Maybe difficult to do something meaningful.
+
+Skip one class today.
+
+#chat[
+  身陷囹圄,
+]
+
+20:00~ CIS194
+
+20:00~ 22:00~ AI 模型, 运行失败, 顺路打游戏, 反正这边运行的时候也用不了做其他事情.
+
+2026-03-23 23:17: 玩完
+
+00:00: 吃完
+
+2026-03-24 01:54: 玩完
+
+= 2026-03-24 14:51:
+
+2026-03-24 14:51: wake up, 洗漱, 打水, about 1h
+
+2026-03-24 15:28: 吃完
+
+中间好多事, 都想布恰利记, 反正衣服洗了
+
+2026-03-25 01:26: sleep
+
+2026-03-25 01:54: finish cis194,
+
+别问为啥睡着了还把cis做了,
+
+TODO: ITLES, Haskell, TaPL, Catagory theory, ...
+
