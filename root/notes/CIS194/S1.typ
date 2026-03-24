@@ -547,3 +547,78 @@ Even, we can have
 instance Functor ((->) e) where
   fmap = (.)
 ```
+
+= Applicative Functors
+
+Concerning we may have something like:
+```hs
+type NAme = String
+data Employee = Employee {
+    name  :: Name,
+    phone :: String
+  }
+  derive Show
+```
+Thus `Employee` is a type of kind `*`, and `Employee` constructor has the type of `Name -> String -> Employee`.
+
+While we may want to have `Maybe Employee` that can have input `Maybe Name -> Maybe String -> Maybe Employee`,
+or even more generally, `f Name -> f String -> f Employee`,
+which is not possible with `fmap` since it only accepts a function of type `a -> b`.
+
+In this situation like define something like `(A -> B -> C) -> (f A -> f B -> f C)`, which is called `Applicative` functor.
+In which we need to apply a functor that takes another functor as argument,
+```hs
+h :: a -> b -> c
+fa :: f a
+fb :: f b
+-- to
+h :: a -> (b -> c)
+fmap h :: f a -> f (b -> c)
+fmap h fa :: f (b -> c)
+```
+fmap cannot help us to apply `h` to `fa` and `fb` since it only accepts a function of type `a -> b`.
+
+== Applicative
+
+Those functors that make "contextual application" possible are called `Applicative` functors, and `Control.Applicative` defines the `Applicative` type class:
+```hs
+class Functor f => Applicative f where
+  pure :: a -> f a
+  (<*>) :: f (a -> b) -> f a -> f b
+```
+
+Apply (`<*>`) is the operator for "contextual application",
+which takes a functor that contains a function and another functor that contains an argument,
+and applies the function to the argument within the context of the functor.
+
+Notably, we can treat `pure` as `fmap0`:
+```hs
+pure  :: a                 -> f a
+fmap  :: (a -> b)          -> (f a -> f b)
+fmap2 :: (a -> b -> c)     -> (f a -> f b -> f c)
+```
+
+Thus, with the help of `<*>`, we can have `fmap2`, which is `liftA2` in `Control.Applicative` indeed:
+```hs
+liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c
+liftA2 f x y = f <$> x <*> y
+```
+
+For which, `<$>` is just an infix version of `fmap`, in `Control.Applicative`.
+How about `liftA3`?
+Apply a new functor towards `liftA2`:
+```hs
+liftA3 :: Applicative f => (a -> b -> c -> d) -> f a -> f b -> f c -> f d
+liftA3 f x y z = f <$> x <*> y <*> z
+```
+
+== Applicative Laws
+
+```hs
+f `fmap` x === pure f <*> x -- (pure f) <*> x
+```
+Mapping a function f over a container x ought to give the same result as first injecting the function into the container, and then applying it to x with `<*>`.
+
+== Applicative Examples
+
+
