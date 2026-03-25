@@ -621,4 +621,21 @@ Mapping a function f over a container x ought to give the same result as first i
 
 == Applicative Examples
 
+= Applicative Functors, part II
+
+== Aside: Levels of Abstraction
+
+`Functors` is a nifty tool but relatively straightforward.
+P.S., I do not think that straightforward is a bad thing since i always confused about `Applicative`.
+
+`Applicative` doesn't add too much towards `Functor`, however it can be then called "model of computation", while `Functor` does not.
+
+When working with things like `Applicative`, it is needed to keep in mind that there are multiple levels of abstraction involved.
+i.e., higher-rank polymorphism.
+
+== The Applicative API
+
+
+
+
 
