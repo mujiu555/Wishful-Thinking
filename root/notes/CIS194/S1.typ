@@ -636,6 +636,29 @@ i.e., higher-rank polymorphism.
 == The Applicative API
 
 
+= Monads
 
+```hs
+class Monad m where
+  return :: a -> m a
+  (>>=) :: m a -> (a -> m b) -> m b
+  (>>) :: m a -> m b -> m b
+-- m1 >> m2 = m1 >>= \_ -> m2
+```
 
+It looks familiar with `IO`, since it's a monadic interface to `IO`.
+`return` has similar type as `pure`.
+In face, every `Monad` should also be an `Applicative`, with `pure` = `return`.
+
+`(>>=)` can take something like `m a` which is called `mobits`, `monadic values` or `computations`,
+which are two computational procedure that may have some effects, and then produce a larger one.
+
+First parameter `m a` produces value of `a` and then pass the returning value to second parameter which is `(a -> m b)`.
+
+`(>>)` just looks like:
+```hs
+(>>) :: m a -> m b -> m b
+m1 >> m2 = m1 >>= \_ -> m2
+```
+which is just ignore returning value of m1 version of `(>>=)`
 
