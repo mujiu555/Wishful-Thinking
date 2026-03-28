@@ -18,3 +18,6 @@ jobs:
 
       - name: Set up Typst
         uses: typst-community/setup-typst@v4
+
+      - name: Set up Typsite
+        uses: mujiu555/setup-typsite@main
