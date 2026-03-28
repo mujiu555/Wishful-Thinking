@@ -968,6 +968,17 @@ with definition like `(define refe (reference var #:type <type>))`, which create
       (((x Integer) (y Integer)) #:returns (sum Integer) (add x y)))))
 ```
 
+// TODO: list for positional parameter, dict for naming parameters;
+// ( ... . rest) for multiple length parameter
+// { _ => ... } for multiple length parameter
+```lisp
+(lambda {
+    a : type => ...
+    ...
+  }
+  ...)
+```
+
 === Procedures
 
 To define a procedure, binding a lambda expression to a name.
