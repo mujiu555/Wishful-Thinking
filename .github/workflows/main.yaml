@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         run: |
-          typsite compile
+          typsite compile -i "${{ steps.pages.outputs.base_url }}/root/"
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
