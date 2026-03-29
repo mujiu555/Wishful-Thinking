@@ -4,12 +4,22 @@ on:
   push:
     branches: [main]
 
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: read
+
 jobs:
   depoly:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          submodules: recursive
+          fetch-depth: 0
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v4
@@ -21,3 +31,18 @@ jobs:
 
       - name: Set up Typsite
         uses: mujiu555/setup-typsite@main
+        with:
+          github-token: ${{ secrets.GH_PAGE_ACTION_TOKEN }}
+
+      - name: Build
+        run: |
+          typsite compile
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          PERSONAL_TOKEN: ${{ secrets.GH_PAGE_ACTION_TOKEN }}
+          EXTERNAL_REPOSITORY: mujiu555/mujiu555.github.io
+          PUBLISH_BRANCH: main
+          PUBLISH_DIR: ./publish
+          commit_message: ${{ github.event.head_commit.message }}
