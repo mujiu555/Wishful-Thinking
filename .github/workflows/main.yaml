@@ -32,7 +32,7 @@ jobs:
       - name: Set up Typsite
         uses: mujiu555/setup-typsite@main
         with:
-          version: 0.1.6
+          version: 0.1.6-44
           github-token: ${{ secrets.GH_PAGE_ACTION_TOKEN }}
 
       - name: Build
