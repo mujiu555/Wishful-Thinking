@@ -1,5 +1,5 @@
 
--- Exercise I~IV
+-- Exercise I I~IV
 doubleOther :: [Int] -> [Int]
 doubleOther []           = []
 doubleOther (x:xs)       = (if even (length xs) then x else x * 2) : doubleOther xs
@@ -18,9 +18,20 @@ sumDigits lst = sum (concat [digitize x | x <- lst])
 validate :: Int -> Bool
 validate n = mod (sumDigits (doubleOther (digitize n))) 10 == 0
 
--- Exercise V
+-- Exercise I V
 type Peg = String
 type Move = (Peg, Peg)
 hanoi :: Integer -> Peg -> Peg -> Peg -> [Move]
 hanoi 0 _ _ _ = []
 hanoi n a b c = hanoi (n-1) a c b ++ [(a, b)] ++ hanoi (n-1) c b a
+
+--
+type Name = String
+data Employee = Employee {
+    name :: Name,
+    phone :: String
+  }
+  deriving Show
+
+main :: IO ()
+main = return ()
