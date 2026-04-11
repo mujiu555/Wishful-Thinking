@@ -468,3 +468,125 @@ Skip one class today.
 
 TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
+= 2026-03-25 08:25: wake up
+
+08:32: play cell phone.
+
+08:34: dress up
+
+08:42: washed up
+
+08:49: maintain my umbrella
+
+09:56: listening ITLES
+
+10:01: play cell phone
+
+10:56: ate and shopped
+
+11:50: waste my life, waiting for death... alright, just sleeping then..
+
+15:16: wake up
+
+15:38: surf the bilibili, prepare to learn cis194
+
+16:52: chat,
+
+17:47: chat chat
+
+18:23: partial complete cis194
+
+19:06: maybe chat
+
+20:20: something else...
+
+00:03: nothing
+
+00:10: do some needlework
+
+01:35: some of TaPL, with large part of nothing
+
+= 2026-03-26:
+
+12:50: wakeup
+
+13:32: washed up
+
+14:27: breakfast
+
+19:35: 摆烂
+
+00:56: prepared to sleep
+
+02:30: cpt202, fuck you
+
+= 2026-03-27
+
+15:52: finish something
+
+23:36: play till now
+
+05:19: work work work
+
+= 2026-03-28
+
+15:13: wake up~
+
+16:47: washing up and breakfast
+
+00:28: gaming
+
+05:21: ci/cd setup-typsite
+
+05:30: publish setup-typsite
+
+= 2026-03-29
+
+15:17: actually, wake up
+
+15:59: cpt202
+
+= 2026-03-30
+
+14:31: wash up
+
+20:39: ate
+
+22:44: wake up~
+
+= 2026-04-01
+
+21:01: ..., you know what i want to say.
+
+23:08: haskell avl
+
+02:03: gaming
+
+03:36: haskell cis194 course work II
+
+04:03: Lilies
+
+= 2026-04-02
+
+14:21: wake up, wash up
+
+15:50: come to class and register IELTS
+
+= 2026-04-05
+
+16:06: wake up & wash up
+
+23:55: zhihu article, summary recent course works
+
+= 2026-04-06
+
+16:04: wash up
+
+16:37: breakfast
+
+= 2026-04-12:
+
+01:18: 时隔6天, 电脑终于修好了, 可以正常用了, 感动, 感激, 但是开发环境还是要重新配置了的.
+系统配置整体重构了,
+另外换了一个组, 终于不用去和ai代码复现打交道了...
+赞美上天!
