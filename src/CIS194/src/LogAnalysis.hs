@@ -1,6 +1,6 @@
 -- | OPTIONS_GHC -Wall -xc
 
-module CIS194.LogAnalysis where
+module LogAnalysis where
 
 import Data.Char (isDigit, digitToInt)
 import Data.Maybe (fromJust)
@@ -83,10 +83,10 @@ rotate tree@(Node ltree _ rtree)
     left (Node lt v (Node lrt rv rrt)) = Node (Node lt v lrt) rv rrt
     left t = t
     leftright (Node (Node Leaf lv (Node lrlt rlv rrlt)) v Leaf) =
-      (Node (Node Leaf lv lrlt) rlv (Node rrlt v Leaf))
+      Node (Node Leaf lv lrlt) rlv (Node rrlt v Leaf)
     leftright t = t
     rightleft (Node Leaf v (Node (Node llrt lrv rlrt) rv Leaf)) =
-      (Node (Node Leaf v rlrt) lrv (Node llrt rv Leaf))
+      Node (Node Leaf v rlrt) lrv (Node llrt rv Leaf)
     rightleft t = t
 
 insert :: LogMessage -> MessageTree -> MessageTree
@@ -99,23 +99,16 @@ insert msg@(LogMessage _ timestamp _) (Node lt omsg@(LogMessage _ v _) rt)
   | otherwise     = rotate (Node lt msg rt)
 
 build :: [LogMessage] -> MessageTree
-build l = foldr insert Leaf l
+build = foldr insert Leaf
 
 inOrder :: MessageTree -> [LogMessage]
 inOrder Leaf           = []
-inOrder (Node lt v rt) = (inOrder lt) ++ [v] ++ (inOrder rt)
+inOrder (Node lt v rt) = inOrder lt ++ [v] ++ inOrder rt
 
 whatWentWrong :: [LogMessage] -> [String]
-whatWentWrong [] = []
-whatWentWrong (r: rs) =
-  case r of
-    Unknown _              -> whatWentWrong rs
-    LogMessage Info _ _    -> whatWentWrong rs
-    LogMessage Warning _ _ -> whatWentWrong rs
-    LogMessage (Error i) _ s -> (if (i > 50) then [s] else []) ++ (whatWentWrong rs)
-
-main :: IO ()
-main = do
-  res <- testParse parse 10 "error.log"
-  print res
-  return ()
+whatWentWrong s = [ info | (LogMessage log_level _ info) <- s,
+                    (case log_level of
+                       Info -> False
+                       Warning -> False
+                       Error i -> i > 50
+                    )]
