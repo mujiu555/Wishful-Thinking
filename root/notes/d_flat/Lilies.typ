@@ -959,25 +959,21 @@ with definition like `(define refe (reference var #:type <type>))`, which create
 ;; passed by ownership movement
 
 ;; `#:returns ()` here is the returning value list for each function
-
-(define bzz
-  (lambda
-    (case
-      (() #:returns () '())
-      (((x Integer)) #:returns (x Integer) x)
-      (((x Integer) (y Integer)) #:returns (sum Integer) (add x y)))))
 ```
+
 
 // TODO: list for positional parameter, dict for naming parameters;
 // ( ... . rest) for multiple length parameter
-// { _ => ... } for multiple length parameter
+// { rest } for multiple length parameter
 ```lisp
 (lambda {
-    a : type => ...
+    a : type
     ...
   }
   ...)
 ```
+
+Parameter list of a procedure can be a pattern, a case expression, or a single symbol.
 
 === Procedures
 

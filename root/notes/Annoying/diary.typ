@@ -590,3 +590,9 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 系统配置整体重构了,
 另外换了一个组, 终于不用去和ai代码复现打交道了...
 赞美上天!
+
+= 2026-04-13:
+
+17:00: almost wake up, and,
+
+
