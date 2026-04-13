@@ -62,7 +62,7 @@ rotate tree@(Node h ltree _ rtree)
 
 insert :: Tree a -> val -> Tree a
 insert Leaf a           = Node 1 Leaf a Leaf
-insert (Node h lt v rt) =
+insert (Node h lt v rt) = . -- TODO
 
 foldTree :: [a] -> Tree a
 foldTree = foldr insert Leaf
