@@ -62,7 +62,7 @@ executable CIS194
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    other-modules:    Log, LogAnalysis, Golf, E1
+    other-modules:    Log, LogAnalysis, Golf, E1, E4, Calc, ExprT, Parser, StackVM
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
