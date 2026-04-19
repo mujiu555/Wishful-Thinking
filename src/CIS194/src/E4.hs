@@ -49,6 +49,7 @@ insertT :: a -> Tree a -> Tree a
 insertT val Leaf = Node 1 Leaf val Leaf
 insertT val (Node _ lt ov rt) =
   Node (1 + max (height lt) (height rt)) Leaf val Leaf
+-- TODO: Adopt Tree from Course Work I
 
 foldTree :: [a] -> Tree a
 foldTree = foldr insertT Leaf
