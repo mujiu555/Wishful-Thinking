@@ -70,6 +70,7 @@ executable CIS194
     -- Other library packages from which modules are imported.
     build-depends:
                   base ^>=4.20.2.0,
+                  containers >= 0.7,
                   random,
                   time >= 1.12.2
 
