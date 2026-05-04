@@ -10,7 +10,7 @@
 #let chat(content, nickname: none, datetime: none) = {
   let a = left
   if nickname == none {
-    a = right
+a = right
     nickname = "Self"
   }
   [
@@ -595,4 +595,36 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 17:00: almost wake up, and,
 
+= 2026-04-16:
 
+23:22: anki
+
+= 2026-04-19:
+
+21:13: finish CIS 194
+
+always boring.
+别发电
+
+= 2026-04-21
+
+00:31:
+
+很可惜, 也许我是小男娘, 每天都在疯狂希望自己真的是个女孩子,
+但是, 每次都会悲哀的考虑到, 现实
+
+多看点书吧, Haskell, 还有其他.
+
+= 2026-04-22
+
+= 2026-05-04
+
+Long time no see.
+
+It has been about one week since last time I write something into this file.
+
+Wake up at about 14, and begin work at about 15, we have concentrated on work for about 5 hours.
+Having a dinner takes about one hour yet.
+And, relax is not, stoppable, thus not until 23, have, we start work again.
+
+Thus, this 流水账 is finished.
