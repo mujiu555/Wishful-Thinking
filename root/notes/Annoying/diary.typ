@@ -628,3 +628,30 @@ Having a dinner takes about one hour yet.
 And, relax is not, stoppable, thus not until 23, have, we start work again.
 
 Thus, this 流水账 is finished.
+
+= 2026-05-06
+
+Current time is 01:00.
+8 hours work again.
+
+Another style of 8-hour work.
+
+Tomorrow, or maybe the day after tomorrow, the se course work will finally be finished.
+However, we still have one exam at Friday, and another exam at next week.
+Another two due is that, se at weekend and 208 at Friday.
+A presentation for 202 is also due next week.
+
+Holy \*\*\*\*.
+
+Prepare to switch SSG from Typsite to Kodma, and move whole repository from GitHub to Codeberg.
+Why GitLab is not serviced in China...
+
+It will eventually be one day for me to setup my own git server... They all so disappointing.
+
+Wake up ad about 14, breakfast from 3 to 3:40 and work until 5.
+Take about half an hour to go back to dorm.
+Then, work until 20, about one hour for dinner and relax, and then, work... till now.
+
+Boring!
+
+Without AI, I can do nothing! I! HATE! \*\*\*\*\*\*\*! SE! Stupid course...
