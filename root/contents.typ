@@ -35,3 +35,4 @@
 
 == #embed("/notes/MIT-6_042j/S1.typ", sidebar: "only_title", open: false)
 
+== #embed("/notes/Category/S1.typ", sidebar: "only_title", open: false)
