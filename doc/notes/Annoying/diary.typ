@@ -10,7 +10,7 @@
 #let chat(content, nickname: none, datetime: none) = {
   let a = left
   if nickname == none {
-a = right
+    a = right
     nickname = "Self"
   }
   [
@@ -687,3 +687,10 @@ Without AI, I can do nothing! I! HATE! \*\*\*\*\*\*\*! SE! Stupid course...
 永远.
 
 胆小鬼.
+
+== 永远对世界怀抱恨意, 永远为活着而心存感激
+
+= 2026-05-17:
+
+两周,
+满心恨意

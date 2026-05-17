@@ -1,12 +1,3 @@
-#import "/lib/lib.typ": *
-
-#show: schema.with("page")
-
-#title[Lilies: S-Expression Language Build Upon D-Flat System]
-#date[2025-12-14 23:46]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
-
 = Abstract 摘要
 
 Lilies (short for "List Interpret Language in s-Expression Syntax")
@@ -49,6 +40,8 @@ including continuation system should support first-class continuations and conti
 Finally, Lilies should provide a comprehensive metaprogramming system (macros, compile-time functions, and code generation) that support hygienic macros and compile-time evaluation.
 
 Lilies（全称 “List Interpret Language in s-Expression Syntax”）是一种列表处理语言方言。本报告描述了 Lilies 语言的设计与实现。
+
+---
 
 Lilies 的设计目标是极其简单且可移植。通过一个精简的内核、清晰的语义以及强大的宏系统，Lilies 能够方便地将表达式组合成更高层次的构造。该语言强调可扩展性与灵活性：其卫生宏（hygienic macro）系统使用户可以安全地向语言中添加新的语法及相应语义。语言提供了一组内建的特殊形式和宏以简化常见编程任务，这些可视为语法糖。
 
