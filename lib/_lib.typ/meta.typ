@@ -3,20 +3,19 @@
 #import "./meta/categories.typ": categories, register-category, update-category
 #import "./meta/tags.typ": tags, update-tags
 #import "./meta/share.typ": share, update-share
-#import "./meta/ref.typ": mklabel, references, register-reference
+#import "meta/indexer.typ": index, indexers, register-indexer
 #import "./meta/docs.typ": documents
 #import "./meta/uids.typ": nid
+#import "./meta/current.typ": current
 
 #import "./util.typ": repri
 
-/// - current (str): current document id-cat--title
-#let current = state("current", ("": (:)))
 
 /// - shared meta data for documents
 #let meta = (
   categories: categories,
   tags: tags,
-  references: references,
+  indexers: indexers,
   documents: documents,
   share: share,
   current: current,
