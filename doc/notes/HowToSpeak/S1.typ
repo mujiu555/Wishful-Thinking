@@ -1,3 +1,15 @@
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [How To Speak],
+  date: datetime(year: 2025, month: 10, day: 14, hour: 3, minute: 28, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "how-to-speak-s1",
+  parent_id: "index",
+)
+
+#mkheader()
+
 = How To Speak
 
 人生的成功很大程度上取决于交流的质量, 思维的深度, 写作的能力.

@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [Crafting Interpreters],
+  date: datetime(year: 2026, month: 2, day: 12, hour: 20, minute: 5, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "crafting-interpreters-s1",
+  parent_id: "index",
+)
 
-#title[Crafting Interpreters]
-#date[2026-02-12 20:05]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Chapter I: Overview
 

@@ -1,12 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [The Missing Semester of Computer Education],
+  date: datetime(year: 2025, month: 12, day: 18, hour: 21, minute: 24, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "missing-semester-s1",
+  parent_id: "index",
+)
 
-#title[The Missing Semester of Computer Education]
-#date[2025-12-18 21:24]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
-
+#mkheader()
 
 = Section I
 

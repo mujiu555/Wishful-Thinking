@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [CIS 194: Introduction to Haskell],
+  date: datetime(year: 2026, month: 3, day: 14, hour: 22, minute: 8, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "cis194-s1",
+  parent_id: "index",
+)
 
-#title[CIS 194: Introduction to Haskell]
-#date[2026-03-14 22:08]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Haskell Basics
 

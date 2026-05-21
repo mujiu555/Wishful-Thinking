@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [Types and Programming Lnaguages],
+  date: datetime(year: 2026, month: 2, day: 13, hour: 23, minute: 45, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "tapl-s1",
+  parent_id: "index",
+)
 
-#title[Types and Programming Lnaguages]
-#date[2026-02-13 23:45]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Chapter III: Untyped Calculation Expressions
 
@@ -56,7 +59,7 @@ The term above the line is called "premise", and the term below the line is call
 Something without predicate is called "axiom", which is always true.
 
 Finally, we can define terms using set operations, which gives a more specific process of finding elements in the set:
-#html.align(center, table(
+#table(
   columns: 3,
   stroke: none,
 
@@ -64,7 +67,7 @@ Finally, we can define terms using set operations, which gives a more specific p
   $S_(i+1)$, $=$, ${#true, #false, 0}$,
   $$, $$, $union {"succ" t_1, "pred" t_1, "iszero" t_1 | t_1 in S_i}$,
   $$, $$, $union {"if" t_1 "then" t_2 "else" t_3 | t_1, t_2, t_3 in S_i}$,
-))
+)
 And let $S = union_(i) S_i$ for $i in N$, then $S$ is the set of all terms.
 
 == Induction on Terms

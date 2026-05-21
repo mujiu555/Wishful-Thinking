@@ -1,9 +1,0 @@
-#import "_lib/kodama.typ": *
-
-#show: kodama
-
-#metadata((
-  title: [GitHub\@mujiu555's page],
-  date: [2026-01-25 14:18],
-  author: (link("https://github.com/mujiu555")[GitHub\@mujiu555]),
-))

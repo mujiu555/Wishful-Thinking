@@ -1,3 +1,15 @@
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [CMU 15-462/662: Linear Algebra in Computer Graphics],
+  date: datetime(year: 2025, month: 9, day: 27, hour: 22, minute: 56, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "cmu-15462-s2",
+  parent_id: "index",
+)
+
+#mkheader()
+
 = CMU 15-462/662
 
 == Linear Algebra in Computer Graphics
@@ -69,8 +81,8 @@ It has some nature properties:
 - As the shortest path between two point is always along a straight way:
   $|arrow(u)| + |arrow(v)| >= | arrow(u) + arrow(v) |$
 
-Euclidean Norm: 
-$|arrow(u)| = |(u_1, ..., u_n)| := sqrt(Sigma^n_(i=1) u^2_i) $
+Euclidean Norm:
+$|arrow(u)| = |(u_1, ..., u_n)| := sqrt(Sigma^n_(i=1) u^2_i)$
 
 == $LL^2$ Norm of Functions
 
@@ -88,7 +100,7 @@ How much two vector are lined up.
 
 Notation: $<arrow(u), arrow(v)>$ or $arrow(u) dot arrow(v)$
 
-$ arrow(u) dot arrow(v) = |arrow(u)| * |arrow(v)| * 2 cos(theta)$
+$arrow(u) dot arrow(v) = |arrow(u)| * |arrow(v)| * 2 cos(theta)$
 
 - Symmetry: $arrow(u) dot arrow(v) = arrow(v) dot arrow(u)$
 - Projection:
@@ -109,7 +121,7 @@ $ <<f,g>> := integral_0^1 f(x) g(x) d x $
 
 Linear are study of vector space and linear maps between them.
 
-- a map is linear if it maps vectors to vectors, 
+- a map is linear if it maps vectors to vectors,
   and for all vectors $arrow(u)$, $arrow(v)$
   has:
   - $f(arrow(u) + arrow(v)) = f(arrow(u)) + f(arrow(v))$
@@ -153,7 +165,7 @@ the two vectors are orthogonal.
 For two vector in $RR^2$ Space, they are orthogonal if they has $theta = 90degree$
 
 For vectors $arrow(e)_1, ..., arrow(e)_n$ are basis vectors and
-$ angle.l arrow(e)_i, arrow(e)_j angle.r = brace ^(1, i = j,)_(0, "otherwise".) $
+$ chevron.l arrow(e)_i, arrow(e)_j chevron.r = brace^(1, i = j,)_(0, "otherwise".) $
 
 == Gram-Schmidt method
 
@@ -163,7 +175,7 @@ use Gram-Schmidt method.
 + normalize first vector: divide by its length
   $arrow(e)_1 := arrow(u)_1 / (|arrow(u)_1|)$
 + subtract any component of the 1st vector from the 2nd one
-  $arrow(u)_2 := arrow(u)_2 - angle.l arrow(u)_2, arrow(e)_1 angle.r arrow(e)_1$
+  $arrow(u)_2 := arrow(u)_2 - chevron.l arrow(u)_2, arrow(e)_1 chevron.r arrow(e)_1$
 + normalize 2nd
 + until all normalized
 
