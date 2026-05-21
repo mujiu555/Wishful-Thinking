@@ -1,4 +1,15 @@
 #import "@preview/zh-kit:0.1.0": *
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [CPT205 FreeGLUT Programming],
+  date: datetime(year: 2025, month: 12, day: 15, hour: 20, minute: 28, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "cpt205-freeglut",
+  parent_id: "index",
+)
+
+#mkheader()
 
 #show: doc => setup-base-fonts(doc)
 #set par(first-line-indent: 0em)

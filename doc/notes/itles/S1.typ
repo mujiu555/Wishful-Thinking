@@ -1,10 +1,13 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [itles],
+  date: datetime(year: 2026, month: 3, day: 23, hour: 21, minute: 13, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "itles-s1",
+  parent_id: "index",
+)
 
-#title[itles]
-#date[2026-03-23 21:13]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 

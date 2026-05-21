@@ -6,8 +6,11 @@
   title: "From The C Programming Language To Theoretical Computer Science (Section I)",
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "c-s1",
   parent_id: "index",
 )
+
+#mkheader()
 
 #show raw: set text(font: (
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
@@ -2244,7 +2247,7 @@ And
 ```c
 float func(float a, float b);
 ```
-may represents $"function" f: R, R -> R$ for $f(arrow(v)) -> R, arrow(v) = angle.l a, b angle.r, a, b in R$.
+may represents $"function" f: R, R -> R$ for $f(arrow(v)) -> R, arrow(v) = chevron.l a, b chevron.r, a, b in R$.
 
 Formally, input in C programming language can be zero or more parameters.
 And output are something so called "return value".

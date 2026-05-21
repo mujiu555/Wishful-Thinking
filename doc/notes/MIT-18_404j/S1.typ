@@ -6,14 +6,17 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [MIT 18.404j Theory of Computation (junior)],
+  date: datetime(year: 2025, month: 12, day: 18, hour: 21, minute: 24, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "mit-18404j-s1",
+  parent_id: "index",
+)
 
-#title[MIT 18.404j Theory of Computation (junior)]
-#date[2025-12-18 21:24]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Applications
 
@@ -25,7 +28,7 @@ Capture important aspect of thing we try to understand.
 
 Use less memory with limited ability of computation.
 
-#html.align(center, inline(scale: 200%, block(fill: color.white, automaton(
+#automaton(
   (
     q1: (q1: 0, q2: 1),
     q2: (q1: 0, q3: 1),
@@ -33,13 +36,12 @@ Use less memory with limited ability of computation.
   ),
   final: ("q3",),
   initial: "q1",
-))))
-
+)
 Each have different
 - Stats: $q_1, q_2, q_3$
 - Transitions: $arrow^1$
-- Start State: #inline(scale: 100%, block(fill: color.white, automaton((q1: ()), initial: "q1", final: ())))
-- Accepted state: #inline(scale: 100%, block(fill: color.white, automaton((q3: ()), initial: (), final: "q3")))
+- Start State: #automaton((q1: ()), initial: "q1", final: ())
+- Accepted state: #automaton((q3: ()), initial: (), final: "q3")
 
 Give finite string as input, and have output of accepted or reject.
 
@@ -56,7 +58,7 @@ Defn: A finite automaton M is a 5-tuple $(Q, Sigma, delta, q_0, F)$:
 - $Sigma$: finite set of alphabet symbols
 - $delta$: transition function $delta: Q times Sigma -> Q$
   $delta$, somehow is, a kind of relation, give a state and a accepted symbol, then returns a (maybe) new state.
-  Eg. $delta(q, a) = r =>$  #inline(automaton((q: (r: "a"), r: ()), initial: (), final: ()))
+  Eg. $delta(q, a) = r =>$  #automaton((q: (r: "a"), r: ()), initial: (), final: ())
 - $q_0$: start state
 - $F$: set of accept states
 
@@ -67,7 +69,7 @@ For example above:
 - $F = {q_3}$.
 And have:
 
-#html.align(left, inline(scale: 200%, table(
+#table(
   columns: 3,
   stroke: none,
   table.hline(),
@@ -77,7 +79,7 @@ And have:
   $q_2$, $q_1$, $q_3$,
   $q_3$, $q_3$, $q_3$,
   table.hline(),
-)))
+)
 
 === String and languages
 
@@ -163,7 +165,7 @@ Construct $M = (Q, Sigma, delta, q_0, F) "recognize" (A_1 circle A_2)$.
 
 Then the machine $M$ should accept input $w$ if there is a split of w into $x y$ where $M_1$ accepts $x$ and $M_2$ accepts $y$.
 
-#html.align(center, inline(scale: 200%, figure(
+#figure(
   block(
     automaton(
       (
@@ -177,9 +179,9 @@ Then the machine $M$ should accept input $w$ if there is a split of w into $x y$
     ),
   ),
   caption: $M_1 "accepts" "language" A_1$,
-)))
+)
 
-#html.align(center, inline(scale: 200%, figure(
+#figure(
   automaton(
     (
       q1: (),
@@ -189,11 +191,11 @@ Then the machine $M$ should accept input $w$ if there is a split of w into $x y$
     final: ("q3",),
   ),
   caption: $M_2 "accepts" "language" A_2$,
-)))
+)
 
 And then construct M:
 
-#html.align(center, inline(scale: 200%, figure(
+#figure(
   automaton(
     (
       q1_1: (),
@@ -209,7 +211,7 @@ And then construct M:
     initial: "q1_1",
   ),
   caption: $M "accepts" "language" (A_1 circle A_2)$,
-)))
+)
 
 If there are input word $w$, then there should be a split point where $M_1$ reach accept state and jump to $M_2$ via $epsilon$ transition.
 
@@ -218,7 +220,7 @@ Construct a new machine, concatenating $M_1$ and $M_2$ together with $epsilon$ t
 But the first place machine reach accept state may not be the correct split point. M need to have a idea of all possible split points.
 = Non-determinism
 
-#html.align(center, inline(scale: 200%, figure(
+#figure(
   automaton(
     (
       q1: (q2: "a", q1: "a"),
@@ -229,7 +231,7 @@ But the first place machine reach accept state may not be the correct split poin
     initial: "q1",
   ),
   caption: "A non-deterministic finite automaton",
-)))
+)
 
 It is mostly same as deterministic finite automaton,
 In deterministic finite automaton, there is exactly one transition for each state and input symbol pair.
@@ -250,21 +252,18 @@ Since at each state, there may be multiple possible transitions for same input s
 E.g., for input "ab" for given automaton above,
 possible status can be:
 
-#html.align(
-  center,
-  inline(scale: 150%, figure(
-    diagram(
-      cell-size: 3pt,
-      $
-        & "start" edge("ld", a, ->) edge("rd", a, ->) & & & \
-        q_1 edge("d", "-->")& & q_2 edge("ld", b, ->) edge("rd", b, ->) & & \
-        "rejected" & q_1 edge("d", "-->") & & q_3 edge("d", epsilon, ->) & \
-        & "rejected" & & q_4 edge("d", "-|>") &\
-        &&&"accepted" &
-      $,
-    ),
-    caption: [Tree graph for possible status of non-deterministic finite automaton],
-  )),
+#figure(
+  diagram(
+    cell-size: 3pt,
+    $
+      & "start" edge("ld", a, ->) edge("rd", a, ->) & & & \
+      q_1 edge("d", "-->")& & q_2 edge("ld", b, ->) edge("rd", b, ->) & & \
+      "rejected" & q_1 edge("d", "-->") & & q_3 edge("d", epsilon, ->) & \
+      & "rejected" & & q_4 edge("d", "-|>") &\
+      &&&"accepted" &
+    $,
+  ),
+  caption: [Tree graph for possible status of non-deterministic finite automaton],
 )
 
 Any way that leads to accept state is accepted.
@@ -278,7 +277,7 @@ Defn: A nondeterministic finite automaton, 5-tuple $(Q, Sigma, delta, q_0, F)$:
 - $Sigma$: finite set of alphabet symbols
 - $delta$: transition function $delta: Q times Sigma_epsilon (Sigma union {epsilon}) -> P(Q) = {R | R subset.eq Q}$
   $delta$, a kind of relation, give a state and a accepted symbol (or epsilon), then returns a set of (maybe) new states.
-  Eg. $delta(q, a) = {r, s} =>$  #inline(automaton((q: (r: "a", s: "a"), r: (), s: ()), initial: (), final: ()))
+  Eg. $delta(q, a) = {r, s} =>$  #automaton((q: (r: "a", s: "a"), r: (), s: ()), initial: (), final: ())
 - $q_0$: start state
 - $F$: set of accept states
 
@@ -340,7 +339,7 @@ P.S., If any one of the state have epsilon transitions, then add those reachable
 
 E.g., for NFA above:
 
-#html.align(center, inline(scale: 200%, table(
+#table(
   columns: 5,
   stroke: none,
   table.hline(),
@@ -365,13 +364,13 @@ E.g., for NFA above:
   [since q_2 can never reach q_3 via a, \
     but b, and then epsilon to q_4],
   table.hline(),
-)))
+)
 
 Since no branch sketch to dead state ${q_2}$ or ${q_3}$ or ${q_4}$, those states can be discarded.
 
 Which have a image like:
 
-#html.align(center, inline(scale: 200%, figure(
+#figure(
   automaton(
     (
       "{q1}": ("{q1, q2}": "a"),
@@ -385,7 +384,7 @@ Which have a image like:
     initial: "{q1}",
   ),
   caption: [DFA equivalent to NFA],
-)))
+)
 
 == Recall for Closure Properties
 
@@ -408,31 +407,35 @@ Proof:
 
 Basically, Convert R to equivalent NFA $M$,
 - If R is atomic:
-  - $R = a "for a symbol" a in Sigma$: #inline(automaton((q1: (q2: "a"), q2: ()), initial: "q1", final: "q2"))
-  - $R = epsilon$: #inline(automaton((q1: (q2: "epsilon"), q2: ()), initial: "q1", final: "q2")) or #inline(automaton((q1: ()), initial: "q1", final: "q1"))
-  - $R = emptyset$: #inline(automaton((q1: ()), initial: "q1", final: ()))
+  - $R = a "for a symbol" a in Sigma$: #(automaton((q1: (q2: "a"), q2: ()), initial: "q1", final: "q2"))
+  - $R = epsilon$: #(automaton((q1: (q2: "epsilon"), q2: ()), initial: "q1", final: "q2")) or #(automaton((q1: ()), initial: "q1", final: "q1"))
+  - $R = emptyset$: #(automaton((q1: ()), initial: "q1", final: ()))
 - If R is composite:
   - $R = R_1 union R_2$:
-    for #inline(automaton((q1: ()), initial: "q1", final: "q1")) and #inline(automaton((q2: ()), initial: "q2", final: "q2")), exists
-    #inline(scale: 100%, automaton(
+    for #(automaton((q1: ()), initial: "q1", final: "q1")) and #(automaton((q2: ()), initial: "q2", final: "q2")), exists
+    #automaton(
       (q0: (q1: "epsilon", q2: "epsilon"), q1: (), q2: ()),
       final: ("q1", "q2"),
       initial: "q0",
-    ))
+    )
   - $R = R_1 circle R_2$:
-    for #inline(automaton((q11: (q12: "x")), initial: "q11", final: "q12")) and #inline(automaton((q21: (q22: "y")), initial: "q21", final: "q22")), exists
-    #inline(scale: 100%, automaton(
-      (q1: (q12: "x"), q12: (q2: "epsilon"), q2: (q22: "y")),
-      final: ("q22",),
-      initial: "q1",
-    ))
+    for #(automaton((q11: (q12: "x")), initial: "q11", final: "q12")) and #(automaton((q21: (q22: "y")), initial: "q21", final: "q22")), exists
+    #(
+      automaton(
+        (q1: (q12: "x"), q12: (q2: "epsilon"), q2: (q22: "y")),
+        final: ("q22",),
+        initial: "q1",
+      )
+    )
   - $R = R_1^*$:
-    for #inline(automaton((q1: (q2: "x")), initial: "q1", final: "q2")), exists
-    #inline(scale: 100%, automaton(
-      (q: (q1: "epsilon"), q1: (q2: "epsilon"), q2: (q: "epsilon")),
-      final: ("q", "q2"),
-      initial: "q",
-    ))
+    for #(automaton((q1: (q2: "x")), initial: "q1", final: "q2")), exists
+    #(
+      automaton(
+        (q: (q1: "epsilon"), q1: (q2: "epsilon"), q2: (q: "epsilon")),
+        final: ("q", "q2"),
+        initial: "q",
+      )
+    )
 
 Then, by structural induction on R, we can show that NFA $M$ recognizes A.
 
@@ -461,7 +464,7 @@ Proof:
 By induction on the number of states in GNFA G.
 
 
-Basic(k = 2): G = #inline(automaton((q_start: (q_accept: "r"), q_accept: ()), final: ("q_accept",), initial: "q_start")).
+Basic(k = 2): G = #(automaton((q_start: (q_accept: "r"), q_accept: ()), final: ("q_accept",), initial: "q_start")).
 Let R = r
 
 Induction step(k > 2): Assume Lemma true for k - 1 states and prove for k states.

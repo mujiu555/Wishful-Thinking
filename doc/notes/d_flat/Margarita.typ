@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [Margarita: Language as extension for Lilies in M-Expression],
+  date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "dflat-margarita",
+  parent_id: "index",
+)
 
-#title[Margarita: Language as extension for Lilies in M-Expression]
-#date[2025-12-14 23:46]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Abstract
 
