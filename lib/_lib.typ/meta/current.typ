@@ -1,3 +1,4 @@
 
-/// - current (str): current document id-cat--title: doc
-#let current = state("current", ("": (:)))
+/// - current (str): current document doc
+#let current = state("current", (:))
+#let header-depth = state("header-depth", 1)

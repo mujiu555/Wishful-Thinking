@@ -3,7 +3,7 @@
 ///   - value (dict):
 ///     - id (str): category identifier
 ///     - parent (str): parent category identifier (same as id if root)
-///     - documents (set[str]): set of document id-cat--title
+///     - documents (set[str]): set of document id
 ///
 /// Categories form a hierarchy. Each category must be registered
 /// before use via register-category().
@@ -23,7 +23,7 @@
 /// Add a document idx to a category's document set.
 /// Asserts that the category has been registered.
 /// - cat (str): category name
-/// - idx (str): document id-cat--title
+/// - idx (str): document id
 /// -> none
 #let update-category(cat, idx) = {
   context {

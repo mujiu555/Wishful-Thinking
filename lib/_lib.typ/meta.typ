@@ -3,10 +3,9 @@
 #import "./meta/categories.typ": categories, register-category, update-category
 #import "./meta/tags.typ": tags, update-tags
 #import "./meta/share.typ": share, update-share
-#import "meta/indexer.typ": index, indexers, register-indexer
+#import "./meta/indexer.typ": index, indexers, register-indexer
 #import "./meta/docs.typ": documents
-#import "./meta/uids.typ": nid
-#import "./meta/current.typ": current
+#import "./meta/current.typ": current, header-depth
 
 #import "./util.typ": repri
 
@@ -48,7 +47,7 @@
   author: none,
   date: datetime.today(),
   keywords: (),
-  id: "",
+  id: none,
   parent_id: none,
   description: none,
   category: none,
@@ -77,15 +76,12 @@
   assert.eq(type(tag), array)
   assert.eq(type(abstract), content)
 
-  let idx = id + "-" + category + "--" + repri(title)
-  assert.eq(type(idx), str)
   let doc = (
     title: title,
     author: author,
     date: date,
     keywords: keywords,
     id: id,
-    uid: nid(),
     parent_id: parent_id,
     description: description,
     category: category,
@@ -95,13 +91,18 @@
   )
   documents.update(prev => (
     ..prev,
-    (idx): doc,
+    (id): doc,
   ))
   if category != none {
-    update-category(category, idx)
+    update-category(category, id)
   }
   for t in tag {
-    update-tags(t, idx)
+    update-tags(t, id)
   }
-  current.update(prev => ((idx): doc))
+  current.update(prev => doc)
 }
+
+#let lookup(id, name, body) = context link(
+  indexers.get().at(id + ":" + name, default: none).position,
+  body,
+)
