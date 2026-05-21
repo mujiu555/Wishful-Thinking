@@ -23,9 +23,7 @@
 
 /// Generate header block: taxon + title(with slug) + metadata line
 #let mkheader() = context {
-  let docs = fetch-meta()
-  if docs.len() == 0 { return }
-  let doc = docs.at(docs.keys().at(0))
+  let doc = fetch-meta()
 
   // taxon
   let tx = doc.at("taxon", default: none)
@@ -35,12 +33,10 @@
   let t = doc.at("title", default: "")
   let slug = doc.at("id", default: "")
   if slug != "" {
-    index(slug)
-    block(below: 0.3em,
-      text(size: 1.5em, weight: heading-font-weight, t)
-      + h(0.5em)
-      + bracketed-slug(slug)
-    )
+    index(slug)[#block(
+      below: 0.3em,
+      text(size: 1.5em, weight: heading-font-weight, t) + h(0.5em) + bracketed-slug(slug),
+    )]
   } else {
     block(below: 0.3em, text(size: 1.5em, weight: heading-font-weight, t))
   }
@@ -61,8 +57,13 @@
   if doc.at("tag", default: none) != none and doc.tag.len() > 0 {
     parts.push(doc.tag.join(", "))
   }
+  if doc.at("parent_id", default: none) != none {
+    let pos = fetch-meta(n: "indexers").at(doc.parent_id + ":" + doc.parent_id, default: none)
+    if pos != none {
+      parts.push(link(pos.position, "[back]"))
+    }
+  }
   if parts.len() > 0 {
-    block(above: 0.3em, below: 0.6em,
-      text(size: 0.9em, fill: meta-color, parts.join(text(" · "))))
+    block(above: 0.3em, below: 0.6em, text(size: 0.9em, fill: meta-color, parts.join(text(" · "))))
   }
 }

@@ -12,22 +12,23 @@
 /// Register a reference (label position) for index generation.
 /// - name (str): reference identifier
 /// -> none
-#let register-indexer(name, pos, tbl: (:)) = {
-  indexers.update(prev => (..prev, (name): (position: pos, ..tbl)))
+#let register-indexer(name, pos, content, tbl: (:)) = {
+  indexers.update(prev => (..prev, (name): (content: content, position: pos, ..tbl)))
 }
 
 /// Create a Typst built-in label and auto-register it in the metadata index.
 /// - name (str): label identifier
 /// - tbl (dict): any attributes to be stored in the metadata index for this label
 /// -> label
-#let index(name, tbl: (:)) = context {
+#let index(name, content, tbl: (:)) = context {
   let loc = here()
-  let prefix = current.get().keys().at(0, default: none)
-  register-indexer(prefix + ":" + name, loc, tbl: tbl)
+  let prefix = current.get().id
+  register-indexer(prefix + ":" + name, loc, content, tbl: tbl)
   [#metadata((
-    name: name,
-    loc: loc,
-    ..tbl,
-  )) <indexers>]
+      name: name,
+      loc: loc,
+      ..tbl,
+    )) <indexers>
+    #content]
 }
 

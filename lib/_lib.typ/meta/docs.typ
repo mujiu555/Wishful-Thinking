@@ -3,7 +3,6 @@
 ///   - value (dict):
 ///     - parent (str): parent document id
 ///     - id (str): document id
-///     - uid (int): unique id
 ///     - title (str): document title
 ///     - author (content | array[content]): authors
 ///     - date (datetime): creation date
