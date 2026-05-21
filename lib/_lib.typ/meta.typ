@@ -56,7 +56,6 @@
   abstract: [],
   tbl: none,
 ) = {
-  assert.eq(type(title), str)
   assert({
     let t = type(author)
     t == array or t == content
