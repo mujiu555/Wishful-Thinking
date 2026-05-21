@@ -1,17 +1,20 @@
-#import "_lib/kodama.typ": *
+#import "/lib/_lib.typ/lib.typ": *
+#include "cats.typ"
 
-#show: kodama
-
-#metadata((
-  title: [GitHub\@mujiu555's page],
-  date: [2025-12-14 23:46],
+#meta(
+  title: [About],
+  id: "about",
+  parent_id: "index",
+  date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   author: (link("https://github.com/mujiu555")[GitHub\@mujiu555]),
-))
+  category: "about",
+)
 
+#mkheader()
 
-= Hello, world!
+= "Hello, world!"
 
-This is my personal page hosted on GitHub pages, powered by #link("https://github.com/kokic/Kodama/")[Kodama].
+This is my personal page hosted on GitHub pages, powered by myself.
 
 Which records some of my works and articles.
 Derived from #link("https://github.com/mujiu555/Wishful-Thinking")[my repository] manually.
@@ -55,6 +58,7 @@ Here is a brief introduction about myself:
   - Jetbrains Intellij IDEA
   - Firefox, Zen
   - Krita
+  - Typst: Used to Replace Markdown rather than LaTeX, since it is force to use LaTeX in conferences
 - BTW I use `NixOS`. (Yeah, I was an Arch User)
   - What I uses:
     - CPU: Intel(R) Core(TM) i5-10\*\*\*\*, laptop
@@ -73,6 +77,7 @@ Here is a brief introduction about myself:
 - Software is not the only thing I am interested in, I also have some experience in hardware:
   - Embedded programming,
   - Actually, I have no hardware or electronic courses before teaching myself on my own,
+- 尽管如此, 我非常不学无术, 轻喷谢谢喵
 
 === GitHub: #link("https://github.com/mujiu555")[mujiu555]
 
