@@ -18,7 +18,7 @@
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
 ))
 
-= CPT205 Computer Graphics
+== CPT205 Computer Graphics
 
 A subject concerning will all aspect of producing pictures or images using a computer.
 - The image you see on the screen
@@ -27,9 +27,9 @@ A subject concerning will all aspect of producing pictures or images using a com
 
 重要, 考过定义, 无语
 
-== Input -> Process -> Output pipeline
+=== Input -> Process -> Output pipeline
 
-== Frame Buffer
+=== Frame Buffer
 
 - Frame Buffer: A block of memory, dedicated to graphics output, that holds the content of what will  be displayed.
 - Pixel: an element of the frame buffer.
@@ -52,7 +52,7 @@ Image quality:
 - Contrast
 - Sensitivity of display to viewing angle
 
-== Pixels
+=== Pixels
 
 Pixel: The most basic addressable image element in a screen
 - CRT - Colour triad (RGB phosphor dots)
@@ -73,7 +73,7 @@ Raster display
 - Cathode Ray Tubes (CRTs), most “tube” monitors you might see. Used to be very common, but big and bulky.
 - Liquid Crystal Displays (LCDs), there are two types: transmissive (laptops, those snazzy new flat panel monitors) and reflective (wrist watches).
 
-=== Cathode ray tubes (CRTs)
+==== Cathode ray tubes (CRTs)
 
 - Heating element on the yolk
 - Phosphor coated screen
@@ -84,7 +84,7 @@ Raster display
 - Very good resolution
 - Heavy, not flat
 
-=== Liquid crystal displays (LCDs)
+==== Liquid crystal displays (LCDs)
 
 Also divided into pixels, but without an electron gun firing at a screen; LCDs have cells that either allow light to flow through, or block it.
 
@@ -98,7 +98,7 @@ Also divided into pixels, but without an electron gun firing at a screen; LCDs h
 - Light weight
 - Low power consumption
 
-== Graphics software
+=== Graphics software
 - How to talk to the hardware? Algorithms, Procedures, Toolkits and Packages (Low Level High Level)
 - Programming API (helps to program, for our labs)
   - OpenGL (our focus)
@@ -111,7 +111,7 @@ Also divided into pixels, but without an electron gun firing at a screen; LCDs h
   - AutoCAD, Studio Max, Unity, Maya, …
   - Medical visualisation, modelling, …
 
-=== OpenGL
+==== OpenGL
 
 - First introduced in 1992.
 
@@ -125,7 +125,7 @@ Also divided into pixels, but without an electron gun firing at a screen; LCDs h
 - With OpenGL, you can control computer-graphics technology to produce realistic pictures or ones that depart from reality in imaginative ways.
 - OpenGL has become the industry standard for graphics applications and games.
 
-== In OpenGL, mathmatics
+=== In OpenGL, mathmatics
 
 x-axis: front to camera,
 y-axis: left to right,
@@ -139,7 +139,7 @@ Vectors:
 - $v_1 dot v_2 = |v_1| |v_2| cos(alpha) = v_1i * v_2i + v_1j * v_2j$
 - $v_1 times v_2 = - v_2 times v_1 = |v_1| |v_2| sin(alpha) arrow(u)$
 
-== Line
+=== Line
 
 “Good” discrete lines
 - No gaps in adjacent pixels
@@ -213,7 +213,7 @@ The Bresenham line algorithm
 - The calculation of each successive pixel requires only an addition and a sign test.
 - It is so efficient that it has been incorporated as a single instruction ongraphics chips.
 
-== Circles
+=== Circles
 
 In Cartesian co-ordinates:
 $ (x - x_c)^2 + (y - y_c)^2 = r^2 $
@@ -258,7 +258,7 @@ Determining pixel positions along a circle circumference using symmetry and the 
 将整个平面均分成八份, 以 $+45degree$ 为基准, 对称到其他部分.
 
 
-== Geometric primitives – polygons and triangles
+=== Geometric primitives – polygons and triangles
 
 - The basic graphics primitives are points, lines and polygons
 - A polygon can be defined by an ordered set of vertices
@@ -266,7 +266,7 @@ Determining pixel positions along a circle circumference using symmetry and the 
 - Complex objects are eventually divided into triangular polygons (a process called tessellation)
 - Because triangular polygons are always flat
 
-== Scan conversion - rasterization
+=== Scan conversion - rasterization
 
 • The output of the rasterizer is a set of potential pixels (fragments) for each primitive, which carry information for colour and location in the frame buffer, and depth information in the depth buffer for further processing.
 • The 3D to 2D projection gives us 2D vertices (points) to define 2D graphic primitives.
@@ -287,7 +287,7 @@ Polygon fill is a sorting problem, where we sort all the pixels in the frame buf
 
 光栅化器需要填充多边形的内部.
 
-== Geometric Transformation
+=== Geometric Transformation
 
 Pipeline: a series of transformations that must be applied to an object before it can be displayed on the screen.
 
@@ -324,7 +324,7 @@ projection, 投影, 透视投影和平行投影, 将观察坐标uvw映射到裁�
 
 viewport, 视口变换, 将裁剪坐标映射到设备坐标, 映射到屏幕像素坐标.
 
-=== Translation
+==== Translation
 
 Translating a point from $P(x, y)$ to $P’(x’, y’)$ along vector T
 
@@ -339,7 +339,7 @@ $
   P'=P+T
 $
 
-=== Rotation
+==== Rotation
 
 Rotating a point from $P(x, y)$ to $P’(x’, y’)$ about the origin by
 angle $θ$ - radius stays the same, and angle increases by $θ$.
@@ -369,7 +369,7 @@ Rotation about a fixed point rather than the origin
 - Move the fixed point back to its initial position
 - $M = T(p_f) R(θ) T(-p_f)$
 
-=== Scaling
+==== Scaling
 
 $
   x' = x dot s_x,\
@@ -380,11 +380,11 @@ $
   P' = S dot P => vec(x', y') = mat(s_x, 0; 0, s_y) dot vec(x, y)
 $
 
-=== Reflection
+==== Reflection
 
 Corresponding to negative scale factors.
 
-=== Shearing
+==== Shearing
 
 $
   x’ = x + y cot(θ),\
@@ -396,7 +396,7 @@ $
   vec(x', y') = mat(1, cot(theta); 0, 1) dot vec(x, y)
 $
 
-== 2D homogeneous coordinates
+=== 2D homogeneous coordinates
 
 Regular 2d point, $vec(x, y) => vec(w x, w y, w)$
 - Translation: $vec(x', y', 1) = mat(1, 0, t_x; 0, 1, t_y; 0, 0, 1) dot vec(x, y, 1)$
@@ -409,18 +409,18 @@ Regular 2d point, $vec(x, y) => vec(w x, w y, w)$
 变换都是对于点而进行的, 每个矩阵中的元素都表示一个对于x, 或y的变换
 第一列表示x的变换, 第二列表示y的变换, 第三列表示平移变换
 
-== 2D composite transformation
+=== 2D composite transformation
 
 对于没有变换的矩阵, 组合变换矩阵是单位矩阵.
 
-=== General rotation about the origin
+==== General rotation about the origin
 
 A rotation by q about an arbitrary axis can be decomposed into the concatenation of rotations about
 the x, y, and z axes.
 $R(q) = R_z(q_z) R_y(q_y)R_x(q_x)$
 where $q_x$, $q_y$ and $q_z$ are called the Euler angles.
 
-== View
+=== View
 
 Viewing requires three basic elements
 - One or more objects
@@ -442,7 +442,7 @@ Buildings, polyhedra, manufactured objects, etc.
 - one-point perspective: 单点透视, looking directly at one face of the object with the projectors converging to a single point
 - three-point perspective: 三点透视, looking at the object with the projectors converging to a single point but not directly at any face of the object
 
-=== Planar geometric projection
+==== Planar geometric projection
 
 Standard projections project onto a plane.
 
@@ -458,7 +458,7 @@ Perspective vs parallel
 - Classical viewing has developed different techniques for drawing each type of projection.
 - The fundamental distinction is between parallel and perspective viewing even though mathematically parallel viewing is the limit of perspective viewing.
 
-==== Perspective
+===== Perspective
 
 Perspective projection generates a view of 3-dimensional scene by projecting points to the view plane along converging paths.
 投影到视平面
@@ -484,7 +484,7 @@ pipeline:
 - select lines, setting projection matrix,
 - clipping, and setting the view volume
 
-===== Frustum perspective projection
+====== Frustum perspective projection
 
 By adding near and far clipping planes that are parallel to
 the viewing plane, parts of the infinite perspective view
@@ -516,12 +516,12 @@ simply enlarged as they are projected away.
 When the viewing point is very far away from the view plane, a
 perspective projection approaches to a parallel projection.
 
-==== Parallel projection
+===== Parallel projection
 
 This method projects points on the object surface along parallel lines.
 It is usually used in engineering and architecture drawings to represent an object with a set of views showing accurate dimensions.
 
-==== 正交投影
+===== 正交投影
 
 The projectors are orthogonal to projection surface
 
@@ -537,7 +537,7 @@ employ these orthographic projections since the
 lengths and angles are accurately depicted and can be
 measured from the drawings.
 
-==== Axonometric projection
+===== Axonometric projection
 轴测投影
 
 一个图像显示所有三围,
@@ -562,7 +562,7 @@ Advantages, disadvantages:
 
 重要, 前两年没考
 
-==== Oblique projection
+===== Oblique projection
 斜投影, 平行投影的一种特殊形式
 
 #figure(image("./img/CPT205-L5-4.png"))
@@ -572,7 +572,7 @@ Advantages, disadvantages:
 - Angles in faces parallel to the projection plane are preserved while we can still see around side
 - not real
 
-== 3D viewing co-ordinate parameters (1)
+=== 3D viewing co-ordinate parameters (1)
 
 A world co-ordinate position $P_0(x_0, y_0, z_0)$ is selected as the viewing origin
 (also called viewing point, viewing position, eye position or camera position).
@@ -602,7 +602,7 @@ Any direction can be used for V as long as it is not parallel to N.
 选视角原点, 选参考点, 有视角方向N, 视平面法向量即为N
 
 
-== Parametric curves
+=== Parametric curves
 
 Explicit representation: $y = a_0 + a_1 x$
 
@@ -623,9 +623,9 @@ Parametric equation:
 $ x = r cos(360t), y = r sin(360t), (0 ≤ t ≤ 1) $
 
 
-== 3D modeling
+=== 3D modeling
 
-=== Wireframe models
+==== Wireframe models
 
 oldest and simplest representation of 3D objects,
 a finite set of points and curves,
@@ -633,14 +633,14 @@ a finite set of points and curves,
 ambiguity of the model and the severe difficulties in validating the model,
 not provide surface and volume information,
 
-=== Surface models
+==== Surface models
 
 generates objects with a more complete and less ambiguous representation.
 
 points and curves.
 a closed loop of curves with skin
 
-=== solid models
+==== solid models
 
 csg: constructive solid geometry
 
@@ -666,7 +666,7 @@ types:
 
 
 
-==== Euler's law
+===== Euler's law
 
 To ensure the topological validity for a solid (i.e., manifold
 model), a manifold model must satisfy the following Euler

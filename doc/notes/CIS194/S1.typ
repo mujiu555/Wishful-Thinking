@@ -10,7 +10,7 @@
 
 #mkheader()
 
-= Haskell Basics
+== Haskell Basics
 
 Haskell is:
 + Functional: first-class functions, expressions
@@ -21,7 +21,7 @@ Haskell is:
   - enable more compositional programming style
 + Statically typed
 
-== Declaration & Variables
+=== Declaration & Variables
 
 use:
 ```hs
@@ -32,7 +32,7 @@ x = 3
 `::` represents "has type" here.
 With `=`, x defined to be 3 and will never get changed.
 
-== Comments
+=== Comments
 
 ```hs
 -- is line comments
@@ -42,7 +42,7 @@ multiple line comments
 -}
 ```
 
-== Basic Types
+=== Basic Types
 
 - Int: max sized integer
 - Integer: Big Integer
@@ -52,9 +52,9 @@ multiple line comments
 - Char: Unicode Characters: 'x'
 - String: Char String: "..."
 
-== Arithmetic
+=== Arithmetic
 
-=== Integer:
+==== Integer:
 
 + `+`:
 + `-`:
@@ -68,7 +68,7 @@ multiple line comments
 If you place prefix inside a pair of "\`", the function will be turned into infix operator.
 If you place infix operator in brackets and in front of other operands, it will be turned into a function call.
 
-=== Boolean
+==== Boolean
 
 + `&&`
 + `||`
@@ -79,13 +79,13 @@ If you place infix operator in brackets and in front of other operands, it will 
 + `>=`
 + `<=`
 
-=== If
+==== If
 
 `if <b> then <t> else <f>`
 
 Haskell prefer to use pattern match or guards instead of if expressions.
 
-== Functions
+=== Functions
 
 ```hs
 sumtorial :: Integer -> Integer
@@ -131,11 +131,11 @@ foo 36   -- > -43
 foo 38   -- > 41
 ```
 
-=== Tuples
+==== Tuples
 
 Type `(T, T2, ...)`, together with value `(v, v2, ...)`
 
-=== Currying
+==== Currying
 
 In Haskell it is suggested to have:
 ```hs
@@ -155,13 +155,13 @@ f x y z = x + y + z
 ((f 3) 17) 8
 ```
 
-== Combining functions
+=== Combining functions
 
-= Algebraic Data Types
+== Algebraic Data Types
 
 #link("book.realworldhaskell.org")[Real World Haskell]
 
-== Enumeration Types
+=== Enumeration Types
 
 ```hs
 data Thing = Shoe
@@ -211,7 +211,7 @@ Thus Failure is a value of type `FailableDouble`, OK not.
 
 Data constructors can have more than one arguments.
 
-== Pattern Matching
+=== Pattern Matching
 
 To match a constructor with more than one parameter, wrap entire pattern with parentheses.
 Underscore `_` is a wildcard pattern, which matches anything but doesn't bind to a name.
@@ -225,7 +225,7 @@ f Failure = 0
 f (OK d) = d
 ```
 
-== Case
+=== Case
 
 ```hs
 case "Hello" of
@@ -234,28 +234,28 @@ case "Hello" of
   _     -> 7
 ```
 
-== Recursive data types
+=== Recursive data types
 
 Define data types in terms of themselves.
 
-= Recursion patterns, polymorphism, and the Prelude.
+== Recursion patterns, polymorphism, and the Prelude.
 
 `map`, `filter`, `foldr`, `zip`...
 
-== Polymorphism
+=== Polymorphism
 
-=== Polymorphic data types
+==== Polymorphic data types
 
 With free variable in data definition, for which, those variables are called type parameter,
 we can define polymorphic data types.
 
-=== polymorphic functions
+==== polymorphic functions
 
 When writing polymorphic functions, it is needed to keep in mind that caller can determine the type of callee.
 
 So polymorphic functions must work for every possible input type.
 
-== Total and partial functions.
+=== Total and partial functions.
 
 Functions which are well defined for every possible input and respond with a value of the correct type are called total functions.
 
@@ -263,7 +263,7 @@ Functions which may crash with some specified input or may recurse forever are c
 
 It is never suggested to write partial functions.
 
-= Higher-order programming and type inference
+== Higher-order programming and type inference
 
 Anonymous function:
 Beginning with `\` and any number of parameters,
@@ -279,11 +279,11 @@ greaterThan100 xs = filter (\x -> x > 100) xs
 Another way to do that is provide `(> 100)`, which is same as `\x -> x > 100`.
 `(?y)` is same as `\x -> x ? y`, while `(y?)` is same as `\x -> y ? x`.
 
-== function composition
+=== function composition
 
 Function x dot (`.`) function y, gives function x (function y).
 
-== Currying and partial application
+=== Currying and partial application
 
 Every function in Haskell is lambda expression that accepts only one argument,
 thus multiple parameter functions are curried.
@@ -291,18 +291,18 @@ thus multiple parameter functions are curried.
 Thus if we provides only some of the arguments, we get back a function that takes the remaining arguments.
 This is called partial application.
 
-== Wholemeal programming
+=== Wholemeal programming
 
 Prefer to combine functions rather than work deep inside.
 
 Point-free style says that define a function without reference to its arguments.
 
-= more polymorphism and type classes
+== more polymorphism and type classes
 
 Haskell has a special type of polymorphism called parametric polymorphism.
 Which means that polymorphic functions must work uniformly for any input type.
 
-== Parametricity
+=== Parametricity
 
 With type mentioned before: `a -> a -> a`, since `a` is a lowercase parameter, it is not a Type but a type variable, which can stand for any type.
 
@@ -314,7 +314,7 @@ f x y = x && y
 Which will throw an error, since `&&` only works for `Bool`, but `a` can be any type.
 As the `a -> a -> a` is just a promise, that a function with this signature will work no matter what type the caller chooses.
 
-== Type Classes
+=== Type Classes
 
 Double arrow like `(+) :: Num a => a -> a -> a` is type-class-constrainted type signature.
 E.g., in definition of `Eq`,
@@ -362,31 +362,31 @@ class Eq a where
 Type classes can have more parameters than only one.
 Which looks like generic function in Common Lisp CLOS.
 
-= Lazy Evaluation
+== Lazy Evaluation
 
-== Strict evaluation
+=== Strict evaluation
 
 Contrast to lazy evaluation, strict evaluation means that an expression is evaluated as soon as it is bound to a variable.
 When we try to call a function with strict evaluation, the arguments will be evaluated before the function is called.
 
 The strict evaluation policy, aka. call-by-value may lead to some side effects, since we cannot control when the arguments are evaluated as lazy evaluation does.
 
-== Side effects and purity
+=== Side effects and purity
 
 Side effects are anything chat causes evaluation of an expression to interact with something outside itself.
 The root issue is that sch outside interactions are time-sensitive.
 
-== Lazy evaluation
+=== Lazy evaluation
 
 Arguments in lazy evaluation strategy are not evaluated until they are actually used in the body of the function.
 
-== Pattern matching drives evaluation
+=== Pattern matching drives evaluation
 
-= Folds and monoids
+== Folds and monoids
 
 Monoids, in Chinese, is called "幺半群", which is a set with an associative binary operation and an identity element.
 
-== Folds, again
+=== Folds, again
 
 For each `Fold*` function, that there is a take-away message that we can implement a fold for may data types.
 The fold for T will take one higher-order argument for each of T's constructors,
@@ -394,7 +394,7 @@ encoding how to turn the values stored by that constructor into a value of the r
 
 Assuming that any recursive occurrences of T have already been folded into a result.
 
-== Monoids
+=== Monoids
 
 In `Data.Monoid`, there is a type class `Monoid`,
 where there are:
@@ -447,12 +447,12 @@ is equivalent to:
 (fun_a (fun_b (fun_c a))) b
 ```
 
-= IO
+== IO
 
 With lazy evaluation, Haskell is purely functional, however it means that any Haskell program can do nothing but waste CPU time.
 Since functional can have no external effects and shall not depend on any external state or stuffs.
 
-== The IO type
+=== The IO type
 
 To solve the problem, there is a special type called `IO`.
 Values of type `IP a` are descriptions of effectful computations (多副作用表达式计算),
@@ -466,7 +466,7 @@ It is a recipe for generate a value of type `a` when executed.
 
 For ```hs main :: IO ()``` we can pass other IO to `main`.
 
-== Combining IO
+=== Combining IO
 
 To combine two IO computations, we can use `>>` operator, "and then".
 It has the type `(>>) :: IO a -> IO b -> IO b`,
@@ -475,7 +475,7 @@ It creates an IO computation consists of performing the first computation, disca
 
 Or, we can have `(>>=) :: IO a -> (a -> IO b) -> IO b`, "bind", which is more powerful than `>>` since it allows us to use the result of the first computation to determine the second computation.
 
-== Record syntax
+=== Record syntax
 
 Suppose we have a data type:
 ```hs
@@ -505,14 +505,14 @@ We can still construct C in pattern matching, but there are some extra benefits:
     C { field1 = f1, field3 = f3 } -> ... f1 ...
   ```
 
-= Functors
+== Functors
 
 What if we can treat types that accepts some type variable as something function-like?
 Can we apply some function-like type variables when defining variables?
 E.g., can we have ```hs thingMap :: (a -> b) -> f a -> f b```.
 In some repeated patterns, the part that is different, is the container being "mapped over", which is what we want.
 
-== Kinds
+=== Kinds
 
 Types themselves have types, which is called `Kinds` in Haskell.
 P.S., There are some other level beyond kinds outside of the Haskell, for example maybe pure type system or universe.
@@ -532,7 +532,7 @@ the kind of `f` is `* -> *` and thus, Funny is a higher-order type constructor, 
 
 Kinds can be partially applied, too.
 
-== Functor
+=== Functor
 
 The essence (本质) of the mapping pattern we saw was a higher-order function with a type like
 ```hs thingMap :: (a->b) -> f a -> f b``` where `f` is a type variable standing in for some type of kind `* -> *`.
@@ -551,7 +551,7 @@ instance Functor ((->) e) where
   fmap = (.)
 ```
 
-= Applicative Functors
+== Applicative Functors
 
 Concerning we may have something like:
 ```hs
@@ -581,7 +581,7 @@ fmap h fa :: f (b -> c)
 ```
 fmap cannot help us to apply `h` to `fa` and `fb` since it only accepts a function of type `a -> b`.
 
-== Applicative
+=== Applicative
 
 Those functors that make "contextual application" possible are called `Applicative` functors, and `Control.Applicative` defines the `Applicative` type class:
 ```hs
@@ -615,18 +615,18 @@ liftA3 :: Applicative f => (a -> b -> c -> d) -> f a -> f b -> f c -> f d
 liftA3 f x y z = f <$> x <*> y <*> z
 ```
 
-== Applicative Laws
+=== Applicative Laws
 
 ```hs
 f `fmap` x === pure f <*> x -- (pure f) <*> x
 ```
 Mapping a function f over a container x ought to give the same result as first injecting the function into the container, and then applying it to x with `<*>`.
 
-== Applicative Examples
+=== Applicative Examples
 
-= Applicative Functors, part II
+== Applicative Functors, part II
 
-== Aside: Levels of Abstraction
+=== Aside: Levels of Abstraction
 
 `Functors` is a nifty tool but relatively straightforward.
 P.S., I do not think that straightforward is a bad thing since i always confused about `Applicative`.
@@ -636,10 +636,10 @@ P.S., I do not think that straightforward is a bad thing since i always confused
 When working with things like `Applicative`, it is needed to keep in mind that there are multiple levels of abstraction involved.
 i.e., higher-rank polymorphism.
 
-== The Applicative API
+=== The Applicative API
 
 
-= Monads
+== Monads
 
 ```hs
 class Monad m where

@@ -11,11 +11,11 @@
 
 #mkheader()
 
-= Assembly, Constitution Principle of Computer, Computer Organization and Architecture and Operating System
+== Assembly, Constitution Principle of Computer, Computer Organization and Architecture and Operating System
 
-== Section I: Basis Assembly
+=== Section I: Basis Assembly
 
-== Coding, Numeration, Radix
+=== Coding, Numeration, Radix
 
 Values, plain bits, expressed in high or low electronic levels, may represent some information.
 With corresponding context or encoding, together with its own properties, like name, can be then
@@ -27,19 +27,19 @@ Encoding converting data into a specific format or representation.
 
 Coding help people understand data.
 
-=== Symbol, Calculation & Presentation
+==== Symbol, Calculation & Presentation
 
 Calculation are some relation between different data.
 Directly, manipulate different value in different coding.
 
-=== Decimal
+==== Decimal
 
 Decimal integers are numbers based on ten,
 which means every number represented in decimal form may contains only
 0-9.
 Every digit's value based on position dependent power of 10.
 
-=== Binary
+==== Binary
 
 Binary integers are numbers based on two,
 every time a digit has value of 2, will result in carry.
@@ -48,23 +48,23 @@ Thus only 0, 1 will appear in binary representation.
 
 Every bit's value based on position dependent power of 2.
 
-=== Hexadecimal, Octal
+==== Hexadecimal, Octal
 
 Hexadecimal numbers based on 16 while Octal numbers based on 8.
 
-=== Radix conversion
+==== Radix conversion
 
 Referencing
 #link("https://github.com/mujiu555/Wishful-Thinking/blob/main/doc/root/c/typ/S1.typ")[redix].
 
-=== Data, Numbers, Computer
+==== Data, Numbers, Computer
 
 Data is presented in binary number in computer.
 
 For each cell of calculation unit can only have two state, open and close.
 Which has natural one-to-one correspondence with binary bits.
 
-== CPU, BUS, Memory
+=== CPU, BUS, Memory
 
 Most important part of a computer is CPU.
 CPU, central processing unit, controls almost all calculation process of computer.
@@ -98,14 +98,14 @@ once data caches, it can be access much faster than other data still exist only 
 main memory later.
 When data accessed, changed and used, it may also be written back to memory when every thing finished.
 
-=== Data, Instructions
+==== Data, Instructions
 
 Data, the raw information, may has some specified meaning after interpreting by associating it together with context and name.
 Instruction, represented in same way as regular data, in binary number.
 
 Data is what a computer processes, and instructions specify how to do so.
 
-==== Dimension, Unit
+===== Dimension, Unit
 
 To measure how much data there are, it is needed to specify units.
 
@@ -139,7 +139,7 @@ Processors may treat data different as well.
 As for processing granularity, a byte is typically the smallest independently loadable/storable object,
 whereas the minimum operand width for arithmetic/logic operations depends on the ISA (commonly 8/16/32/64 bits).
 
-=== Harvard, von Neumann Architecture
+==== Harvard, von Neumann Architecture
 
 As we mentioned before, data and instructions both stored in binary form.
 So, CPU cannot actually tell whether some memory storing data or instructions.
@@ -158,7 +158,7 @@ For example, some JIT compiler are implemented in such way.
 Harvard architecture, however, prevent data from being treated as instruction.
 Though it reduces flexibility, ambiguity are prevented.
 
-=== Program Counter, Instruction Register
+==== Program Counter, Instruction Register
 
 How a program executes?
 CPU reads instruction, and them executes them.
@@ -187,7 +187,7 @@ and take effects.
 PC and IR are both abstracted concept of physical registers.
 They may not exists in real CPU, but there must exist a, or group of, register(s) do the function they describes.
 
-=== Memory Address Register, Memory Buffer Register, Memory Data Register & Memory
+==== Memory Address Register, Memory Buffer Register, Memory Data Register & Memory
 
 When CPU try to visit memory, it also needs something to record where it meant to read.
 Just like PC records which instruction should execute next.
@@ -198,7 +198,7 @@ In some case, MBR can also be called as "Memory, Data Register", MDR.
 
 Furthermore, most important, MAR, MBR still not the real register.
 
-=== Fetch-Execute Cycle
+==== Fetch-Execute Cycle
 
 When CPU executing programs, it follows the fetch-execute cycle.
 Until it receives halt instruction, it will repeat read, decode, execute process.
@@ -214,7 +214,7 @@ Calling ALU to actually execute the instruction.
 
 This is a full fetch-execute cycle for CPU.
 
-=== CISC & RISC
+==== CISC & RISC
 
 CISC, Complex Instruction Set Computer, a collection of architecture,
 try to improve computer performance by decrease instruction number of some specify operations.
@@ -239,14 +239,14 @@ Furthermore, overall number of registers in RISC are more than those in CISC.
 CPU control method adopted by those two type of architecture are also different,
 CISC often uses micro program to control whole CPU, while RISC uses logical circuit.
 
-=== Cache
+==== Cache
 
 Inside CPU, it is too slow to fetch outside registers, so cache some frequent used data is a good idea.
 Cache may have multiple level, each get far away from core.
 
 L1, L2 cache may spare within one core, and L3 cache may be used commonly by whole CPU.
 
-=== Memory
+==== Memory
 
 Memory, most data and instructions are stored here,
 CPU use it to cache data, store results and communicate with other components.
@@ -275,7 +275,7 @@ Optane memory, it can even store data after power-off.
 Devices other than main memory still have their own memory,
 for example, hard drivers, may have their own cache (a memory) to exchange information with CPU.
 
-==== Address
+===== Address
 
 Memory is a kind of physical device,
 but it is not possible to access memory through its physical information,
@@ -300,7 +300,7 @@ And then CPU can access those devices without specify its hardware information.
 This id, we call it "Address".
 Every address indexes a space of memory.
 
-==== Bytes, Word, Double Word and Half-Word
+===== Bytes, Word, Double Word and Half-Word
 
 In assembly, or CPU design, there are another measurement for data,
 
@@ -322,7 +322,7 @@ In assembly, or CPU design, there are another measurement for data,
 
 Those units measure the data computer can manipulate DIRECTLY.
 
-==== Direct Memory Access
+===== Direct Memory Access
 
 Most time, CPU do calculating work, this takes relative small times.
 But when CPU have to access memory or other device, it must take multiple cycles to fetch data.
@@ -332,7 +332,7 @@ Thus, it is natural to have a special designed device fetching data for CPU.
 When CPU have to fetch data from peripheral, DMA will take this job and copy information from those devices into memory,
 while CPU do its own calculating job.
 
-=== ROM
+==== ROM
 
 Outside memory, there are another kind of data storage, ROM, Read-Only Memory.
 
@@ -344,7 +344,7 @@ As time goes, ROM soon developed into EPROM, EEPROM and NAND Flash.
 Which can be read and rewritten using special tool, can be covered using light or other method, and Write-Rewrite using only electron.
 NADA Flash is the basis of USB Memory Driver and SSD.
 
-=== Storage
+==== Storage
 
 Hard drivers, together old school soft drivers, are storage for computer, which have larger space,
 more reliable storage ability than memory.
@@ -352,7 +352,7 @@ Always have the responsibility for keep data.
 
 But the speed of storage are much slower than memory.
 
-=== BUS
+==== BUS
 
 How CPU access its desired data, how CPU touches its required devices indeed?
 
@@ -367,7 +367,7 @@ Why we need BUS, rather than other communicate architecture?
 - BUS also standardize interfaces for devices.
   Before PCIe, there are multiple different connector for devices.
 
-==== Address BUS
+===== Address BUS
 
 Address Bus, as its name, used for transfer memory address.
 With address bus, CPU then can visit its wanted memory.
@@ -377,7 +377,7 @@ Width of address bus determine the largest memory space a computer can visit.
 
 With a 32-bit address bus, CPU can visit maximum 4GB data.
 
-==== Data BUS
+===== Data BUS
 
 Data Bus transfer actual data, as CPU specify its wanted data space address by Address Bus.
 The terminal device may return actual data the space stores back towards CPU using Data Bus.
@@ -389,7 +389,7 @@ Width of Data Bus limits maximum size of data a CPU can fetch or write.
 
 With a CPU with register size 64, Data Bus width 64, whole register can be stored directly.
 
-==== Control BUS
+===== Control BUS
 
 Control Bus transfer control or status signal.
 Both side can send or receive signal transferred by Control Bus.
@@ -400,7 +400,7 @@ to storage will instruction storage which data to read or how to store some data
 Also, signals send by terminal devices may also affect CPU, for example, I/O finish interrupt signal
 may tell CPU some data finish reading.
 
-==== Dual Independent BUS: North, South Bridge
+===== Dual Independent BUS: North, South Bridge
 
 In traditional bus system, bus connects all components of a computer.
 This result in long time waste when I/O transfer.
@@ -415,7 +415,7 @@ Front Side Bus, outside CPU, connect CPU with North and South Bridge.
   - PCI: high speed I/O devices
   - ISA: low speed I/O devices
 
-=== Stack
+==== Stack
 
 Since memory is represented in large continuous space logically.
 Find methods for data management is a large problem.
@@ -426,7 +426,7 @@ Stack is a linear first-in-last-out data structure.
 First choose an address as base of stack, and then we can push data and pop data out of the stack.
 On the other way, it is possible to index element inside a stack by offset.
 
-==== Stack grows downwards
+===== Stack grows downwards
 
 In computer, continuous memory have address, and then some address with larger value can be seen as high
 address, and thus we can define the side of stack.
@@ -436,24 +436,24 @@ and then stack increment will result in stack grown towards lower address.
 
 Why stack always choose higher address: #link("https://github.com/mujiu555/Wishful-Thinking/blob/mujiu555@feat/c/doc/root/c/typ/S1.typ").
 
-==== Push
+===== Push
 
 Push operations to stack eventually lead to stack growth.
 It first add new element onto the top of stack, and then increase stack top pointer.
 
-==== Pop
+===== Pop
 
 Pop operation to stack eventually lead to stack shrink.
 It store the value store at top to somewhere, and then decrease stack top pointer.
 
-=== Registers
+==== Registers
 
 Registers in CPU, is the most basic function unit.
 They have the function to store data, and put them into calculating.
 
 Following are registers commonly used in `8086`, `i386`, `x86`, `ia32`, `amd64`(`x86_64`).
 
-==== AX(Accumulator), BX(Base Address), CX(Counter), DX(Data)
+===== AX(Accumulator), BX(Base Address), CX(Counter), DX(Data)
 
 In x86_64, there are four general purpose registers.
 They are `*AX`, `*BX`, `*CX`, `*DX`.
@@ -479,30 +479,30 @@ Those general purpose registers can be divide, and used as smaller registers.
 - \*CX register always treat as counter, and will automatically decrease in loop.
 - \*DX register always transfer arguments, do I/O operation.
 
-==== CS:IP(Code Segment: Instruction Pointer)
+===== CS:IP(Code Segment: Instruction Pointer)
 
-==== SS:BP, SS:SP (Stack Segment: Base Pointer, Stack Segment: Stack Pointer)
+===== SS:BP, SS:SP (Stack Segment: Base Pointer, Stack Segment: Stack Pointer)
 
-==== SI, DI (Source Index, Destination Index)
+===== SI, DI (Source Index, Destination Index)
 
-==== DS (Data Segment)
+===== DS (Data Segment)
 
-==== ES (Extra Segment)
+===== ES (Extra Segment)
 
-==== FLAGs
+===== FLAGs
 
-==== R8, R9, R10, ..., R15
+===== R8, R9, R10, ..., R15
 
-=== Heap
+==== Heap
 
-== Syntax
+=== Syntax
 
-=== Operator, Operand
+==== Operator, Operand
 
-=== Comment
+==== Comment
 
-=== Memory Access
+==== Memory Access
 
-=== Labels
+==== Labels
 
-=== Macro
+==== Macro

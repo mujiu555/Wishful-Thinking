@@ -26,7 +26,7 @@
 #let mujiu = link("https://github.com/mujiu555")[暮玖(mujiu555)]
 #let meowyou = link("https://github.com/mujiu555")[猫柚(Meow You)]
 
-= 2025-12-21 01:35: Nothing Special
+== 2025-12-21 01:35: Nothing Special
 
 Of course, this should be written in the form of mail.
 Or, in my original plan, as chat history.
@@ -47,7 +47,7 @@ To difficult to design a function.
   Finally
 ]
 
-= 2025-12-21 02:13: Silent Message
+== 2025-12-21 02:13: Silent Message
 
 #chat(datetime: [2025-12-21 02:13])[
   You know, I always alone,
@@ -137,7 +137,7 @@ On my poor stupid.
   呵
 ]
 
-== 2025-12-21 18:38: 摆烂日寄
+=== 2025-12-21 18:38: 摆烂日寄
 
 讲真话现在天天看晚上发电的都尴尬, 中二一笔.
 
@@ -188,7 +188,7 @@ On my poor stupid.
 
 多么想要, 知道如何活下去啊
 
-= 2025-12-22 17:52: We choose to give up
+== 2025-12-22 17:52: We choose to give up
 
 You shall understand,
 the emotions called love is coming from the chemical reaction in brain.
@@ -212,7 +212,7 @@ The history won't remember us,
 but ourselves.
 
 
-= 2026-01-02 23:35:
+== 2026-01-02 23:35:
 
 我们曾向往星辰,
 但时间将激情消磨
@@ -239,11 +239,11 @@ but ourselves.
 
 这是可知不可知的知识, 不可传述, 只有一瞬间的认知
 
-= 2026-01-05 01:28: 愿神明赐与我永恒的安眠
+== 2026-01-05 01:28: 愿神明赐与我永恒的安眠
 
-= 2026-01-24 19:39: 找到男盆友啦!
+== 2026-01-24 19:39: 找到男盆友啦!
 
-= 2026-01-28 21:39: 无题
+== 2026-01-28 21:39: 无题
 
 有些时候, 心情不好, 不会选择写日记, 反而, 我会喜欢写一些自述, 一些回忆.
 回忆并不总是什么好的东西, 尤其是, 所见皆是疮痍.
@@ -278,7 +278,7 @@ but ourselves.
 
 有点, 语无伦次, 我的语文很差, 很可惜没有抑郁症或者其他的什么问题.
 
-= 2026-03-15 11:28: 好吧, 流水账
+== 2026-03-15 11:28: 好吧, 流水账
 
 所以, 欢饮来到我的流水账.
 
@@ -314,7 +314,7 @@ but ourselves.
 
 我我我, 每天都在我我我. 真自私啊.
 
-== 2026-03-15 12:28: 好的, 结束 "面向对象五十弦"
+=== 2026-03-15 12:28: 好的, 结束 "面向对象五十弦"
 
 同时没有记笔记.
 
@@ -323,20 +323,20 @@ but ourselves.
 我将严肃去吃早饭.
 我喜欢吃早饭.
 
-== 2026-03-15 12:50: 20 minutes' relax? no, anti-involution
+=== 2026-03-15 12:50: 20 minutes' relax? no, anti-involution
 
 2026-03-15 13:38: 吃完了
 
-== 2026-03-15 17:03: Nothing done but chat on group.
+=== 2026-03-15 17:03: Nothing done but chat on group.
 
 Spend for more than 5 hours, doing nothing.
 
-== 2026-03-15 17:23: 还没看几页
+=== 2026-03-15 17:23: 还没看几页
 
 莫名其妙就开始给人做心理疏导了.
 我讨厌你
 
-== 2026-03-15 18:47: Again
+=== 2026-03-15 18:47: Again
 
 20mins Haskell composed with 1hour chat.
 
@@ -358,7 +358,7 @@ Spend for more than 5 hours, doing nothing.
 
 2026-03-16 02:47: 结束,
 
-= 2026-03-16 15:39:
+== 2026-03-16 15:39:
 
 12点醒而至今才洗漱, 你真的想要这样的生活吗
 
@@ -374,7 +374,7 @@ Nothing worthy recording.
 
 2026-03-17 01:19: finish CIS194 II
 
-= 2026-03-17 13:36:
+== 2026-03-17 13:36:
 
 8:40 醒, 回笼觉
 
@@ -400,11 +400,11 @@ Nothing worthy recording.
 
 2026-03-18 03:27: finish TaPL Chapter III
 
-= 2026-03-18 16:29:
+== 2026-03-18 16:29:
 
 13 wake up and does nothing until 16:30:09.
 
-= 2026-03-19 14:50: 又没坚持下来,
+== 2026-03-19 14:50: 又没坚持下来,
 
 2026-03-19 14:51: at sa169
 
@@ -412,13 +412,13 @@ Nothing worthy recording.
 
 2026-03-20 01:28:
 
-= 2026-03-20 22:40: nothing done, even not this fncking diary
+== 2026-03-20 22:40: nothing done, even not this fncking diary
 
-= 2026-03-22 02:48: surely, today, nothing
+== 2026-03-22 02:48: surely, today, nothing
 
 2026-03-22 04:49: finish Haskell, section VI, one problem left
 
-= 2026-03-23 00:23: forgot to write diary again.
+== 2026-03-23 00:23: forgot to write diary again.
 
 因为一些原因, 现在几乎难以写这个狗屎日记,
 每天做事总没有办法集中注意力, 随随便便就去干其他事情了,
@@ -432,7 +432,7 @@ XJTLU你就是折磨人来的.
   我当死去, 因不为自己所理解.
 ]
 
-= 2026-03-23 18:23:
+== 2026-03-23 18:23:
 
 Wake up in 14:00~,
 
@@ -454,7 +454,7 @@ Skip one class today.
 
 2026-03-24 01:54: 玩完
 
-= 2026-03-24 14:51:
+== 2026-03-24 14:51:
 
 2026-03-24 14:51: wake up, 洗漱, 打水, about 1h
 
@@ -470,7 +470,7 @@ Skip one class today.
 
 TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
-= 2026-03-25 08:25: wake up
+== 2026-03-25 08:25: wake up
 
 08:32: play cell phone.
 
@@ -508,7 +508,7 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 01:35: some of TaPL, with large part of nothing
 
-= 2026-03-26:
+== 2026-03-26:
 
 12:50: wakeup
 
@@ -522,7 +522,7 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 02:30: cpt202, fuck you
 
-= 2026-03-27
+== 2026-03-27
 
 15:52: finish something
 
@@ -530,7 +530,7 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 05:19: work work work
 
-= 2026-03-28
+== 2026-03-28
 
 15:13: wake up~
 
@@ -542,13 +542,13 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 05:30: publish setup-typsite
 
-= 2026-03-29
+== 2026-03-29
 
 15:17: actually, wake up
 
 15:59: cpt202
 
-= 2026-03-30
+== 2026-03-30
 
 14:31: wash up
 
@@ -556,7 +556,7 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 22:44: wake up~
 
-= 2026-04-01
+== 2026-04-01
 
 21:01: ..., you know what i want to say.
 
@@ -568,47 +568,47 @@ TODO: ITLES, Haskell, TaPL, Catagory theory, ...
 
 04:03: Lilies
 
-= 2026-04-02
+== 2026-04-02
 
 14:21: wake up, wash up
 
 15:50: come to class and register IELTS
 
-= 2026-04-05
+== 2026-04-05
 
 16:06: wake up & wash up
 
 23:55: zhihu article, summary recent course works
 
-= 2026-04-06
+== 2026-04-06
 
 16:04: wash up
 
 16:37: breakfast
 
-= 2026-04-12:
+== 2026-04-12:
 
 01:18: 时隔6天, 电脑终于修好了, 可以正常用了, 感动, 感激, 但是开发环境还是要重新配置了的.
 系统配置整体重构了,
 另外换了一个组, 终于不用去和ai代码复现打交道了...
 赞美上天!
 
-= 2026-04-13:
+== 2026-04-13:
 
 17:00: almost wake up, and,
 
-= 2026-04-16:
+== 2026-04-16:
 
 23:22: anki
 
-= 2026-04-19:
+== 2026-04-19:
 
 21:13: finish CIS 194
 
 always boring.
 别发电
 
-= 2026-04-21
+== 2026-04-21
 
 00:31:
 
@@ -617,9 +617,9 @@ always boring.
 
 多看点书吧, Haskell, 还有其他.
 
-= 2026-04-22
+== 2026-04-22
 
-= 2026-05-04
+== 2026-05-04
 
 Long time no see.
 
@@ -631,7 +631,7 @@ And, relax is not, stoppable, thus not until 23, have, we start work again.
 
 Thus, this 流水账 is finished.
 
-= 2026-05-06
+== 2026-05-06
 
 Current time is 01:00.
 8 hours work again.
@@ -658,7 +658,7 @@ Boring!
 
 Without AI, I can do nothing! I! HATE! \*\*\*\*\*\*\*! SE! Stupid course...
 
-= 2026-05-06
+== 2026-05-06
 
 宝宝们好喵.
 这里是废物的自述.
@@ -690,14 +690,14 @@ Without AI, I can do nothing! I! HATE! \*\*\*\*\*\*\*! SE! Stupid course...
 
 胆小鬼.
 
-== 永远对世界怀抱恨意, 永远为活着而心存感激
+=== 永远对世界怀抱恨意, 永远为活着而心存感激
 
-= 2026-05-17:
+== 2026-05-17:
 
 两周,
 满心恨意
 
-= 2026-05-19:
+== 2026-05-19:
 
 Yet another diary,
 two days' ex-volution makes me lazy.

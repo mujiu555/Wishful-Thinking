@@ -11,46 +11,46 @@
 
 #mkheader()
 
-= From the C programming language to Theoretical Computer Science
+== From the C programming language to Theoretical Computer Science
 
-== Object-Oriented Programming
+=== Object-Oriented Programming
 
-== Generic Types
+=== Generic Types
 
-=== Template
+==== Template
 
-=== Types Erase
+==== Types Erase
 
-== Inheritance
+=== Inheritance
 
-=== Class Object
+==== Class Object
 
-=== Prototype Chain
+==== Prototype Chain
 
-== Polymorphism
+=== Polymorphism
 
-=== Interface
+==== Interface
 
-=== Trait
+==== Trait
 
-=== Duck Type
+==== Duck Type
 
-== Encapsulation
+=== Encapsulation
 
-=== Accessibility
+==== Accessibility
 
-== Object System
+=== Object System
 
 ===
 
-== Turning Machine
+=== Turning Machine
 
-== Lambda Calculus
+=== Lambda Calculus
 
-== First Order Function
+=== First Order Function
 
-=== Church numeral
+==== Church numeral
 
-== Formal Verification
+=== Formal Verification
 
-== ...
+=== ...

@@ -10,9 +10,9 @@
 
 #mkheader()
 
-= CMU 15-462/662
+== CMU 15-462/662
 
-== Drawing a Trangle
+=== Drawing a Trangle
 
 Two major techniques for getting stuff on the screen:
 
@@ -27,7 +27,7 @@ Ray tracing:
 - easier to get photorealism
 - slower
 
-== Rasterization Pipeline
+=== Rasterization Pipeline
 
 Pipeline: structure computation as a series of stages,
 each stage accepts some fixed data,
@@ -41,7 +41,7 @@ Rasterization pipeline:
 - Input: triangles (may with additional attributes)
 - Output: bitmap image( with depth, alpha,)
 
-== Triangles
+=== Triangles
 
 Rasterization pipeline converts all primitives to triangles:
 - can approximate any shape
@@ -51,7 +51,7 @@ Rasterization pipeline converts all primitives to triangles:
 Once everything reduced to triangles,
 can focus on making an extremely  well-optimized pipeline for drawing them.
 
-== Sketch
+=== Sketch
 
 - transform/position objects in the world
 - project objects onto the screen
@@ -60,7 +60,7 @@ can focus on making an extremely  well-optimized pipeline for drawing them.
 - sample texture maps/ evaluate shaders
 - combine sample into final image
 
-== Draw triangle
+=== Draw triangle
 
 - Coverage: what pixels does the triangle overlap
 - Occlusion: which triangle is closest to the camera in each pixel,
@@ -103,14 +103,14 @@ Edge cases: if two triangle has both edge in same pixel.
 
 To have a clear definition for behaviour.
 
-== Aliasing
+=== Aliasing
 
 1D signal can be expressed as a superposition of frequencies.
 Sin ware
 
 High frequencies in the original signal masquerade as low frequencies after reconstruction due to undersampling.
 
-== Nyquist-Shannon theorem
+=== Nyquist-Shannon theorem
 
 Consider a band-limited signal: has no frequencies above some threshold
 $omega_0$.
@@ -124,7 +124,7 @@ Ideal filter with no frequencies above cutoff, and also infinite extent.
 Sinc filter is $sinc(x) = 1 / (pi x)$.
 Wave goes forever.
 
-== Sampling in computer graphics
+=== Sampling in computer graphics
 
 Signal are often not band-limited in computer graphics.
 
@@ -141,9 +141,9 @@ For n samples in image, for each samples must calculate the contribution to
 other samples, using sinc filter.
 The $O(n^2)$ algorithm too expansive.
 
-== Aliasing artifacts in images
+=== Aliasing artifacts in images
 
-== How to reduce aliasing
+=== How to reduce aliasing
 
 Integrate signal into pixels.
 
@@ -153,7 +153,7 @@ Increase frequency of sampling converge signal.
 Super sampling: Rather than just take one sampling for coverage signal,
 takes more sample for same pixel, with some location.
 
-== Resampling
+=== Resampling
 
 Converting from one discrete sampled representation to another.
 
@@ -169,9 +169,9 @@ So that, for a pixel:
 - None-covered, if non of which are covered,
 - some percentage covered, if average by sampling numbers.
 
-== Checkerboard - Exact Solution.
+=== Checkerboard - Exact Solution.
 
-== How actually evaluate coverage(x, y)
+=== How actually evaluate coverage(x, y)
 
 How to check if a given point q is inside a triangle.
 
@@ -180,15 +180,15 @@ Check if it is contained in three half planes associated with the edges.
 Given points $P_i$, $P_j$, along an edge and a query point $q$.
 Find whether q is to the left or right of the line from $P_i$, $P_j$.
 
-=== Incremental traversal
+==== Incremental traversal
 
 Visit pixels along a special order
 
-=== Parallel coverage tests
+==== Parallel coverage tests
 
 Test all samples in triangle in parallel
 
-=== Hybrid approach: tiled triangle traversal
+==== Hybrid approach: tiled triangle traversal
 
 Traversal a large blocks, intersect the triangle.
 - If there has no pixels in a triangle, skip the block.
@@ -196,7 +196,7 @@ Traversal a large blocks, intersect the triangle.
 - If some of which in the block are inside the triangle,
   sample points parallel.
 
-=== Hierarchical strategies
+==== Hierarchical strategies
 
 Check if the Triangle intersect with large Three Blocks.
 And split it into smaller blocks till all small blocks reaches pixel size.

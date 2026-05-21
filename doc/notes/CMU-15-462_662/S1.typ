@@ -10,18 +10,18 @@
 
 #mkheader()
 
-= CMU 15-462/662 Computer Graphic
+== CMU 15-462/662 Computer Graphic
 
-== Section I
+=== Section I
 
-== What is Computer graphic
+=== What is Computer graphic
 
 For A more visual way to express the output.
 Human-Computer communication way.
 
 To express information to human.
 
-== Why we need graphic information
+=== Why we need graphic information
 
 Human has more ability to digest visual information.
 
@@ -33,7 +33,7 @@ Computer vision: turning real information into digital.
 
 ACM SIGGRAPH conference.
 
-== Foundations of computer graphics
+=== Foundations of computer graphics
 
 - Demand sophisticated theory & systems,
 - Theory:
@@ -47,7 +47,7 @@ ACM SIGGRAPH conference.
   - parallel, heterogeneous processing: how to process data effectively
   - graphics-specific programming languages: shaders
 
-== How to modeling and draw a cube
+=== How to modeling and draw a cube
 
 *Goal*: generate a realistic drawing of a cube
 
@@ -67,7 +67,7 @@ How to render a cube as 2D image:
 + Just throw a coordinate: lose lot of information
 + Projection: map 3d into 2d points, and connect each 2d points.
 
-== Perspective projection
+=== Perspective projection
 
 - Objects look smaller as they get further away: perspective
 - pinhole model: let point p=(x,y,z), and projection q=(u,v): 小孔成像
@@ -76,7 +76,7 @@ How to render a cube as 2D image:
 - then v/1=y/z
 - and u/1-x/z
 
-== Cube Rendering
+=== Cube Rendering
 
 Assume camera at c=(2,3,5)
 and convert (X,Y,Z) of both endpoints to (u,v):
@@ -85,7 +85,7 @@ and convert (X,Y,Z) of both endpoints to (u,v):
 + And, divide (x,y) by z, then get (u,v)
 + Draw a line between (u1,v1) and (u2,v2)
 
-== How to draw a line on computer (screen)
+=== How to draw a line on computer (screen)
 
 Grid: little picture elements (pixels) on screen.
 Little block red, green and blue light turn on and off,
@@ -98,7 +98,7 @@ Image are composed with the numerical value stored in the grid.
 Each cell of grid represents a colour.
 There exists map between number and colour.
 
-== Rasterization
+=== Rasterization
 
 The process turning high-level object that continuous into a discrete represented raster grid.
 

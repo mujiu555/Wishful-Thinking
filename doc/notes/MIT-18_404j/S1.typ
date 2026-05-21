@@ -18,13 +18,13 @@
 
 #mkheader()
 
-= Applications
+== Applications
 
-= Modules of computation
+== Modules of computation
 
 Capture important aspect of thing we try to understand.
 
-== Finite Automata
+=== Finite Automata
 
 Use less memory with limited ability of computation.
 
@@ -51,7 +51,7 @@ We say that "M_1 accepts exactly those string in A where $A = {w | w "contains s
 And, we have A that is the language accepted by the language $L(M_1)$.
 $M_1$ recognize A and $A = L(M_1)$.
 
-=== Define a finite automation
+==== Define a finite automation
 
 Defn: A finite automaton M is a 5-tuple $(Q, Sigma, delta, q_0, F)$:
 - Q: finite set of states
@@ -81,7 +81,7 @@ And have:
   table.hline(),
 )
 
-=== String and languages
+==== String and languages
 
 - A string (word) is a finite sequence of symbols in $Sigma$ (alphabet),
 - A language is a set of strings (finite or infinite),
@@ -103,13 +103,13 @@ Every machine can accept many words, but only one language.
 
 Define: a language is regular if some finite automaton recognizes it.
 
-=== Regular Languages
+==== Regular Languages
 
 $L(M_1) = {w|w "contains substing 11"} = A$
 
-= Regular Expressions
+== Regular Expressions
 
-== Regular Operations
+=== Regular Operations
 
 Let A, B be languages:
 - Union: $A union B = {w| w in A or w in B}$,
@@ -117,7 +117,7 @@ Let A, B be languages:
 - Kleene Star: Unary operation: $A^* = {x_1 ... x_k| "each" x_i in A "for" k >= 0}, epsilon in A^*$
 Note., empty language won't accept empty string, but Kleene star of empty language will.
 
-== Regular expression
+=== Regular expression
 
 Like mathematical expression comes from combination of mathematical operations and mathematical elements,
 regular expression comes form combination of regular operations and languages.
@@ -129,12 +129,12 @@ E.g., $(0 union 1)^* = Sigma^*$ gives all strings over $Sigma$.
 
 Finite automata equivalent to regular expressions.
 
-= Closure Properties for regular languages
+== Closure Properties for regular languages
 
 If some set are closed under some operation, which means
 after applying those operations on objects, the result will still leave in the same class of objects.
 
-== Union:
+=== Union:
 
 If $A_1, A_2$ are regular languages, so is $A_1 union A_2$ (closure under $union$)
 
@@ -152,7 +152,7 @@ $F = (F_1 times Q_2) union (Q_1 times F_2)$
 
 Note., if $F = F_1 times F_2$, then it could be closure under intersection.
 
-== Concatenation:
+=== Concatenation:
 
 If $A_1, A_2$ are regular languages, so is $A_1 circle A_2$ (closure under $circle$)
 
@@ -218,7 +218,7 @@ If there are input word $w$, then there should be a split point where $M_1$ reac
 Construct a new machine, concatenating $M_1$ and $M_2$ together with $epsilon$ transitions from each accept state of $M_1$ to the start state of $M_2$.
 
 But the first place machine reach accept state may not be the correct split point. M need to have a idea of all possible split points.
-= Non-determinism
+== Non-determinism
 
 #figure(
   automaton(
@@ -270,7 +270,7 @@ Any way that leads to accept state is accepted.
 
 For "aa", it will never reaches accept state.
 
-== NFA
+=== NFA
 
 Defn: A nondeterministic finite automaton, 5-tuple $(Q, Sigma, delta, q_0, F)$:
 - Q: finite set of states
@@ -293,11 +293,11 @@ Computation processes of NFA is a kind of BFS:
 Or, you may image the machine can make good guesses at each step,
 which always choose the correct transition to reach accept state if there is one.
 
-= NFA and DFA equivalence
+== NFA and DFA equivalence
 
 NFA and DFA are equivalent in power, which means any language recognized by NFA can also be recognized by DFA, and vice versa.
 
-== NFA to DFA
+=== NFA to DFA
 
 Theorem: If an NFA recognizes a language L, then L is regular.
 
@@ -386,7 +386,7 @@ Which have a image like:
   caption: [DFA equivalent to NFA],
 )
 
-== Recall for Closure Properties
+=== Recall for Closure Properties
 
 - Union:
   Construct a new NFA that connect two start states of two NFA via epsilon transitions from a new start state.
@@ -399,7 +399,7 @@ Which have a image like:
   Also, add a new start state that is also an accept state, and connect it to the old start state via epsilon transition.
   And then everything done.
 
-== Regular Expression to NFA
+=== Regular Expression to NFA
 
 Theorem: If R is a regexpr and $A = L(R)$ then A is regular.
 
@@ -439,7 +439,7 @@ Basically, Convert R to equivalent NFA $M$,
 
 Then, by structural induction on R, we can show that NFA $M$ recognizes A.
 
-== Generalize NFA
+=== Generalize NFA
 
 Similar to NFA, but will more complex transitions.
 GNFA allow transitions labeled with regular expressions.
@@ -453,7 +453,7 @@ Assume:
   - only entering the accept state
   - connect states without stransitions via emptyset transitions.
 
-== NFA to regular
+=== NFA to regular
 
 Inverse, if a language L is regular, then there is a regexpr R such that $L = L(R)$.
 
@@ -472,9 +472,9 @@ Induction step(k > 2): Assume Lemma true for k - 1 states and prove for k states
 Convert k-state GNFA G to (k - 1)-state GNFA G' by removing one state q_rip that neither start nor accept states.
 And repair all path may go through q_rip.
 
-= Non-regular languages
+== Non-regular languages
 
-== Pumping Lemma for regular languages
+=== Pumping Lemma for regular languages
 
 To show a language is regular, just give a finite automaton or a regular expression.
 
@@ -497,9 +497,9 @@ then the language may be regular.
 
 Pumping lemma depends on the fact that if M has p states, and it runs for more than p steps will enter some state at least twice (by pigeonhole principle).
 
-== Using pumping lemma to show non-regularity
+=== Using pumping lemma to show non-regularity
 
-=== $D = {0^n 1^n | n >= 0}$
+==== $D = {0^n 1^n | n >= 0}$
 
 Let $D = {0^n 1^n | n >= 0}$
 show: D is not regular.
@@ -519,7 +519,7 @@ But $x y y z$ has excess 0s than 1s, thus $x y y z in.not D$, contradiction.
 
 Therefore the assumption is false, D is not regular.
 
-=== $F = {w w|w in Sigma^*}$, Sigma = {0, 1}.
+==== $F = {w w|w in Sigma^*}$, Sigma = {0, 1}.
 
 Let $F = {w w|w in Sigma^*}$, Sigma = {0, 1}.
 Show F is not regular.
@@ -536,7 +536,7 @@ And $x y y z$ has excess 0s in the first half than the second half,
 
 Contradiction found, thus F is not regular.
 
-=== $B = {w | w "has equal number of" 0's "and" 1's}$
+==== $B = {w | w "has equal number of" 0's "and" 1's}$
 
 Let $B = {w | w "has equal number of" 0's "and" 1's}$.
 Show B is not regular.
@@ -551,7 +551,7 @@ But for language C, we have already shown it is not regular.
 
 Contradiction found, thus B is not regular.
 
-= Context-free languages
+== Context-free languages
 
 Context free grammar are more powerful than finite machines.
 
@@ -567,14 +567,14 @@ until there is no variable left.
 
 The terminals are the base of final strings generated by the grammar.
 
-== Parse Trees
+=== Parse Trees
 
 Start at the root with start variable,
 then for each rule applied, create child nodes for each symbol in the right side of the rule.
 
 When all leaves are terminals, the parse tree is complete.
 
-== Formal definition of CFG
+=== Formal definition of CFG
 
 Defn: A context-free grammar G is a 4-tuple $(V, Sigma, R, S)$ where
 - V: finite set of variables
@@ -592,12 +592,12 @@ $L(G) = {w in Sigma^* | S =>^* w}$, the language generated by G.
 
 Defn: A is a context-free language if there is a CFG G such that $A = L(G)$.
 
-== Ambiguity
+=== Ambiguity
 
 For some CFG, there may be more than one parse tree for some string in the language.
 For some string, there may be more than one leftmost derivation or more than one rightmost derivation.
 
-== PDA: pushdown automata
+=== PDA: pushdown automata
 
 This is a new view of finite automata with a stack memory.
 
@@ -625,7 +625,7 @@ E.g., $B = {w w^R | w in {1, 0}^*}$, and sample input: 011110
 - and enter accepted state if stack is empty.
 Assume, every time the state fork, stack is duplicated for each.
 
-== Convert CFG to PDA
+=== Convert CFG to PDA
 
 Theorem: If A is a CFL then some PDA recognizes A.
 Proof: Convert A's CFG to a PDA.
@@ -643,7 +643,7 @@ If find a terminal on the top of stack, then pop it and compare with input symbo
   Else if the top of stack is a terminal symbol, then pop it and compare with input symbol, if equal, then read next input symbol.
 + If both input and stack are empty, then accept.
 
-== Convert PDA to CFG
+=== Convert PDA to CFG
 
 Theorem: A is a CFL iff some PDA recognizes A.
 Proof need to be done on both PDA can be converted to CFG and CFG can be converted to PDA.

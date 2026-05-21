@@ -10,7 +10,7 @@
 
 #mkheader()
 
-= Section I
+== Section I
 
 除了算法, 工具可以有效提升工作效率,
 这是一个尝试, 教授如何掌握工具, 以及提供(可能)不清楚但是有用的工具.
@@ -19,7 +19,7 @@
 
 仅会介绍少量极其有用的工具
 
-= Shell
+== Shell
 
 Shell是与计算机交互的一个重要途径
 
@@ -52,7 +52,7 @@ PATH是用来在计算机中找到可执行文件的方式
 3. 一共由9位二进制表示: 每三位表示对应对应用户(组)的权限, 读/写/执行
 4. 目录的写权限仅影响是否可以删除修改其内部的文件
 
-== Most used Commands
+=== Most used Commands
 
 1. `mv`:
 1. `cp`:
@@ -66,7 +66,7 @@ PS. `info`:
 Short cut:
 `Ctrl-L`: clear
 
-== Shell Stream
+=== Shell Stream
 
 iostream redirection
 
@@ -76,30 +76,30 @@ iostream redirection
 4. `>> file`: output append into file
 5. `prog1 | prog2`: pipe, output redirection to another program
 
-== Root user
+=== Root user
 
 Super administrator
 
 `sudo`: super user do (do as super user)
 
-== `/sys`
+=== `/sys`
 
 vfs: kernel variables
 
 1. `tee`: ```sh echo < file | sudo tee /target```
 
-== Shell Scripting
+=== Shell Scripting
 
 语法,
 
-= VIM
+== VIM
 
 我用的是NeoVim (LazyVim distro)
 
 仓库地址: [My LazyVim](https://github.com/mujiu555/my-lazyvim)
 
 
-= Section IV
+== Section IV
 
 - grep
 - less
@@ -118,16 +118,16 @@ vfs: kernel variables
 - parallel
 
 
-= Command Line
+== Command Line
 
 Short cut for shell
 
 - Ctrl-C: SIGINT
 - Signal: kill
 
-== Tmux
+=== Tmux
 
-== Dot files
+=== Dot files
 
 Configurations
 
@@ -136,9 +136,9 @@ Configurations
 - PS1
 
 
-= Debugging
+== Debugging
 
-== Logger
+=== Logger
 
 Log, like printf, but with more information.
 
@@ -150,19 +150,19 @@ It is possible to use third party log system.
 Most of which may be placed in `/var/log`.
 `Journalctl` will place log in `/var/log/journal`
 
-== Debugger
+=== Debugger
 
 Step debuggers: `GDB`, and so on.
 
 It is possible to walk through the execution
 
-== Static checker
+=== Static checker
 
 Try to detect errors without actually execute a program.
 
-== Inspect
+=== Inspect
 
-== Profiling
+=== Profiling
 
 Count time is useful.
 
@@ -170,7 +170,7 @@ And real time: the time program cost to execute to finish.
 User time: the cpu time a program used.
 System time: the system cost during the program executes.
 
-=== CPU profiling
+==== CPU profiling
 
 Tracing: record all information during program executes.
 Sampling: regularly inspect program.
@@ -179,9 +179,9 @@ Thus tracing will result to performance decrease.
 
 Liner profiler: cost for each line's execute.
 
-=== Memory profiling
+==== Memory profiling
 
-==== Analysis
+===== Analysis
 
 `Perf`:
 
@@ -190,41 +190,41 @@ Liner profiler: cost for each line's execute.
 - record:
 - report:
 
-=== Visualize
+==== Visualize
 
 - Flame Graph
 - Call Graph
 
-=== Resource profiling
+==== Resource profiling
 
 
-= Meta programming
+== Meta programming
 
 DSL everywhere.
 
-== Build systems
+=== Build systems
 
 - Describe how to build
 - Encode Rules
 
 Make: GNU Make, BSD Make, NMake
 
-== Make Rules
+=== Make Rules
 
-== Repositories
+=== Repositories
 
-== Version
+=== Version
 
 Semantic Version
 
-== CI/CD
+=== CI/CD
 
 Continuously Integration & Continuously Distribution
 
 - Recipe:
 - Behaviour when something happened
 
-== Auto Testing
+=== Auto Testing
 
 - Test Suit: a large collection of tests
 - Unit Test:
@@ -233,26 +233,26 @@ Continuously Integration & Continuously Distribution
 - Mocking:
 
 
-= Security
+== Security
 
 Password need to be hight information entropy
 
-== Hash functions
+=== Hash functions
 
 - non-invertible
 - collision resistant
 
 Hash in git, need no conflict, compared to old hash method.
 
-== Key derivation functions
+=== Key derivation functions
 
-== Symmetric key cryptography
+=== Symmetric key cryptography
 
 - keygen() -> key
 - encrypt(plain text, key) -> cipher text
 - decrypt(cipher text, key) -> plain text
 
-== Asymmetric key cryptography
+=== Asymmetric key cryptography
 
 - keygen() -> (public key, private key)
 - encrypt(P, public key) -> C
@@ -262,30 +262,30 @@ Hash in git, need no conflict, compared to old hash method.
 - verify(msg, sig, public key) -> ok?
 
 
-= Misc
+== Misc
 
-== Change keyboard mapping
+=== Change keyboard mapping
 
 Remap fn keys, caplock, shortcuts.
 
-== daemons
+=== daemons
 
 run commands in background
 
-== fuse
+=== fuse
 
-== background
+=== background
 
-== API
+=== API
 
-== WM
+=== WM
 
-== MD
+=== MD
 
-== Boot
+=== Boot
 
-== Docker
+=== Docker
 
-== Interactive Notepad Programming
+=== Interactive Notepad Programming
 
-== GitHub
+=== GitHub

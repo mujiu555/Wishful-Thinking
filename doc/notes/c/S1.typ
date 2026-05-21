@@ -18,12 +18,12 @@
 
 #show: doc => setup-base-fonts(doc)
 
-= Section I: C Programming Language
+== Section I: C Programming Language
 
 To have a glance to computer science, we must have known a programming language, and then it could lead you to
 understand some key concept within the computer and programming language design.
 
-= Intro
+== Intro
 
 C语言, 历史悠长, 自从它于80年代伴随 Unix 出现,
 便成为了全世界开发者的心头好. 至今为止都依然被广泛使用.
@@ -39,7 +39,7 @@ C 驱动着世界上绝大多数设备的运行.
 
 C是一门高级语言, 但是何为高级语言?
 
-= High Level Language
+== High Level Language
 
 高级语言是相对于低级语言而言的. 一般而言, 我们所说的低级语言,
 是各个不同设备上面的汇编语言, 这些语言非常强大, 可以操作 CPU,
@@ -75,7 +75,7 @@ C是一门高级语言, 但是何为高级语言?
 
 这就为程序的移植提供了极大的方便, 不再需要手动为不同的平台进行适配.
 
-== Mid-Level Language
+=== Mid-Level Language
 
 C语言虽然名义上是一个高级语言, 但是很多人并不这么认为,
 因为C语言并不提供一种通用的内存管理方案.
@@ -85,7 +85,7 @@ C语言虽然名义上是一个高级语言, 但是很多人并不这么认为,
 因此, 便有人将C语言称作中级语言, 过渡语言. 不过,
 这不过是称呼上的差别而已.
 
-== Compile & Interpret
+=== Compile & Interpret
 
 CPU 实际上只能够理解和运行二进制的机器码.
 因此, 直接以人类可读形式写出来的代码, 计算机没有办法直接执行.
@@ -130,7 +130,7 @@ CPU 实际上只能够理解和运行二进制的机器码.
 再如, 大家或许熟悉的 Python语言,
 便是通过解释器执行的, 因此才认为 python语言 是一门编译型语言.
 
-= Environment And IDE
+== Environment And IDE
 
 不知道大家是否喜欢玩 PC 上的游戏, 有时候玩游戏会提示缺少 `DirectX`
 运行时环境, 编程也和玩游戏一样, 是需要环境的. 一般而言,
@@ -159,7 +159,7 @@ Linux 平台, 最常用的 "IDE" 是 (Neo)Vim 和 Emacs, 不过,
 Education)" 和 "理论计算机导论 (Introduction to Theoretical Computer
 Science)" 中找到.
 
-== Environment Variables
+=== Environment Variables
 
 环境变量可以被视为程序的设置, 它们告诉程序该如何工作,
 比如, 配置 "PATH" 可以帮助程序找到需要的文件或者指令.
@@ -182,7 +182,7 @@ Science)" 中找到.
   来找到它需要的程序. 比如动态链接器 (`ld-linux-x86_64.so`)
 - 好吧其实目前只用知道 PATH 一个就够了 (
 
-== Windows
+=== Windows
 
 对于 Windows 而言, 环境变量的修改非常便捷安全:
 
@@ -203,13 +203,13 @@ WSL的全称是 "Windows Subsystem for Linux",
 是微软创造出来, 用于提升开发者体验的一个工具.
 凭借WSL, 我们可以非常容易的, 像直接使用Linux一样的安装和管理开发环境.
 
-== Linux, MacOS & \*nix
+=== Linux, MacOS & \*nix
 
 对于类Unix及Unix系统而言, 环境变量的修改往往和用户配置文件相关联. 不过,
 实际上, 要在这类系统上安装 C 的编程环境, 完全不需要对环境变量做过多修改,
 而可以简单通过几行命令完成.
 
-= Hello, World
+== Hello, World
 
 于是便到了我们的第一个程序: Hello, World!
 
@@ -271,7 +271,7 @@ Hello, World!
 
 Try to change the source code and you may let it print your name.
 
-== Explanation
+=== Explanation
 
 Looks fantastic?
 
@@ -283,7 +283,7 @@ For example, we always have the three parts -- header file import, entry, and ex
 我们的 "Hello, World" 程序, 包含了几个部分,
 库文件的引入, 入口函数(main), 以及主要的表达式.
 
-== Library
+=== Library
 
 C语言的内核很小, 只包括了一些非常基础的功能, 而其他的部分则都通过库来提供.
 同时又因为它相对比较简陋, 所以当我们使用它的库的时候需要一个描述文件,
@@ -316,7 +316,7 @@ Stdio, 是 "Standard Input / Output" 的简称,
 
 下面就是我们程序的主体了.
 
-== main
+=== main
 
 ```c
 int main(void) {
@@ -347,7 +347,7 @@ printf("Hello, World");
 则是我们程序唯一的主体 --- 我们的程序实际上只干了这一件事 ---
 输出 "Hello, World".
 
-== Function
+=== Function
 
 刚才的两个部分, 我们都提到了一个概念 -- "函数",
 函数是什么呢, 函数实际上是一系列代码, 一系列功能的集合,
@@ -384,7 +384,7 @@ return 0;
 
 这其实也涉及到了一些后面的知识, 所以目前记住主函数的结束, 必须写上这样一句 ```c return 0;```就可以了.
 
-== Expression: Statement.
+=== Expression: Statement.
 
 大家如果仔细观察了, 就会发现, main函数内部的两个东西, 结尾都是分号.
 
@@ -410,7 +410,7 @@ Statements are colourful, but, the rule for them are relative same.
 
 将会在后面详细讲解各个语句, 不过, 一定要记住, 每个语句的结尾都需要一个分号;
 
-= Types
+== Types
 
 C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新知识点了!
 - 什么是类型,
@@ -453,7 +453,7 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 )
 这就是我们说的 "静态类型" 系统.
 
-== Literal
+=== Literal
 
 字面量, 就像我们在解数学题目的时候, 会写下一些系数, 一些常量,
 字面量就是直接出现在程序当中的常量.
@@ -462,12 +462,12 @@ C 语言是一门静态类型语言. 那么, 这一句话就涉及到两个新�
 而计算机程序中的常量, 则仅仅只是表示一个变量不会被改变而已...
 通过一些特殊的手段, 我们也是可以让一个常量打开心扉, 接受新的数值的.
 
-== Basic Data Types
+=== Basic Data Types
 
 对于简单的编程任务, C语言定义了一些基本数据类型.
 它们涵盖了数字, 文本和逻辑(好吧其实并没有).
 
-=== Integer
+==== Integer
 
 我们最常用, 并且也将最先介绍的就是整数家族了:
 - `short`: 短整型, 相对于整型, 需要的内存更少, 只有16位空间
@@ -519,7 +519,7 @@ Integer may be expressed as:
 0b<number>*<suffix>   for binary express      ; 0b1, 0b0, 0b10
 ```
 
-=== Literal Suffix
+==== Literal Suffix
 
 有些同学可能就注意到了, 我们有些的数字之后, 跟上了一些字符.
 这些字符, 比如 `ll`,`ull`, 被称作字面量后缀, 它的作用是, 给字面量一些修饰,
@@ -535,7 +535,7 @@ long long ll = 2147483648ll;
 这是因为, 在C语言中, 我们写下的所有整数, 默认的类型都是int类型,
 如果字面量超出了int类型的范围, 那就会出现错误.
 
-=== Real numbers: `float` & `double`
+==== Real numbers: `float` & `double`
 
 在整数之外, 我们自然还有小数.
 在 C语言 中, 我们将小数称之为 "二进制浮点数" 简称 "浮点数".
@@ -569,7 +569,7 @@ C语言中的常用浮点数一共有三种, 分别是:
 我们使用二进制数来表示数据, 因此, 我们实际上使用的浮点数也是二进制表示的.
 这就可以解释什么叫做 "二进制浮点数" 了.
 
-=== Type Boost
+==== Type Boost
 
 当然, 在数学之中, 我们也有整数和小数的运算,
 大家可以先试一下, 当我们在c语言之中, 进行了可以得到小数的运算之后,
@@ -623,7 +623,7 @@ printf("%f", 1 / 2.0);
 这从汇编的角度来看, 其实就是将寄存器由小寄存器, 拼接到相对大的寄存器.
 如, 将 `AH`寄存器, 提升到`EAX`寄存器.
 
-=== String & Char
+==== String & Char
 
 另一部分, 在数值之外, 就是字符类型和字符串了.
 
@@ -677,7 +677,7 @@ wprintf(L"Hello World");
 c语言中并不是很常用到8位的数值, 因此这样的代替也并不是很大的问题.
 当我们真的需要它的时候, 也可以临时用 ```c char``` 类型充当一下.
 
-== Logical Values
+=== Logical Values
 
 当然, 计算机也不总是只处理数值.
 作为一堆二三极管, 逻辑门, 晶体管拼接而成的产物,
@@ -691,7 +691,7 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 
 很简单对不对.
 
-== Void Type
+=== Void Type
 
 以上的类型, 都还很具体, 不过当我们需要表示 "这里没有东西" 呢?
 该怎么办?
@@ -699,7 +699,7 @@ c语言中并不是很常用到8位的数值, 因此这样的代替也并不是�
 这时候我们就需要用到 `void` 类型了.
 不过这里不解释太多, 我们将会在应用中见证它的使用.
 
-= Mathematics Operations
+== Mathematics Operations
 
 有了数字, 并不能让我们进行计算, 我们还需要定义对于这些数字的运算才可以.
 
@@ -774,7 +774,7 @@ printf("%", i);
 所以我们就也自然会有一些对于变量本身存储的数值进行操作的运算符,
 除了这里讲到的自增自减运算符, 其实还有其他的, 比如赋值运算符.
 
-== Relation Operations
+=== Relation Operations
 
 除了数值运算, 实际上我们也可以对这些数值进行比较,
 在 C语言中,
@@ -823,7 +823,7 @@ C语言中是没有办法写出类似 $A>B>C$ 的这种表达式的.
 
 因此, 一定要注意, 不要写出 "连续不等式" 哦.
 
-== Logical Operations
+=== Logical Operations
 
 逻辑运算, 也是C语言经常需要进行的运算, 那么什么是逻辑运算呢?
 
@@ -863,7 +863,7 @@ C语言中是没有办法写出类似 $A>B>C$ 的这种表达式的.
 就是说, 如果逻辑运算符的左边结果, 已经可以决定逻辑运算符整体结果,
 那么逻辑运算的右半部分就不会被执行, 而是直接将逻辑运算的结果返回出来.
 
-== Associativity
+=== Associativity
 
 正如上面提到的, 运算符结合性决定了连续运算的表达式的执行顺序,
 那么, 具体的规则如何呢?
@@ -909,7 +909,7 @@ C语言中是没有办法写出类似 $A>B>C$ 的这种表达式的.
 
 PS. 另一个比较重要的则是赋值运算符家族, 将在重新完整介绍完C语言的语法后介绍.
 
-== Binary Calculation
+=== Binary Calculation
 
 现在, 就需要一些简单的数学了: 二进制运算.
 
@@ -927,7 +927,7 @@ PS. 另一个比较重要的则是赋值运算符家族, 将在重新完整介�
 另外一些特性是, 二进制数可以方便的和十六进制与八进制相互转换,
 虽然这些实际上是十六进制和八进制的优势, 因为它们基数均为二的次方.
 
-== Radix Convert
+=== Radix Convert
 
 二进制对于计算机友好, 但是对于人类来说却有些难办了.
 因为我们常年都在和十进制打交道.
@@ -967,7 +967,7 @@ $ (1011)_((2)) = (001'011)_((2)) = (13)_((8)). $
 
 反向操作也极其一致, 非常方便.
 
-== Bitwise Operations
+=== Bitwise Operations
 
 二进制, 除了常规的十进制运算, 其实也提供了一些特别的运算能力,
 在C语言中的表现就是, 按位运算.
@@ -1023,7 +1023,7 @@ $ (1011)_((2)) = (001'011)_((2)) = (13)_((8)). $
   table.hline(),
 )
 
-== Overflow
+=== Overflow
 
 计算机操作的虽然是二进制数, 但是它的容量却是有限的,
 而不能像数学中可以表示理想的无限大整数.
@@ -1042,7 +1042,7 @@ $ (1011)_((2)) = (001'011)_((2)) = (13)_((8)). $
 
 而我们计算机中, 对于负数的表示, 也和溢出有千丝万缕的联系.
 
-== 2's Completion
+=== 2's Completion
 
 计算机可以表示的数据是有限的, 最开始, 一块 CPU 只能计算8位二进制数,
 那非常小, 只能表示 $0~255$ 之间的数据.
@@ -1100,7 +1100,7 @@ $ (1011)_((2)) = (001'011)_((2)) = (13)_((8)). $
 
 当然, 这是实践可以得出的结论, 补码实际上有它更深层次的意义.
 
-== N's Completion
+=== N's Completion
 
 N的补码, 实际上是模N剩余类加群, 对于
 $ Z_n = Z mod n(Z, mod) $, 满足封闭性, 结合性, 则有Z上的模N剩余群.
@@ -1114,7 +1114,7 @@ $ Z_n = Z mod n(Z, mod) $, 满足封闭性, 结合性, 则有Z上的模N剩余�
 有 $a' = -a$的加法逆元, 则, 对 $M$ 求补有 $a' = M - a, M = 10^n$,
 对于 `M` 有 $0 = M, 0 = 0$, 在 $M/2$ 上同余.
 
-== Bitwise Shift
+=== Bitwise Shift
 
 Apart from regular bitwise operations, we have some special ones as well.
 Could you image that every digit of a numbers can be shift?
@@ -1184,7 +1184,7 @@ Actually, `SHL` are some number multiple $2^n$.
 
 And all discarded numbers are seen as overflow.
 
-= Syntax
+== Syntax
 
 C语言, 实际上, 作为一种和计算机进行沟通交流的语言,
 实际上也有自己的一套语法规范.
@@ -1222,7 +1222,7 @@ contains something we haven't met before.
 
 We all explain them all in this chapter.
 
-== Statements
+=== Statements
 
 The first thing I'd like to tell you is definition for statement.
 
@@ -1275,7 +1275,7 @@ int i = 10,
     j = 20;
 ```
 
-== Expression
+=== Expression
 
 As we have known statement, another import part of c program is
 expression.
@@ -1328,7 +1328,7 @@ statement.
 
 But they are meaningless.
 
-== Code Block
+=== Code Block
 
 When we programming, sometimes we may want to
 execute some operation at same time
@@ -1348,7 +1348,7 @@ one large statement later on the rest of program.
 
 And we need no semi-colon at the end of bracket expression.
 
-== Empty Lines & Space
+=== Empty Lines & Space
 
 Not only for beauty, we'll need spaces in code for distinct different
 syntax object.
@@ -1375,7 +1375,7 @@ int x = 1;
 int x=1;
 ```
 
-== Comment
+=== Comment
 
 Comments are another thing that will not affect anything within our code.
 When compiler meets a comment, it will ignore it directly.
@@ -1388,7 +1388,7 @@ There are two ways for us to write comments.
 
 We can see the code above, to have a relative simple understand to comments.
 
-= Variables & Variable space
+== Variables & Variable space
 
 Here, we comes to the most import part of a program.
 We'll know what variable is, how it is defined, and operations done on
@@ -1396,7 +1396,7 @@ them.
 
 First of all, we'd like to see, relation between variable and value.
 
-== Data, Variable, Value
+=== Data, Variable, Value
 
 Data, something that represents something, carrying some information,
 always the object we will manipulate in program.
@@ -1408,7 +1408,7 @@ desired space for storing data.
 Thus, in general, variable are some space, slot, that can store some
 value, carrying some specified data.
 
-== Definition
+=== Definition
 
 Before we use some concrete variable in our program.
 We must define them.
@@ -1438,7 +1438,7 @@ int b;
 Furthermore, when we have learnt the structure, enumerator, union and
 function, we all have more form of types.
 
-== Variable Name
+=== Variable Name
 
 One must-have element of variable definition is type.
 And another one is variable name.
@@ -1483,7 +1483,7 @@ one underscore are reserved for library.
 Names all capitalized alphabet, split by underscore, meaning
 constants.
 
-== Initialize
+=== Initialize
 
 Once you finished declaration, which doesn't means you finished the
 variable definition.
@@ -1503,7 +1503,7 @@ with declaration.
 int a = 10;
 ```
 
-== Assignment Operations
+=== Assignment Operations
 
 Assignment are some operation special to variable.
 
@@ -1539,7 +1539,7 @@ Just like the drawer that can store exactly one thing.
 You may put one thing inside.
 And you may clear the drawer, and put a new one inside.
 
-== Composed Assignment Operations
+=== Composed Assignment Operations
 
 Beyond regular assignment operation, we have some advanced ones.
 You may compose assignment operation with other mathematics operations.
@@ -1577,7 +1577,7 @@ a+=1; // Equivalent, a => 2
 a-=1;// a => 0
 ```
 
-= Type Conversion
+== Type Conversion
 
 As we mentioned before, C is typed language.
 Each type's variable occupies different spaces.
@@ -1617,21 +1617,21 @@ This may cause some unexpected results.
 Also, conversion from real numbers to integer will also introduce same problem.
 All number after decimal point will be dropped directly.
 
-= Input And Output
+== Input And Output
 
 Programs does not only calculation, but also have to tell the result.
 Thus input and output utilities are indispensable.
 
 Most useful input and output function are provided by `printf` and `scanf` function in C.
 
-== ```c printf```
+=== ```c printf```
 
 `printf`, stand for "print with format", a kind of format output method.
 
 So, basically, the function of `printf` is to display some information on screen.
 And advanced functions are format output string.
 
-=== Output
+==== Output
 
 Most basic usage of `printf` is written as following:
 ```c
@@ -1665,7 +1665,7 @@ printf("with new line mark inside\n");
 ```
 (why we add semi-colon at the end of sentence? Because you will never able to written two different expression within one statement in such form)
 
-=== Placeholder & format
+==== Placeholder & format
 
 And how about advanced functions?
 
@@ -1817,7 +1817,7 @@ printf("format string", arguments, arg2, arg3)
 ...
 ```
 
-== ```c scanf```
+=== ```c scanf```
 
 Once we learnt output part, it is also necessary to have a glance to input part.
 
@@ -1886,7 +1886,7 @@ int main(void) {
 }
 ```
 
-= Conditional Statement
+== Conditional Statement
 
 Since the program is not only tool to calculating,
 it also helps people to solve problems require decision.
@@ -1894,7 +1894,7 @@ it also helps people to solve problems require decision.
 So, scientists introduces conditional statement.
 They can decide what to do according to conditions.
 
-== If
+=== If
 
 If statement has form of:
 ```c
@@ -1923,7 +1923,7 @@ if (max < x) {
 ```
 Here, we execute two statements when x larger than current max value.
 
-== If-Else
+=== If-Else
 
 Instead of just "if" statement, sometimes we may need "else" part.
 // NOTE: example required
@@ -1964,7 +1964,7 @@ if (cond1) {
 ```
 Very clear.
 
-== Ternary if-else operator
+=== Ternary if-else operator
 
 三元运算符
 
@@ -2001,7 +2001,7 @@ equivalent style is ```cpp int::operator=(i< j ? i : j, 1);```)
 
 They all correct, but second one is not encouraged to use.
 
-== Switch-Case
+=== Switch-Case
 
 Addition to if-else statement, we also have switch-case statements.
 
@@ -2034,7 +2034,7 @@ switch (i) {
 }
 ```
 
-=== Break statement
+==== Break statement
 
 But what does break statement do?
 
@@ -2048,14 +2048,14 @@ and rest statements inside will not be executed.
 
 Though break statements in switch-case is not mandatory, but it is a good habit to add break for each label.
 
-= Loop
+== Loop
 
 What if you want to execute multiple, same, or equivalent same statements?
 Here we needs loop.
 
 Loop are some statements can execute other statements repeatedly according to some condition.
 
-== While
+=== While
 
 While loop looks similar to if statement,
 ```c
@@ -2074,7 +2074,7 @@ while (1) {
 }
 ```
 
-== For
+=== For
 
 For loop is another type of loop, it may not that clear to have the name "for",
 ```c
@@ -2104,7 +2104,7 @@ for (;;)
 can be seen as infinity loop.
 
 
-== Do-While
+=== Do-While
 
 But what if we need to execute body at least once?
 
@@ -2117,7 +2117,7 @@ do {
 
 Apart form other statements, do-while loop requires brackets compulsory.
 
-== Break
+=== Break
 
 Still break, the other form of break is here,
 when break statement used within the body of loops, it will jump out of whole loop.
@@ -2126,7 +2126,7 @@ Even update part of for loop.
 
 Similar to switch-case.
 
-== Continue
+=== Continue
 
 Sometimes, you may need to just skip rest of part in body, but not jump out of loop,
 then you needs continue statement.
@@ -2134,7 +2134,7 @@ then you needs continue statement.
 When continue executed, it will just go to another round of loop, do update, test condition, and new execution
 process of body.
 
-= Array
+== Array
 
 When we are dealing with small scale of data, define multiple variables is enough,
 but how about sequence of data?
@@ -2191,7 +2191,7 @@ For multiple-dimension arrays, you must specify other dimension length except fi
 and you can write initial values directly in one pair of brackets, but also, spare each dimension array elements using
 different brackets pair.
 
-== C Style String
+=== C Style String
 
 Finally, we come to string part.
 
@@ -2200,7 +2200,7 @@ Actually, strings in c programming language are array of char.
 
 In C programming language, it will treat char array end with '\0' as a string.
 
-= `sizeof`
+== `sizeof`
 
 Though it is possible to traversal arrays using literals.
 It is not that convenient.
@@ -2217,7 +2217,7 @@ So, to have the length of array, we can say that:
 int len = sizeof(array) / sizeof(type);
 ```
 
-= Iterator
+== Iterator
 
 To traversal arrays, using `idx` traversal variable is one possible method.
 The other way to archive the goal is using iterator.
@@ -2234,7 +2234,7 @@ The p here is called, pointer points to int.
 
 More detail will be covered in Pointers section.
 
-= Function
+== Function
 
 Function, a kind of contract, accepts some input and generate outputs.
 Most similar to their mathematical form, any same input provide for a function will result in same output.
@@ -2259,7 +2259,7 @@ For example, I/O. Any operation modify memory, variables outside its own scope, 
 
 More particularly, some function in C programming language may have even no returning but side-effects.
 
-== Definition
+=== Definition
 
 To brief understand function in c, first look at the function definition.
 
@@ -2302,7 +2302,7 @@ int add (int a, int b) {
 }
 ```
 
-== Function Calling
+=== Function Calling
 
 Once a function has been defined, it can be used in our program with function call syntax.
 
@@ -2337,7 +2337,7 @@ Thus, the function call is acceptable.
 But what if we provide arguments less, more, or even has type mismatch?
 The C programming language will complain about syntax error.
 
-== Recursion
+=== Recursion
 
 Since a function can be called within body of other functions,
 it make nonsense to prevent a function calling it self.
@@ -2365,7 +2365,7 @@ it must have a terminal condition to stop further calls.
 Here the if statement works as terminal condition.
 When n equals to 0, the function will return 1 directly, without further calling itself.
 
-== Function Tail Call Optimization
+=== Function Tail Call Optimization
 
 In some case, a function's last operation is calling another function,
 which is called tail call.
@@ -2377,263 +2377,263 @@ but with tail call optimization, the compiler can optimize tail calls to avoid t
 
 The common way to implement tail call optimization is Continuous Passing Style.
 
-=== Continuous Passing Style
+==== Continuous Passing Style
 
 Continuous Passing Style (CPS) is a style of programming where control is passed explicitly in the form of a continuation.
 
 
-= Assembly
+== Assembly
 
-== Architecture
+=== Architecture
 
-=== AMD64 (x86_64)
+==== AMD64 (x86_64)
 
-=== Aarch64 / arm64
+==== Aarch64 / arm64
 
-=== MIPS / Loong
+==== MIPS / Loong
 
-== BUS
+=== BUS
 
-=== Bridges
+==== Bridges
 
-== CPU
+=== CPU
 
-== Intel Syntax, AT&T Syntax
+=== Intel Syntax, AT&T Syntax
 
-== Memory Access
+=== Memory Access
 
-== Commands
+=== Commands
 
-== Direct Memory Access
+=== Direct Memory Access
 
-= Stack
+== Stack
 
-== Frames
+=== Frames
 
-== Stack Variables, Local Variables
+=== Stack Variables, Local Variables
 
-== Recursion Function Expansion
+=== Recursion Function Expansion
 
-= Global Variables
+== Global Variables
 
-= Variable Scope
+== Variable Scope
 
-== Dynamic Scope
+=== Dynamic Scope
 
-== Lexical Scope
+=== Lexical Scope
 
-=== Function Scope
+==== Function Scope
 
-=== Block Scope
+==== Block Scope
 
-= Closure
+== Closure
 
-= Heap Space
+== Heap Space
 
-== Variable Allocation
+=== Variable Allocation
 
-= Memory Management
+== Memory Management
 
-== Virtual Memory (OS)
+=== Virtual Memory (OS)
 
-= Function Call
+== Function Call
 
-== Function Stack
+=== Function Stack
 
-== Function In Assembly
+=== Function In Assembly
 
-= `goto`
+== `goto`
 
-= User Defined Types
+== User Defined Types
 
-== `Struct`
+=== `Struct`
 
-=== Bit Field
+==== Bit Field
 
-=== Simulate `class` Using Structure
+==== Simulate `class` Using Structure
 
-=== Virtual Function Table
+==== Virtual Function Table
 
-== `Enum`
+=== `Enum`
 
-== `Union`
+=== `Union`
 
-= Structure space, Memory Alignment & Offset
+== Structure space, Memory Alignment & Offset
 
-= Pointers
+== Pointers
 
-== Pointer offset, index & linked list
+=== Pointer offset, index & linked list
 
-== Array, Pointers Points To Continuous Memory
+=== Array, Pointers Points To Continuous Memory
 
-== Function pointers
+=== Function pointers
 
-=== Form
+==== Form
 
-=== Function As Function Pointer
+==== Function As Function Pointer
 
-=== Calling With Function Pointer
+==== Calling With Function Pointer
 
-=== Simplified Function Call
+==== Simplified Function Call
 
-== Void Pointers
+=== Void Pointers
 
-== Pointer Convert
+=== Pointer Convert
 
-= Pointer in Assembly
+== Pointer in Assembly
 
-= Exception
+== Exception
 
-== `setjump`, `longjump`
+=== `setjump`, `longjump`
 
-== Try-Catch, Throw
+=== Try-Catch, Throw
 
-== Seh, Structure exception handler
+=== Seh, Structure exception handler
 
-== Herbexception
+=== Herbexception
 
-== Exception spread
+=== Exception spread
 
-== Condition System
+=== Condition System
 
-== Continuous
+=== Continuous
 
-= Preprocessor
+== Preprocessor
 
-== Header files, ```c #include```
+=== Header files, ```c #include```
 
-== Macro
+=== Macro
 
-=== C Style Macro
+==== C Style Macro
 
-=== M4 Macro Language
+==== M4 Macro Language
 
-=== C++ Template
+==== C++ Template
 
-=== Rust Procedure Macro
+==== Rust Procedure Macro
 
-=== Rust Macro Rules
+==== Rust Macro Rules
 
-=== Macro Assembly, Pseudocode
+==== Macro Assembly, Pseudocode
 
-=== Common Lisp Expansion Macro
+==== Common Lisp Expansion Macro
 
-=== Common Lisp Reader Macro
+==== Common Lisp Reader Macro
 
-=== Scheme Hygiene Macro System
+==== Scheme Hygiene Macro System
 
-=== Scheme Syntax Rules
+==== Scheme Syntax Rules
 
-=== Scheme Syntax Case
+==== Scheme Syntax Case
 
-=== Hygiene for the Unhygienic
+==== Hygiene for the Unhygienic
 
-== Compiler Comments
+=== Compiler Comments
 
-== ```c #progma```
+=== ```c #progma```
 
-= Meta-programming
+== Meta-programming
 
-= Compiler
+== Compiler
 
-== Compile Process
+=== Compile Process
 
-== Compiler Driver
+=== Compiler Driver
 
-== Assembler
+=== Assembler
 
-== Assemble
+=== Assemble
 
-== Assembly Code
+=== Assembly Code
 
-== Linker
+=== Linker
 
-== Link
+=== Link
 
-= Executable File
+== Executable File
 
-== Object
+=== Object
 
-== Executable
+=== Executable
 
-== Executable File Format
+=== Executable File Format
 
-=== Portable Executable (PE)
+==== Portable Executable (PE)
 
-=== Executable Linkable Format (ELF)
+==== Executable Linkable Format (ELF)
 
-=== Mach-5 (Fat-5)
+==== Mach-5 (Fat-5)
 
-=== Common Object File Format (COFF)
+==== Common Object File Format (COFF)
 
-=== Binary (Bin)
+==== Binary (Bin)
 
-= ABI
+== ABI
 
-== Function Call Conventions
+=== Function Call Conventions
 
-=== `__cdecl`
+==== `__cdecl`
 
-=== `__stdcall`
+==== `__stdcall`
 
-=== `__fastcall`
+==== `__fastcall`
 
-=== `thiscall`
+==== `thiscall`
 
-=== Microsoft 4-register fastcall `__vectorcall`
+==== Microsoft 4-register fastcall `__vectorcall`
 
-=== System V ABI syscall
+==== System V ABI syscall
 
-== Function Naming Convention
+=== Function Naming Convention
 
-=== C Function Naming Convention
+==== C Function Naming Convention
 
-=== MSVC C++ Function Naming Convention
+==== MSVC C++ Function Naming Convention
 
-=== Rust Function Naming Convention
+==== Rust Function Naming Convention
 
-=== Common Lisp Naming Convention
+==== Common Lisp Naming Convention
 
-== Endian
+=== Endian
 
-== Dynamic Linked Library
+=== Dynamic Linked Library
 
-== Static Linked Library
+=== Static Linked Library
 
-== fPIE, fPIC
+=== fPIE, fPIC
 
-= Multiple File Compile
+== Multiple File Compile
 
-== Compile Unit
+=== Compile Unit
 
-== Object
+=== Object
 
-= Build Systems
+== Build Systems
 
-== C Project Management
+=== C Project Management
 
-== Makefiles
+=== Makefiles
 
-== AutoTools
+=== AutoTools
 
-== CMake
+=== CMake
 
-== VSXMake (VSProj)
+=== VSXMake (VSProj)
 
-== XMake
+=== XMake
 
-= Variable Decorator
+== Variable Decorator
 
-= ```c asm volatile (assembly code : output operands : input operands : clobbers)```
+== ```c asm volatile (assembly code : output operands : input operands : clobbers)```
 
-= ```c __attribute__((attribute))```
+== ```c __attribute__((attribute))```
 
-= ```c _Generic```
+== ```c _Generic```
 
-= ```c ..., va_start, va_arg, va_end``` Macro, stdarg.h
+== ```c ..., va_start, va_arg, va_end``` Macro, stdarg.h
 
-= ```c __VA_ARGS__```
+== ```c __VA_ARGS__```
 
-= Variable Length Array
+== Variable Length Array
 
-= ASCII, EBCDIC, Unicode/UCS-II
+== ASCII, EBCDIC, Unicode/UCS-II

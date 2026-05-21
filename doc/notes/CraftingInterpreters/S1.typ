@@ -10,7 +10,7 @@
 
 #mkheader()
 
-= Chapter I: Overview
+== Chapter I: Overview
 
 Process of compile:
 + Lexing: source code -> tokens, lexing is the shortcut for "lexical analysis",
@@ -46,7 +46,7 @@ Compiler is not the only thing helps to execute a program,
 - Transpiler: a compiler that translates source code from one programming language to another, often with the goal of making it easier to run on a different platform or to take advantage of features in the target language.
 - Just-in-time (JIT) compiler: a compiler that generates machine code at runtime, rather than ahead of time, allowing for optimizations based on the actual execution context.
 
-= Chapter II: Lox
+== Chapter II: Lox
 
 `print` is a built-in keyword.
 

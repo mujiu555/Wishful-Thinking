@@ -23,6 +23,8 @@
 
 /// Generate header block: taxon + title(with slug) + metadata line
 #let mkheader() = context {
+  pagebreak()
+
   let doc = fetch-meta()
 
   // taxon
