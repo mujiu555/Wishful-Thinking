@@ -1,6 +1,3 @@
-#import "/lib/lib.typ": *
-
-#show: schema.with("page")
 
 #title[Assembly, Constitution Principle of Computer, Computer Organization and Architecture and Operating System (Section I)]
 #date[2025-12-14 23:46]

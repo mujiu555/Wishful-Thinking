@@ -1,17 +1,16 @@
 /// TAG: c, programming theory, computation theory
 #import "@preview/zh-kit:0.1.0": *
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
-
-#title[From The C Programming Language To Theoretical Computer Science (Section I)]
-#date[2025-12-14 23:46]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#meta(
+  title: "From The C Programming Language To Theoretical Computer Science (Section I)",
+  date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  parent_id: "index",
+)
 
 #show raw: set text(font: (
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
-  "Noto Sans CJK SC",
 ))
 
 #show: doc => setup-base-fonts(doc)

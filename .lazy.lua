@@ -6,7 +6,7 @@ return {
 				---@type vim.lsp.Config
 				tinymist = {
 					settings = {
-						exportTarget = "html",
+						--exportTarget = "html",
 					},
 				},
 			},

@@ -1,11 +1,13 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
 #import "@preview/gentle-clues:1.2.0": *
 
-#show: schema.with("page")
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#title[Not actually even a diary]
-#date[2025-12-21 00:25]
+#meta(
+  title: [Not actually even a diary],
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  date: datetime(year: 2025, month: 12, day: 21, hour: 0, minute: 25, second: 0),
+  id: "E001",
+)
 
 #let chat(content, nickname: none, datetime: none) = {
   let a = left
@@ -14,9 +16,9 @@
     nickname = "Self"
   }
   [
-    #html.align(a, html.text(datetime, size: 9pt, fill: gray))
-    #clue(title: html.align(a, nickname))[
-      #html.align(a, content)
+    #align(a, text(datetime, size: 9pt, fill: gray))
+    #clue(title: align(a, nickname))[
+      #align(a, content)
     ]
   ]
 }
@@ -694,3 +696,8 @@ Without AI, I can do nothing! I! HATE! \*\*\*\*\*\*\*! SE! Stupid course...
 
 两周,
 满心恨意
+
+= 2026-05-19:
+
+Yet another diary,
+two days' ex-volution makes me lazy.
