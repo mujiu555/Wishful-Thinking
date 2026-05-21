@@ -30,6 +30,14 @@
   }
 }
 
+#let fetch-meta-final(n: none) = {
+  if n == none {
+    meta.current.final()
+  } else {
+    meta.at(n).final()
+  }
+}
+
 /// - title (str): document title
 /// - author (str | array[str]): authors
 /// - date (datetime): time when document created
