@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [[Bartosz Milewski] Category theory for programmers (Part I)],
+  date: datetime(year: 2026, month: 4, day: 19, hour: 21, minute: 27, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "category-s1",
+  parent_id: "index",
+)
 
-#title[[Bartosz Milewski] Category theory for programmers (Part I)]
-#date[2026-04-19 21:27]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 Why category theory is important?
 - Functional programming: Functors,

@@ -1,3 +1,15 @@
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [CMU 15-462/662: Vector Calculus],
+  date: datetime(year: 2025, month: 10, day: 2, hour: 18, minute: 37, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "cmu-15462-s3",
+  parent_id: "index",
+)
+
+#mkheader()
+
 = CMU 15-462/662
 
 == Vector Calculus

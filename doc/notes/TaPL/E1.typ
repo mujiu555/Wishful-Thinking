@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [Types and Programming Lnaguages (Solution Set)],
+  date: datetime(year: 2026, month: 3, day: 9, hour: 0, minute: 21, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "tapl-e1",
+  parent_id: "index",
+)
 
-#title[Types and Programming Lnaguages (Solution Set)]
-#date[2026-03-09 00:21]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 
 = Chapter III: Untyped Calculation Expressions

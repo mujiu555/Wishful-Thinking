@@ -1,12 +1,15 @@
 /// TAG: c, programming theory, computation theory
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [From The C Programming Language To Theoretical Computer Science (Section II)],
+  date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "c-s2",
+  parent_id: "index",
+)
 
-#title[From The C Programming Language To Theoretical Computer Science (Section II)]
-#date[2025-12-14 23:46]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = From the C programming language to Theoretical Computer Science
 

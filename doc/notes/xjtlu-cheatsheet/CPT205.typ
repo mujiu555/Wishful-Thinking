@@ -1,4 +1,15 @@
 #import "@preview/zh-kit:0.1.0": *
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [CPT205 Computer Graphics],
+  date: datetime(year: 2025, month: 11, day: 19, hour: 3, minute: 6, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "cpt205",
+  parent_id: "index",
+)
+
+#mkheader()
 
 #show: doc => setup-base-fonts(doc)
 #set par(first-line-indent: 0em)

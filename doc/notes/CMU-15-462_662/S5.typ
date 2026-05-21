@@ -1,3 +1,15 @@
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [CMU 15-464/662: Spatial Transformation],
+  date: datetime(year: 2025, month: 10, day: 16, hour: 13, minute: 51, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "cmu-15464-s5",
+  parent_id: "index",
+)
+
+#mkheader()
+
 = CMU 15-464/662
 
 #set math.mat(delim: "[")
@@ -34,7 +46,7 @@ Algebraically, preserves vector space operations (only for addition & scaling).
 
 - translation: Moving form one to another place
 - scaling: Resize the object
-- Rotation: 
+- Rotation:
 - shear
 
 The Transformation is not defined by the formula, but the invariants it preserved.
@@ -44,13 +56,15 @@ What quantity remains fixed before and after the Transformation.
   columns: 3,
   stroke: none,
   table.hline(),
-  table.header([Transformation], [invariants],[algebraic description]),
+  table.header([Transformation], [invariants], [algebraic description]),
   table.hline(stroke: 0.5pt),
   [linear], [straight lines / origin], $f(a arrow(x) + arrow(y)) = a f (arrow(x)) + f(arrow(y))$,
   [translation], [differences between pair of points], $f(arrow(x)-arrow(y)) = arrow(x) - arrow(y)$,
   [scaling], [lines through origin / direction vector], $f(arrow(x)) / (|f(arrow(x))|) = arrow(x) / (|arrow(x)|)$,
-  [Rotation], [origin / distances between points / orientation], $|f(arrow(x)) - f(arrow(y)) = |arrow(x) - arrow(y)|, det(f) > 0$,
-  table.hline()
+  [Rotation],
+  [origin / distances between points / orientation],
+  $|f(arrow(x)) - f(arrow(y)) = |arrow(x) - arrow(y)|, det(f) > 0$,
+  table.hline(),
 )
 
 == Rotation
@@ -64,9 +78,9 @@ What quantity remains fixed before and after the Transformation.
 2d rotation by an angle $theta$ maps each point $arrow(x)$ to a point
 $f_theta(arrow(x))$ on the circle of radius $|arrow(x)|$
 
-$ arrow(x) = angle.l x_1, x_2 angle.r = x_1 angle.l 1, 0 angle.r + x_2 angle.l 0, 1 angle.r $
+$ arrow(x) = chevron.l x_1, x_2 chevron.r = x_1 chevron.l 1, 0 chevron.r + x_2 chevron.l 0, 1 chevron.r $
 So, as rotation on basic vectors are linear,
-$ f(arrow(x)) = x_1 angle.l cos(theta), sin(theta) angle.r + x_2 angle.l -sin(theta), cos(theta) angle.r $
+$ f(arrow(x)) = x_1 chevron.l cos(theta), sin(theta) chevron.r + x_2 chevron.l -sin(theta), cos(theta) chevron.r $
 
 === 3D Rotation
 
@@ -77,12 +91,12 @@ Just apply the same transformation of $x_1$, $x_2$, and keep $x_3$ fixed.
 
 Original matrix represents a object in 3d:
 $
-R = mat(|,|,|;e_1,e_2,e_3;|,|,|) = mat(1,0,0;0,1,0;0,0,1)
+  R = mat(|, |, |; e_1, e_2, e_3; |, |, |) = mat(1, 0, 0; 0, 1, 0; 0, 0, 1)
 $
 Thus,
 $
-R_T = mat(-,e_1^T,-;-,e_2^T,-;-,e_3^T,-;) = mat(1,0,0;0,1,0;0,0,1)\
-R^T R = mat(1,0,0;0,1,0;0,0,1) = I
+  R_T = mat(-, e_1^T, -; -, e_2^T, -; -, e_3^T, -;) = mat(1, 0, 0; 0, 1, 0; 0, 0, 1)\
+  R^T R = mat(1, 0, 0; 0, 1, 0; 0, 0, 1) = I
 $
 
 === Orthogonal Transformation
@@ -101,7 +115,7 @@ Preserves the direction of all vectors
 
 Build a diagonal matrix D, with a along the diagonal:
 $
-mat(a,0,0;0,a,0;0,0,a) vec(u_1,u_2,u_3) = vec(a u_1, a u_2, a u_3)
+  mat(a, 0, 0; 0, a, 0; 0, 0, a) vec(u_1, u_2, u_3) = vec(a u_1, a u_2, a u_3)
 $
 
 It is also possible to own a none-uniformed scaling.
@@ -112,7 +126,7 @@ finally multiple $R&T$ to get back into original axis:
 $f(x,y,z) = R^T D R arrow(x)$
 
 $
-A:= R^T D R
+  A:= R^T D R
 $
 
 === Spectral Theorem
@@ -126,7 +140,7 @@ $A e_i = lambda_i e_i$
 for A is Symmetric and diagonal matrix.
 
 Also, $A R = R D$, when
-$ R = [e_1 ... e_n] , D = mat(lambda_1,,;,dots.down,;,,lambda_n) $
+$ R = [e_1 ... e_n] , D = mat(lambda_1, , ; , dots.down, ; , , lambda_n) $
 
 Every symmetric matrix performs a non-uniform scaling along some set of orthogonal axes.
 
@@ -134,14 +148,13 @@ Every symmetric matrix performs a non-uniform scaling along some set of orthogon
 
 Displaces each point x in a direction $arrow(u)$ according to its distance
 (which is $arrow(x)$) along a fixed vector $arrow(v)$:
-$ f_(arrow(u), arrow(v)) = arrow(x) + angle.l arrow(v), arrow(x) angle.r arrow(u) $
+$ f_(arrow(u), arrow(v)) = arrow(x) + chevron.l arrow(v), arrow(x) chevron.r arrow(u) $
 
 The more x align with v, the more it moves.
 $
-f_(arrow(u), arrow(v)) =
-arrow(x) + angle.l arrow(v), arrow(x) angle.r arrow(u) =
-I arrow(x) + 
-A_(arrow(u), arrow(v)) 
+  f_(arrow(u), arrow(v)) =
+  arrow(x) + chevron.l arrow(v), arrow(x) chevron.r arrow(u) =
+  I arrow(x) +
+  A_(arrow(u), arrow(v))
 $
-
 
