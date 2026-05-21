@@ -4,7 +4,7 @@
 
 #import "style/theme.typ": *
 #import "style/components.typ": bracketed-slug, mkheader, slug, taxon, taxon-upper
-#import "meta.typ": fetch-meta
+#import "meta.typ": fetch-meta, fetch-meta-final
 
 /// Apply the kodama-inspired page style via `#show: template`
 #let template(doc) = {
@@ -13,18 +13,43 @@
     margin: 2em,
     header: context {
       let doc = fetch-meta()
+      let docs = fetch-meta-final(n: "documents")
+      let indexers = fetch-meta-final(n: "indexers")
 
-      // left: back link
-      let back = none
-      if doc.at("parent_id", default: none) != none {
-        let pos = fetch-meta(n: "indexers").at(
-          doc.parent_id + ":" + doc.parent_id,
-          default: none,
-        )
-        if pos != none {
-          back = link(pos.position, text(size: 0.75em, fill: meta-color, "[back]"))
+      // fetch the previous and next documents for navigation links
+      let prev = none
+      let next = none
+      let found = false
+      for (id, d) in docs {
+        if id == doc.at("id", default: none) {
+          found = true
+        } else if found and next == none {
+          next = d
+          break
+        } else if not found {
+          prev = d
         }
       }
+      if not found {
+        prev = none
+      }
+      let up = docs.at(doc.at("parent_id", default: ""), default: none)
+
+      let navs = ()
+      if prev != none {
+        let prev = indexers.at(prev.id + ":" + prev.id)
+        navs.push(link(prev.position, "[prev]"))
+      }
+      if up != none {
+        let up = indexers.at(up.id + ":" + up.id)
+        navs.push(link(up.position, "[up]"))
+      }
+      if next != none {
+        let next = indexers.at(next.id + ":" + next.id)
+        navs.push(link(next.position, "[next]"))
+      }
+
+      navs = text(size: 0.75em, fill: meta-color, navs.join(" "))
 
       // right: title · category · date
       let parts = ()
@@ -40,13 +65,13 @@
         text(size: 0.75em, fill: meta-color, parts.join(text("  ·  ")))
       }
 
-      if back != none and meta-content != none {
+      if navs != none and meta-content != none {
         grid(
-          columns: (1fr, 4fr),
-          align(left, back), align(right, meta-content),
+          columns: (1fr, 6fr),
+          align(left, navs), align(right, meta-content),
         )
-      } else if back != none {
-        align(left, back)
+      } else if navs != none {
+        align(left, navs)
       } else if meta-content != none {
         align(right, meta-content)
       }
