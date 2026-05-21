@@ -1,4 +1,5 @@
 #import "/lib/_lib.typ/lib.typ": *
+#show: template
 #include "cats.typ"
 
 #meta(
