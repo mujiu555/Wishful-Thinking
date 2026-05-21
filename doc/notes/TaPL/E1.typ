@@ -11,17 +11,17 @@
 #mkheader()
 
 
-= Chapter III: Untyped Calculation Expressions
+== Chapter III: Untyped Calculation Expressions
 
-== Syntax
+=== Syntax
 
-=== Exercise: How many elements are there in $S_3$?
+==== Exercise: How many elements are there in $S_3$?
 
 Answer., $S_0$ is empty, $S_1$ has 3 elements,
 $S_2$ has, 'succ true', 'succ false', ..., $3 * 3$, for second rule, and $3*3*3$ for third rule, totally $3 + 3*3 + 3*3*3 = 39$ elements.
 And $S_3$ has $39 + 39*3 + 39*39*39 = 59319$ elements.
 
-=== Exercise: Show that the sets $S_i$ are cumulative --- that is, that for each i we have $S_i subset.eq S_(i+1)$.
+==== Exercise: Show that the sets $S_i$ are cumulative --- that is, that for each i we have $S_i subset.eq S_(i+1)$.
 
 Proof., we can prove by induction on $i$.
 Since $S_0$ is empty, $S_0 subset.eq S_1$ is true.
@@ -34,9 +34,9 @@ Thus $S_(i+1) subset.eq S_(i+2)$ is true.
 
 Then by induction, we have $S_i subset.eq S_(i+1)$ is true for all $i$.
 
-== Induction on Terms
+=== Induction on Terms
 
-=== Suppose P is a predicate on terms.
+==== Suppose P is a predicate on terms.
 
 - Induction on depth:
   ```txt
@@ -94,7 +94,7 @@ Then, assume $Q(n)$ holds for all n < k, we need to show that $Q(k)$ holds.
 When P(r) holds for all r with depth(r) < depth(s), we have P(s) holds, thus Q(k) holds.
 Then by natural number induction, we have Q(n) holds for all n, thus P(s) holds for all s.
 
-=== 3.5.10 Exercise: Rephrase Definition 3.5.9 as a set of inference rules.
+==== 3.5.10 Exercise: Rephrase Definition 3.5.9 as a set of inference rules.
 
 Given definition:
 - Def: The multiple step evaluation relation $->*$ is the reflexive, transitive closure of one-step evaluation.
@@ -116,7 +116,7 @@ Then we have:
 
 ```
 
-=== 3.5.13 Exercise:
+==== 3.5.13 Exercise:
 
 Suppose we add a new rule:
 $ "if" #true "then" t_2 "else" t_3 -> t_3 $[E-Funny]

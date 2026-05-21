@@ -10,19 +10,17 @@
 
 #mkheader()
 
-= From The C Programming Language to Theoretical Computer Science
+== From The C Programming Language to Theoretical Computer Science
 
-== Section -1: Linux and Tool Chain
+=== Section -1: Linux and Tool Chain
 
-#outline()
+=== Intro
 
-== Intro
+=== Virtualization
 
-== Virtualization
+==== Virtual Machine
 
-=== Virtual Machine
-
-=== Full Virtualization & Semi Virtualization
+==== Full Virtualization & Semi Virtualization
 
 Full Virtualization:
 
@@ -38,88 +36,88 @@ Semi Virtualization:
 + KVM
 + ZEN
 
-=== Hardware Virtualization Support
+==== Hardware Virtualization Support
 
-=== Virtual Box
+==== Virtual Box
 
-== Operating System
+=== Operating System
 
-=== Bootloader
+==== Bootloader
 
-=== Bootstrap
+==== Bootstrap
 
-=== Kernel
+==== Kernel
 
-=== GRUB, Systemd-boot
+==== GRUB, Systemd-boot
 
-== GNU/ Linux, Minix, GNU/Hurd, \*BSD, Illumos, Drawin, ...: \*nix (Unix-Like)
+=== GNU/ Linux, Minix, GNU/Hurd, \*BSD, Illumos, Drawin, ...: \*nix (Unix-Like)
 
-=== Distribution
+==== Distribution
 
-=== Debian, Ubuntu, RHEL, Arch, NixOS, Slackware
+==== Debian, Ubuntu, RHEL, Arch, NixOS, Slackware
 
-=== Root Distribution
+==== Root Distribution
 
-=== Why Ubuntu
+==== Why Ubuntu
 
-=== Live CD
+==== Live CD
 
-=== Bootstrap
+==== Bootstrap
 
-=== Installation
+==== Installation
 
-=== Partition
+==== Partition
 
-=== Partition Table
+==== Partition Table
 
-=== File System
+==== File System
 
-=== Log, CoW, Snapshot
+==== Log, CoW, Snapshot
 
-=== User & Group
+==== User & Group
 
-=== Privilege
+==== Privilege
 
-=== Root user
+==== Root user
 
-=== Sudo
+==== Sudo
 
-=== Terminal, Shell, Terminal Simulator & `tty/n`
+==== Terminal, Shell, Terminal Simulator & `tty/n`
 
-=== FHS
+==== FHS
 
-=== home
+==== home
 
-=== root
+==== root
 
-=== bin & sbin
+==== bin & sbin
 
-=== usr
+==== usr
 
-=== User Commands
+==== User Commands
 
-=== Sudoer Commands
+==== Sudoer Commands
 
-=== commands, parameters, augments
+==== commands, parameters, augments
 
-=== shell tricks, pipeline, i/o redirection
+==== shell tricks, pipeline, i/o redirection
 
-=== Forground & Background
+==== Forground & Background
 
-=== Process Suspend
+==== Process Suspend
 
-=== signal
+==== signal
 
-=== Terminal Reuse
+==== Terminal Reuse
 
-=== Aliasing
+==== Aliasing
 
-=== SSH
+==== SSH
 
-=== Shell substitution
+==== Shell substitution
 
-=== Command line Editor
+==== Command line Editor
 
-=== Version Control
+==== Version Control
 
-=== Build System
+==== Build System

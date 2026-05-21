@@ -18,7 +18,7 @@
 
 #mkheader()
 
-= Section I:
+== Section I:
 
 What proof is?
 A proof is a method for ascertaining the truth.

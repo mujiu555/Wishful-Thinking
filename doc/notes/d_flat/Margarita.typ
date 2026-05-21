@@ -10,11 +10,11 @@
 
 #mkheader()
 
-= Abstract
+== Abstract
 
-= Introduction
+== Introduction
 
-== Background
+=== Background
 
-== Guiding Principle
+=== Guiding Principle
 

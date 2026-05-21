@@ -10,7 +10,7 @@
 
 #mkheader()
 
-= Abstract 摘要
+== Abstract 摘要
 
 Lilies (short for "List Interpret Language in s-Expression Syntax")
 is a dialect of LISt-Processing language.
@@ -71,7 +71,7 @@ Lilies 应设计完整的续体/延续（continuation）系统，包含续体的
 
 最后，Lilies 应设计完善的元编程系统，包含宏、编译时函数与代码生成，元编程系统应支持卫生宏与编译时求值。
 
-= Introduction 引言
+== Introduction 引言
 
 A single generic programming language cannot satisfy all needs of all programmers.
 Therefore reducing language complexity is important:
@@ -169,14 +169,14 @@ Lilies 的目标是成为一门可与 C 竞争的本地语言，或作为其他�
 
 这些特性使 Lilies 成为构建复杂软件系统的强大工具，同时也是计算机程序理论研究的良好平台。
 
-== Background 背景
+=== Background 背景
 
 The lilies language is designed and implemented as part of the D-Flat system.
 For creating a practical programming language and a powerful tool that can be used to implement other languages.
 
 In the design of Lilies, many ideas and concepts from other programming languages are borrowed.
 
-== Guiding Principle 指导方略
+=== Guiding Principle 指导方略
 
 The design of Lilies is guided by several principles:
 + Simplicity: The language should be simple and easy to learn, with a small set of core constructs and clear semantics.
@@ -191,18 +191,18 @@ For real world programming, the following principles are also important:
 + Allowing for efficient code generation and execution.
 + Support multiple programming paradigms, including functional, imperative, and declarative programming styles.
 
-== Section Description 章节描述
+=== Section Description 章节描述
 
 In the specification of Lilies language, each topic is described in a separate chapter.
 
-= Overview 语言总览
+== Overview 语言总览
 
 本章用于描述语言的基本概念, 以帮助了解后续章节.
 本章依据语法条目以帮助手册的方式被组织起来, 并非完整对于语言的描述.
 在某些地方也不会完善和规范.
 在后续章节中, 每个主题都会被单独描述, 并且附带推荐实现细节.
 
-== Comment 注释
+=== Comment 注释
 
 In the language Lilies, there are three main types of comments:
 + Documentation: Every Piece of code can have its own documentation, and accessed through documentation family functions.
@@ -266,7 +266,7 @@ E.g., a function with documentation:
       (add (succ a) (pred b)))))
 ```
 
-== Variable, Slots & Fields 变量, 插槽与字段
+=== Variable, Slots & Fields 变量, 插槽与字段
 
 Variables in Lilies are some space allocated to store values.
 
@@ -275,7 +275,7 @@ In practice, slots are some space allocated within an object to store values.
 
 Fields are similar to slots, but they are named and is used to store values that are associated with a specific object instance.
 
-== Type System 类型系统
+=== Type System 类型系统
 
 Every value in Lilies has a type.
 Types are used to classify values and determine what operations can be performed on them.
@@ -293,7 +293,7 @@ Every type must derive a default "empty" value, together with its corresponding 
 Every type has its own type checking rules, which are used to determine whether a value is of that type or not.
 Thus empty values can be distinguished from other values of the same type.
 
-=== Basic Types 基本类型
+==== Basic Types 基本类型
 
 Primitive types for Lilies language include:
 - Numbers
@@ -311,7 +311,7 @@ Primitive types for Lilies language include:
 - Unit
 - Empty
 
-==== Number Tower 数字类型层次
+===== Number Tower 数字类型层次
 
 Numbers in Lilies are organized in a type hierarchy known as the "number tower".
 At the base of the tower is the most general type, `Number`, which encompasses all numeric types:
@@ -336,7 +336,7 @@ Default Empty type for numbers is Zero.
 `Integer` is the short name for signed most used integer type, which is `(int 32)` in Lilies.
 `Size` is the short name for longest unsigned integer type, which is `(uint 64)` in Lilies.
 
-==== Booleans 布尔类型
+===== Booleans 布尔类型
 
 Booleans in Lilies are represented by the type `Boolean`, which has two possible values: `#True` (true) and `#False` (false).
 The boolean type are organized in a type hierarchy:
@@ -346,12 +346,12 @@ The boolean type are organized in a type hierarchy:
 
 Default Empty type for booleans is False.
 
-==== Characters 字符类型
+===== Characters 字符类型
 
 Characters in Lilies are represented by the type `Character`, which represents a single Unicode character.
 Default Empty type for characters is the null character type EOF, which has the only instance `#\EOF`.
 
-==== Strings 字串类型
+===== Strings 字串类型
 
 Strings in Lilies are represented by the type `String`, which represents a sequence of objects, typically characters.
 Default Empty type for strings is the Empty type, for which the only instance is the empty string `""`.
@@ -366,7 +366,7 @@ In Lilies, there are different kinds of continuous data:
 - Array, variable-size sequence of same-type elements,
 - List, variable-size sequence of potentially different-type elements, as a linked list,
 
-==== Symbols 符号类型
+===== Symbols 符号类型
 
 Symbols is a unique and immutable identifier used to represent names or labels in Lilies.
 Symbols have their own name, which is a string.
@@ -379,7 +379,7 @@ When a symbol is created, the system checks if a symbol with the same name alrea
 Symbols has their own type, `Symbol`.
 Nothing default empty type for symbols.
 
-==== Pairs 对偶类型
+===== Pairs 对偶类型
 
 Pairs in Lilies are represented by the type `Pair`, which represents a ordered pair of values.
 Pairs is a type as primitive type but with generic type parameters, allowing for pairs of any two types of values.
@@ -389,7 +389,7 @@ Which are linked lists constructed from pairs.
 
 Default Empty type for pairs is the `Pair::Empty` type, for which the only instance is the pair `(None . None)`.
 
-==== Vectors 向量类型
+===== Vectors 向量类型
 
 Vectors in Lilies are represented by the type `Vector`, which represents a fixed-size sequence of values.
 Vectors is a type as primitive type but with two generic type parameters: the type of the elements and the size of the vector.
@@ -397,7 +397,7 @@ Vectors is a type as primitive type but with two generic type parameters: the ty
 Default Empty type for vectors is the `Vector::Empty` type, a vector type that has size of 0 and type of None.
 The only instance of this type is the empty vector `[]`.
 
-==== Tuples 元组类型
+===== Tuples 元组类型
 
 Tuples in Lilies are represented by the type `Tuple`, which represents a fixed-size sequence of values of potentially different types.
 Tuples is a type as primitive type but with a variable number of generic type parameters, each representing the type of an element in the tuple.
@@ -405,7 +405,7 @@ Tuples is a type as primitive type but with a variable number of generic type pa
 Default Empty type for tuples is the `Tuple::Empty` type, a tuple type that has no elements.
 The only instance of this type is the empty tuple `<>`.
 
-==== Any 任意类型
+===== Any 任意类型
 
 Any type is the supertype of all types in Lilies.
 Every value in Lilies is of type Any.
@@ -415,7 +415,7 @@ In practice, Any type is used as a placeholder type when the specific type of a 
 
 Any type has no default empty type.
 
-==== Nothing 无类型
+===== Nothing 无类型
 
 Nothing type is the subtype of all types in Lilies.
 Nothing represents the absence of a value.
@@ -425,7 +425,7 @@ In practice, Nothing type is used to indicate that a value is missing or not app
 
 Nothing have no empty type since it have never own a instance.
 
-==== Ignore 忽略类型
+===== Ignore 忽略类型
 
 Ignore type is a special type that indicates that a value should be ignored.
 Values of Ignore type are not stored or used in any way.
@@ -436,14 +436,14 @@ In practice, Ignore type is used to indicate that a value should be ignored or d
 
 Ignore type is the default empty type for itself.
 
-==== Meta 元类型
+===== Meta 元类型
 
 Meta type is the type of types in Lilies.
 Meta type may be structure description or type generator.
 
 Meta type always promises to be non-empty, thus has no default empty type.
 
-==== Unit 单元类型
+===== Unit 单元类型
 
 Every structure that has no fields is considered as Unit type.
 Thus unit type is not a primitive type, but a special structure type.
@@ -454,7 +454,7 @@ All unit type shares same instance, which is also called Unit.
 
 Unit is the default empty type for itself.
 
-==== Empty 空类型
+===== Empty 空类型
 
 Empty type is a special type that has no instances.
 
@@ -462,27 +462,27 @@ Empty type always used to indicate a function will never return.
 
 Empty have no default empty type.
 
-=== Syntax Object 语法类型
+==== Syntax Object 语法类型
 
 Syntax objects in Lilies are representations of code as data structures, together with contextual information such as scope and source location.
 Syntax objects are so special that they should be built-in and given first-class status in the language.
 
-=== Closure Type 闭包类型
+==== Closure Type 闭包类型
 
 Functions in Lilies represents a mapping from a set of input values (parameters) to a set of output values (return values).
 And can capture the lexical scope in which they are defined, forming closures.
 
 Closure type constructs the type of a function, including the types of its parameters and return values.
 
-=== Continuation Type 续体类型
+==== Continuation Type 续体类型
 
-=== Annotation Type 注解类型
+==== Annotation Type 注解类型
 
-=== Contracts 契约
+==== Contracts 契约
 
-=== Contravariance, Covariance, and Invariance 逆变, 协变与不变
+==== Contravariance, Covariance, and Invariance 逆变, 协变与不变
 
-=== Composite Types 复合类型
+==== Composite Types 复合类型
 
 There are composite type constructors provided in Lilies language, including:
 - product types
@@ -507,24 +507,24 @@ Others are constructed through type definition syntax, such as structures, union
 Use `type` to define new recursive types by creating type generators that can produce types based on type parameters.
 The type described by `type` will not create a new type indeed, rather a new type checker that can check whether a value is of the described type or not will be implemented.
 
-=== List Types 表类型
+==== List Types 表类型
 
 In Lilies, same as other Lisp dialect, the List is composited by Pairs that have second element be another List.
 
-=== Union Types 联合类型
+==== Union Types 联合类型
 
 Union types in Lilies are special form of tagged unions, which represent a set of named values.
 
-=== Enum Types 枚举类型
+==== Enum Types 枚举类型
 
 If a enumeration type is not defined to have variants with specified type, the variants can be assigned with any constant value with same type.
 Though it is just be done by translating Enum index to corresponding value, it will be obviously user-friendly.
 
-=== Sealed Classes 密封类
+==== Sealed Classes 密封类
 
-=== Record Classes 记录类
+==== Record Classes 记录类
 
-=== Enum Classes 枚举类
+==== Enum Classes 枚举类
 
 Similar to enum types, but enum class definition can make the enumeration with newly defined type,
 and the variants of the enumeration can only be assigned with values of that type.
@@ -532,12 +532,12 @@ and the variants of the enumeration can only be assigned with values of that typ
 Behaviour like enum classes in Java, enum class in Lilies is a syntax sugar for enum type definition,
 with enum classes, it is free to define enumeration with any newly defined type, without really defining that type elsewhere.
 
-=== Internal Types 内部类型
+==== Internal Types 内部类型
 
 Internal types in Lilies are special types that are used by the language implementation itself, and are not intended to be used directly by programmers.
 The only exception is the Syntax Object type, which is used in macros and syntax manipulation.
 
-=== Generic 泛型类型
+==== Generic 泛型类型
 
 There exists different kinds of generic type implements in practice,
 including:
@@ -550,7 +550,7 @@ including:
 - canonicalization
 In the Lilies language, compile-time type computation is main approach used to implement generics.
 
-=== Traits 特征与接口
+==== Traits 特征与接口
 
 Traits are a way to define shared behavior that can be implemented by multiple types.
 Furthermore, traits can be composed together to create new traits.
@@ -558,19 +558,19 @@ Furthermore, traits can be composed together to create new traits.
 Traits can be used to constraint generic types, ensuring that a type parameter implements a specific set of behaviors.
 Traits can be used to define dynamic dispatch rule, allowing methods to be called on values of different types that implement the same trait.
 
-=== Type Dispatch 类型分派
+==== Type Dispatch 类型分派
 
 When a value is used in an expression, the type of the value is determined through type dispatch.
 
-=== Auto Type Detection 自动类型检测
+==== Auto Type Detection 自动类型检测
 
 When defining variables, functions, classes, and so on, if the type is not explicitly specified, the type will be inferred from the context.
 
-=== Type Inference 类型推断
+==== Type Inference 类型推断
 
-==== Type Family 类型族
+===== Type Family 类型族
 
-== Object System 对象系统
+=== Object System 对象系统
 
 Object is the core concept of Lilies language.
 Though types in Lilies can not inherit from other types in the traditional sense,
@@ -596,7 +596,7 @@ Type wrapper can be ownership, garbage collected or reference counted pointer.
 
 This part describes the object system, definition of classes, and their possible literals.
 
-=== Primitive Object 原始对象
+==== Primitive Object 原始对象
 
 Primitive objects in Lilies are build upon primitive types.
 Some of primitive objects can be written in literal syntax.
@@ -612,7 +612,7 @@ For which, there are:
 - Boolean Object
 - Pair Object
 
-=== Classes, Fields, Properties & Traits 类, 字段, 属性与特征
+==== Classes, Fields, Properties & Traits 类, 字段, 属性与特征
 
 Classes are user defined types for structure types.
 
@@ -633,7 +633,7 @@ Traits are used to define shared behavior that can be implemented by multiple cl
 Traits can be implemented manually for a class,
 and user defined traits can be used to extend class behavior for a library defined class.
 
-==== Definition of Classes 类的定义
+===== Definition of Classes 类的定义
 
 Define a new class with `class` syntax.
 E.g., to define a new class `Point` with two fields `x` and `y` of type `Integer`:
@@ -689,7 +689,7 @@ But, it is clear that, there can be only `define` or `lambda` to have the abilit
 
 // TODO: Type family, first-class classes
 
-==== Definition of Traits 特征的定义
+===== Definition of Traits 特征的定义
 
 // TODO: multiple-dispatch support,
 //       behaviours like Haskell type classes,
@@ -702,7 +702,7 @@ E.g., to define a new trait `Drawable` with a method `draw`:
     #:self self
     (define draw (function (self)))))
 ```
-==== Method and Trait Implementation 方法与特征实现
+===== Method and Trait Implementation 方法与特征实现
 
 Both Methods and Traits are implemented with `implement` syntax.
 
@@ -724,7 +724,7 @@ E.g., Implement Drawable for Point:
 
 Since `implement` syntax unwraps the namespace of a class or object only, it is possible to define variables associated with the class or object inside.
 
-==== Generic Function & Interface 泛义函数与接口
+===== Generic Function & Interface 泛义函数与接口
 
 With generic function, methods can be called in a uniform way as traditional functions.
 
@@ -741,11 +741,11 @@ we can have:
 ```
 And then we can call `draw` on any object that implements `Drawable` trait, and the corresponding method will be called.
 
-==== Method Dispatch 方法分派
+===== Method Dispatch 方法分派
 
 When a method is called on an object, the method to be executed is determined through method dispatch.
 
-===== Dynamic Dispatch 动态分派
+====== Dynamic Dispatch 动态分派
 
 ```lisp
 ((invoke object 'method-name') object ...args)
@@ -753,7 +753,7 @@ When a method is called on an object, the method to be executed is determined th
 ({method-name object} ...args) ; for short
 ```
 
-===== Static Dispatch 静态分派
+====== Static Dispatch 静态分派
 
 ```lisp
 ((method Class 'method-name') ...args)
@@ -761,21 +761,21 @@ When a method is called on an object, the method to be executed is determined th
 ({method-name Class} ...args) ; for short
 ```
 
-===== Method Access 方法调用语法糖
+====== Method Access 方法调用语法糖
 
-===== Invoke 调用
+====== Invoke 调用
 
-==== Chain Call & Chain Methods 链式调用与链式方法
+===== Chain Call & Chain Methods 链式调用与链式方法
 
-===== Syntax Sugar for Chain Methods Definition 链式方法定义的语法糖
+====== Syntax Sugar for Chain Methods Definition 链式方法定义的语法糖
 
-==== Field & Property Access 字段与属性访问
+===== Field & Property Access 字段与属性访问
 
 `ref`
 
-==== Traits Shadowing 特征遮蔽
+===== Traits Shadowing 特征遮蔽
 
-==== Predefined Traits 预定义特征
+===== Predefined Traits 预定义特征
 
 Assignment:
 - Clone (Deep clone all fields)
@@ -787,14 +787,14 @@ Comparison:
 - Value Equal (Compare whether two value is same logically, in this case, two children that treat as same parent type may be equal)
 - Identity Equal (Compare whether two bindings reference to the same object)
 
-== Generic Programming 泛型编程
+=== Generic Programming 泛型编程
 
 // TODO: refactor Type System, Object System and Generic Programming sections
 // Add type family support and type-level programming support in Type System section
 
-== Expression
+=== Expression
 
-== Apply & Evaluation
+=== Apply & Evaluation
 
 + Apply & Evaluation
   + Value Pass
@@ -803,7 +803,7 @@ Comparison:
     + Move
     + Brought
 
-== Variable, Binding & Reference
+=== Variable, Binding & Reference
 
 - Variable, Definition & Binding
   - Dynamic Scope
@@ -827,9 +827,9 @@ There are three types of assignment:
 - Clone: clone the object
 - Reference: assign by reference
 
-== Built-in Data Types and Literals 内建数据类型与字面量
+=== Built-in Data Types and Literals 内建数据类型与字面量
 
-=== Primitive Types and Literals 基本类型与字面量
+==== Primitive Types and Literals 基本类型与字面量
 
 - Integer Object
   - `[1-9][0-9]*`
@@ -865,7 +865,7 @@ There are three types of assignment:
 
 Above, quote syntax is used to create literal syntax for symbols and pairs.
 
-=== Vectors(Matrix), Tuples, Arrays, Lists, dictionaries & Index
+==== Vectors(Matrix), Tuples, Arrays, Lists, dictionaries & Index
 
 There are some built-in composite types in Lilies, including:
 
@@ -875,7 +875,7 @@ There are some built-in composite types in Lilies, including:
 - Lists, which is a variable-size sequence of potentially different-type elements, and can be indexed
 - Dictionaries, which is a collection of key-value pairs, and can be indexed by keys.
 
-=== Vector
+==== Vector
 
 In Lilies, one-dimension vectors can be written in the form of `[element1 element2 ...]`,
 Furthermore, vector type have its own literal syntax rather than regular type application syntax like `(int 8)`,
@@ -890,7 +890,7 @@ In other case, something like jagged array can be implemented by using vector of
 However, only vector slice is able to used as type argument for vector without really declare the length of a vector.
 It will never behaviour like jagged array in C Sharp.
 
-=== Tuple
+==== Tuple
 
 Tuple is another fixed-length sequence in Lilies.
 Compared to vector, tuple is slightly more flexible.
@@ -902,12 +902,12 @@ Tuple is obviously able to contains another tuple.
 
 Tuple is indexed still by `index`.
 
-=== Array
+==== Array
 
 Contracts to other languages, array in Lilies behaviours like `std::vector` in c++ or `ArrayList` in Java,
 which is a data type that can contains variable number of elements of the same type, and can be indexed by integers.
 
-=== List
+==== List
 
 List is a traditional data structure in Lisp dialects, which is a variable-length sequence of potentially different-type elements.
 Since the list is a type derived from pairs, determined in compilation time, it is not difficult to check the safety of list operations and optimize the code for list operations.
@@ -915,7 +915,7 @@ Since the list is a type derived from pairs, determined in compilation time, it 
 List, a kind of recursive type, defined in the form of `(cons element list)`, where `cons` is a constructor for pairs, and `element` is the first element of the list, and `list` is the rest of the list, is able to be visited using traditional `car` and `cdr` functions, and furthermore, `index` for `nth` in common lisp.
 All those operations is determined in compilation time, thus the visiting of list have the same efficiency as visiting vector.
 
-=== Dictionary
+==== Dictionary
 
 Dictionary is a collection of key-value pairs,
 in common lisp, it is called `associative list`,
@@ -926,7 +926,7 @@ a corresponding built-in library for export dictionary and array to json format 
 
 Similar to classes and other structures that have names associated with fields, dictionary uses `ref` to access the value of a key.
 
-== Reference
+=== Reference
 
 Actually, define something directly to another variable creates a new reference to the same object.
 Thus if you'd like to define reference to a variable defined within same scope, or same structures,
@@ -938,7 +938,7 @@ If create raw pointer, it costs space to store the pointer, and it is not safe t
 Thus Lilies provides a way to create reference without creating a new variable,
 with definition like `(define refe (reference var #:type <type>))`, which creates a new reference to the same object as `var`, but with a different type.
 
-== Procedure, Function & Method
+=== Procedure, Function & Method
 
 - Function Call
 - Multiple Value for Function Call
@@ -980,7 +980,7 @@ with definition like `(define refe (reference var #:type <type>))`, which create
 
 Parameter list of a procedure can be a pattern, a case expression, or a single symbol.
 
-=== Procedures
+==== Procedures
 
 To define a procedure, binding a lambda expression to a name.
 A lambda expression is composed of a parameter list, an optional returning value list, and a function body.
@@ -1012,14 +1012,14 @@ The body of lambda expression must be a single one expression.
 You can exit a function without executing rest part of the body by invoke built-in function `:return`, this is a function that only can be called within a function body,
 and it will return the values passed to it as the returning values of the function.
 
-=== Positional, Named or Rest Parameters
+==== Positional, Named or Rest Parameters
 
 By default, Lilies will never provide positional parameters.
 All parameters are matched by name, and the order of parameters in function call is not important.
 
 // TODO:
 
-=== Functions
+==== Functions
 
 Each lambda expression has its own type, which is a closure type that includes the types of its parameters and returning values.
 When a lambda expression is defined, a new function object is created and bound to the name of the procedure.
@@ -1028,9 +1028,9 @@ However the need to define types that can represent some common function signatu
 Firstly, every lambda type is derived from a generic function type.
 If you'd declare a function holder or delegate, you may have to use generic callable trait.
 
-== Conditional & Control Flow
+=== Conditional & Control Flow
 
-=== Conditionals 条件语句
+==== Conditionals 条件语句
 
 + `if`
 + `cond`
@@ -1038,7 +1038,7 @@ If you'd declare a function holder or delegate, you may have to use generic call
 
 + `switch`
 
-=== Loops 循环语句
+==== Loops 循环语句
 
 Traditional loops provided in Lilies are:
 + `loop`: infinite loop
@@ -1053,17 +1053,17 @@ And lisp style loops are also provided:
 + `fold`: fold a collection to a single value by applying a binary function with an initial value
 + `scan`: scan a collection to produce a new collection by applying a binary function with an initial value
 
-=== Try With Pattern 匹配尝试
+==== Try With Pattern 匹配尝试
 
 Similar to Rust, the Lilies supports tagged union types and pattern matching.
 `try` works similar to `if let` in Rust.
 When the pattern matches, control-flow goes to then part, otherwise goes to else part.
 
-=== Control Flow 控制流
+==== Control Flow 控制流
 
-== Name Space, Lexical Scope, Dynamic Scope, Closure 命名空间, 词法作用域, 动态作用域, 闭包
+=== Name Space, Lexical Scope, Dynamic Scope, Closure 命名空间, 词法作用域, 动态作用域, 闭包
 
-=== `sequence`, Sequence Point & Evaluation Order 序列, 序列点与求值顺序
+==== `sequence`, Sequence Point & Evaluation Order 序列, 序列点与求值顺序
 
 In Lilies, the code block is called `sequence`,
 basically, the sequence is a list of expressions that are evaluated in order, and the value of the sequence is the value of the last expression in the sequence.
@@ -1071,22 +1071,22 @@ The sequence can have a name and then return through the name.
 To exit a sequence, use `:break` and the output value will be the value passed to `:break`.
 If optional label is provided, the `:break` will jump out of the sequence with the label, otherwise it will jump out of the nearest sequence.
 
-=== `dynamic` & Dynamic Binding
+==== `dynamic` & Dynamic Binding
 
-=== Environment & Context 环境与上下文
+==== Environment & Context 环境与上下文
 
-== Lazy Evaluation & Call by Name 惰性求值与按名调用
+=== Lazy Evaluation & Call by Name 惰性求值与按名调用
 
 By default, Lilies uses eager evaluation and call by value.
 No matter `#:ref`, `#:in` or `#:val` is used, the arguments will be evaluated before being passed to the function.
 If `#:naming` is used, the argument will be treated as a lazy-evaluated expression.
 
-== Generics
+=== Generics
 
 + Generics: Template
   + Generic Macro
 
-== Macro
+=== Macro
 
 + Macro
   + History: Compile-time calculation
@@ -1110,31 +1110,31 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
   + How can we have macro understand the types of expressions?
   + Evaluate while expanding
 
-=== Built-in Macros 内建宏
+==== Built-in Macros 内建宏
 
 - `todo`: a simple macro to indicate that there is still work to be done in this part of code.
 - `assert`: a simple macro to check if a condition is true, and if not,
 - `unreachable`: a simple macro to indicate that the code is unreachable and should not be executed.
 - `debug`: a simple macro to print debug information during development.
 
-== Pattern-Matching
+=== Pattern-Matching
 
-== Annotations and Annotation processing
+=== Annotations and Annotation processing
 
 `#@[attributes]` is the general syntax for annotations in Lilies.
 
-=== Built-in Annotations
+==== Built-in Annotations
 
 - `wip`: a simple annotation to indicate that the annotated code is still a work in progress and may not be complete or fully functional.
 - `deprecated`: a simple annotation to indicate that the annotated code is deprecated and should not be
 - `experimental`: a simple annotation to indicate that the annotated code is experimental and may be subject to change or removal in future versions.
 - `internal`: a simple annotation to indicate that the annotated code is intended for internal use only and should not be used by external code.
 
-== Symbol Generation
+=== Symbol Generation
 
-=== Expression Tree
+==== Expression Tree
 
-== Memory Management
+=== Memory Management
 
 + Pointer
   + Reference Count
@@ -1152,20 +1152,20 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
   + `constant`: Constant Wrapper, define a constant space in structures
 + Auto Life-cycle Detection
 
-== CPS, Continuations & Delimited Continuations
+=== CPS, Continuations & Delimited Continuations
 
-== Side Effects & Algebraic Effects
+=== Side Effects & Algebraic Effects
 
-== Yield, Suspend, Resume & Stream (Engine)
+=== Yield, Suspend, Resume & Stream (Engine)
 
-== Threads & Subroutines
+=== Threads & Subroutines
 
-== Async, Await & Coroutines
+=== Async, Await & Coroutines
 
-== Exception Handling
+=== Exception Handling
 + Condition System
 
-== Top-Level
+=== Top-Level
 
 For each file, the top-level is the outermost level of code that is not nested inside any other expression or structure.
 Briefly, the definition and expression at the top-level is treated to be executed in order.
@@ -1174,7 +1174,7 @@ Top-level is the smallest unit of code, defines the entry point, global environm
 
 Each file is encouraged to have only one expression at the top-level (except for the main file).
 
-=== Entry Point
+==== Entry Point
 
 The entry point of a lilies program is a function provided directly at the top-level.
 
@@ -1182,11 +1182,11 @@ Main function must be a function that takes one `(Optional (Vector String))` par
 and returns `(Result Integer (impl Error))`, which gives the feedback of the program execution,
 where `Integer` is the exit code, and `impl Error` is the error information when the program execution fails.
 
-== Module & Library
+=== Module & Library
 
 // TODO:
 
-=== Provide & Require
+==== Provide & Require
 
 In each file, it is possible and only to have only one provide form, which declares what objects are provided by this file.
 And these objects can be loaded by other file with `require` form.
@@ -1240,7 +1240,7 @@ require ::=
 ;; require => <provided-object>
 ```
 
-=== Module & Library System
+==== Module & Library System
 
 Module is a way to organize code into separate namespaces, and to control the visibility and accessibility of code.
 Each top-level is able to define multiple modules, but only one of them can be provided for other modules to require.
@@ -1270,7 +1270,7 @@ export-list ::=
 '#:export' '(' { <exported-object> } ')'
 ```
 
-=== Import & :Export
+==== Import & :Export
 
 Provide simply declare the object to be provided, and require simply load the provided object and returns it.
 So, it must have some special syntax for bind the provided object to a name.
@@ -1285,10 +1285,10 @@ Each sub-from can be combined together to import a module in a flexible way.
 
 Export form is a sub-form of module definition, which is used to declare which objects are exported by the module.
 
-= ...
+== ...
 
 ...
 
 ...
 
-= Code Generation
+== Code Generation

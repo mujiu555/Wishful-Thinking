@@ -10,5 +10,5 @@
 
 #mkheader()
 
-= Lambda Calculator Virtual Machine Design
+== Lambda Calculator Virtual Machine Design
 

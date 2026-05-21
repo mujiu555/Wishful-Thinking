@@ -18,11 +18,11 @@
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
 ))
 
-= CAN 201 Computer Network
+== CAN 201 Computer Network
 
-== Intro to network
+=== Intro to network
 
-=== Basic Concepts
+==== Basic Concepts
 
 - Hosts: terminal systems
 - Packet switches: forward packages, chunks of data
@@ -33,7 +33,7 @@
 - Networks: collections of devices, routers, links
   - managed by organization
 
-=== Nut and bolts view
+==== Nut and bolts view
 
 - Hosts: running network apps; server and client
 - communication links
@@ -48,7 +48,7 @@
   - RFC: Request for comments
   - IETF: Internet Engineering Task Force
 
-=== Hosts
+==== Hosts
 
 + Takes application message
 + breaks into smaller chunks, packets, with length L bits
@@ -57,7 +57,7 @@
 
 $"packet transmission delay" = "time needed to transmit L-bit packet into link" = L / R$
 
-== Physical media
+=== Physical media
 
 Wired, wireless communication links.
 - Guided media: signals propagate in solid media: copper, fiber, coaxial cable, glass
@@ -87,7 +87,7 @@ Types:
 - Wide-area: Cellular: 4G: \~100Mbps; 5G: \~1Gbps
 - Satellite: Kpbs \~ 45Mpbs; starlink: \~ 1440Mbps; At least 270ms e2e delay
 
-=== PSTN: Dial-up Internet access
+==== PSTN: Dial-up Internet access
 
 拨号网络: use public switched telephone network (PSTN)
 - dialing a telephone number over conventional telephone line.
@@ -96,7 +96,7 @@ Types:
   - encode digital signals back into audio
 - 56Kpbs \~ 10min for a music
 
-=== DSL: Digital subscriber line
+==== DSL: Digital subscriber line
 
 Telephone line base:
 - Have a splitter
@@ -113,13 +113,13 @@ Computer --> DSL modem --> splitter --> DSLAM --> ` --> ISP
 - Downstream \~ < 50Mbps
 - ADSL: Asymmetric Digital Subscriber Line: faster
 
-=== FTTH: fiber to the home
+==== FTTH: fiber to the home
 
 Pptical network terminator `->` Optical splitter `->` Optical line terminator `->` Internet
 
 Passive Optical Networks (PONs) distribution architecture.
 
-=== Wireless access networks
+==== Wireless access networks
 
 Base stations used to provide the signal.
 
@@ -130,16 +130,16 @@ Base stations used to provide the signal.
   - provided by ISP
   - >= 1Gbps
 
-=== Enterprise networks
+==== Enterprise networks
 
 Companies, Universities, ...
 Mix of wired, wireless link, connecting a mix of switches and routers
 
-=== Data center networks
+==== Data center networks
 
 high bandwidth links connected servers
 
-== Core
+=== Core
 
 Mesh of interconnected routers
 
@@ -164,7 +164,7 @@ Packet switching: store-and-forward:
 - Store and forward: entire packet must arrive at router before it can be transmitted on next link
 - E2E delay = 2L/R (assuming no propagation delay) 无传播延时
 
-=== Switching: queueing delay, loss
+==== Switching: queueing delay, loss
 
 
 Circuit switching:
@@ -206,7 +206,7 @@ PS drawbacks:
 How to provide circuit-like behavior PS?
 - Bandwidth guarantees
 
-== Internet structure
+=== Internet structure
 
 Hosts connect to Internet via access
 Internet Service Providers (ISPs)
@@ -248,7 +248,7 @@ At “center”: small \# of well-connected large networks
 - “tier-1” commercial ISPs (e.g., Level 3, Sprint, AT&T, NTT), national & international coverage
 - content provider networks (e.g., Google, Facebook): private network that connects its data centers to Internet, often bypassing tier-1, regional ISPs
 
-== Performance
+=== Performance
 速率：数据传输速率或称比特率。往往指额定速率或标称速率
 带宽
 - “带宽”原本指信号具有的频带宽度，即最高频率与最低频率之差。
@@ -305,7 +305,7 @@ Throughput: 吞吐量
 Per-connection end-end throughput: min{$R_"client"$ , $R_"server"$ , $R_"total"$/connected devices count}
 - In practice: $R_"client"$ or $R_"server"$ is often bottleneck
 
-== Internet protocol stack
+=== Internet protocol stack
 
 - 体系结构
   - OSI 7 层体系结构：物理层、数据链路层、网络层、运输层、会话层、表示层、应用层
@@ -374,7 +374,7 @@ Host     +-------------+ Destination
 - Easy for maintenance
 - Flexible for updating
 
-== Application Layer
+=== Application Layer
 
 Creating a network app
 Write programs that:
@@ -385,7 +385,7 @@ No need to write software for network-core devices
 - network-core devices do not run user applications
 - applications on end systems allows for rapid app development, propagation
 
-== Host(Program), Sockets, Network
+=== Host(Program), Sockets, Network
 
 Processes communicating:
 Process: program running within a host
@@ -449,7 +449,7 @@ Transport service requirements: common apps
 )
 \*Audio: 5k to 1Mpbs, Video: 10kpbs - 10 Mbps or more
 
-== Internet transport protocols services
+=== Internet transport protocols services
 
 TCP service:
 - Reliable transport between sending and receiving process
@@ -572,7 +572,7 @@ TCP的标志位
 - 第三次分手： Server端向Client端发送标志位是FIN的报文段，请求关闭连接，同时Client端进入LAST_ACK状态。
 - 第四次分手 ： Client端收到Server端发送的FIN报文段，向Server端发送标志位是ACK的报文段，然后Client端进入TIME_WAIT状态。Server端收到Client端的ACK报文段以后，就关闭连接。此时，Client端等待2MSL的时间后依然没有收到回复，则证明Server端已正常关闭，那好，Client端也可以关闭连接了。
 
-== HTTP
+=== HTTP
 
 HTTP: hypertext transfer protocol (超文本传输协议)
 - Application layer protocol
@@ -611,7 +611,7 @@ Key-value pairs, metadata about the request and the client:
 - Caching / Cookies
 - Types of connections
 
-=== Non-persistent HTTP
+==== Non-persistent HTTP
 - At most one object sent over TCP connection
 - connection then closed
 - Downloading multiple objects required multiple connections
@@ -637,7 +637,7 @@ Client                           Server
   | file received
 ```
 
-=== Persistent HTTP
+==== Persistent HTTP
 Non-persistent HTTP issues:
 - Requires 2 RTTs per object
 - OS overhead for each TCP connection
@@ -648,7 +648,7 @@ Persistent HTTP issues:
 - Client sends requests as soon as it encounters a referenced object
 - As little as one RTT for all the referenced objects
 
-=== Status Code
+==== Status Code
 
 The Status-Code element is a 3-digit integer result code of the attempt to understand and satisfy the request. These codes are fully defined in section 10. The Reason-Phrase is intended to give a short textual description of the Status-Code. The Status-Code is intended for use by automata and the Reason-Phrase is intended for the human user. The client is not required to examine or display the Reason- Phrase.
 
@@ -709,7 +709,7 @@ extension-code = 3DIGIT
 Reason-Phrase  = *<TEXT, excluding CR, LF>
 ```
 
-=== Cookies
+==== Cookies
 
 Four components:
 + cookie header line of HTTP response message
@@ -717,7 +717,7 @@ Four components:
 + cookie file kept on user’s host, managed by user’s browser
 + back-end database at Web site
 
-=== Web cache
+==== Web cache
 
 Cache acts as both client and server
 - server for original requesting client
@@ -735,7 +735,7 @@ Conditional GET
 - cache: specify date of cached copy in HTTP request If-modified-since: `<date>`
 - server: response contains no object if cached copy is up-to-date: HTTP/1.0 304 Not Modified
 
-=== HTTP/2, HTTP/3
+==== HTTP/2, HTTP/3
 
 Key goal: decreased delay in multi-object HTTP requests
 
@@ -758,7 +758,7 @@ HTTP/2 over single TCP connection means:
 - no security over raw TCP connection
 HTTP/3: adds security, per object error- and congestion- control (more pipelining) over UDP
 
-=== QUIC: Quick UDP Internet Connections
+==== QUIC: Quick UDP Internet Connections
 
 application-layer protocol, on top of UDP
 - increase performance of HTTP
@@ -771,7 +771,7 @@ TCP vs. QUIC:
 - TCP: TCP (reliability, congestion control state) + TLS (authentication, crypto state): 2 serial handshakes
 - QUIC: reliability, congestion control, authentication, crypto state: 1 handshake
 
-== RESTful API
+=== RESTful API
 
 Representational State Transfer Application Programming Interface
 
@@ -782,7 +782,7 @@ A set of recommended styles/rules for API design
 - Use of standard HTTP status codes to represent the outcome of requests.
 - Over 93% of developers using RESTful API in their projects
 
-=== DNS: domain name system
+==== DNS: domain name system
 
 Application-layer protocol:
 - C/S architecture
@@ -847,14 +847,14 @@ Local DNS name server
   - Has local cache of recent name-to-address translation pairs (but may be out of date!)
   - Acts as proxy, forwards query into hierarchy
 
-=== caching, updating records
+==== caching, updating records
 
 - Once (any) name server learns mapping, it caches mapping: Cache entries timeout (disappear) after some time (TTL)
 - TLD servers typically cached in local name servers: thus root name servers not often visited
 - Cached entries may be out-of-date: If name host changes IP address, may not be known Internet-wide until all TTLs expire
 - Update/notify mechanisms proposed IETF standard: RFC 2136
 
-=== Records
+==== Records
 
 DNS: distributed database storing resource records (RR)
 
@@ -900,7 +900,7 @@ Message header:
 - Records for authoritative servers
 - Additional “helpful” info that may be used
 
-=== New record
+==== New record
 
 Register name feimax.com at DNS registrar (e.g., net.cn)
 - Normally, you don’t need to set up the NS record
@@ -908,7 +908,7 @@ Register name feimax.com at DNS registrar (e.g., net.cn)
 - Insert MX record for email
 - …
 
-== P2P
+=== P2P
 
 No always-on server
 - Arbitrary end systems directly communicate
@@ -937,7 +937,7 @@ File distribution time: P2P
 time to distribute F to N clients using P2P approach:
 $D_"P2P" > "max"{F/u_s,,F/d_"min",N F/(u_s + Sigma u_i)}$
 
-==== BitTorrent
+===== BitTorrent
 
 - Efficient content distribution system using file swarming.
 - The throughput increases with the number of downloaders via the efficient use of network bandwidth
@@ -1014,7 +1014,7 @@ Upload-Only mode:
 - Once download is complete, a peer can only upload. The question is, which nodes to upload to?
 - Policy: Upload to those with the best upload rate. This ensures that pieces get replicated faster, and new seeders are created fast
 
-== Socket
+=== Socket
 
 Socket: door between application process and end-end-transport protocol
 
@@ -1081,7 +1081,7 @@ read reply               | <-------- | write reply: cn.send()
 ```
 
 
-== Transport Layer
+=== Transport Layer
 
 Provide logical communication between app processes running on different hosts
 - Transport protocols run in end systems
@@ -1123,7 +1123,7 @@ Services not available:
 - Delay guarantees
 - Bandwidth guarantees
 
-== Multiplexing/demultiplexing
+=== Multiplexing/demultiplexing
 
 Multiplexing as sender:
 handle data from multiple sockets, add transport header (later used for demultiplexing)
@@ -1162,7 +1162,7 @@ TCP socket identified by 4-tuple:
 - Server host may support many simultaneous TCP sockets: each socket identified by its own 4-tuple
 - Web servers have different sockets for each connecting client: non-persistent HTTP will have different socket for each request
 
-== UDP: User Datagram Protocol [RFC 768]
+=== UDP: User Datagram Protocol [RFC 768]
 
 Feature：
 - Simple and straightforward
@@ -1232,7 +1232,7 @@ while ((b = input()) != NULL) {
 checksum = ~checksum;
 ```
 
-== Principles of reliable data transfer
+=== Principles of reliable data transfer
 
 Complexity of reliable data transfer protocol will depend (strongly) on characteristics of unreliable channel (lose, corrupt, reorder data?)
 
@@ -1342,7 +1342,7 @@ Performance of rdt3.0
 - if RTT=30ms, 1KB pkt every 30 msec: 33kB/sec throughput over 1 Gbps link
 - Network protocol limits use of physical resources!
 
-== Pipelined protocols
+=== Pipelined protocols
 
 Pipelining: sender allows multiple, “in-flight”, yet-to-be-acknowledged pkts
 • Range of sequence numbers must be increased
@@ -1403,7 +1403,7 @@ pkt n in [rcvbase, rcvbase+N-1]
 - In-order: deliver (also deliver buffered, in-order pkts), advance window to next not- yet-received pkt
 pkt n in [rcvbase-N,rcvbase-1]: ACK(n) otherwise: Ignore
 
-== TCP: Overview RFCs: 793,1122,1323, 2018, 2581
+=== TCP: Overview RFCs: 793,1122,1323, 2018, 2581
 
 - Point-to-point: one sender, one receiver
 - Reliable, in-order byte stream: no “message boundaries”
@@ -1527,7 +1527,7 @@ closing:
 - Respond to received FIN with ACK: On receiving FIN, ACK can be combined with own FIN
 - Simultaneous FIN exchanges can be handled
 
-== Congestion:
+=== Congestion:
 “too many sources sending too much data too fast for network to handle”(informally)
 
 Manifestations:
@@ -1614,7 +1614,7 @@ $
   "avg TCP thruput" = 3/4 W/ "RTT" "bytes"\/"sec"
 $
 
-=== Evolving transport-layer functionality
+==== Evolving transport-layer functionality
 
 TCP, UDP: principal transport protocols for 40 years
 
@@ -1642,7 +1642,7 @@ different “flavors” of TCP developed, for specific scenarios:
   table.hline(),
 )
 
-=== QUIC: Quick UDP Internet Connections
+==== QUIC: Quick UDP Internet Connections
 
 application-layer protocol, on top of UDP
 - increase performance of HTTP
@@ -1665,7 +1665,7 @@ Implementation in the Internet
 - UDP
 - TCP
 
-== Network Layer
+=== Network Layer
 
 Goal: Understand principles behind network layer services, focusing on data plane:
 - Network layer service models
@@ -1755,7 +1755,7 @@ Reflections on best-effort service:
 - congestion control of “elastic” services helps
 It’s hard to argue with success of best-effort service model
 
-== Router architecture overview
+=== Router architecture overview
 
 High-level view of generic router architecture:
 
@@ -1797,7 +1797,7 @@ matches destination address.
 - content addressable: present address to TCAM: retrieve address in one clock cycle, regardless of table size
 - Cisco Catalyst: \~1M routing table entries in TCAM
 
-=== Switching fabrics
+==== Switching fabrics
 
 transfer packet from input link to appropriate output link
 
@@ -1847,7 +1847,7 @@ Priority scheduling – who gets best performance, network neutrality
 
 #figure(image("./img/CAN201-L6-7.png"))
 
-=== Buffer Management
+==== Buffer Management
 
 buffer management:
 - drop: which packet to add, drop when buffers are full
@@ -1882,7 +1882,7 @@ Weighted Fair Queuing (WFQ):
 - each class, i, has weight, wi, and gets weighted amount of service in each cycle: $W_i/(Sigma_j w_j)$
 - minimum bandwidth guarantee (per-traffic-class)
 
-== The Internet network layer
+=== The Internet network layer
 
 #figure(image("./img/CAN201-L6-8.png"))
 #figure(image("./img/CAN201-L6-9.png"))
@@ -1895,7 +1895,7 @@ IP fragmentation, reassembly
   - IP header bits used to identify, order related fragments
 
 
-== Network-layer Services and Protocols
+=== Network-layer Services and Protocols
 
 Transport segment from sending host to receiving host
 - sender: encapsulates segments into datagrams, passes to link layer
@@ -1925,7 +1925,7 @@ Control plane
   - traditional routing algorithms: implemented in routers
   - software-defined networking (SDN): implemented in (remote) servers
 
-== Internet
+=== Internet
 
 ```txt
 +--------------------------------------+
@@ -2025,7 +2025,7 @@ Q: Are there enough 32-bit IP addresses?
 - NAT (next) helps IPv4 address space exhaustion
 - IPv6 has 128-bit address space
 
-== NAT: Network Address Translation
+=== NAT: Network Address Translation
 
 NAT: All devices in the local network share just one IPv4 address as far as the outside world is concerned.
 
@@ -2054,7 +2054,7 @@ NAT has been controversial:
 - NAT traversal: what if client wants to connect to server behind NAT?
 but NAT is here to stay: extensively used in home and institutional nets, 4G/5G cellular nets
 
-== IPv6
+=== IPv6
 
 initial motivation: 32-bit IPv4 address space would be completely allocated
 
@@ -2095,7 +2095,7 @@ Transition from IPv4 to IPv6:
 #figure(image("img/CAN201-L7-6.png"))
 #figure(image("img/CAN201-L7-7.png"))
 
-== Generalized Forwarding and SDN
+=== Generalized Forwarding and SDN
 
 flow: defined by header field values (in link-, network-, transport-layer fields)
 
@@ -2124,7 +2124,7 @@ NAT
 - match: IP address and port
 - action: rewrite address and port
 
-== Routing Protocols
+=== Routing Protocols
 
 Routing protocol goal: determine “good” paths (equivalently, routes), from sending host to receiving host, through network of routers
 - Path: sequence of routers packets will traverse in going from given initial source host to given final destination host
@@ -2167,7 +2167,7 @@ $D_x(y) ← min_v{c(x,v) + D_v(y)} "for each node" y in N$
 ❖ Under minor, natural conditions, the estimate Dx(y) converge to the
 actual least cost dx(y)
 
-== Making Routing Scalable
+=== Making Routing Scalable
 
 our routing study thus far:
 idealized
@@ -2229,7 +2229,7 @@ Hierarchical OSPF
 
 #figure(image("./img/CAN201-L8-1.png"))
 
-== Internet inter-AS routing: BGP
+=== Internet inter-AS routing: BGP
 
 BGP (Border Gateway Protocol): the de facto inter-domain routing protocol: “glue that holds the Internet together”
 
@@ -2287,7 +2287,7 @@ performance:
 - intra-AS: can focus on performance
 - inter-AS: policy dominates over performance
 
-== Software Defined Networking (SDN)
+=== Software Defined Networking (SDN)
 
 Internet network layer: historically has been implemented via distributed, per-router approach
 - Monolithic router contains switching hardware, runs proprietary implementation of Internet standard protocols (IP, RIP, IS-IS, OSPF, BGP) in proprietary router OS (e.g., Cisco IOS)
@@ -2325,7 +2325,7 @@ Network-control apps:
 
 #figure(image("./img/CAN201-L8-6.png"))
 
-== OpenFlow Protocol
+=== OpenFlow Protocol
 
 - Operates between controller, switch
 - TCP used to exchange messages: optional encryption
@@ -2345,7 +2345,7 @@ Key controller-to-switch messages
 
 #figure(image("./img/CAN201-L8-7.png"))
 
-== ICMP: Internet Control Message Protocol
+=== ICMP: Internet Control Message Protocol
 
 used by hosts and routers to communicate network-level information
 - error reporting: unreachable host, network, port, protocol
@@ -2391,7 +2391,7 @@ Stopping criteria:
 
 when ICMP message arrives at source: record RTTs
 
-== Network Management
+=== Network Management
 
 Autonomous systems (aka “network”): 1000s of interacting hardware/software components
 
@@ -2404,7 +2404,7 @@ Other complex systems requiring monitoring, control:
 
 #figure(image("./img/CAN201-L8-8.png"))
 
-== Parity Bit Checking
+=== Parity Bit Checking
 
 Single-bit error detection:
 - Even parity:
@@ -2419,7 +2419,7 @@ compute parity of received data bits + parity bit
 treat data bits as matrix
 detect errors by computing parity bits for rows and columns
 
-== Checksum
+=== Checksum
 
 Internet checksum algorithm:
 - Sender:
@@ -2433,7 +2433,7 @@ Add carries to least significant bit,
 then take 1’s complement
 Until no more carries
 
-== Cyclic Redundancy Check (CRC)
+=== Cyclic Redundancy Check (CRC)
 
 D: data bits to be transmitted, viewed as a polynomial
 G: generator polynomial, agreed upon by sender, receiver

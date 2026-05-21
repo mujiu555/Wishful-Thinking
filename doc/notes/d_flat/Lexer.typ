@@ -10,9 +10,9 @@
 
 #mkheader()
 
-= Basic Functionalities
+== Basic Functionalities
 
-== Node Types
+=== Node Types
 
 - Character: A node that matches single character
 - String: A node that matches a sequence of characters
@@ -35,7 +35,7 @@ not always greedy or non-greedy, but all possible cases.
 All nodes can be combined together to create more complex patterns,
 which is, concatenate nodes together and build a larger NFA graph.
 
-== Traversal
+=== Traversal
 
 When trying to match a pattern,
 the lexer combinator will create a virtual tree structure, which represents all possible paths that can be taken to match the input string.

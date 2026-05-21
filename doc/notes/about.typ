@@ -12,14 +12,14 @@
 
 #mkheader()
 
-= "Hello, world!"
+== "Hello, world!"
 
 This is my personal page hosted on GitHub pages, powered by myself.
 
 Which records some of my works and articles.
 Derived from #link("https://github.com/mujiu555/Wishful-Thinking")[my repository] manually.
 
-== Self Intro
+=== Self Intro
 
 Here is a brief introduction about myself:
 
@@ -79,7 +79,7 @@ Here is a brief introduction about myself:
   - Actually, I have no hardware or electronic courses before teaching myself on my own,
 - 尽管如此, 我非常不学无术, 轻喷谢谢喵
 
-=== GitHub: #link("https://github.com/mujiu555")[mujiu555]
+==== GitHub: #link("https://github.com/mujiu555")[mujiu555]
 
 You can call me anything if you want,
 since I don't really care about my pronouns,

@@ -18,11 +18,11 @@
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
 ))
 
-= CPT205 FreeGLUT Programming
+== CPT205 FreeGLUT Programming
 
-== Geometric primitives
+=== Geometric primitives
 
-=== `glBegin(parameters)`
+==== `glBegin(parameters)`
 
 #figure(image("./img/CPT205-L3-1"))
 
@@ -46,14 +46,14 @@ glEnd();
 
 #figure(image("./img/CPT205-L3-2.png"))
 
-== matrices
+=== matrices
 
-=== 为什么用 4×4 矩阵（齐次坐标）
+==== 为什么用 4×4 矩阵（齐次坐标）
 
 - OpenGL 用 4×4 齐次矩阵来统一表示三维的平移、旋转、缩放、投影等变换。把三维点 (x,y,z) 表示为四维齐次向量 (x,y,z,1)，矩阵乘法即可同时完成线性变换和位移。
 - 投影需要引入 w 分量，之后做视锥裁剪和透视除法（x/w,y/w,z/w）得到 NDC（规范化设备坐标）。
 
-=== 常见坐标空间（变换链）
+==== 常见坐标空间（变换链）
 
 - 模型空间 / 局部空间（Object/Local）：物体自身坐标。
 - 世界空间（World）：把物体放到场景中的位置。
@@ -62,7 +62,7 @@ glEnd();
 - 规范化设备坐标 NDC：透视除法后的坐标，范围 x,y,z 在 [-1,1]（OpenGL 传统）。
 - 窗口/屏幕空间（Window/Viewport）：NDC 经视口变换映射到像素坐标和深度缓存范围。
 
-=== 三类主要矩阵（现代渲染常见）
+==== 三类主要矩阵（现代渲染常见）
 
 - Model（或 ModelMatrix）：把顶点从对象空间变换到世界空间。
 - View（或 ViewMatrix）：把世界空间变换到相机/视点空间；通常是相机变换的逆（如果你有相机位置/朝向，通过构造 LookAt 再求逆或直接构造 view 矩阵）。
@@ -79,7 +79,7 @@ Select which to be manipulated by
 - `glMatrixMode(GL_MODELVIEW);`
 - `glMatrixMode(GL_PROJECTION);`
 
-=== 矩阵布局与乘法约定（OpenGL 的惯例）
+==== 矩阵布局与乘法约定（OpenGL 的惯例）
 
 - 内存布局：OpenGL 与 GLSL 默认使用列主序（column-major）。也就是矩阵在内存中按列依次存储。
 - 向量位置：OpenGL 习惯把向量视为列向量，数乘形式为 v' = M \* v（M 是 4×4，v 是 4×1）。
@@ -101,7 +101,7 @@ of the state and is applied to all vertices that pass down the pipeline.
 - OpenGL has a model-view and a projection matrix in the pipeline which are concatenated together to form the CTM.
 - The CTM can manipulate each by first setting the correct matrix mode.
 
-==== CTM Operations
+===== CTM Operations
 
 The CTM can be altered either by loading a new CTM or by postmutiplication.
 - Load an identity matrix: C ← I
@@ -161,7 +161,7 @@ Functions:
 - `glPixelZoom()`: Specify 2D scaling parameters for raster operations
 
 
-=== 基本变换矩阵（4×4）
+==== 基本变换矩阵（4×4）
 
 - 平移 (tx,ty,tz):
   `[1 0 0 tx
@@ -187,29 +187,29 @@ Functions:
 
 （可在需要时给出具体数值公式：glFrustum 的矩阵元素、gluPerspective 如何由 fovy/aspect 计算）。
 
-=== 透视裁剪与透视除法
+==== 透视裁剪与透视除法
 
 - 投影矩阵将顶点变换得到 clip-space 坐标 (x_c,y_c,z_c,w_c)。裁剪在 -w_c <= x_c,y_c,z_c <= w_c 进行。
 - 然后对坐标做透视除法： (x_ndc,y_ndc,z_ndc) = (x_c/w_c, y_c/w_c, z_c/w_c) 得到 NDC，随后做视口变换得到屏幕像素坐标。
 - 因此视点的远近和 near/far 的选择会影响深度分辨率与精度。
 
-=== 深度范围与坐标系统差异
+==== 深度范围与坐标系统差异
 
 - 传统 OpenGL NDC z 范围是 [-1,1]（对应 glClipPlane 后的行为）。很多现代图形 API（Direct3D）使用 [0,1]。
 - 在使用多种库或 API 时要注意深度范围差异，某些 math 库或引擎会为不同 API 构造不同的 projection 矩阵。
 
-=== 法线矩阵（normal matrix）
+==== 法线矩阵（normal matrix）
 
 - 顶点位置用 ModelMatrix 变换，但法线向量不能直接用相同矩阵变换（尤其遇到非均匀缩放时）。
 - 正确做法是用 ModelMatrix 的上左 3×3 的逆转置（inverse(transpose(M3x3))) 来变换法线。在着色器里经常传一个 3×3 的 normalMatrix = transpose(inverse(mat3(modelView)))。
 - 如果 ModelMatrix 只包含旋转与均匀缩放（或正交变换），inverse(transpose(R)) = R（或只需缩放的逆因子），可简化处理。
 
-=== OpenGL 旧固定管线的矩阵栈（已弃用）
+==== OpenGL 旧固定管线的矩阵栈（已弃用）
 
 - 早期 OpenGL 提供矩阵堆栈：GL_MODELVIEW、GL_PROJECTION、GL_TEXTURE 等，通过 glMatrixMode/glLoadIdentity/glPushMatrix/glPopMatrix/glTranslate/glRotate/glScale 等操作管理。
 - 现代 OpenGL（Core profile）中已弃用，推荐自己在 CPU 构造矩阵（glm 等库）并作为 uniform 上传到着色器。
 
-=== 常见实践与建议
+==== 常见实践与建议
 
 - 在 CPU 端预先计算组合矩阵（MVP），避免在顶点着色器里重复做相同的矩阵乘法（节省带宽与计算）。
 - 注意矩阵乘法的顺序与你使用的向量约定（行向量 vs 列向量）。GLSL 默认列向量，矩阵在表达式中按列主序。
@@ -218,7 +218,7 @@ Functions:
 - 上传矩阵给 shader 时，确认是否需要转置（glUniformMatrix4fv 的 transpose 参数）；如果你用列主序数据且 GLSL 默认列主序，通常传 GL_FALSE。
 - 使用 double 精度矩阵只有在极大坐标范围或高精度需要时才有意义（大多数 GPU 着色器只使用 float）。
 
-=== 举例（常见 API）
+==== 举例（常见 API）
 
 - 构造 View（LookAt）：
   1. 给出 eye（相机位置）、center（目标点）、up（上向量）。
@@ -229,7 +229,7 @@ Functions:
   然后矩阵元素按公式设置，使得 x 和 y 根据 aspect & f 缩放，z 根据 near/far 映射到 [-1,1]，并在第四列产生 w = -z（产生透视效果）。
 
 
-== Projection
+=== Projection
 
 `gluLookAt(eye_position, look_at, look_up)`
 `GLAPI void GLAPIENTRY gluLookAt (GLdouble eyeX, GLdouble eyeY, GLdouble eyeZ, GLdouble centerX, GLdouble centerY, GLdouble centerZ, GLdouble upX, GLdouble upY, GLdouble upZ);`

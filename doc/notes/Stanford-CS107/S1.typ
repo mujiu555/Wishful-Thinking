@@ -14,9 +14,9 @@
 
 #show: doc => setup-base-fonts(doc)
 
-= Data Types and Conversion
+== Data Types and Conversion
 
-== Binary Numbers
+=== Binary Numbers
 
 对于正数, 直接相加即可得到结果(在范围内)
 
@@ -58,11 +58,11 @@
 
   补码的数学含义: 模数加法构成阿贝尔群: 正整数的加法逆元
 
-== Characters
+=== Characters
 
 字符本身即为数字
 
-== Convert
+=== Convert
 
 小数值的赋值近似直接将对应值赋值到大数值的低位
 
@@ -70,7 +70,7 @@
 
 负数赋值会用符号位填充高位(逻辑赋值), 或填0
 
-== Floats
+=== Floats
 
 + 定点二进制小数: 采用几个位数表示 $$ 2^{-n} $$
 
@@ -87,7 +87,7 @@
 
   实际上来说, $"val"(10) = (-1)^"sign" times 1."base"^(exp-2^("bits"(exp)-1)+1)$
 
-== Endian
+=== Endian
 
 最高位所在的字节称为大端，最低位所在的字节称为小端.
 
@@ -98,7 +98,7 @@
 
 指针指向会被字节序影响
 
-= Structure (`struct`)
+== Structure (`struct`)
 
 指针指向结构的起始地址, 其他元素通过相对于起始地址
 (基地址,类似汇编的基地址和偏移地址的关系,
@@ -106,12 +106,12 @@
 此处偏移地址以0x1为基且偏移地址的值相等于之前变量的长度的总和)
 的偏移访问.
 
-== Array
+=== Array
 
 指针指向数组的起始地址, 其他元素通过相对于起始地址的偏移访问.
 总体类似于结构, 但是偏移地址的长度等于n倍的元素变量长度
 
-== Generic
+=== Generic
 
 c风格的泛型,
 
@@ -149,20 +149,20 @@ void * lsearch (
 }
 ```
 
-= Stack
+== Stack
 
-== Stack with int
+=== Stack with int
 
-== Generic Stack
+=== Generic Stack
 
-= Memory Management
+== Memory Management
 
 若需要在析构泛型栈的同时析构内部元素, 则需要提供释放函数, 以便于析构.
 
 需要确定指针与地址.
 
 
-= Memory Segments
+== Memory Segments
 
 Soft managed memory:
 
@@ -183,12 +183,12 @@ Memory manager may spilt memory into segments,
 and just allocate memory space for you
 within some specify segment if request less than 2^n bytes.
 
-== Memory compose
+=== Memory compose
 
 Split a large space of memory to handle memory allocation using handler.
 Handler are some pointer points to the pointer points to actual memory.
 
-== Stack segment
+=== Stack segment
 
 Stack depth roughly relative with function call count.
 
@@ -244,7 +244,7 @@ High address        +-----------------------+       +-------------+
 Low address         +-----------------------+
 ```
 
-== Memory Management
+=== Memory Management
 
 When memory allocating, memory allocator will not only allocate memory you request,
 but also some extra memory for meta data.
@@ -272,7 +272,7 @@ rely on space you request.
 Compact:
 
 
-= Section IX: Computer architecture
+== Section IX: Computer architecture
 
 If have code:
 
@@ -320,15 +320,15 @@ For `j = i + 7`, it should first load `i` and then do ALU operation.
 Then, `mov [sp], r2`.
 And, `inc [sp]`
 
-== Load / Store, ALU Operations
+=== Load / Store, ALU Operations
 
-== force conversion
+=== force conversion
 
 Force conversion just cheat compiler rather than assembler.
 Assembler knows only address.
 
 
-= activate record: function call frame
+== activate record: function call frame
 
 If have: prototype:
 ```c
@@ -399,7 +399,7 @@ pushing argument to stack for `foo`:
         | argument| &i   <- sp
 ```
 
-= Section XI: Swap, call in assembly
+== Section XI: Swap, call in assembly
 
 ```c
 void foo() {
@@ -505,13 +505,13 @@ int main(int argc, char *argv[]) {
 
 `swap` function does not implemented as code shown in c, but use `xchg`.
 
-= Pre-process, Compile, Assemble, Link
+== Pre-process, Compile, Assemble, Link
 
 Code -> Processed Code -> Assembled Code -> Objected File -> Executable File
 
-== Preprocessor
+=== Preprocessor
 
-=== `#define`
+==== `#define`
 
 Replacement of text appear in source file.
 
@@ -529,11 +529,11 @@ Replacement of text appear in source file.
   int x = MAX(3, 5);
   ```
 
-=== `#include`
+==== `#include`
 
-== compiler
+=== compiler
 
-= Section XIII:
+== Section XIII:
 
 What if comment `#include <stdio.h>`?
 
@@ -576,12 +576,12 @@ since the function `Declare` will not clean whole bit pattern after returning.
 
 The technology is called "Channeling".
 
-== multiple arguments
+=== multiple arguments
 
 Push arguments from right to left.
 For better organization of compiler.
 
-= Multiple Threads
+== Multiple Threads
 
 Operating systems give different process a virtual memory.
 So that the program can assuming it holds all memory.
@@ -611,7 +611,7 @@ When leaving critical section, add the semaphore, release the resource.
 
 Semaphore operations acquire resources.
 
-== Producer Consumer Problem
+=== Producer Consumer Problem
 
 Producer generates data, puts into a buffer.
 Consumer takes data from buffer, process it.
@@ -621,14 +621,14 @@ Producer should not put data when buffer is full.
 
 Use two semaphores to track the number of empty slots and full slots in buffer.
 
-== Reader Writer Problem
+=== Reader Writer Problem
 
 Reader Writer problem is a classic synchronization problem.
 With two types of processes, readers and writers,
 readers can read shared data simultaneously,
 writers need exclusive access to shared data.
 
-== Philosophers Dining Problem
+=== Philosophers Dining Problem
 
 Every philosopher needs two forks to eat.
 Five philosophers sitting around a table,
@@ -639,9 +639,9 @@ then they will never able to pick up the right fork,
 
 This is a deadlock.
 
-== Ice cream Shop Problem
+=== Ice cream Shop Problem
 
-= Functional Programming Paradigm
+== Functional Programming Paradigm
 
 In functional programming paradigm, each function are treated as regular mathematical function.
 Which accepts some input and produce some output.
@@ -667,7 +667,7 @@ Apply reduce the expression with function and it also need eval to evaluate the 
 
 Then eval and apply loops over and over until the expression is fully evaluated.
 
-== Power Set
+=== Power Set
 
 If it is required to generate power set of a set.
 Concerning all subsets with and without each element.
@@ -680,7 +680,7 @@ Though it cannot decrease the time and space complexity of a recursive process i
 
 `let` is equivalent to lambda expression application, with parameters bind to arguments like regular values bind to let variables.
 
-= Python: Script Language Paradigm
+== Python: Script Language Paradigm
 
 Python is a imperative, object-oriented, and functional programming language.
 
@@ -688,9 +688,9 @@ All paradigms may be used by the user using python.
 Thus the paradigm python represents is script style paradigm.
 Which means you may work with python without really design a program structure.
 
-== Directory
+=== Directory
 
-== Class
+=== Class
 
 In python, classes are like directory.
 P.S., Prototype-Chain! It is so awful that nobody should implement a class system by prototype-chain.
@@ -698,12 +698,12 @@ P.S., Prototype-Chain! It is so awful that nobody should implement a class syste
 Each class is encoded using a directory.
 Furthermore, every object is a directory that contains information generated by prototype-chain `__init__` processes.
 
-== XML
+=== XML
 
 Python has built-in support for XML parsing and manipulation through libraries such as `xml.etree.ElementTree` and `lxml`.
 Which supports the Internet development.
 
-== Haskell
+=== Haskell
 
 Haskell is a language that rooted in functional programming paradigm.
 It derived from lambda calculus. Lisp>ML>Haskell.

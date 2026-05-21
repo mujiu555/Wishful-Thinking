@@ -40,9 +40,9 @@ Computer is a virtual environment that will not affect by real world constraints
 The only limitation is our imagination and creativity.
 A ideal system.
 
-= Preface
+== Preface
 
-= Section I: Building Abstractions with Procedures
+== Section I: Building Abstractions with Procedures
 
 The first way to build abstraction is black boxes, aka., procedures.
 Which accepts some inputs, and produce some outputs, without revealing the internal details of how the procedure works.
@@ -63,7 +63,7 @@ In this chapter, we'd talk about several topics:
 - Abstract and how to build new abstractions
 - Extract common patterns
 
-== Lisp
+=== Lisp
 
 The main purpose to have such section is not to programming in Lisp, rather than to learn how to think about programming.
 What is about to learn is a general framework, which compose of primitives, means of combination, and the means of abstraction.
@@ -71,12 +71,12 @@ What is about to learn is a general framework, which compose of primitives, mean
 The combination of Lisp expressions are organized in a tree structure, aka., S-expressions.
 P.S., in compiler, such tree structure is called Abstract Syntax Tree (AST).
 
-== `define`
+=== `define`
 
 The way to build new abstractions is using `define`.
 By extract general ideas from specific examples, it is possible to create new procedures.
 
-= Section II: Procedure and Processes, Substitution Model
+== Section II: Procedure and Processes, Substitution Model
 
 To write effective and usable programs,
 it is necessary to have a overall understanding of relationship between procedures and processes.
@@ -110,7 +110,7 @@ Normally, transforming a recursive process into an iterative one is not trivial,
 since it requires to find a way to store the necessary information in a fixed number of state variables.
 Thus memorization is a easier way to achieve this.
 
-= Section III: Higher-Order Procedures
+== Section III: Higher-Order Procedures
 
 Extract a procedure as a parameter and then it enhance extensibility since the procedure can be customized by modifying the procedure taken as argument.
 
@@ -123,7 +123,7 @@ A fix-point is something that has the property that applying the function to it 
 
 The idea is that if there exists a procedure that can find the fix point of a function, then it is possible to use such procedure to find the square root of a number.
 
-= Section IV: Compound Data
+== Section IV: Compound Data
 
 Divorce the task of building data structures from the task of implementing them.
 The key idea is to build the system in layers, and setup abstraction barriers that isolate the details at the lower layers.
@@ -140,7 +140,7 @@ The lisp provides a way to build compound data using pairs.
 When define a new data by `cons`, it is treated as box and pointer notion.
 By which concatenate conses, Cons cell chain, it is possible to build more complex data structures, such as lists, trees, and so on.
 
-= Section V: Escher
+== Section V: Escher
 
 Pair is closed under the operation of `cons`.
 It is able to concatenate data using Pairs.
@@ -150,7 +150,7 @@ List is built from nested Pairs. All pairs that have cdr be another pair are tre
 As for map in scheme, it is able to concerning only operations on aggregates, without worrying about the details of how the data is represented.
 Another case is the use of stream.
 
-= Section VI: Symbolic Differentiation System: Quotation
+== Section VI: Symbolic Differentiation System: Quotation
 
 To some some large problems, it is not the best way to solve them directly, even with divide and conquer.
 
@@ -182,7 +182,7 @@ With quote, it is able to prevent a expression from being evaluated.
 Which embraces the expression as data.
 And build a more powerful language upon the lisp, interpreting such data as expressions in the new language.
 
-= Section VII: Pattern-Matching: Rule-Based Substitution
+== Section VII: Pattern-Matching: Rule-Based Substitution
 
 Since the differentiation rules distinguished by the form of the expression.
 And each rule is dispatched based on the pattern of the expression.
@@ -221,7 +221,7 @@ We then can build a simplification system that can simplify the expression after
 If the expression is a unit, then process it using unit simplification rules.
 Else, extract all components, simplify them recursively, and then reassemble the expression.
 
-= Section VIII: Generic Operators
+== Section VIII: Generic Operators
 
 In previous sections, there introduced a key idea that create abstraction barriers to separate different layers of the system.
 When something is used in upper layers, it is not needed to know how it is implemented in lower layers.
@@ -249,13 +249,13 @@ However it is also possible to associate operations directly with types and obje
 The second method here is called message passing, which is widely used in OOP.
 P.S., In c++, such mechanism is called virtual functions.
 
-= Section IX: Assignment, State & Side Effects
+== Section IX: Assignment, State & Side Effects
 
 Functional programming is a kind of encoding of mathematical facts.
 But it's stateless.
 In real world programming, it is necessary to have state to record the changes of the system over time.
 
-== Environment Model
+=== Environment Model
 
 We say that a variable v is bound in an expression E if
 the meaning of E is unchanged
@@ -276,7 +276,7 @@ When we search for a symbol that appears in an expression, we search for it in t
 if not found, then search in the parent environment, and so on, until we reach the global environment,
 which is the top-level environment that contains all the global definitions.
 
-== Object
+=== Object
 
 When organize the data into objects, it can have its own state,
 thus states we need to represent the state of the system, and the changes of the system over time is less than
@@ -297,7 +297,7 @@ However, if we treat it as an object, which has its own state, then it can retur
 But it is not a pure function, since it has side effects, which is the change of the state of the object.
 And when it is called at multiple place, the result may be unexpected, since the state of the object always change in between.
 
-= Section X: Computational Objects
+== Section X: Computational Objects
 
 Assume that we have a physical world and each object in that world is independent and have their own properties,
 we can then have a clear relationship between each pair of objects.
@@ -365,7 +365,7 @@ however, in this case, any one that have the permission can change the value of 
   (x (lambda (a d sa sd) (sd val))))
 ```
 
-= Section XI: Stream
+== Section XI: Stream
 
 Instead of concerning a object as the sequences of states in time and space, a discrete entity.
 Concerning it as a continuous representation of real world the object itself is the process of the changes of states.
@@ -397,7 +397,7 @@ But for real world programming, sometimes we may need to fetch same element in t
 and if we evaluate the stream each time we fetch such element, it will be inefficient.
 So we can use memorization to store the value of such element after it is computed for the first time, and then reuse it later when needed, thus it will not be computed again.
 
-= Section XII: Stream II
+== Section XII: Stream II
 
 Stream is a way to decouple the apparent order of events from the actual order of computation.
 Thus it is able to generate very long or even infinite sequences of data as demanded.
@@ -459,7 +459,7 @@ Everything is in a mass.
 
 This phenomenon introduces the idea of functional programming.
 
-= Section XIII: Metacircular Evaluator
+== Section XIII: Metacircular Evaluator
 
 ```lisp
 (define (eval expr env)
@@ -563,7 +563,7 @@ However, this can only ensure the function is able to be defined recursively, wh
 
 In., Joy Stoy, The Scott-Strachey Method of Denotational Semantics. MIT Press.
 
-= Section XIV: Metacircular Evaluator II
+== Section XIV: Metacircular Evaluator II
 
 If a language is designed to have many features built-in that may 1) take account without really concerning, 2) have specification function addition to what a language should do.
 
@@ -588,7 +588,7 @@ In the case of dynamic scope, when a procedure is called, to find the value of a
 On the other hand, in where we worked on for now, the environment model describe the lexical scope or so called static scope,
 in which a free variable is always lookup in the environment where the procedure is defined.
 
-= Section XV: Logical Programming
+== Section XV: Logical Programming
 
 Sometimes designing a new language can help reduce the complexity of the system.
 
@@ -611,7 +611,7 @@ Key part of the language is,
 
 By combine rules and logical operations, the language can define relations and then find the solution by searching through the space of possible solutions.
 
-= Section XVI: Logical Programming II
+== Section XVI: Logical Programming II
 
 To implement the language in lisp, it will use `match` procedure introduced before.
 
@@ -624,7 +624,7 @@ Order matters in logical programming since the search process determined by them
 In the language, `NOT` is not for "not true", but for "not provable".
 If i have no idea about a statement, `NOT` such statement is true.
 
-= Section XVII: Register based Machine
+== Section XVII: Register based Machine
 
 Each procedure represented here is able to be translated into real machine.
 
@@ -657,7 +657,7 @@ To represent the machine, we can have something like programming language.
 
 The machine can be build upon finite states controller and datapath that direct the data stack.
 
-= Explicit Control Evaluation
+== Explicit Control Evaluation
 
 Previously, we have analyzed the Escher Pic, Digital Logical, Query Based languages.
 They all build upon the lisp, which, a language that aims to build another language, a meta language.
@@ -677,7 +677,7 @@ as those recursive procedures creates iterative processes indeed.
 
 Or you may break the tail recursion optimization, just process the last expression as a regular expression.
 
-= Compile
+== Compile
 
 Previous strategies to implement the lisp system is to build an interpreter, in hardware or software, to directly execute the lisp code.
 
@@ -689,7 +689,7 @@ The compiler can generate more efficient code.
 A worse but workable compiler is called zeroth-order compiler,
 which is a compiler that generates code that directly execute the lisp code, but without really executing the lisp code.
 
-= Memory management and Garbage Collection
+== Memory management and Garbage Collection
 
 It is able to place the list data structure in the sequential memory.
 
@@ -704,7 +704,7 @@ The one algorithm to reclaim the memory is mark-sweep, which is a two-pass algor
 Another one is Minsky-Fenichel-Yocelson algorithm, which copies currently used memory to a new location, and then reclaim the old memory.
 Henry Baker helps improve the algorithm so that it can be done without shutdown the world.
 
-= Not Everything Can Be Computed
+== Not Everything Can Be Computed
 
 P.S.,
 The limitation of computation.

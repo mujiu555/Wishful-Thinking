@@ -10,9 +10,9 @@
 
 #mkheader()
 
-= CMU 15-462/662
+== CMU 15-462/662
 
-== Linear Algebra in Computer Graphics
+=== Linear Algebra in Computer Graphics
 
 Vector spaces, and linear maps between them:
 $arrow(u), arrow(v), arrow(w)$ are vectors and $a, b$ are scalars.
@@ -25,7 +25,7 @@ $arrow(u), arrow(v), arrow(w)$ are vectors and $a, b$ are scalars.
 - $a(arrow(u) + arrow(v)) = a arrow(u) + a arrow(v)$
 - $(a + b)arrow(v) = a arrow(v) + b arrow(v)$
 
-== vector
+=== vector
 
 What is a vector:
 
@@ -53,21 +53,21 @@ How to deal vector:
 
 Any object that can satisfying all of properties is a vector space.
 
-== Euclidean Vector Space
+=== Euclidean Vector Space
 
 Typically denoted by $RR^n$: n real numbers
 
-== Functions as Vectors
+=== Functions as Vectors
 
 Operations:
 - Addition: for $f(x)$, $g(x)$, $(f+g)(x):=f(x) + g(x)$
 - Scaling: for $f(x)$, $(a f)(x) = a(f(x))$
 
-== Midpoint
+=== Midpoint
 
 $(arrow(u) + arrow(v)) / 2$
 
-== Norm of a vector
+=== Norm of a vector
 
 Magnitude, scale or norm:
 the length or magnitude of a vector: $|arrow(u)|$
@@ -84,7 +84,7 @@ It has some nature properties:
 Euclidean Norm:
 $|arrow(u)| = |(u_1, ..., u_n)| := sqrt(Sigma^n_(i=1) u^2_i)$
 
-== $LL^2$ Norm of Functions
+=== $LL^2$ Norm of Functions
 
 Total magnitude of a function.
 
@@ -94,7 +94,7 @@ whose square has a well defined integral.
 The $LL^2$ Norm is:
 $ ||f|| := sqrt(integral^1_0 (f(x)^2) d x) $
 
-== Inner Product
+=== Inner Product
 
 How much two vector are lined up.
 
@@ -113,11 +113,11 @@ $arrow(u) dot arrow(v) = |arrow(u)| * |arrow(v)| * 2 cos(theta)$
 
 $ < arrow(u), arrow(v)> = Sigma_(i=1)^n u_i v_i $
 
-== $LL^2$ Inner Product for Functions
+=== $LL^2$ Inner Product for Functions
 
 $ <<f,g>> := integral_0^1 f(x) g(x) d x $
 
-== Linear Map
+=== Linear Map
 
 Linear are study of vector space and linear maps between them.
 
@@ -132,11 +132,11 @@ Linear are study of vector space and linear maps between them.
   $ f(u_1, ..., u_m) = Sigma_(i=1)^m u_i arrow(a)_i $
 - If it is a linear combination of a fixed set of vectors $a_i$.
 
-== Affine Maps
+=== Affine Maps
 
 - like linear function, but can shift origin.
 
-== Span
+=== Span
 
 Span is the set of linear combination of all vectors.
 $ "Span"(arrow(u)_1, ..., arrow(u)_k) = {arrow(x) in V | arrow(x) = Sigma_(i=1)^k a_i arrow(u)_i, a_1, ..., a_k in RR} $
@@ -147,7 +147,7 @@ by applying some specify map.
 
 The span of a map are linear space constructed by the base of matrix.
 
-== Basis
+=== Basis
 
 If, there are exactly n vectors $arrow(e)_1, ..., arrow(e)_n$
 such that $"span"(arrow(e)_1, ..., arrow(e)_n) = RR^n$.
@@ -158,7 +158,7 @@ NOTE. If and only if there are exactly n vectors, neither more or less.
 - The vectors are linear independent
 - Maybe orthogonal: 正交
 
-== Orthogonal Basis
+=== Orthogonal Basis
 
 When two vectors has zero as their result for dot product,
 the two vectors are orthogonal.
@@ -167,7 +167,7 @@ For two vector in $RR^2$ Space, they are orthogonal if they has $theta = 90degre
 For vectors $arrow(e)_1, ..., arrow(e)_n$ are basis vectors and
 $ chevron.l arrow(e)_i, arrow(e)_j chevron.r = brace^(1, i = j,)_(0, "otherwise".) $
 
-== Gram-Schmidt method
+=== Gram-Schmidt method
 
 To gain a orthogonal basis of a plant with non-orthogonal basis,
 use Gram-Schmidt method.
@@ -181,7 +181,7 @@ use Gram-Schmidt method.
 
 PS. For float numbers, using qr decomposition.
 
-== Fourier Transform
+=== Fourier Transform
 
 Project onto basis of sinusoids: $sin(n x), cos(m x), m, n in NN$
 
@@ -190,7 +190,7 @@ $LL^2$ Linear map of those two are orthogonal.
 A linear map from one basis to another.
 Projecting a signal onto different frequent.
 
-== System of Linear Equations
+=== System of Linear Equations
 
 A bunch of equations where left hand is a linear function,
 and right hand side is constant.
@@ -205,8 +205,8 @@ Review:
   Pivots must existed in different columns and different rows.
 - $"col" = "row-rank" + "free-variables" = "DOFs"$
 
-== Visualization
+=== Visualization
 
-== Uniqueness, existence of Solutions
+=== Uniqueness, existence of Solutions
 
-== Matrices in Linear Algebra
+=== Matrices in Linear Algebra

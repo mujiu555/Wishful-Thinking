@@ -10,12 +10,12 @@
 
 #mkheader()
 
-== D-Flat Editor
+=== D-Flat Editor
 
-== Configuration Language
+=== Configuration Language
 
-== Plugin
+=== Plugin
 
-== Extension
+=== Extension
 
-== IDE Layer
+=== IDE Layer

@@ -10,7 +10,7 @@
 
 #mkheader()
 
-= Chapter III: Untyped Calculation Expressions
+== Chapter III: Untyped Calculation Expressions
 
 ```
 type ::                                   ;; Term
@@ -28,7 +28,7 @@ For example, the meta variable "type" in "if type then type else type" can be re
 "false", "0", "succ 0", etc.
 The meta variable is a placeholder for any valid type, and it allows us to define the syntax of the language in a more general way.
 
-== Syntax
+=== Syntax
 
 The formal definition for the grammar is defined by induction.
 + ${"true", "false", 0} subset.eq Tau$
@@ -70,7 +70,7 @@ Finally, we can define terms using set operations, which gives a more specific p
 )
 And let $S = union_(i) S_i$ for $i in N$, then $S$ is the set of all terms.
 
-== Induction on Terms
+=== Induction on Terms
 
 With definition above we can find some properties for all terms,
 If $t in T$, then we can give inductive definitions of functions over the set of terms.
@@ -125,7 +125,7 @@ $ |"Consts"(t)| = |"Consts"(t_1)| <= "size"(t_1) < "size"(t) $.
 $ |"Consts"(t)| = |"Consts"(t_1) union "Consts"(t_2) union "Consts"(t_3)| $
 $ <= |"Consts"(t_1)| + |"Consts"(t_2)| + |"Consts"(t_3)| <= "size"(t_1) + "size"(t_2) + "size"(t_3) < "size"(t) $.
 
-== Semantic Style
+=== Semantic Style
 
 + Operational semantics: defines the behaviour of a pl by define abstract machine (automata).
   - Small-step (structural operational) semantics: defines transitions, with a t in language, it will always transition to another, simplifying until it reaches final.
@@ -140,7 +140,7 @@ $ <= |"Consts"(t_1)| + |"Consts"(t_2)| + |"Consts"(t_3)| <= "size"(t_1) + "size"
   While axiomatic semantics take the laws as the definition for language.
   The meaning of terms is just what can be proved about them.
 
-== Evaluation
+=== Evaluation
 
 Given:
 
@@ -251,12 +251,12 @@ thus, the evaluation of this term will have following derivation tree:
   If a term is stuck, it means that the evaluation of the term cannot proceed, but it is not a value, thus it is an error.
 - Another way to deal with stuck is introducing an explicit error term, and add rules to propagate the error.
 
-= Chapter IV: An ML Implementation of Arithmetic Expressions
+== Chapter IV: An ML Implementation of Arithmetic Expressions
 
 Meta languages for implement boolean and arithmetic language this chapter,
 encouraged to use OCaml but I decide to use both Haskell and Chez Scheme.
 
-== Syntax
+=== Syntax
 
 ```ml
 type term =
