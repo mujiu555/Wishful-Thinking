@@ -6,14 +6,17 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [MIT 6.042 Mathematics in Computer Science (junior)],
+  date: datetime(year: 2026, month: 2, day: 20, hour: 0, minute: 0, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "mit-6042j-s1",
+  parent_id: "index",
+)
 
-#title[MIT 6.042 Mathematics in Computer Science (junior)]
-#date[2026-02-20]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Section I:
 

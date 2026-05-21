@@ -1,3 +1,15 @@
+#import "/lib/_lib.typ/lib.typ": *
+
+#meta(
+  title: [Lilies: List Interpret Language in s-Expression Syntax],
+  date: datetime(year: 2025, month: 8, day: 21, hour: 4, minute: 18, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "dflat-lilies",
+  parent_id: "index",
+)
+
+#mkheader()
+
 = Abstract 摘要
 
 Lilies (short for "List Interpret Language in s-Expression Syntax")

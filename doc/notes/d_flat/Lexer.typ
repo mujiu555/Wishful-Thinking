@@ -1,11 +1,14 @@
-#import "/lib/lib.typ": *
+#import "/lib/_lib.typ/lib.typ": *
 
-#show: schema.with("page")
+#meta(
+  title: [Lexer: A Lexer Combinator for D Flat System],
+  date: datetime(year: 2026, month: 2, day: 17, hour: 3, minute: 54, second: 0),
+  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  id: "dflat-lexer",
+  parent_id: "index",
+)
 
-#title[Lexer: A Lexer Combinator for D Flat System]
-#date[2026-02-17 03:54]
-#author(link("https://github.com/mujiu555")[GitHub\@mujiu555])
-#parent("/index.typ")
+#mkheader()
 
 = Basic Functionalities
 
