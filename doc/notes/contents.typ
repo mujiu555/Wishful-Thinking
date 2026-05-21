@@ -10,6 +10,8 @@
 
 #mkheader()
 
+#outline(depth: 1)
+
 #embed("/doc/notes/Assembly/S1.typ")
 #embed("/doc/notes/Category/S1.typ")
 #embed("/doc/notes/CIS194/S1.typ")
