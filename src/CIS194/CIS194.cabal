@@ -68,7 +68,8 @@ executable CIS194
                       E4,
                       Calc, ExprT, Parser, StackVM,
                       Fibonacci,
-                      JoinList, Editor, Buffer, Sized, Scrabble
+                      JoinList, Editor, Buffer, Sized, Scrabble,
+                      Party, Employee
 
 
     -- LANGUAGE extensions used by modules in this package.
