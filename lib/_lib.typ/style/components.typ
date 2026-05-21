@@ -32,14 +32,15 @@
   // title + slug
   let t = doc.at("title", default: "")
   let slug = doc.at("id", default: "")
-  if slug != "" {
-    index(slug)[#block(
-      below: 0.3em,
-      text(size: 1.5em, weight: heading-font-weight, t) + h(0.5em) + bracketed-slug(slug),
-    )]
-  } else {
-    block(below: 0.3em, text(size: 1.5em, weight: heading-font-weight, t))
-  }
+  index(slug)[
+    = #if slug != "" {
+      block(
+        below: 0.3em,
+        text(weight: heading-font-weight, t) + h(0.5em) + bracketed-slug(slug),
+      )
+    } else {
+      block(below: 0.3em, text(weight: heading-font-weight, t))
+    }]
 
   // metadata line
   let parts = ()

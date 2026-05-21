@@ -27,8 +27,6 @@
 #embed("/doc/notes/Missing-Semester/S1.typ")
 #embed("/doc/notes/MIT-18_404j/S1.typ")
 #embed("/doc/notes/MIT-6_042j/S1.typ")
-#embed("/doc/notes/NovelOC/S-0Mother.typ")
-#embed("/doc/notes/NovelOC/S1.typ")
 #embed("/doc/notes/SICP/S1.typ")
 #embed("/doc/notes/Stanford-CS107/S1.typ")
 #embed("/doc/notes/TaPL/E1.typ")
