@@ -25,11 +25,11 @@ The language is designed to be extensible and flexible:
 its hygienic macro system lets users defines new syntax and corresponding semantics safely.
 A set of built-in special forms and macros is provided to simplify common programming tasks; these act as syntactic sugar over the core language.
 
-Lilies aims to be efficient practical and safe.
-With a strong type system, an ownership model forces memory safety and, and compile-time evaluation capabilities, the language can force programmers to write efficient and safe code.
+Lilies aims to be efficient, practical, and safe.
+With a strong type system, an ownership model that forces memory safety, and compile-time evaluation capabilities, the language can guide programmers to write efficient and safe code.
 Lilies can express complex algorithms and data structures in functional, imperative, declarative and message passing styles or so.
 
-The standard library for Lilies are divided into two parts:
+The standard library for Lilies is divided into two parts:
 a core language library that provides basic data types, syntaxes, and contracts;
 and a compile-time library that supplies macros and compile-time functions.
 
@@ -38,38 +38,18 @@ Together with REPL, Development Environment, Debugger, and other tools to provid
 
 The language has a full type system: primitive types, composite types, generic types, and user-defined types, plus type annotations and type inference.
 The type system should support type inference, type checking, and type casting.
-Providing with interface, trait, and generic programming capabilities.
+Providing trait and generic programming capabilities.
 
 Lilies should include a complete module system (module definition, import / export, and versioning)
-that support dependency management and module resolution.
+that supports dependency management and module resolution.
 
 It should also include a complete exception handling system (exception definition, exception throwing and catching, and exception propagation)
 with custom exception types definition and hierarchies.
 
-The language should support continuation system (definition, capture and invocation),
-including continuation system should support first-class continuations and continuation passing style.
+The language should support continuations (definition, capture, and invocation),
+including first-class continuations and continuation passing style.
 
 Finally, Lilies should provide a comprehensive metaprogramming system (macros, compile-time functions, and code generation) that support hygienic macros and compile-time evaluation.
-
-Lilies（全称 “List Interpret Language in s-Expression Syntax”）是一种列表处理语言方言。本报告描述了 Lilies 语言的设计与实现。
-
----
-
-Lilies 的设计目标是极其简单且可移植。通过一个精简的内核、清晰的语义以及强大的宏系统，Lilies 能够方便地将表达式组合成更高层次的构造。该语言强调可扩展性与灵活性：其卫生宏（hygienic macro）系统使用户可以安全地向语言中添加新的语法及相应语义。语言提供了一组内建的特殊形式和宏以简化常见编程任务，这些可视为语法糖。
-
-Lilies 追求高效、实用与安全。借助强类型系统、强制内存安全的所有权模型以及编译时求值能力，语言能够帮助程序员编写高效且安全的代码。Lilies 可用于以函数式、命令式或消息传递等风格表达复杂算法与数据结构。
-
-Lilies 的标准库分为两类：一类是核心语言库，提供基本数据类型、语法与契约；另一类是编译时库，提供宏和编译时函数。
-
-Lilies 应当同时实现解释器和编译器，并配套提供 REPL、开发环境、调试器及其它工具，以提供完整的开发体验。
-
-该语言应具备完整的类型系统，包括基本类型、复合类型、泛型类型和用户自定义类型，并支持类型注解与类型推断。类型系统应支持类型推断、类型检查与类型转换，并提供接口、特征（trait）和泛型编程能力。
-
-Lilies 应设计完整的模块系统，包含模块定义、导入导出与版本管理，模块系统应支持依赖管理与模块解析。语言还应设计完整的异常处理系统，包含异常定义、抛出与捕获以及异常传播，并支持自定义异常类型与异常层次结构。
-
-Lilies 应设计完整的续体/延续（continuation）系统，包含续体的定义、捕获与调用，支持一等续体和续体传递风格（continuation-passing style）。
-
-最后，Lilies 应设计完善的元编程系统，包含宏、编译时函数与代码生成，元编程系统应支持卫生宏与编译时求值。
 
 == Introduction 引言
 
@@ -88,17 +68,17 @@ Lilies is intended to be a native language that can compete with C,
 or a compilation target upon which other languages can be implemented.
 In the D-Flat system, Marguerite is implemented on top of Lilies.
 
-All symbols in Lilies share a single namespace, whether they are variables, functions, classes, interfaces, modules, or other entities.
+All symbols in Lilies share a single namespace, whether they are variables, functions, classes, traits, modules, or other entities.
 In each expression, operators and operands are distinguished by their positions.
 
 Unlike some Lisp dialects that use function application to implement loops,
 Lilies provides full functional loop constructs as built-in syntax extensions (outside the minimal core).
 Tail-call optimization is provided to ensure loops are efficient.
 
-Object-oriented classes are supported.
-Everything in Lilies is an object, including functions, classes, interfaces, and modules.
+Classes (product types / record types) are supported as user-defined composite types.
+Everything in Lilies is a value with a type; functions, classes, traits, and modules are all first-class values at compile time.
 Classes can be computed at compile time, enabling powerful metaprogramming and generic programming.
-With traits and interfaces, Lilies supports polymorphism and code reuse.
+With traits, Lilies supports polymorphism and code reuse.
 Contracts enable design-by-contract programming.
 The language also provides full compile-time type checking and type inference.
 
@@ -131,48 +111,20 @@ The macro system must ensure that macros can provide the same compile-time infor
 
 The language is built on an attribute grammar so that each syntax node can carry attributes used to store type information, scope information, and other metadata.
 
-Except for `define`, no construct may directly create new bindings in the current scope.
-The `let` and `let:` families create bindings through closure capture.
-The language is designed to be referentially transparent: variables, functions, classes, modules, and macros should be defined before use.
+`define` is the only construct that directly adds new bindings to the current scope.
+At the top-level and within `lambda` bodies, `define` is ordered and carries side effects: bindings created by `define` are visible to subsequent expressions in the same scope.
+Within a module body, `define` does not carry sequential side effects — modules are compiled as namespace units rather than executed in order, so all definitions in a module are mutually visible regardless of textual order.
+In contrast, `lambda` creates formal-parameter bindings within a new scope — it does not mutate the scope in which the `lambda` form appears.
+The `let` and `let:` families create bindings through closure capture (i.e., by desugaring into `lambda`), so they also operate in a new scope rather than mutating the current one.
+The language is designed to require definition before use: variables, functions, classes, modules, and macros must be defined before they are referenced.
+This ensures that every name can be resolved at compile time without forward-reference ambiguity.
 
 These features make Lilies a powerful tool for building complex software systems and a fertile platform for research in programming theory.
-
-单一的通用编程语言无法满足所有程序员的所有需求。因此，简化语言复杂性很重要：保留最小核心，并赋予用户扩展语言的能力。
-
-简单清晰的表达式语法以及表达式的无限可组合性，使得构建实用且高效的编程语言成为可能。
-
-Lilies 在设计上借鉴了早期的 Lisp 和 Scheme 方言的许多思想：一等函数（过程）、词法作用域、continuations（续延/延续）和宏。语法对象可以以编程方式进行操作。与这些语言不同，Lilies 设计为具有强静态类型系统的语言。
-
-Lilies 的目标是成为一门可与 C 竞争的本地语言，或作为其他语言的编译目标。在 D-Flat 系统中，Marguerite 就是建立在 Lilies 之上的。
-
-在 Lilies 中所有符号共享同一个命名空间，不论它们是变量、函数、类、接口、模块或其他实体。在每个表达式中，运算符和操作数由其位置来区分。
-
-不同于某些 Lisp 方言通过函数调用实现循环的做法，Lilies 提供完整的函数式循环构造，作为内建的语法扩展（而非核心）。同时提供尾调用优化以保证循环的高效性。
-
-支持面向对象的类。Lilies 中的一切都是对象，包括函数、类、接口和模块。类可以在编译期计算，从而支持强大的元编程能力和泛型编程。通过 trait（特征）和接口，Lilies 支持多态和代码重用。通过契约（contracts），支持契约式设计。语言同时提供完整的编译时类型检查和类型推断能力。
-
-模块是第一类公民：可以定义、导入和导出。
-
-语言能够捕获任意时刻的 continuation（程序剩余计算），从而可以构建高级控制流构造。捕获的 continuation 会被保存为“逃逸过程”（escape procedure），这是一个可以稍后调用以从捕获点恢复计算的函数。Lilies 也支持定界（delimited）continuation。
-
-为了实现更高层次的控制，Lilies 也支持代数效果（algebraic effects）及其处理器。虽然效果处理器可以用 continuation 来实现，但 Lilies 将它们作为独立的构造来提供，以便拥有更好的语法和语义支持。
-
-提供了完整的函数式异常处理系统。异常可以定义、抛出、捕获和传播，并在某些情况下支持恢复，从而灵活地处理错误。
-
-有多种方式扩展语言，其中宏是最强大的。Lilies 的宏是“卫生”的（hygienic），并允许用户解析抽象语法树（AST）、获取或丢弃上下文信息、生成新的语法树。宏生成的语法可以根据需要是卫生的或有意非卫生的。语法对象在 Lilies 中是一等公民，便于在宏中解析、操作和生成语法树。另一种扩展方式是符号生成：可以在编译时根据给定的符号或属性生成新的表达式（类似于 Kotlin 的 KSP 或 C\# 的 Roslyn）。
-
-宏系统必须确保程序中使用的宏在编译时能提供与内建语法相同的信息，以便编译器能给出完整的错误诊断。
-
-该语言基于属性文法构建，每个语法节点都可以关联属性，用于存储类型信息、作用域信息或其他元数据。
-
-除 `define` 外，任何构造都不能直接在当前作用域创建新的绑定。`let` 和 `let:` 系列通过闭包捕获来创建绑定。因此语言被设计为引用透明：变量、函数、类、模块和宏应在使用前定义。
-
-这些特性使 Lilies 成为构建复杂软件系统的强大工具，同时也是计算机程序理论研究的良好平台。
 
 === Background 背景
 
 The lilies language is designed and implemented as part of the D-Flat system.
-For creating a practical programming language and a powerful tool that can be used to implement other languages.
+The goal is to create a practical programming language and a powerful tool that can be used to implement other languages.
 
 In the design of Lilies, many ideas and concepts from other programming languages are borrowed.
 
@@ -193,7 +145,7 @@ For real world programming, the following principles are also important:
 
 === Section Description 章节描述
 
-In the specification of Lilies language, each topic is described in a separate chapter.
+In the specification of the Lilies language, each topic is described in a separate chapter.
 
 == Overview 语言总览
 
@@ -205,28 +157,33 @@ In the specification of Lilies language, each topic is described in a separate c
 === Comment 注释
 
 In the language Lilies, there are three main types of comments:
-+ Documentation: Every Piece of code can have its own documentation, and accessed through documentation family functions.
++ Documentation: Every piece of code can have its own documentation, and accessed through documentation family functions.
 + Code Block Comment: A block of code, each part of which is parsed as normal code, but without semantic meaning. Code block comments are used to temporarily disable a block of code or to provide examples of code usage.
 + Normal Comment: A comment that is ignored by the compiler and is used to provide explanations for code.
 
-In documentation, there is a special syntax for written sample code that can be executed and tested.
-Documentation starts with `#;|` and ends with `|#;`,
-at the beginning of each line, there must be a `;` to indicate that this line is part of the documentation.
+Documentation comments in Lilies extract the documentation-before-declaration convention found in other languages (Javadoc, doc comments in Rust, etc.) into a first-class syntax.
+A documentation comment starts with `#;|` immediately followed by a token that indicates the documentation kind (e.g., no token for a plain doc comment, or a keyword like `TODO`, `FIXME`, `NOTE`, etc.; see below).
+The documentation block ends with `|#;`.
+Documentation comments must be placed directly before the definition or declaration they document.
+
+At the beginning of each line within the documentation block, there must be a `;` to indicate that this line is part of the documentation.
 Within documentation, there are some annotations for describing the properties of a function, variable, or symbol:
 - `#name`
 - `#param`
 - `#return`
 And for sample code part, `#;code|` and `|#;` are used to indicate the beginning and end of the code part respectively.
-In each code part, the code this documentation belongs is imported automatically, and all code blocks in same documentation
-is treated as if they are in the same scope, thus can refer to each other.
-Tough each code block is seen as individual parse unit.
+In each code part, the code this documentation belongs to is imported automatically, and all code blocks in same documentation
+are treated as if they are in the same scope, thus can refer to each other.
+Though each code block is seen as an individual parse unit.
 
 For code block comments, the syntax is `#;` followed by a normal code block.
 
 Normal comments can be either line comments,
 starting with `;` and ending at the end of the line,
 or block comments, starting with `#|` and ending with `|#`.
-Similar to other Lisp dialects, comments can be nested.
+
+Nesting of comments is supported: `#|` ... `#|` ... `|#` ... `|#` is valid for block comments.
+(Line comments are also technically described as nestable — nesting `;` within `;` is meaningless in practice since a line comment ends at the end of its line, but the rule is stated uniformly to keep the comment syntax simple and consistent.)
 
 There are some simple conventions for single line comments:
 - `;;` is used for comments that describe the following code.
@@ -258,7 +215,7 @@ E.g., a function with documentation:
  ;  |#;
  |#;
 (define add
-  (lambda ((a (dyn Integer)) (b (dyn Integer)))
+  (lambda ((a Integer) (b Integer))
     #:returns (Integer)
     ;; increse a by one and decrese b by one until b is zero
     (if (equal b 0)
@@ -268,10 +225,10 @@ E.g., a function with documentation:
 
 === Variable, Slots & Fields 变量, 插槽与字段
 
-Variables in Lilies are some space allocated to store values.
+Variables in Lilies are bindings that refer to allocated storage locations for values.
 
 Slots are locations within objects that can hold values, named or not.
-In practice, slots are some space allocated within an object to store values.
+In practice, slots are memory locations allocated within an object to store values.
 
 Fields are similar to slots, but they are named and is used to store values that are associated with a specific object instance.
 
@@ -282,16 +239,16 @@ Types are used to classify values and determine what operations can be performed
 
 It is able to define new types by combining existing types (structures) or inductively defining new types (recursive types).
 
-Each type are individual, defined by its name, structure, and behavior.
-But types can also have hierarchical relationships with other types through inheritance and subtyping.
-A type can be a subtype of another type, if and only if it inherits from that type and implement all traits and interfaces the type implemented.
+Each type is individual, defined by its name, structure, and behavior.
+Types are not related through inheritance or subtyping — Lilies adopts a Hindley-Milner type system without subtyping.
+Instead, types relate to one another through trait implementations:
+a type can implement a trait to provide shared behavior, and constrained generic type parameters accept any type that satisfies the required trait bounds.
 
-Supertype doesn't means that all values of the subtype can be treated as values of the supertype.
-The only guarantee is that when a constraint requires a value of the supertype, a value of the subtype can be used instead.
-
-Every type must derive a default "empty" value, together with its corresponding type, which is used when a value of that type is required but not provided.
+Every user-defined type must derive a default "empty" value, together with its corresponding type, which is used when a value of that type is required but not provided.
 Every type has its own type checking rules, which are used to determine whether a value is of that type or not.
 Thus empty values can be distinguished from other values of the same type.
+
+Certain built-in types and traits are explicitly exempt from the empty-value requirement, as noted in their respective sections: `Any` (a trait, not a concrete type), `Symbol`, `Meta`, and `Empty` have no empty value, either because they are not meant to be instantiated or because no meaningful empty value exists.
 
 ==== Basic Types 基本类型
 
@@ -304,8 +261,7 @@ Primitive types for Lilies language include:
 - Pairs
 - Vector
 - Tuples
-- Any
-- Nothing
+- Any (trait)
 - Ignore
 - Meta
 - Unit
@@ -313,51 +269,51 @@ Primitive types for Lilies language include:
 
 ===== Number Tower 数字类型层次
 
-Numbers in Lilies are organized in a type hierarchy known as the "number tower".
-At the base of the tower is the most general type, `Number`, which encompasses all numeric types:
-- Number
-- Complex
-- Real
-- Rational
-- Integer
-- Unsigned Integer
-- Zero
-Below `Unsigned Integer`, there are specific types for different sizes of integers:
-- `(int 8)` or `(uint 8)`
-- `(int 16)` or `(uint 16)`
-- `(int 32)` or `(uint 32)`
-- `(int 64)` or `(uint 64)`
+Numeric types in Lilies are not organized by subtyping.
+Instead, each numeric type is distinct, and relationships between them are expressed through trait implementations (e.g., a type implements the `Number` trait, the `Integral` trait, etc.), similar to Haskell's type-class approach.
 
-Zero is a special type that represents the value zero.
-It can be used to construct other numeric types.
+The numeric types include:
 
-Default Empty type for numbers is Zero.
+- `Integer` — arbitrary-precision integer, analogous to Haskell's `Integer` or Scheme's exact integer.
+  This is the default integer type when no specific size is required.
+- `Int` — fixed-size machine integer. Specific sizes are given by type application:
+  - `(Int 8)`, `(Int 16)`, `(Int 32)`, `(Int 64)` for signed integers
+  - `(Uint 8)`, `(Uint 16)`, `(Uint 32)`, `(Uint 64)` for unsigned integers
+- `Rational` — exact rational number, represented as a pair of `Integer` numerator and denominator.
+- `Real` — real number (floating-point). Specific precisions:
+  - `(Real 32)` for single precision
+  - `(Real 64)` for double precision (the default when writing `Real`)
+- `Complex` — complex number, parameterized by the real component type:
+  - `(Complex (Real 64))` for double-precision complex numbers.
 
-`Integer` is the short name for signed most used integer type, which is `(int 32)` in Lilies.
-`Size` is the short name for longest unsigned integer type, which is `(uint 64)` in Lilies.
+`Int` is distinct from `Integer`: `Int` values are bounded machine words with wrap-around or checked arithmetic, while `Integer` values are arbitrary-precision and never overflow.
+
+`Zero` is a special literal value that can be used wherever a numeric type is expected; the compiler infers the intended numeric type from context.
+
+Default value for numeric types is the zero value of the corresponding type (e.g., `0` for `Integer` and `Int`, `0.0` for `Real`, etc.).
+
+`Int` without a size argument defaults to `(Int 32)`, which is the most commonly used signed integer type.
+`Size` is the short name for `(Uint 64)`, the longest unsigned integer type, used for memory-related quantities.
 
 ===== Booleans 布尔类型
 
-Booleans in Lilies are represented by the type `Boolean`, which has two possible values: `#True` (true) and `#False` (false).
-The boolean type are organized in a type hierarchy:
-- Boolean
-  - True
-  - False
+Booleans in Lilies are represented by the type `Boolean`, an algebraic sum type with two constructors: `#True` (true) and `#False` (false).
+`True` and `False` are not subtypes of `Boolean`; they are the only inhabitants of the `Boolean` type.
 
-Default Empty type for booleans is False.
+Default value for booleans is `#False`.
 
 ===== Characters 字符类型
 
 Characters in Lilies are represented by the type `Character`, which represents a single Unicode character.
-Default Empty type for characters is the null character type EOF, which has the only instance `#\EOF`.
+The empty character type is `EOF`, whose only instance (the default value) is `#\EOF`.
 
 ===== Strings 字串类型
 
-Strings in Lilies are represented by the type `String`, which represents a sequence of objects, typically characters.
-Default Empty type for strings is the Empty type, for which the only instance is the empty string `""`.
-
-String are some serialized data, a continuous sequence of bytes.
-No matter it is encoded utf-8 ro raw bytes, even integers or complex objects.
+Strings in Lilies are represented by the type `String`, which is a continuous sequence of bytes — analogous to Rust's `str` / `String`.
+A string literal (e.g., `"hello"`) creates an immutable, UTF-8-encoded string by default; raw byte strings are created with the `#b"..."` literal prefix.
+Strings are not generic over their element type: they always store bytes, though library functions interpret those bytes as UTF-8 code units when appropriate.
+Default value for strings is a special canonical empty-string instance, distinct from the literal `""`.
+The literal `""` creates a new empty string at each use, while the canonical empty string is a singleton — every reference to the string default value resolves to the same instance, avoiding allocation.
 
 In Lilies, there are different kinds of continuous data:
 - Strings, which is described here,
@@ -377,53 +333,43 @@ Symbols are interned, meaning that there is only one instance of a symbol with a
 When a symbol is created, the system checks if a symbol with the same name already exists, and if so, returns the existing symbol instead of creating a new one.
 
 Symbols has their own type, `Symbol`.
-Nothing default empty type for symbols.
+Symbols are exempt from the empty-value requirement (see Type System overview): they have no default empty type.
 
 ===== Pairs 对偶类型
 
 Pairs in Lilies are represented by the type `Pair`, which represents a ordered pair of values.
-Pairs is a type as primitive type but with generic type parameters, allowing for pairs of any two types of values.
+Pairs are a primitive type with generic type parameters, allowing pairs of any two types of values.
 
-Pairs that the second element contains another pair that has its second element being None are treated as lists.
-Which are linked lists constructed from pairs.
+A Pair whose second element is either another Pair or the empty list (nil) is treated as a list node.
+Proper lists are linked lists constructed from pairs, terminated by the empty list.
 
-Default Empty type for pairs is the `Pair::Empty` type, for which the only instance is the pair `(None . None)`.
+The empty-type variant for pairs is `Pair::Empty`, whose only instance (the default value) is `(None . None)`.
 
 ===== Vectors 向量类型
 
 Vectors in Lilies are represented by the type `Vector`, which represents a fixed-size sequence of values.
-Vectors is a type as primitive type but with two generic type parameters: the type of the elements and the size of the vector.
+Vectors are a primitive type with two generic type parameters: the type of the elements and the size of the vector.
 
-Default Empty type for vectors is the `Vector::Empty` type, a vector type that has size of 0 and type of None.
-The only instance of this type is the empty vector `[]`.
+The empty-type variant for vectors is `Vector::Empty`, a vector type that has size 0 and element type `None`.
+The only instance (the default value) of this type is the empty vector `[]`.
 
 ===== Tuples 元组类型
 
 Tuples in Lilies are represented by the type `Tuple`, which represents a fixed-size sequence of values of potentially different types.
-Tuples is a type as primitive type but with a variable number of generic type parameters, each representing the type of an element in the tuple.
+Tuples are a primitive type with a variable number of generic type parameters, each representing the type of an element in the tuple.
 
-Default Empty type for tuples is the `Tuple::Empty` type, a tuple type that has no elements.
-The only instance of this type is the empty tuple `<>`.
+The empty-type variant for tuples is `Tuple::Empty`, a tuple type that has no elements.
+The only instance (the default value) of this type is the empty tuple `<>`.
 
 ===== Any 任意类型
 
-Any type is the supertype of all types in Lilies.
-Every value in Lilies is of type Any.
-But Any type cannot hold any value directly nor be instantiated.
+`Any` is a trait (analogous to Rust's `std::any::Any`) that is automatically implemented by every concrete type in Lilies.
+A value of any type can be erased to a trait object `(dyn Any)` via an explicit coercion; the original concrete type can be recovered through a checked downcast.
+`Any` itself is not a type that can be directly instantiated or that holds values directly — it is always used behind a reference or pointer as `(dyn Any)`.
 
-In practice, Any type is used as a placeholder type when the specific type of a value is not known or not important.
+In practice, `(dyn Any)` is used when the specific type of a value is not known at compile time and must be inspected at runtime (e.g., heterogeneous collections, reflective operations).
 
-Any type has no default empty type.
-
-===== Nothing 无类型
-
-Nothing type is the subtype of all types in Lilies.
-Nothing represents the absence of a value.
-Nothing type can hold nothing.
-
-In practice, Nothing type is used to indicate that a value is missing or not applicable.
-
-Nothing have no empty type since it have never own a instance.
+`Any` is exempt from the empty-value requirement (see Type System overview): it has no default empty type, since it is a trait rather than a concrete type.
 
 ===== Ignore 忽略类型
 
@@ -434,33 +380,36 @@ Ignore type has only one value, also a variable, which is also called Ignore.
 
 In practice, Ignore type is used to indicate that a value should be ignored or discarded.
 
-Ignore type is the default empty type for itself.
+Ignore is its own default value.
 
 ===== Meta 元类型
 
 Meta type is the type of types in Lilies.
 Meta type may be structure description or type generator.
 
-Meta type always promises to be non-empty, thus has no default empty type.
+Meta type always promises to be non-empty, thus has no default empty type (exempt from the empty-value requirement; see Type System overview).
 
 ===== Unit 单元类型
 
-Every structure that has no fields is considered as Unit type.
-Thus unit type is not a primitive type, but a special structure type.
+Unit is a primitive type that represents the absence of meaningful data.
+Every structure that has no fields also yields the Unit type — the empty structure and the primitive Unit are the same type, not distinct.
 
-Sometimes Unit type is used to represent a function is finished and has no meaningful return value.
+Sometimes Unit type is used to represent that a function is finished and has no meaningful return value.
 
-All unit type shares same instance, which is also called Unit.
+All unit values share the same instance, which is also called Unit.
 
-Unit is the default empty type for itself.
+Unit is its own default value.
 
 ===== Empty 空类型
 
-Empty type is a special type that has no instances.
+Empty type is the bottom type in Lilies' type system (analogous to Rust's never type `!`).
+Empty unifies with every other type during type inference, representing computations that never produce a value.
+Empty type has no instances and can hold nothing.
 
-Empty type always used to indicate a function will never return.
+In practice, Empty type is used to indicate that a value is missing or not applicable,
+or that a function never returns (e.g., a function that always panics or diverges).
 
-Empty have no default empty type.
+Empty has no default empty type (exempt from the empty-value requirement; see Type System overview).
 
 ==== Syntax Object 语法类型
 
@@ -469,18 +418,83 @@ Syntax objects are so special that they should be built-in and given first-class
 
 ==== Closure Type 闭包类型
 
-Functions in Lilies represents a mapping from a set of input values (parameters) to a set of output values (return values).
-And can capture the lexical scope in which they are defined, forming closures.
+A function in Lilies represents a mapping from input values (parameters) to output values (return values).
+When a `lambda` expression captures variables from its enclosing lexical scope, it forms a closure.
+The resulting closure type includes the types of its parameters and its return values, and is a distinct type for each `lambda` expression.
 
-Closure type constructs the type of a function, including the types of its parameters and return values.
+A closure captures variables from the enclosing scope by borrow (default).
+The borrow lasts for the lifetime of the closure — the compiler ensures captured references do not outlive their referents.
+To capture by move (transferring ownership of a captured variable into the closure), annotate the `lambda` with `#:move`:
+```lisp
+(lambda #:move (x) ...)   ;; captures enclosing variables by move
+```
+This is analogous to `move |x| { ... }` in Rust: after the closure is created, moved variables are no longer accessible in the enclosing scope.
 
 ==== Continuation Type 续体类型
 
+A continuation represents the "rest of the computation" at a given point in a program.
+The continuation type captures the control state and environment at the point where the continuation is created.
+
+In Lilies, continuations are first-class values with type `Continuation`.
+A continuation can be invoked as if it were a procedure: it accepts a value (or values) and resumes execution at the capture point with those values.
+Unlike ordinary functions, invoking a continuation never returns to the caller — it replaces the current continuation entirely.
+
+The continuation type is parameterized by the types of values it accepts:
+- `(Continuation A)` — a continuation that accepts a single value of type `A`
+- `(Continuation A B)` — a continuation that accepts two values of types `A` and `B`
+
+Continuations are created by the `call/cc` (call-with-current-continuation) primitive or by delimited continuation operators such as `reset` and `shift`.
+Delimited continuations have type `(DelimitedContinuation A B)` where `A` is the input type and `B` is the type of the enclosing `reset` expression.
+
+Continuations cannot be serialized and are valid only within the dynamic extent of their creation point, unless explicitly captured as escape procedures.
+
 ==== Annotation Type 注解类型
+
+Annotations are metadata attached to expressions, declarations, or types that carry additional information for the compiler, tooling, or runtime.
+The annotation type in Lilies is `Annotation`, which represents a key-value pair of compile-time or runtime metadata.
+
+Annotations can be attached to syntax nodes using the `#@[...]` syntax or through keyword annotations (`#:key` and `#&key`).
+The annotation type is parameterized by the kind of entity it annotates and the value it carries:
+- `(Annotation :type T)` — an annotation carrying a type
+- `(Annotation :expr)` — an annotation on an expression
+- `(Annotation :decl NAME)` — an annotation on a declaration named `NAME`
+
+Annotations are processed at compile time by annotation processors, which can inspect annotated syntax nodes and generate additional code, perform validation, or modify the compilation pipeline.
+Built-in annotations include `#:type`, `#:returns`, `#:self`, `#:mut`, and `#:init`.
+(`#:naming` is a call-site modifier for lazy evaluation, not an annotation; see Calling Conventions.)
+Users can define custom annotations and corresponding annotation processors through the macro system.
 
 ==== Contracts 契约
 
-==== Contravariance, Covariance, and Invariance 逆变, 协变与不变
+Contracts in Lilies provide a design-by-contract mechanism that allows programmers to specify preconditions, postconditions, and invariants for functions, methods, and types.
+Contracts are checked at compile time where possible, with remaining checks performed at runtime.
+
+A contract is defined using the `contract` form, which associates a predicate with a name:
+```lisp
+(define non-negative?
+  (contract (lambda (x) (>= x 0))))
+```
+
+Contracts can be attached to function parameters and return values:
+```lisp
+(define sqrt
+  (lambda ((x (contract Integer non-negative?)))
+    #:returns (contract Real non-negative?)
+    ...))
+```
+
+Contract types include:
+- Precondition contracts: checked before the function body executes.
+- Postcondition contracts: checked after the function body executes, before returning.
+- Invariant contracts: checked on entry and exit of every public method of a class.
+- Class invariant contracts: checked after construction and before/after every public method.
+
+Contracts can be selectively enabled or disabled at compile time for performance.
+When a contract violation is detected, a `ContractViolation` condition is raised, which can be caught and handled by the condition system.
+
+Contracts compose through trait implementation: a type implementing a trait
+must satisfy or strengthen the contracts declared on that trait.
+
 
 ==== Composite Types 复合类型
 
@@ -499,7 +513,6 @@ There are composite type constructors provided in Lilies language, including:
   - linked lists
 - intersection types
   - traits
-  - interfaces
 
 Some of them are built-in primitive types with generic type parameters, such as tuple, pair, and vector.
 Others are constructed through type definition syntax, such as structures, unions, and recursive types.
@@ -509,7 +522,7 @@ The type described by `type` will not create a new type indeed, rather a new typ
 
 ==== List Types 表类型
 
-In Lilies, same as other Lisp dialect, the List is composited by Pairs that have second element be another List.
+In Lilies, as in other Lisp dialects, a List is a chain of Pairs where each Pair's first element holds a value and its second element holds either the next Pair in the chain or the empty list (nil), which terminates the list.
 
 ==== Union Types 联合类型
 
@@ -517,20 +530,80 @@ Union types in Lilies are special form of tagged unions, which represent a set o
 
 ==== Enum Types 枚举类型
 
-If a enumeration type is not defined to have variants with specified type, the variants can be assigned with any constant value with same type.
-Though it is just be done by translating Enum index to corresponding value, it will be obviously user-friendly.
+If an enumeration type is not defined to have variants with specified types, the variants can be assigned any constant value of the same type.
+This is done by translating the enum variant index to the corresponding value, which is user-friendly.
 
 ==== Sealed Classes 密封类
 
+A sealed class is an algebraic data type with a closed set of variant constructors,
+declared at the definition site. No new variants can be added outside the defining module,
+analogous to Rust's `enum` with named-field variants.
+
+Sealed classes are useful for modeling restricted hierarchies where all variants are known at compile time,
+enabling exhaustive pattern matching.
+
+```lisp
+(define Expr
+  (class #:sealed (Num Var Add Mul)
+    (define loc (constant SourceLocation))))
+```
+
+`Num`, `Var`, `Add`, and `Mul` are the only constructors for `Expr`.
+The compiler uses this information to verify exhaustiveness in `case` and `match` expressions over sealed types.
+
+All variant constructors of a sealed class must be defined in the same module as the sealed class itself.
+This ensures that the full set of variants is known at compilation time and cannot be extended by external code.
+
 ==== Record Classes 记录类
+
+A record class is a compact class definition form that automatically generates:
+- A primary constructor with parameters corresponding to all fields
+- Accessor methods for each field
+- Structural equality and hashing based on all fields
+- A printable representation
+
+Record classes are defined using the `record` keyword instead of `class`:
+```lisp
+(define Point
+  (record
+    (define x (constant Integer))
+    (define y (constant Integer))))
+```
+
+This definition automatically provides:
+- Constructor: `(Point x y)`
+- Accessors: `(Point-x point)`, `(Point-y point)`
+- Equality: structural comparison of `x` and `y`
+- Hashing: based on `x` and `y`
+
+Fields in a record class must be wrapped with `constant`; `variable` is not permitted for record fields.
+Record fields are always immutable — this is a defining property of record classes.
+
+Record classes are self-contained product types. They can implement traits normally,
+but are not part of any class hierarchy — there is no inheritance in Lilies' type system.
+Record classes are implicitly closed: no other type may extend or inherit fields from a record class.
 
 ==== Enum Classes 枚举类
 
-Similar to enum types, but enum class definition can make the enumeration with newly defined type,
+Similar to enum types, but an enum class definition creates the enumeration together with a newly defined type,
 and the variants of the enumeration can only be assigned with values of that type.
 
-Behaviour like enum classes in Java, enum class in Lilies is a syntax sugar for enum type definition,
-with enum classes, it is free to define enumeration with any newly defined type, without really defining that type elsewhere.
+Behaving like enum classes in Java, an enum class in Lilies is syntactic sugar that combines an enum type definition
+with a class definition. Each variant can carry its own fields and implement methods.
+```lisp
+(define Color
+  (enum-class
+    (Red    (define r (constant Integer)) (define g (constant Integer)) (define b (constant Integer)))
+    (Green  (define brightness (constant Integer)))
+    (Blue   (define saturation (constant Float)))))
+```
+
+Each variant of an enum class is a distinct constructor of the enum class (analogous to Rust's enum variants).
+Methods can be defined on the enum class directly, with per-variant dispatch provided as syntactic sugar for exhaustive pattern matching in the method body.
+Pattern matching over enum class instances is exhaustive when all variants are covered.
+
+Enum classes are implicitly sealed: no variants may be added outside the defining module.
+This guarantees that pattern matches over enum class values can be checked for exhaustiveness at compile time.
 
 ==== Internal Types 内部类型
 
@@ -570,27 +643,27 @@ When defining variables, functions, classes, and so on, if the type is not expli
 
 ===== Type Family 类型族
 
-=== Object System 对象系统
+=== Value System 值系统
 
-Object is the core concept of Lilies language.
-Though types in Lilies can not inherit from other types in the traditional sense,
-objects system for Lilies still provides other way to archive polymorphism and code reuse.
+Values of user-defined types are the core data abstraction in Lilies.
+Lilies adopts a Hindley-Milner type system without subtyping or inheritance —
+polymorphism and code reuse are achieved through traits.
 
-The class defines only the structure of a object, but methods are implemented separately.
-With traits, it becomes possible to share method implementations across different classes and extend object behaviour outside the class definition.
+A class defines the structure (fields) of a value, but methods are implemented separately via `implement`.
+With traits, it becomes possible to share method implementations across different classes and extend behavior outside the class definition.
 
-A concept of generic function is borrowed from CLOS and it is renamed to `interface` in Lilies.
-With interface, user-defined methods can be called in a uniform way as traditional functions.
-Another benefit is that interfaces are all static dispatched by default, making them more efficient than traditional methods.
+A concept of generic function is borrowed from CLOS and it is called `trait` in Lilies.
+With traits, user-defined methods can be called in a uniform way as traditional functions.
+Another benefit is that trait methods are all statically dispatched by default, making them efficient.
 
-`implement` syntax will create methods for a specific class, and assign the method to corresponding class.
+`implement` syntax creates method implementations for a specific class, associating methods with the class's method table.
 
-There are still some special concept borrowed form traditional OOP languages:
-- Fields: named slots associated with a specific object instance.
-- Properties: named slots that used for value fetching only.
+Concepts for structuring data:
+- Fields: named slots associated with a specific class instance.
+- Properties: named accessors that expose values through getter/setter methods.
 
-All objects in lilies are referenced by value by default.
-To have a object referenced by reference, use type wrappers.
+All objects in Lilies are passed by value by default.
+To have an object passed by reference, use type wrappers.
 
 Type wrapper can be ownership, garbage collected or reference counted pointer.
 
@@ -598,7 +671,7 @@ This part describes the object system, definition of classes, and their possible
 
 ==== Primitive Object 原始对象
 
-Primitive objects in Lilies are build upon primitive types.
+Primitive objects in Lilies are built upon primitive types.
 Some of primitive objects can be written in literal syntax.
 
 Primitive objects cannot be split into smaller parts.
@@ -614,13 +687,13 @@ For which, there are:
 
 ==== Classes, Fields, Properties & Traits 类, 字段, 属性与特征
 
-Classes are user defined types for structure types.
+Classes are user-defined product types that group named fields together.
 
-A classes can declare it inherits from a parent class explicitly,
-but that will not change the class structure.
-If a class is declared to have a parent class, it must implement all traits that its parent class implements.
+A class does not inherit from any other class — there is no class inheritance in Lilies.
+Instead, classes can implement traits to provide shared behavior.
+Composition over inheritance is the recommended pattern: a class can contain instances of other classes as fields.
 
-Fields are named slots associated with a specific object instance.
+Fields are named slots associated with a specific class instance.
 Each field has its own name and type.
 In class definition, fields are declared with `define` syntax.
 
@@ -631,7 +704,7 @@ However, it is encouraged to manually assign accessibility attributes to fields 
 
 Traits are used to define shared behavior that can be implemented by multiple classes.
 Traits can be implemented manually for a class,
-and user defined traits can be used to extend class behavior for a library defined class.
+and user-defined traits can be used to extend the behavior of a class defined in a library.
 
 ===== Definition of Classes 类的定义
 
@@ -654,10 +727,8 @@ Later there will be a chapter describing all these annotations in detail.
 Full syntax of class definition is described as:
 ```lisp
 class-definition ::=
-'(' 'class' <inherits>
-   { <fields> } ')'
+'(' 'class' { <fields> } ')'
 
-<inherits>       => '(' { <class> } ')'
 <fields>         =>
 '(' ':fields' { <deffield> } ')'
 
@@ -665,8 +736,8 @@ class-definition ::=
 '(' 'define' <name> [ '#:type' ] <type> [ <init> ] ')'
 ```
 
-Inherits clause declares the super classes of the class being defined.
-Self clause declares the symbol that refers to the current instance of the class within the class body.
+The class body contains field definitions using `define`.
+Self clause declares the symbol that refers to the current instance of the class within the class body (via the `#:self` annotation).
 Type clause declares the type of the class being defined.
 
 With annotations, the accessibility of fields can be controlled:
@@ -680,21 +751,77 @@ E.g.,
     (define y (constant Integer))))
 ```
 
-To define filed to be variable, wrap type with `variable`.
-Otherwise, if type is wrapped with `constan`, the field is not assignable after object creation.
+To define a field to be variable, wrap the type with `variable`.
+Otherwise, if the type is wrapped with `constant`, the field is not assignable after object creation.
 All assignment traits for that field will be dropped.
 
-Define syntax vary depend on the context it appears, thus the `define` we used here is not suitable for other case in Lilies.
-But, it is clear that, there can be only `define` or `lambda` to have the ability to create a new binding.
+Define syntax varies depending on the context in which it appears; the `define` used within a class body to declare fields is not the same form as top-level `define`.
+More precisely, only `define` can directly add a new binding to the current scope; `lambda` creates a new scope whose formal parameters are bound within that scope, without mutating the enclosing scope.
 
-// TODO: Type family, first-class classes
+Type families allow types to be computed from other types at compile time.
+A type family is declared with `type-family` and defines a mapping from type parameters to concrete types:
+```lisp
+(type-family ElementType
+  ((Vector T) => T)
+  ((List   T) => T)
+  ((Array  T) => T))
+```
+Type families enable type-level programming, where types can be computed based on other types,
+similar to associated types in Rust or type families in Haskell.
+
+Classes in Lilies are first-class values at compile time: a class can be passed as an argument to
+a compile-time function, stored in a compile-time data structure, and used to construct instances.
+This enables patterns like compile-time factories, serialization codecs generated from class definitions,
+and ORM-style mappings.
 
 ===== Definition of Traits 特征的定义
 
-// TODO: multiple-dispatch support,
-//       behaviours like Haskell type classes,
-//       add support for concepts
-Define a new trait with `trait` syntax.
+Traits in Lilies follow a Rust-like dispatch model:
+- **Static dispatch** is the default. When a generic function is called with concrete types known at compile time,
+  the compiler monomorphizes the code, producing a specialized copy for those types with full inlining and optimization.
+- **Dynamic dispatch** is opt-in. A trait object type, written `(dyn TraitName)`, erases the concrete type
+  and dispatches through a vtable at runtime. Trait objects are used when the concrete type cannot be determined
+  at compile time (e.g., heterogeneous collections).
+```lisp
+;; Static dispatch (default): compiler monomorphizes for Integer
+(define add-one (lambda ((x Integer)) #:returns (Integer) (+ x 1)))
+
+;; Dynamic dispatch via trait object
+(define draw-all (lambda ((shapes (List (dyn Drawable))))
+  #:returns (None)
+  (foreach shape shapes
+    (draw shape))))
+```
+
+A trait can require its implementing type (`Self`) to also implement other traits,
+just as Haskell type classes support superclass constraints (`class Eq a => Ord a`).
+This is specified with the `#:requires` annotation in the trait definition:
+```lisp
+(define Ord
+  (trait
+    #:requires (Eq Self)   ;; Self must implement Eq
+    (define compare (function (Self Self) #:returns (Ordering)))))
+```
+The compiler enforces that any type implementing `Ord` must also implement `Eq`.
+Trait bounds on `Self` form a directed acyclic graph; circular requirements are rejected at compile time.
+
+Traits can also specify associated types and constraints, similar to Haskell type classes:
+```lisp
+(define Container
+  (trait
+    #:associated-type Element
+    (define insert (function (Self (Self:Element)) #:returns (Self)))
+    (define lookup (function (Self Integer) #:returns (Optional (Self:Element))))))
+```
+
+Concepts are named sets of constraints that can be used to describe requirements on type parameters
+more concisely than listing individual traits. A concept combines multiple trait bounds and
+associated type constraints:
+```lisp
+(concept Sortable
+  #:requires (Ord (Element T))
+  #:where (T implements Container))
+```
 E.g., to define a new trait `Drawable` with a method `draw`:
 ```lisp
 (define Drawable
@@ -706,8 +833,8 @@ E.g., to define a new trait `Drawable` with a method `draw`:
 
 Both Methods and Traits are implemented with `implement` syntax.
 
-`implement` unwraps namespace of a class, and then methods defined within the body are assigned to the class function table.
-Furthermore, traits can unwrap namespace of a object, and then anything inside will only extend the object behavior.
+`implement` opens the namespace of a class, and then methods defined within the body are assigned to the class method table.
+Furthermore, trait implementations can open the namespace of an object, and then anything inside will extend the object's behavior.
 
 Empty implementation list indicates the methods defined inside this `implement` are for the class itself, not for a trait.
 
@@ -724,84 +851,338 @@ E.g., Implement Drawable for Point:
 
 Since `implement` syntax unwraps the namespace of a class or object only, it is possible to define variables associated with the class or object inside.
 
-===== Generic Function & Interface 泛义函数与接口
-
-With generic function, methods can be called in a uniform way as traditional functions.
-
-// TODO: multiple-dispatch support
-
-For example, if we'd define a new generic method called `draw` that is contained in `Drawable`,
-we can have:
-```lisp
-(define draw
-  (generic (Drawable)
-    #:self self
-    (function (self)
-      #:returns (None)))))
-```
-And then we can call `draw` on any object that implements `Drawable` trait, and the corresponding method will be called.
-
 ===== Method Dispatch 方法分派
 
-When a method is called on an object, the method to be executed is determined through method dispatch.
+Lilies adopts a Rust-like dispatch model: static dispatch is the default, and dynamic dispatch is opt-in.
 
-====== Dynamic Dispatch 动态分派
+====== Static Dispatch (default) 静态分派
 
+When the concrete type is known at compile time, method calls are resolved statically and monomorphized — the compiler generates a direct call to the method implementation. This is the default and incurs no runtime overhead:
 ```lisp
-((invoke object 'method-name') object ...args)
-;; or
-({method-name object} ...args) ; for short
+;; Static dispatch: the compiler knows p is Point, calls Point's draw directly
+(define p (Point 3 4))
+(draw p)
 ```
 
-====== Static Dispatch 静态分派
+====== Dynamic Dispatch (opt-in) 动态分派
 
+Dynamic dispatch is used when the concrete type cannot be determined at compile time.
+A trait object type `(dyn TraitName)` erases the concrete type and dispatches through a vtable:
 ```lisp
-((method Class 'method-name') ...args)
-;; or
-({method-name Class} ...args) ; for short
+;; Dynamic dispatch via trait object
+(define draw-all (lambda ((shapes (List (dyn Drawable))))
+  #:returns (None)
+  (foreach shape shapes
+    (draw shape))))  ;; dispatch through Drawable's vtable at runtime
+```
+
+The `invoke` primitive explicitly requests dynamic dispatch for a specific object and method:
+```lisp
+(invoke object 'method-name)
+;; => a procedure that, when called, dispatches through the object's vtable
+```
+
+The dispatch protocol for dynamic dispatch is:
+1. The runtime type of `object` is retrieved.
+2. The vtable of that type is searched for `'method-name`.
+3. If found, the corresponding implementation is returned and called.
+4. If not found, the search proceeds to implemented traits (in order of implementation).
+5. If still not found, a `MethodNotFound` condition is raised.
+
+For cases where the type is known at compile time but the programmer wants to explicitly select a specific trait's method implementation, the `method` form is used:
+```lisp
+(method ClassName 'method-name)
+;; => the method implementation for ClassName, resolved at compile time
 ```
 
 ====== Method Access 方法调用语法糖
 
-====== Invoke 调用
+Lilies provides syntactic sugar for method calls using the `@{}` notation:
+```lisp
+(@{method-name object} arg1 arg2)
+;; desugars to:
+((invoke object 'method-name) object arg1 arg2)
+```
+
+For chained access, the `->` operator threads an object through a series of operations:
+```lisp
+(-> object
+    (@{method1} arg)
+    (@{method2} arg2))
+;; desugars to:
+(@{method2 (@{method1 object} arg)} arg2)
+```
 
 ===== Chain Call & Chain Methods 链式调用与链式方法
 
 ====== Syntax Sugar for Chain Methods Definition 链式方法定义的语法糖
 
+Chain methods return `Self` (the type of the receiver), enabling fluent method chaining.
+A chain method is defined by annotating the return type with `#:returns (Self)`:
+
+```lisp
+(implement Point ()
+  #:self self
+  (define set-x
+    (lambda (self (new-x Integer))
+      #:returns (Self)
+      (Point new-x (field self 'y))))
+  (define set-y
+    (lambda (self (new-y Integer))
+      #:returns (Self)
+      (Point (field self 'x) new-y))))
+```
+
+Chain methods can then be called in sequence using the `->` threading macro:
+```lisp
+(-> point (@{set-x 10}) (@{set-y 20}))
+```
+
+Chain methods are statically dispatched when the concrete type is known,
+and dynamically dispatched when called through a trait reference.
+
 ===== Field & Property Access 字段与属性访问
 
-`ref`
+Field access in Lilies uses the `ref` form, which retrieves the value of a named slot from an object:
+```lisp
+(ref object 'field-name)
+;; retrieves the value of field-name from object
+```
+
+For mutable access, `ref` can be used in assignment contexts:
+```lisp
+(set! (ref object 'field-name) new-value)
+```
+
+Fields declared with accessibility annotations enforce access control:
+- `:public` — accessible from any code.
+- `:internal` — accessible only within the same module.
+- `:class-internal` — accessible only within the defining class and code within the same module that operates on the same type.
+- `:private` — accessible only within the defining class.
+
+Properties are fields accessed through getter and setter methods.
+When a field has defined getters/setters, `ref` automatically dispatches through them rather than accessing the storage directly.
+This allows classes to change internal representation without breaking callers.
+
+Dot notation is available as syntactic sugar:
+```lisp
+object.field-name
+;; desugars to:
+(ref object 'field-name)
+```
+
+===== `field` Primitive `field` 原语
+
+The `field` form is the low-level primitive for reading a named field from an object at runtime.
+Unlike `ref`, which respects property accessors (getter/setter methods) and accessibility annotations,
+`field` bypasses accessors and accesses the underlying storage directly:
+```lisp
+(field self 'x)
+;; retrieves the raw storage slot for field x, bypassing any getter method
+```
+
+When a class defines getter/setter methods for a field, `ref` dispatches through those methods,
+while `field` always performs a direct slot access. This makes `field` useful in contexts where
+the raw storage must be accessed without triggering side effects (e.g., within the implementation
+of getter/setter methods themselves, or in low-level serialization code).
+
+`field` respects accessibility annotations (`:public`, `:internal`, `:class-internal`, `:private`)
+and is subject to the same access-control checks as `ref`.
+
+`field` can be combined with `set!` for direct field mutation, bypassing setter methods:
+```lisp
+(set! (field self 'x) new-value)
+```
 
 ===== Traits Shadowing 特征遮蔽
+
+When a class implements multiple traits that define methods with the same name, a name conflict arises.
+Lilies resolves trait method conflicts through explicit disambiguation rather than implicit shadowing.
+
+By default, if two implemented traits provide a method with the same name and signature,
+the compiler emits an error requiring the programmer to disambiguate.
+
+Disambiguation is done in the `implement` body by providing an explicit disambiguation:
+```lisp
+(implement MyClass (TraitA TraitB)
+  #:self self
+  (define conflict-method
+    ;; explicitly choose TraitB's implementation
+    (shadow (method TraitA 'conflict-method)
+            (method TraitB 'conflict-method))))
+```
+
+The `shadow` form declares a precedence order: the first argument is shadowed by the second.
+When calling `conflict-method` on `MyClass`, `TraitB`'s implementation is used,
+while `TraitA`'s implementation remains accessible through a qualified call:
+```lisp
+((method TraitA 'conflict-method) my-instance args...)
+```
+
+If a class defines its own method with the same name, it automatically shadows any trait-provided implementations.
 
 ===== Predefined Traits 预定义特征
 
 Assignment:
 - Clone (Deep clone all fields)
 - Move (Move the ownership)
-- Reference (Borrow the visibility)
+- Reference (Borrow the value)
 
 Comparison:
 - Strict Equal (Compare whether two value have same type and value in bitwise)
 - Value Equal (Compare whether two value is same logically, in this case, two children that treat as same parent type may be equal)
-- Identity Equal (Compare whether two bindings reference to the same object)
+- Identity Equal (Compare whether two bindings reference the same object)
 
 === Generic Programming 泛型编程
 
-// TODO: refactor Type System, Object System and Generic Programming sections
-// Add type family support and type-level programming support in Type System section
+Generic programming in Lilies is achieved through compile-time type computation, where generic code
+is expanded and specialized at compile time rather than relying on runtime type erasure.
+This section ties together the type system, object system, and metaprogramming facilities
+to describe how generic programming works in practice.
+
+==== Type-Level Programming
+
+Type families (described in the Type System chapter) enable type-level computation.
+Combined with compile-time evaluation, Lilies can express complex type-level transformations:
+```lisp
+(type-family MapType
+  ((List T) => (List (Option T)))
+  ((Vector T N) => (Vector (Option T) N)))
+```
+
+Type-level programming in Lilies is not a separate language — it uses the same expression language
+as runtime code, evaluated at compile time. This unification means type-level functions
+can reuse ordinary functions and vice versa.
+
+==== Generic Code Generation
+
+When the compiler encounters a generic function applied to concrete types, it monomorphizes:
+it generates a specialized copy of the function for those concrete type arguments.
+Monomorphization enables full optimization of generic code (inlining, constant folding)
+and eliminates any runtime overhead from generics.
+
+For cases where monomorphization would produce excessive code size,
+the compiler can use a hybrid approach with a universal representation fallback,
+selected via the `#:generic-strategy` annotation.
+
+==== Constrained Generics
+
+Type parameters can be constrained by traits:
+```lisp
+(lambda ((x T) (y T))
+  #:where (T implements Ord)
+  (if (< x y) x y))
+```
+
+The `#:where` clause specifies constraints on type parameters.
+The compiler checks that all concrete type arguments satisfy these constraints at monomorphization time.
 
 === Expression
 
+An expression is the fundamental unit of computation in Lilies.
+Every construct in Lilies is an expression that evaluates to a value and has a type.
+There are no statements — even control flow constructs, definitions, and module declarations are expressions.
+
+The general form of an expression is a list `(operator operand ...)` where the first element
+(the operator position) determines how the expression is evaluated.
+The operator may be:
+- A special form keyword (e.g., `define`, `lambda`, `if`, `let`), which follows custom evaluation rules.
+- A macro name, which triggers compile-time expansion before evaluation.
+- A procedure value (function or closure), which causes function application.
+- A symbol bound to a procedure, which is resolved and then applied.
+
+Expressions can also be self-evaluating literals — forms that evaluate to themselves without any further computation:
+- Numbers: `42`, `3.14`, `#x2A`
+- Booleans: `#True`, `#False`
+- Characters: `#\a`, `#\space`
+- Strings: `"hello"`
+- Vectors: `[1 2 3]`
+- Tuples: `<1 "a" #True>`
+
+Symbols and pairs are not self-evaluating. As in Common Lisp and Scheme, an unquoted symbol evaluates to the value bound to that name in the current scope. To obtain a symbol or pair as a literal value, the `quote` special form (abbreviated `'`) is used:
+- `'foo` is shorthand for `(quote foo)`, which evaluates to the symbol `foo`.
+- `'(first . second)` is shorthand for `(quote (first . second))`, which evaluates to a pair.
+
+Thus `'foo` is not a self-evaluating literal; it is a quoted expression — a special form whose evaluation rule is to return its argument unevaluated.
+
+The value of a sequence (block) is the value of its last expression.
+All preceding expressions are evaluated for their side effects.
+
+==== Expression Evaluation Order
+
+By default, Lilies uses eager evaluation with left-to-right evaluation order within a sequence.
+Arguments to a function are evaluated before the function is called, in left-to-right order.
+Lazy evaluation can be requested for specific parameters using the `#:naming` calling convention.
+
+==== Expression Types
+
+Every expression has a statically known type. The type of an expression is determined by:
+1. For literals: the type is the literal's inherent type.
+2. For variable references: the declared or inferred type of the variable.
+3. For function applications: the return type of the function, with type parameters substituted.
+4. For special forms: defined by the semantics of the special form.
+5. For macros: the type of the expanded expression.
+
+The compiler checks that every expression's type is consistent with the context in which it appears.
+
 === Apply & Evaluation
 
-+ Apply & Evaluation
-  + Value Pass
-  + Reference Pass
-    + Ownership transaction
-    + Move
-    + Brought
+Function application in Lilies follows a uniform protocol: the operator and operands are evaluated,
+then the operator is applied to the operands. The application mechanism depends on what the operator evaluates to.
+
+==== Evaluation Protocol
+
+1. The operator expression is evaluated.
+2. The operand expressions are evaluated left-to-right (unless `#:naming` defers evaluation).
+3. The resulting operator value is applied to the resulting operand values.
+
+If the operator is a procedure (lambda), the application proceeds by:
+1. Matching actual arguments to formal parameters — by position (for positional parameter lists) or by name (for named parameter lists).
+2. Creating a new lexical environment binding parameters to the argument values, with the argument-passing convention (borrow, move, or clone) applied as specified at the call site.
+3. Evaluating the procedure body in this new environment.
+4. Returning the result(s) to the caller by ownership transfer (move).
+
+==== Calling Conventions
+
+Lilies follows a Rust-like argument-passing model. The parameter list itself does not specify calling conventions (unlike the previous `#:ref` / `#:in` / `#:val` annotations on parameters). Instead, how an argument is passed is determined at the call site:
+
+- **Borrow** (default): The argument is evaluated and a shared reference is passed. The callee can read but not mutate the borrowed value. The caller retains ownership; the borrow lasts for the call duration. This is the default for all arguments and corresponds to Rust's `&` borrow.
+  ```lisp
+  (fun a b)   ;; a and b are both borrowed
+  ```
+
+- **Move** (explicit): Ownership of the argument is transferred into the callee. After the call, the caller can no longer access the moved value. This is the most efficient convention for large or non-copyable values and corresponds to Rust's move semantics.
+  ```lisp
+  (fun (move a) b)   ;; a is moved, b is borrowed
+  ```
+
+- **Clone** (explicit): The argument is deep-copied and the copy is passed. The callee owns the copy; the caller retains the original. This is used when the callee needs ownership but the caller must keep the value — analogous to `.clone()` in Rust.
+  ```lisp
+  (fun (clone a) b)   ;; a is deep-copied, b is borrowed
+  ```
+
+- **Lazy / Call-by-Name** (`#:naming`): The argument is not evaluated at the call site. Instead, a thunk (a closure of zero arguments) is passed, and the argument is evaluated each time the parameter is referenced in the function body. This supports defining control structures and short-circuit evaluation.
+  ```lisp
+  (fun #:naming a b)   ;; a is passed lazily, b is borrowed
+  ```
+
+There is no implicit deep-copy: if a function needs an owned copy of a borrowed argument, it must clone explicitly within its body.
+
+The call-site modifiers `(move x)` and `(clone x)` control how an argument is passed to a function — analogous to Rust's argument passing.
+These are distinct from `#:move` on a `lambda` expression, which controls how the closure captures variables from its enclosing scope (see Closure Type).
+In Rust terms: `(move x)` is argument-passing move, while `(lambda #:move ...)` is `move |...| { ... }` closure capture.
+
+==== Multiple Return Values
+
+A function may return multiple values. The caller can receive them by destructuring:
+```lisp
+(let:rec ((values a b) (divmod x y))
+  ;; a is quotient, b is remainder
+  ...)
+```
+If a multi-value result is used in a single-value context, only the first value is retained.
+
+
 
 === Variable, Binding & Reference
 
@@ -809,16 +1190,45 @@ Comparison:
   - Dynamic Scope
   - Lexical Scope
   - `define`
-    You can have a optional `#:mut` that indicates a variable bind is mutable, otherwise assignment traits of the variable and its fields will be dropped.
-    You can have a optional `#:type <type>` to declare the type of variable, otherwise it will be inducted automatically
-    In some Environment such as class body, `define` may have different syntax.
+    `define` binds a name to a value in the current scope: `(define name value)`.
+    An optional type annotation follows the name, matching the lambda parameter syntax: `(define (name Type) value)`.
+    An optional `#:mut` indicates the binding is mutable; otherwise the binding is immutable and assignment traits are dropped.
+    In some environments such as a class body, `define` may have a different syntax (see Definition of Classes).
+
+    The semantics of `define` vary by context:
+    - **Top-level**: `define` is ordered and carries sequential side effects — bindings created by `define` are visible to subsequent expressions in the same top-level scope. The top-level is executed in order at program startup (or when a script file is run).
+    - **`lambda` body**: `define` within a `lambda` body likewise has sequential side effects — later expressions in the same body see earlier `define` bindings.
+    - **Module body**: `define` within a module body does *not* carry sequential side effects, because a module is a namespace construct that is compiled as a unit rather than executed in order. All definitions within a module are mutually visible and are resolved at compile time; the order of `define` forms in a module does not affect visibility. Module-level `define` does not imply runtime initialization — modules are not "executed" in the sense that top-level code or lambda bodies are.
   - `let` & `let:` family
     - `let`: `let` in scheme, which creates a new scope and binds variables in that scope.
     - `let:fwd`: `let*` in scheme, which creates a new scope and binds variables in that scope, but the bindings are visible to the rest of the body. Sequential bindings are supported, which means that the value of a variable can be used in the initialization of another variable defined later in the same `let:fwd` expression.
     - `let:rec`: `letrec` in scheme, which creates a new scope and binds variables in that scope, but the bindings are visible to the rest of the body. Recursive bindings are supported, which means that the value of a variable can be used in the initialization of itself or another variable defined later in the same `let:rec` expression.
     - `let:seq:rec`: `letrec*` in scheme, which creates a new scope and binds variables in that scope, but the bindings are visible to the rest of the body. Sequential and recursive bindings are supported, which means that the value of a variable can be used in the initialization of itself or another variable defined later in the same `let:seq:rec` expression.
-  - Dynamic In Lexical Scope
-- Form
+  - Dynamic In Lexical Scope:
+    Lilies uses lexical scoping by default, but dynamic scoping can be introduced for specific variables
+    using the `dynamic` form. A dynamically scoped variable looks up its value in the dynamic extent
+    (the call chain) rather than the lexical environment:
+    ```lisp
+    (define *current-output-port*
+      (dynamic (make-stdout-port)))
+    ```
+    Dynamic variables are conventionally named with surrounding asterisks `*like-this*`.
+    The `dynamic-let` form temporarily rebinds a dynamic variable for the dynamic extent of its body:
+    ```lisp
+    (dynamic-let ((*current-output-port* (make-file-port "output.txt")))
+      (display "This goes to the file"))
+    ```
+    Dynamic binding is implemented via shallow binding with a thread-local binding stack,
+    ensuring efficient access and thread safety.
+  - Form:
+    A form is any syntactic unit that can be evaluated. In Lilies, forms are classified as:
+    - Self-evaluating forms: literals that evaluate to themselves.
+    - Symbol forms: variable references that evaluate to the bound value.
+    - List forms: compound expressions `(operator ...operands)`.
+    - Special forms: built-in constructs with custom evaluation rules (`define`, `lambda`, `if`, `let`, etc.).
+    - Macro forms: expressions expanded at compile time before evaluation.
+    The term "form" is often used interchangeably with "expression" in Lisp tradition,
+    though "form" emphasizes the syntactic structure while "expression" emphasizes the evaluable nature.
 - Assignment
 
 Assignment is a trait that must be implemented by any type that supports assignment operation.
@@ -838,10 +1248,9 @@ There are three types of assignment:
   - `0x[0-9a-fA-F]+`
 - Float Object
   - `[0-9]+\.[0-9]*([eE][+-]?[0-9]+)?`
-  - `\.[0-9]+([eE][+-]?[0-9]+)?`
   - `[0-9]+[eE][+-]?[0-9]+`
 - Character Object
-  - `#\descrition`
+  - `#\description`
   - `#\'character`
   - `#\uXXXX`
 - String Object
@@ -880,7 +1289,7 @@ There are some built-in composite types in Lilies, including:
 In Lilies, one-dimension vectors can be written in the form of `[element1 element2 ...]`,
 Furthermore, vector type have its own literal syntax rather than regular type application syntax like `(int 8)`,
 E.g., a vector of 4 signed 32bit integers can be written as `[(int 32): 4]`, similar to array type in Rust.
-Multiple dimension vectors is also exists, and can be written as `[(int 32): 4 4]` for a 4x4 matrix of signed 32bit integers.
+Multi-dimensional vectors also exist, and can be written as `[(int 32): 4 4]` for a 4x4 matrix of signed 32bit integers.
 
 To index a vector, use `index`, which accepts a vector and an vector of integers as index, and returns the variable element at the corresponding position.
 `(index obj indexs)`.
@@ -888,13 +1297,13 @@ E.g., to index the element at position (1, 2) in a 4x4 matrix `mat`, we can writ
 
 In other case, something like jagged array can be implemented by using vector of vectors, which is also a vector.
 However, only vector slice is able to used as type argument for vector without really declare the length of a vector.
-It will never behaviour like jagged array in C Sharp.
+It will never behave like a jagged array in C#.
 
 ==== Tuple
 
 Tuple is another fixed-length sequence in Lilies.
 Compared to vector, tuple is slightly more flexible.
-In practical, returning value list can be seen as implemented using tuple.
+In practice, multiple return values can be implemented using tuples.
 
 Tuple can be written as `<element1 element2 ...>` in Lilies for short.
 
@@ -904,8 +1313,8 @@ Tuple is indexed still by `index`.
 
 ==== Array
 
-Contracts to other languages, array in Lilies behaviours like `std::vector` in c++ or `ArrayList` in Java,
-which is a data type that can contains variable number of elements of the same type, and can be indexed by integers.
+In contrast to other languages, array in Lilies behaves like `std::vector` in C++ or `ArrayList` in Java,
+which is a data type that can contain a variable number of elements of the same type and can be indexed by integers.
 
 ==== List
 
@@ -913,7 +1322,7 @@ List is a traditional data structure in Lisp dialects, which is a variable-lengt
 Since the list is a type derived from pairs, determined in compilation time, it is not difficult to check the safety of list operations and optimize the code for list operations.
 
 List, a kind of recursive type, defined in the form of `(cons element list)`, where `cons` is a constructor for pairs, and `element` is the first element of the list, and `list` is the rest of the list, is able to be visited using traditional `car` and `cdr` functions, and furthermore, `index` for `nth` in common lisp.
-All those operations is determined in compilation time, thus the visiting of list have the same efficiency as visiting vector.
+Operations whose index is known at compile time can be partially evaluated by the compiler (e.g., unrolling a fixed number of `cdr` steps). In the general case, however, indexed access to a linked list is an O(n) traversal, whereas vector indexing is O(1) — this is an inherent algorithmic difference between the two data structures.
 
 ==== Dictionary
 
@@ -946,87 +1355,148 @@ with definition like `(define refe (reference var #:type <type>))`, which create
 
 ```lisp
 (define foo
-  (lambda ((param #:ref (int 8) #:init 0))
+  (lambda ((param (Int 8) #:init 0))
     #:returns ()
     '()))
-;; param with type of `(int 8)', signed integer length 8bits, passed by reference (borrow in rust),
-;; initial default value 0
+;; param type is `(Int 8)`, signed 8-bit integer. Calling convention is determined at the call site:
+;;   (foo x)         — borrow x (default)
+;;   (foo (move x))  — move x into param
+;;   (foo (clone x)) — deep-copy x into param
 (define bar
-  (lambda ((param (String)))
+  (lambda ((param String))
     #:returns ()
     '()))
-;; param with type of `String`, passed by value, deep clone needed
+;; param type is `String`. No deep-copy is implicit — the call site decides.
 (define baz
-  (lambda ((param #:in (Vector (int 32) 4)))
+  (lambda ((param (Vector (Int 32) 4)))
     #:returns ()
-    '())))
-;; param with type of `Vector` of 4 elements, each element is signed integer length 32bits,
-;; passed by ownership movement
+    '()))
+;; param type is `(Vector (Int 32) 4)`, a vector of 4 signed 32-bit integers.
 
-;; `#:returns ()` here is the returning value list for each function
+;; `#:returns ()` declares the return-value list — `()` is the empty list.
+;; Returned values are moved out (ownership transfer) to the caller.
 ```
 
 
-// TODO: list for positional parameter, dict for naming parameters;
-// ( ... . rest) for multiple length parameter
-// { rest } for multiple length parameter
+Parameter lists come in exactly one style per procedure — positional and named forms may not be mixed in a single lambda.
+
+**Positional parameters** are specified as a list. Arguments are matched by position:
 ```lisp
-(lambda {
-    a : type
-    ...
-  }
-  ...)
+(lambda (x y z) ...)
+;; called as: (proc 1 2 3)
 ```
 
-Parameter list of a procedure can be a pattern, a case expression, or a single symbol.
+Each positional parameter may carry an optional type annotation and default value:
+```lisp
+(lambda ((x Integer) (y String #:init "default")) ...)
+```
+
+**Named parameters** use the curly-brace form. Arguments are matched by name at the call site and can be provided in any order:
+```lisp
+(lambda {x: Integer, y: String, z: Boolean} ...)
+;; called as: {proc x: 1, y: "hello", z: #True}
+```
+
+**Rest parameters** collect additional arguments. In positional form, the dotted-pair notation `( ... . rest)` gathers remaining positional arguments into a list:
+```lisp
+(lambda (x y . rest) ...)
+;; (proc 1 2 3 4 5) => x=1, y=2, rest='(3 4 5)
+```
+
+In named form, the dotted-pair notation `{ ... . rest }` gathers remaining named arguments into a dictionary:
+```lisp
+(lambda {x: Integer . rest} ...)
+;; {proc x: 1, y: "hello", z: #True} => x=1, rest={'y "hello", 'z #True}
+```
+
+**Mixing positional and named parameter styles in the same lambda is not permitted.** Choose one style per procedure.
+
+Parameter list of a procedure can also be a pattern, a case expression, or a single symbol.
 
 ==== Procedures
 
-To define a procedure, binding a lambda expression to a name.
+To define a procedure, bind a lambda expression to a name.
 A lambda expression is composed of a parameter list, an optional returning value list, and a function body.
 
-In parameter list, each parameter is defined with its name, type, and some optional annotations.
+In the parameter list, each parameter is defined with its name, optional type, and optional initial value.
+The calling convention is not specified in the parameter declaration — it is determined at the call site (see Calling Conventions).
 If the parameter list is empty, the function takes no parameters.
-If the parameter list have last element not None, it is treated as rest parameter, which can take variable number of arguments.
-The type for rest parameter must be able to be inducted from the context, thus it is not required to be explicitly declared.
-If the parameter list is a single parameter, no positional (and named) parameters are supported.
+If the last element of the parameter list is a dotted rest parameter (` . rest`), it collects the remaining arguments into a list (positional) or dictionary (named).
+The type for a rest parameter can be inferred from context and need not be explicitly declared.
 
-For each parameter, it should be still lists.
-First element is the parameter name, which is a symbol.
-Then it is optional to declare the calling method, which can be `#:ref` for borrowing, `#:in` for ownership movement, and `#:val` or default for calling by value.
-Particularly, if `#:naming` is declared, the parameter is treated as lazy-evaluated expression.
-Next part of parameter declaration is the type of the parameter, the type must be defined before.
-Last part is optional initial value.
+For each parameter:
+- First element is the parameter name (a symbol).
+- Then an optional type annotation — the type must be defined before use.
+- Last, an optional initial value (`#:init <value>`).
 
-Procedures can have their returning value list have named values or just types, which declare the types of returning values.
-If named values are provided, the returning values can be accessed by name, and they can be used as ordinary variables in the function body.
-The returning value list is provided using `#:returns` and corresponding returning value list.
+Procedures declare their return types with `#:returns` followed by a return-value list.
+Returned values are transferred by ownership move to the caller (Rust-style).
+If names are provided in the return list, the return values can be accessed by name within the function body.
 
-For each returning value, still, it should be a list.
-First element is the optional returning value name, which is a symbol.
-Second element is the optional returning method, which can be `#:ref` for returning by reference, `#:out` for returning by ownership movement, and `#:val` or default for returning by value.
-Lastly, the type of the returning value.
+For each entry in the return-value list:
+- First element is an optional return-value name (a symbol).
+- Second element is the type of the returned value.
 
-The body of lambda expression must be a single one expression.
+The body of a lambda expression must be a single expression.
 
-You can exit a function without executing rest part of the body by invoke built-in function `:return`, this is a function that only can be called within a function body,
-and it will return the values passed to it as the returning values of the function.
+You can exit a function early by invoking the built-in function `:return`, which is only valid within a function body.
+It returns the values passed to it as the function's return values.
 
 ==== Positional, Named or Rest Parameters
 
-By default, Lilies will never provide positional parameters.
-All parameters are matched by name, and the order of parameters in function call is not important.
+Lilies supports both positional and named parameter styles, but they cannot be mixed in a single lambda.
 
-// TODO:
+**Named-parameter call syntax** uses curly braces with the function name immediately after `{`, followed by a space and then comma-separated `key: value` pairs: `{fun key: value, ... . rest}`.
+The space after the function name marks the start of the argument list; commas separate individual arguments, matching the dictionary literal syntax.
+`. rest` collects remaining named arguments into a dictionary:
+```lisp
+{fun x: 1, y: 2}              ;; call `fun` with named args x=1, y=2
+{fun x: 1, y: 2 . extras}     ;; extras collects additional named args as a dictionary
+```
+
+**Positional calls** use the standard parenthesized form:
+```lisp
+(fun 1 2)                  ;; positional call
+(fun 1 2 . extras)         ;; extras collects remaining positional args as a list
+```
+
+**Method access shorthand** uses `(@{method obj} arg ...)`:
+```lisp
+(@{draw shape})            ;; calls method `draw` on `shape`
+(@{draw shape} x y)        ;; calls method `draw` on `shape` with args x, y
+```
+
+The choice between positional and named style is made at the definition site and must be consistent at the call site.
+
+The `{}` syntax serves two roles, distinguished by context:
+- **Named call**: `{` immediately followed by the function name, then a space, then comma-separated `key: value` pairs — e.g., `{fun x: 1, y: 2}`.
+- **Named parameter definition**: `{` appears inside a `lambda` form to declare named formal parameters — e.g., `(lambda {x: Integer, y: String} ...)`.
+There is no ambiguity because a named call always appears in expression position with the function name directly after `{`, while a named parameter list always appears as the second element of a `lambda` form.
 
 ==== Functions
 
-Each lambda expression has its own type, which is a closure type that includes the types of its parameters and returning values.
-When a lambda expression is defined, a new function object is created and bound to the name of the procedure.
+A `lambda` expression, as described in the Procedures section, evaluates to a function value — a closure that captures the lexical scope in which it was defined.
+The type of each `lambda` expression is a unique closure type that includes the types of its parameters and return values.
+When a `lambda` is bound to a name via `define`, the resulting procedure can be called by that name.
 
-However the need to define types that can represent some common function signatures make Lilies have some special types for functions, which are called function types.
-Firstly, every lambda type is derived from a generic function type.
-If you'd declare a function holder or delegate, you may have to use generic callable trait.
+To declare a variable or parameter that holds an arbitrary function, use a function type.
+Function types are written with the `(-> ...)` syntax:
+```lisp
+(-> (Integer String) Boolean)          ;; takes Integer and String (positional), returns Boolean
+(-> {x: Integer, y: String} Boolean)   ;; takes named x, y, returns Boolean
+```
+
+Every function type implements the `Callable` trait.
+The `Callable` trait is the common interface for all callable values — procedures, closures, and continuations.
+
+When the concrete function type is not known at compile time, use a trait object:
+```lisp
+(define apply-twice
+  (lambda ((f (dyn (-> (Integer) Integer))) (x Integer))
+    #:returns (Integer)
+    (f (f x))))
+```
+Here `f` is dynamically dispatched through the `Callable` vtable.
 
 === Conditional & Control Flow
 
@@ -1057,7 +1527,7 @@ And lisp style loops are also provided:
 
 Similar to Rust, the Lilies supports tagged union types and pattern matching.
 `try` works similar to `if let` in Rust.
-When the pattern matches, control-flow goes to then part, otherwise goes to else part.
+When the pattern matches, control flow goes to the then-branch; otherwise it goes to the else-branch.
 
 ==== Control Flow 控制流
 
@@ -1077,9 +1547,8 @@ If optional label is provided, the `:break` will jump out of the sequence with t
 
 === Lazy Evaluation & Call by Name 惰性求值与按名调用
 
-By default, Lilies uses eager evaluation and call by value.
-No matter `#:ref`, `#:in` or `#:val` is used, the arguments will be evaluated before being passed to the function.
-If `#:naming` is used, the argument will be treated as a lazy-evaluated expression.
+By default, Lilies uses eager evaluation: arguments are evaluated before being passed to the function, regardless of whether they are borrowed, moved, or cloned at the call site.
+If `#:naming` is used, the argument is treated as a lazy-evaluated expression — the thunk is evaluated each time the parameter is referenced.
 
 === Generics
 
@@ -1113,11 +1582,62 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
 ==== Built-in Macros 内建宏
 
 - `todo`: a simple macro to indicate that there is still work to be done in this part of code.
-- `assert`: a simple macro to check if a condition is true, and if not,
+- `assert`: a simple macro to check if a condition is true; if not, it raises an `AssertionFailure` condition.
 - `unreachable`: a simple macro to indicate that the code is unreachable and should not be executed.
 - `debug`: a simple macro to print debug information during development.
 
 === Pattern-Matching
+
+Pattern matching in Lilies provides a concise way to destructure values and branch on their structure.
+The primary pattern-matching construct is `match`, which evaluates a scrutinee expression and
+dispatches to the first matching clause.
+
+```lisp
+(match expr
+  (pattern1 body1 ...)
+  (pattern2 body2 ...)
+  (_ default-body ...))
+```
+
+==== Pattern Forms
+
+Lilies supports the following pattern forms:
+
+- **Wildcard**: `_` matches any value and discards it.
+- **Variable**: a symbol matches any value and binds it to the symbol.
+- **Literal**: a literal value (`42`, `#True`, `"hello"`) matches if the scrutinee is equal to the literal.
+- **Constructor**: `(Cons head tail)` matches a pair/list node and recursively matches `head` and `tail`.
+- **Tuple**: `<p1 p2 ...>` matches a tuple with matching elements.
+- **Vector**: `[p1 p2 ...]` matches a vector with matching elements, where `...` captures the rest of the vector.
+- **Typed**: `(p : Type)` matches if the value matches pattern `p` AND has type `Type`.
+- **Guard**: `(p #:when condition)` matches if `p` matches AND `condition` evaluates to true.
+- **Or**: `(or p1 p2)` matches if either `p1` or `p2` matches.
+- **As**: `(p #:as name)` matches `p` and also binds the whole value to `name`.
+
+==== Exhaustiveness Checking
+
+The compiler checks that `match` expressions are exhaustive — every possible value of the scrutinee type
+must be covered by at least one pattern. For sealed types, the compiler knows all variants and can verify
+completeness. For open types, a wildcard or variable pattern is required.
+
+==== `try` Pattern Matching
+
+The `try` form is a shorthand for two-way matching, similar to `if let` in Rust:
+```lisp
+(try (Ok value) result
+  (display value)
+  (error-handler))
+```
+If the pattern matches, the then-branch is evaluated; otherwise, the else-branch is evaluated.
+
+==== Destructuring in Bindings
+
+Patterns can be used directly in `let` and `define` bindings:
+```lisp
+(let ((<x y> (get-coordinates)))
+  (+ x y))
+```
+This destructures the tuple and binds `x` and `y` in a single step.
 
 === Annotations and Annotation processing
 
@@ -1132,38 +1652,513 @@ If `#:naming` is used, the argument will be treated as a lazy-evaluated expressi
 
 === Symbol Generation
 
+Symbol generation is a compile-time metaprogramming mechanism that allows the creation of new symbols,
+expressions, and declarations based on existing code patterns. It is similar in spirit to KSP (Kotlin Symbol Processing)
+or Roslyn source generators for C#, adapted to the Lisp syntax model.
+
+A symbol generator is defined using the `generate` form, which specifies:
+1. A pattern that matches the declarations or expressions to be processed.
+2. A template that produces the generated code.
+3. Optional filtering criteria to constrain which matched nodes are processed.
+
+```lisp
+(generate
+  #:pattern (define $name (record #:serializable $fields ...))
+  #:template
+  (implement (serialize $name)
+    #:self self
+    (define to-json
+      (lambda (self)
+        #:returns (String)
+        (json-encode (list $@(map (lambda (f) (list f (ref self f))) $fields)))))))
+```
+
+Symbol generation runs after parsing and name resolution but before type checking.
+Generated code is fully integrated into the compilation pipeline and receives full type checking
+and error diagnostics, just like hand-written code.
+
 ==== Expression Tree
+
+An expression tree is the parsed, structured representation of Lilies source code as a tree of syntax objects.
+Each node in the expression tree is a syntax object that carries:
+- The kind of expression (literal, symbol, list, special form).
+- Source location information (file, line, column).
+- Scope and binding information (after name resolution).
+- Type information (after type checking).
+- Any annotations attached to the node.
+
+Expression trees are first-class values that can be inspected, traversed, and manipulated by macros
+and compile-time functions. The expression tree API includes:
+- `syntax-kind` — returns the kind of a syntax node.
+- `syntax-children` — returns the child nodes.
+- `syntax-location` — returns source location.
+- `syntax-type` — returns the inferred/checked type.
+- `syntax-attributes` — returns attached annotations.
+- `syntax->datum` — converts a syntax object to a plain datum (stripping source and scope info).
+- `datum->syntax` — embeds a datum as a syntax object, attaching context from a template syntax object.
 
 === Memory Management
 
-+ Pointer
-  + Reference Count
-  + Unique Ownership
-  + Raw Pointer
-  + Address
-  + Virtual Method Table: How dynamic dispatch implemented
-+ Ownership
-+ Garbage Collection
-+ Allocation
-  + `alloc:stack`: Object Allocated in Stack
-  + `alloc:heap`: Object Allocated in Heap
-  + `new`: Object creation, with initialization
-  + `variable`: Variable Wrapper, define a space in structures
-  + `constant`: Constant Wrapper, define a constant space in structures
-+ Auto Life-cycle Detection
+Lilies provides a hybrid memory management model combining ownership-based allocation with optional garbage collection.
+The default mode is ownership tracking (similar to Rust), with garbage collection available as an opt-in for
+cyclic or shared-ownership data structures.
+
+==== Ownership
+
+Every value in Lilies has a single owner at any given time.
+Ownership is transferred via explicit `(move x)` at the call site, or shared via borrowing (the default).
+The compiler tracks ownership statically and inserts deallocation code at the end of each owning scope.
+No runtime reference counting or GC overhead is incurred for owned values.
+
+Ownership rules:
+- Each value has exactly one owner.
+- When the owner goes out of scope, the value is deallocated.
+- Ownership can be transferred (moved) to another binding or function.
+- Borrowing creates a temporary, non-owning reference that must not outlive the owner.
+- Mutable borrows are exclusive: only one mutable borrow may exist at a time.
+
+==== Pointers
+
+Lilies provides several pointer types for different use cases:
+
+- **Unique Ownership** (`Owned T`): A uniquely owning pointer. When dropped, the owned value is deallocated.
+  This is the default reference type for heap-allocated objects.
+
+- **Reference Count** (`Rc T`): A shared-ownership pointer with reference counting.
+  The value is deallocated when the last `Rc` pointing to it is dropped.
+  For cycle breaking, `Weak T` provides a non-owning reference to an `Rc`-managed value.
+
+- **Raw Pointer** (`Ptr T`): An unsafe, non-owning pointer. Dereferencing a raw pointer requires an `unsafe` block.
+  Raw pointers are used for FFI and low-level systems programming.
+
+- **Address** (`Addr T`): A typed memory address, distinct from pointers in that it does not imply
+  any ownership or liveness guarantees. Used primarily for memory-mapped I/O and embedded programming.
+
+- **Virtual Method Table**: Each concrete type has an associated vtable stored in the type descriptor.
+  Dynamic dispatch is implemented by indexing into this vtable at runtime.
+  The vtable is constructed at compile time and stored in the static data section.
+
+==== Garbage Collection
+
+For data structures with cycles or shared ownership, Lilies provides an optional tracing garbage collector.
+GC-managed values are allocated with `gc:new` and tracked by the collector.
+```lisp
+(gc:new (MyClass ...))
+```
+
+GC is opt-in per allocation. Owned and GC-managed values can coexist in the same program,
+but GC references cannot be stored inside owned structures (to avoid dangling references after collection).
+
+==== Allocation
+
+Lilies provides explicit control over allocation strategy:
+
+- `alloc:stack`: Allocates the object on the call stack. The object is deallocated when the stack frame is popped.
+  Suitable for small, short-lived values with a size known at compile time.
+
+- `alloc:heap`: Allocates the object on the heap with ownership tracking. The object is deallocated when
+  its owner goes out of scope.
+
+- `new`: The standard object creation form. By default allocates on the heap for types whose size is not
+  statically known, and on the stack otherwise. The compiler may optimize stack allocation based on escape analysis.
+
+- `variable`: A mutable slot wrapper. Wrapping a type with `variable` creates a mutable cell that can be
+  assigned to after creation.
+
+- `constant`: An immutable slot wrapper. Wrapping a type with `constant` creates an immutable cell
+  that cannot be assigned to after creation. This is the default for record fields and `let` bindings.
+
+==== Auto Life-Cycle Detection
+
+The compiler performs escape analysis to determine whether a heap-allocated value can be safely allocated
+on the stack instead. If the compiler can prove that a value does not escape its allocating scope
+(i.e., it is not returned, assigned to a longer-lived location, or captured by a closure that escapes),
+it may transparently use stack allocation. This optimization is guaranteed safe and does not change program semantics.
+
+
 
 === CPS, Continuations & Delimited Continuations
 
+Lilies provides first-class continuations, enabling the program to capture and manipulate
+the "rest of the computation" at any point.
+
+==== Continuation Passing Style (CPS)
+
+CPS is a programming style where control is passed explicitly as a continuation argument.
+Lilies does not require CPS by default, but supports it through the `call/cc` primitive.
+The compiler can optionally transform code into CPS as an intermediate representation for optimization.
+
+==== First-Class Continuations
+
+`call/cc` (call-with-current-continuation) captures the current continuation as a first-class value:
+```lisp
+(call/cc (lambda (k)
+  ;; k is the continuation — the rest of the computation after this call/cc
+  (k 42)   ;; invoke the continuation: return 42 from the call/cc
+  (display "never reached")))
+```
+
+When a continuation is invoked:
+1. Control jumps to the point where the continuation was captured.
+2. The value(s) passed to the continuation become the result of the `call/cc` expression.
+3. The current continuation at the invocation point is discarded (the invocation never returns).
+
+Continuations are escape procedures: once invoked, they do not return to the caller.
+A continuation remains valid as long as its dynamic extent is on the call stack.
+Captured continuations can be stored in data structures and invoked multiple times,
+but they must not be invoked after the original call stack frame has been exited,
+unless the continuation was captured as a delimited continuation (see below).
+
+==== Delimited Continuations
+
+Delimited continuations capture a segment of the continuation rather than the entire rest of the computation.
+They are created using `reset` (which marks the boundary) and `shift` (which captures up to the nearest `reset`):
+
+```lisp
+(reset
+  (* 2 (shift k
+    ;; k captures: (* 2 [·])
+    ;; i.e., the context between shift and reset
+    (+ (k 3) (k 4)))))
+;; => (+ (* 2 3) (* 2 4)) => 14
+```
+
+`reset` delimits the continuation. `shift` captures the delimited continuation (from the `shift` up to
+the nearest enclosing `reset`) and binds it to a variable. The body of `shift` can invoke this
+delimited continuation zero, one, or many times.
+
+Delimited continuations are implemented as composable, multi-prompt continuations:
+- `(reset #:prompt p body)` — marks a boundary with prompt tag `p`.
+- `(shift p k body)` — captures up to the nearest `reset` with prompt `p`.
+
+==== Implementation
+
+Continuations are implemented via stack copying: when a continuation is captured, the relevant portion
+of the control stack is copied into the heap. When the continuation is invoked, the stack is restored
+from the copy. Delimited continuations copy only the stack segment between the `reset` and `shift` frames.
+
 === Side Effects & Algebraic Effects
+
+Lilies supports algebraic effects and handlers as a high-level mechanism for managing side effects.
+Algebraic effects separate the description of an effect from its implementation, allowing effect handlers
+to be composed, interleaved, and reinterpreted.
+
+==== Effect Declarations
+
+An effect is declared with the `effect` form, specifying the operations it provides:
+```lisp
+(define-effect State
+  (get (function () #:returns (Any)))
+  (put (function (Any) #:returns (None))))
+```
+
+Each operation declares its name and signature. The effect declaration defines an interface
+that effect handlers must implement.
+
+==== Performing Effects
+
+Effects are performed using the `perform` form:
+```lisp
+(perform State:get)
+(perform State:put new-value)
+```
+
+When an effect is performed, control transfers to the nearest enclosing handler for that effect.
+The handler processes the operation and can either:
+- Resume the computation with a value (using `resume`).
+- Abort the computation entirely.
+
+==== Effect Handlers
+
+An effect handler is installed with the `handle` form:
+```lisp
+(handle (State)
+  #:handler
+  (lambda (op resume)
+    (match op
+      ((State:get) (resume current-state))
+      ((State:put v) (set! current-state v) (resume None)))))
+  body ...)
+```
+
+Multiple effects can be handled simultaneously, and handlers can be nested.
+The nearest handler for a given effect intercepts `perform` operations.
+
+==== Built-in Effects
+
+Lilies provides standard effects for common side-effecting operations:
+- `IO` — console input/output, file operations.
+- `Exception` — exception raising and handling.
+- `State` — mutable state.
+- `Reader` — read-only environment.
+- `NonDet` — non-deterministic computation (multiple resumptions).
+
+==== Relationship to Continuations
+
+Algebraic effects can be implemented using delimited continuations: `perform` is `shift`,
+and `resume` invokes the delimited continuation. Lilies treats effects as a distinct construct
+with dedicated syntax because it provides clearer semantics, better error messages,
+and more optimization opportunities than a direct encoding with continuations.
 
 === Yield, Suspend, Resume & Stream (Engine)
 
+Lilies provides generators and streams as composable abstractions for lazy sequences and
+cooperative concurrency.
+
+==== Yield
+
+The `yield` form suspends a generator function and produces a value to the caller:
+```lisp
+(define-generator (count-from n)
+  (let loop ((i n))
+    (yield i)
+    (loop (+ i 1))))
+```
+
+A generator is a function that can suspend its execution and later resume from the suspension point.
+Each call to the generator resumes from the last `yield` and runs until the next `yield` or `return`.
+
+==== Suspend & Resume
+
+Generators are built on a lower-level suspend/resume mechanism:
+- `suspend` captures the current execution state and returns control to the invoker.
+- `resume` restores a suspended execution and continues from the suspension point.
+
+These are implemented using delimited continuations internally, but the generator abstraction
+provides a safer, more constrained interface.
+
+==== Streams (Engine)
+
+A stream is a lazy, potentially infinite sequence produced by a generator.
+Streams support the full set of sequence operations:
+```lisp
+(stream-map square (count-from 1))
+(stream-filter even? (count-from 1))
+(stream-take 10 (count-from 1))
+```
+
+Streams are evaluated on demand: elements are computed only when needed.
+Stream operations compose without creating intermediate collections.
+```lisp
+(-> (count-from 1)
+    (stream-filter even?)
+    (stream-map square)
+    (stream-take 5)
+    stream->list)
+;; => (4 16 36 64 100)
+```
+
+Streams can be infinite and support operations like `stream-zip`, `stream-interleave`,
+`stream-merge`, and `stream-iterate`.
+
+==== Implementation
+
+Generators are compiled to state machines at compile time when possible (for simple, local generators).
+For complex generators (those that capture non-local state or are passed as values), they are
+implemented via delimited continuations backed by heap-allocated stack segments.
+
 === Threads & Subroutines
+
+Lilies provides both operating-system threads and lightweight user-space threads (subroutines)
+for concurrent and parallel execution.
+
+==== OS Threads
+
+Native threads are created with the `thread` form:
+```lisp
+(let ((handle (thread (lambda ()
+  (display "running in thread")))))
+  (thread-join handle))
+```
+
+OS threads run in parallel across multiple CPU cores. Each thread has its own call stack,
+dynamic environment, and thread-local storage. Communication between threads uses
+channels, mutexes, and atomic variables.
+
+Thread safety is enforced by the type system: types that are not `Send` cannot be transferred
+across thread boundaries, and types that are not `Sync` cannot be shared across thread boundaries
+via borrowing.
+
+==== Subroutines
+
+Subroutines are lightweight, cooperatively scheduled execution contexts that run within a single OS thread.
+They are similar to green threads or fibers, providing cheap context switching without kernel involvement.
+```lisp
+(subroutine (lambda ()
+  (yield-to :scheduler)
+  ...))
+```
+
+Subroutines are scheduled cooperatively: a subroutine runs until it explicitly yields control
+(via `yield-to` or an I/O operation) or completes. The scheduler then selects the next ready subroutine.
+
+Subroutines are suitable for high-concurrency workloads (many thousands of concurrent tasks)
+where OS thread overhead would be prohibitive.
+
+==== Channels
+
+Communication between threads and subroutines uses channels:
+```lisp
+(let ((ch (make-channel Integer)))
+  (subroutine (lambda () (channel-send ch 42)))
+  (let ((value (channel-recv ch)))
+    ...))
+```
+
+Channels can be buffered or unbuffered, synchronous or asynchronous.
+Channel operations can be integrated with `select` for multi-way waiting.
 
 === Async, Await & Coroutines
 
+Lilies provides built-in support for asynchronous programming through coroutines and the `async`/`await` syntax,
+integrated with the effect system for composable, testable async code.
+
+==== Async Functions
+
+An async function is defined with `async` before `lambda`:
+```lisp
+(define fetch-data
+  (async lambda ((url String))
+    #:returns (String)
+    (let ((response (await (http-get url))))
+      (response-body response))))
+```
+
+An async function returns a `Future T` value, where `T` is the return type.
+The future represents a computation that will complete at some point in the future.
+
+==== Await
+
+`await` suspends the current coroutine until the awaited future completes:
+```lisp
+(await future-value)
+```
+
+When a coroutine awaits, it yields control to the scheduler (the async runtime),
+which can run other coroutines while waiting for I/O or other events.
+
+==== Coroutines
+
+Async functions are compiled into coroutines — resumable functions whose local state is preserved
+across suspension points (await calls). Each `await` is a suspension point where the coroutine's
+state is saved and control returns to the scheduler.
+
+Coroutines are similar to subroutines but are specifically designed for I/O-bound concurrency:
+- They are scheduled by an async I/O event loop rather than cooperatively.
+- They automatically yield on I/O operations without explicit `yield-to`.
+- They can run across multiple threads via work-stealing schedulers.
+
+```lisp
+;; Concurrently fetch multiple URLs
+(let ((results
+  (await (future-join
+    (list (fetch-data url1)
+          (fetch-data url2)
+          (fetch-data url3))))))
+  ...)
+```
+
+==== Async Runtime
+
+The async runtime is pluggable. Lilies provides a default multi-threaded work-stealing runtime,
+but users can provide custom runtimes for embedded or specialized environments.
+The runtime is selected at program entry and is global to the program.
+
+==== Relationship to Algebraic Effects
+
+Async/await is implemented as an algebraic effect. The `await` operation performs the `Async` effect,
+which the runtime handler intercepts. This design allows testing async code without a real event loop
+by providing a mock handler:
+```lisp
+(handle (Async)
+  #:handler (lambda (op resume) (resume mock-result))
+  (test-async-function))
+```
+
 === Exception Handling
-+ Condition System
+
+Lilies provides a comprehensive condition system for error handling, inspired by the Common Lisp
+condition system but enhanced with static type checking.
+
+==== Exception Types
+
+Exceptions are values of types that implement the `Exception` trait:
+```lisp
+(define ParseError
+  (record
+    (define message (constant String))
+    (define location (constant SourceLocation))))
+(implement ParseError (Exception))
+```
+
+The standard library provides a hierarchy of exception types:
+- `Exception` (trait) — base trait for all exceptions.
+  - `Error` — serious errors that typically should not be caught.
+  - `Warning` — non-fatal warnings.
+  - `Condition` — general conditions for non-local control flow.
+
+==== Raising Exceptions
+
+Exceptions are raised with the `raise` form:
+```lisp
+(raise (ParseError "unexpected token" (here)))
+```
+
+`here` is a compile-time form that expands to the current source location.
+
+==== Handling Exceptions
+
+Exception handlers are installed with `guard`:
+```lisp
+(guard
+  ((ParseError e)
+   (display "parse error: ")
+   (display (ParseError-message e)))
+  body ...)
+```
+
+Multiple handlers can be specified, and the first matching handler is selected.
+Handlers can be chained: if a handler cannot resolve the condition, it can re-raise it.
+
+==== Condition System
+
+Beyond simple try/catch, Lilies provides a full condition system with restarts:
+```lisp
+(guard
+  ((ParseError e)
+   (restart-case
+     ((skip () (continue))
+      (retry-with (new-input) new-input))
+     (display "parse error; use restart to recover"))))
+```
+
+Restarts are recovery options established by handler code that can be invoked by the raiser
+or by interactive debugging tools. This separates error detection (raising) from error recovery
+(restart selection).
+
+Key condition system forms:
+- `raise` — signals a condition, searching for a handler.
+- `guard` — establishes condition handlers for a body of code.
+- `restart-case` — establishes restart options available to handlers.
+- `restart` — invokes a named restart.
+- `continue` — resumes execution from the point where the condition was raised (if resumable).
+- `unwind-protect` — ensures cleanup code runs regardless of how a body exits (normal, exception, or continuation).
+
+==== Typed Exceptions
+
+Exception types are part of a function's effect signature.
+A function that may raise `ParseError` declares it in its return type:
+```lisp
+(lambda (input String)
+  #:returns (Result AST ParseError)
+  ...)
+```
+
+For functions using the condition system with restarts, the `Condition` effect tracks
+which conditions may be raised, enabling compile-time verification that all conditions
+are either handled or propagated.
+
+
 
 === Top-Level
 
@@ -1172,7 +2167,7 @@ Briefly, the definition and expression at the top-level is treated to be execute
 
 Top-level is the smallest unit of code, defines the entry point, global environment and the module of a lilies program.
 
-Each file is encouraged to have only one expression at the top-level (except for the main file).
+A library file that defines and exposes exactly one module (via `provide`) naturally conforms to the recommended style: the module definition is the single top-level expression. Multiple local modules within a single file exist as a convenience to avoid deep file hierarchies for small, closely related interfaces; this pattern is discouraged for general use. The main file (entry point) is exempt from this recommendation, as it typically requires `import` and `provide` forms alongside the `main` definition.
 
 ==== Entry Point
 
@@ -1184,7 +2179,20 @@ where `Integer` is the exit code, and `impl Error` is the error information when
 
 === Module & Library
 
-// TODO:
+The module system in Lilies organizes code into named, separately compilable units with explicit
+dependencies and controlled visibility. Each file has exactly one top-level scope.
+Within that top-level, multiple local modules may be defined; they can reference one another freely.
+However, only one module per file may be exposed to other files via `provide`.
+
+A module as a whole can be treated as a first-class value: binding a module to a variable name
+allows accessing its exported members through member-access syntax (e.g., `module:member`),
+or all of its exported members can be imported into the current scope at once.
+
+Modules serve several purposes:
+- **Namespace management**: modules group related definitions, preventing name collisions across modules.
+- **Visibility control**: modules declare what is exported and accessible to other modules.
+- **Dependency management**: modules declare their dependencies explicitly via `require`.
+- **Separate compilation**: modules are compiled independently, with dependencies resolved at link time.
 
 ==== Provide & Require
 
@@ -1192,16 +2200,16 @@ In each file, it is possible and only to have only one provide form, which decla
 And these objects can be loaded by other file with `require` form.
 
 Provide accepts a symbol as the module name, and a object to be provided.
-Require needs the name of the module to be loaded, and returns the provided object of the module.
+Require takes the name of the module to be loaded and returns the provided object of that module.
 The search path of require is relative to the file that required.
 Other search path for standard libraries and third-party libraries can be configured in the compiler.
 
-Even it is not encouraged, you can still define something out side of the provide form,
+Even though it is not encouraged, you can still define something outside of the provide form,
 thus, though those objects maybe used by functions in the module, they are not possible to be loaded by other modules.
 This can remove the unnecessary module definition.
 Some times, the trick is useful in main file.
 
-Name provided by a file must be same as the file name, without the file extension and prefixed with `:`,
+The name provided by a file must be the same as the file name, without the file extension and prefixed with `:`;
 thus, for example, if a file is named `foo.l`, it must provide a module named `:foo`.
 
 E.g., Traditional module definition:
@@ -1222,10 +2230,10 @@ Main file without module definition:
   (:ns (require :std))
   (:ns (require :foo)))
 
-(define main)
+(define main
   (lambda ((args (Optional (Vector String))))
     #:returns (Result Integer (impl Error))
-    (Ok 0))))
+    (Ok 0)))
 
 (provide :main main)
 ```
@@ -1243,7 +2251,8 @@ require ::=
 ==== Module & Library System
 
 Module is a way to organize code into separate namespaces, and to control the visibility and accessibility of code.
-Each top-level is able to define multiple modules, but only one of them can be provided for other modules to require.
+A single file may define multiple local modules that can reference one another.
+However, each file exposes at most one module to the outside world: only one `provide` form is permitted per file, and it determines which module (or value) is visible to other files.
 
 A file that provide a module is called a library, and a file that require only modules is called the client.
 There are three type of client:
@@ -1285,10 +2294,167 @@ Each sub-from can be combined together to import a module in a flexible way.
 
 Export form is a sub-form of module definition, which is used to declare which objects are exported by the module.
 
-== ...
+== Compilation Model 编译模型
 
-...
+Lilies is designed to be implemented as both an interpreter and a native compiler.
+This chapter describes the compilation pipeline and how the interpreter and compiler share infrastructure.
 
-...
+=== Compilation Pipeline
+
+The Lilies compilation pipeline consists of the following phases:
+
+1. **Lexing**: Source text is tokenized into a stream of tokens (identifiers, literals, delimiters, keywords).
+2. **Parsing**: Tokens are parsed into syntax objects forming an abstract syntax tree (AST).
+   The parser produces syntax objects with source location annotations.
+3. **Macro Expansion**: Macros are expanded recursively. The expander walks the AST, expanding
+   macro forms and inserting the resulting syntax in place. Expansion continues until no macro forms remain.
+4. **Name Resolution**: All symbols are resolved to their definitions. The resolver builds a scope graph
+   and links each reference to its binding site. Unresolved references produce compile-time errors.
+5. **Type Checking & Inference**: The type checker assigns types to every expression, verifies
+   type consistency, and infers types where annotations are omitted.
+6. **Ownership Analysis**: The borrow checker verifies ownership rules: no use-after-move,
+   no dangling borrows, exclusive mutable references.
+7. **Optimization**: Middle-end optimizations: inlining, constant folding, dead code elimination,
+   closure conversion, and monomorphization of generic code.
+8. **Code Generation**: The IR is lowered to target code — either bytecode for the interpreter
+   or native code (via LLVM / Cranelift) for the compiler.
+9. **Linking**: Object files and libraries are linked into the final executable.
+
+=== Interpreter Mode
+
+In interpreter mode, after type checking, the AST (or a high-level intermediate representation)
+is evaluated directly by a tree-walking interpreter. The interpreter:
+- Evaluates expressions in the current environment.
+- Uses the same type-checked AST as the compiler, ensuring consistent semantics.
+- Supports REPL interaction with incremental compilation of each input form.
+- Provides enhanced debugging: breakpoints, single-stepping, stack inspection.
+
+=== Compiler Mode
+
+In compiler mode, the pipeline proceeds through code generation to produce native executables.
+The compiler:
+- Translates the typed, ownership-checked IR to native code.
+- Performs target-specific optimizations (register allocation, instruction selection).
+- Supports multiple backends: LLVM for optimizing compilation, Cranelift for fast compilation.
+- Produces standalone executables or shared libraries.
+
+=== REPL
+
+The Read-Eval-Print Loop provides interactive development:
+- Each input form is lexed, parsed, expanded, resolved, type-checked, and evaluated incrementally.
+- Definitions persist in the REPL environment across inputs.
+- The REPL provides command history, tab completion, and inline documentation via the `doc` function.
+- In REPL mode, the interpreter is used by default; individual forms can be JIT-compiled with a directive.
+
+=== Foreign Function Interface
+
+The FFI allows Lilies code to call functions written in other languages (primarily C) and vice versa.
+```lisp
+(ffi:declare fopen
+  (function (String String) #:returns (Ptr None)))
+```
+
+FFI declarations are checked at compile time; the linker verifies symbol availability.
+Calling conventions, struct layouts, and type mappings are specified through FFI annotations.
+Unsafe FFI calls must be enclosed in `unsafe` blocks.
+
+=== Linkage & Distribution
+
+Lilies modules can be distributed as:
+- **Source libraries**: distributed as source files, compiled by the consumer.
+- **Compiled libraries**: distributed as pre-compiled IR or object files with interface files.
+- **Packages**: collections of modules with versioned dependencies, distributed through the package registry.
+
+The compiler supports building static and dynamic libraries, as well as standalone executables.
 
 == Code Generation
+
+Code generation is the final phase of compilation, translating the optimized intermediate representation
+into executable target code. Lilies supports multiple backends for different use cases.
+
+=== Intermediate Representation
+
+The Lilies IR is a typed, SSA-based (Static Single Assignment) intermediate language that preserves:
+- Full type information, including generic type parameters after monomorphization.
+- Ownership and borrowing information for memory management code generation.
+- Source location mappings for debug information.
+- Effect annotations for handler code generation.
+
+The IR is lowered through a series of passes:
+1. **High-level IR**: Preserves algebraic data types, closures, and pattern matching.
+2. **Mid-level IR**: Closures are converted to closure objects; pattern matching is lowered to decision trees.
+3. **Low-level IR**: Types are converted to machine representations; ownership is lowered to allocation/deallocation.
+
+=== Backend Targets
+
+Lilies supports multiple code generation backends:
+
+==== LLVM Backend
+
+The primary backend for production builds. Generates optimized native code for all LLVM-supported targets.
+Features:
+- Full link-time optimization (LTO).
+- Profile-guided optimization (PGO) support.
+- Sanitizer integration (address, memory, thread, undefined behavior).
+- Debug info generation (DWARF, PDB).
+
+==== Cranelift Backend
+
+A fast, simple code generator for debug/development builds.
+Prioritizes compilation speed over runtime performance.
+Used by default in the REPL's JIT compiler.
+
+==== Bytecode Backend
+
+Generates portable bytecode for the Lilies VM.
+The bytecode is interpreted by the Lilies runtime, providing:
+- Platform-independent distribution.
+- Smaller binary sizes.
+- Runtime dynamic loading and hot-swapping of code.
+
+=== Code Generation Phases
+
+1. **Instruction Selection**: IR operations are mapped to target machine instructions.
+2. **Register Allocation**: Virtual registers are assigned to physical registers or stack slots.
+3. **Instruction Scheduling**: Instructions are reordered to exploit pipeline parallelism.
+4. **Prologue/Epilogue Generation**: Stack frame setup and teardown code is emitted.
+5. **Object File Emission**: The final machine code is written in the target object format (ELF, Mach-O, PE).
+
+=== Garbage Collection Integration
+
+When the GC is enabled, the code generator:
+- Emits stack maps at GC-safe points, recording which registers and stack slots contain GC-managed references.
+- Inserts write barriers for stores into GC-managed objects (to track inter-generational pointers).
+- Aligns allocations with GC requirements.
+- Generates GC-trigger checks before heap allocations.
+
+=== Linkage
+
+The Lilies linker combines compiled modules, resolves cross-module references,
+and produces the final executable or library. The linker handles:
+- Module dependency resolution and version checking.
+- Vtable and trait implementation table construction.
+- Initialization code generation for module-level definitions and top-level expressions.
+- Entry point wrapping (calling the main function with command-line arguments).
+
+=== Compile-Time Evaluation
+
+Expressions that can be evaluated at compile time are computed during compilation
+rather than at runtime. This includes:
+- Constant expressions (literals, constant-folding).
+- Macro expansions and symbol generation.
+- Type-level computations (type families, trait resolution).
+- Compile-time function calls (functions annotated with `#:compile-time`).
+
+Compile-time evaluation uses the interpreter, providing identical semantics to runtime evaluation
+for all pure expressions.
+
+=== Debug Information
+
+Debug information maps generated code back to source locations, enabling:
+- Source-level debugging (breakpoints, stepping).
+- Stack traces with source file names and line numbers.
+- Variable inspection (names, types, values).
+
+Debug info is generated in the platform-appropriate format (DWARF on Unix, CodeView/PDB on Windows)
+and can be stripped for release builds.
