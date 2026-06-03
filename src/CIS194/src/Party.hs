@@ -17,3 +17,14 @@ moreFun g1@(GL _ f1) g2@(GL _ f2)
   | otherwise = g1
 
 -- Exercise II
+treeFold :: (a -> [b] -> b) -> Tree a -> b
+treeFold f (Node val forest) = f val (map (treeFold f) forest)
+
+-- Exercise III
+nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
+nextLevel e l = let r = foldr (<>) mempty l in
+  (glCons e (snd r), fst r)
+
+-- Exercise IV
+maxFun :: Tree Employee -> GuestList
+maxFun l = maximum $ treeFold nextLevel l
