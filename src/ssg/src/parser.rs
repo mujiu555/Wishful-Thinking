@@ -674,3 +674,22 @@ mod tests {
         assert!(abs.contains("abstract"));
     }
 }
+
+    #[test]
+    fn test_meta_not_at_beginning() {
+        let src = r##"
+= Heading First
+
+Some introductory text.
+
+#meta(
+  title: "After Content",
+  author: ("Bob",),
+  date: datetime(year: 2025, month: 6, day: 1),
+  id: "after-content",
+)
+"##;
+        let fields = parse_meta_call(src).expect("should find meta even mid-file");
+        assert_eq!(fields.get("title").unwrap(), "After Content");
+        assert_eq!(fields.get("id").unwrap(), "after-content");
+    }
