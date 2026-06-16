@@ -518,7 +518,7 @@ Some of them are built-in primitive types with generic type parameters, such as 
 Others are constructed through type definition syntax, such as structures, unions, and recursive types.
 
 Use `type` to define new recursive types by creating type generators that can produce types based on type parameters.
-The type described by `type` will not create a new type indeed, rather a new type checker that can check whether a value is of the described type or not will be implemented.
+The type described by `type` does not create a new type; rather, it implements a type checker that can verify whether a value matches the described type.
 
 ==== List Types 表类型
 
@@ -643,6 +643,826 @@ When defining variables, functions, classes, and so on, if the type is not expli
 
 ===== Type Family 类型族
 
+==== Typing Rules 类型规则
+
+This section defines the formal typing rules of Lilies, modeled after the style used in the Kotlin language specification.
+Typing rules are presented as inference rules of the form:
+
+#figure(
+  ```
+    Premise₁    ...    Premiseₙ
+  ────────────────────────────────  (Rule-Name)
+              Conclusion
+  ```
+)
+
+The notation is read as: if all premises above the line hold, then the conclusion below the line is derivable.
+Each rule has a name (in parentheses on the right) for reference in the text.
+
+===== Notation 记号
+
+In the typing rules that follow:
+
+- `Γ` (Gamma) denotes a typing context — a finite map from variable names to type schemes.
+- `Δ` (Delta) denotes a trait environment — the set of trait implementations in scope.
+- `Σ` (Sigma) denotes the structure definition environment — the set of class, record, enum, and type-family definitions in scope.
+- `Γ(x)` denotes the type scheme assigned to variable `x` in context `Γ`.
+- `Γ, x : τ` denotes the context `Γ` extended with variable `x` bound to type `τ`.
+- `Γ \ x` denotes the context `Γ` with the binding for `x` removed.
+- `[α ↦ τ]` denotes the capture-avoiding substitution of type variable `α` with type `τ`.
+- `ftv(τ)` denotes the set of free type variables in type `τ`.
+- `dom(Γ)` denotes the set of variable names bound in context `Γ`.
+
+===== Judgment Forms 判断形式
+
+The typing rules use the following judgment forms:
+
+- `Γ ⊢ e : τ` — Under context `Γ`, expression `e` has type `τ`.
+- `Γ ⊢ e : τ ! E` — Under context `Γ`, expression `e` has type `τ` and may perform effects `E`.
+- `Γ ⊢ p : τ ⇒ Γ′` — Under context `Γ`, pattern `p` matches type `τ` and produces bindings `Γ′`.
+- `Γ ⊢ τ` — Type `τ` is well-formed under context `Γ`.
+- `Γ ⊢ τ : κ` — Type `τ` has kind `κ` under context `Γ`.
+- `Δ ⊢ τ implements T` — Under trait environment `Δ`, type `τ` implements trait `T`.
+- `Γ ⊢ τ₁ ≡ τ₂` — Types `τ₁` and `τ₂` are equivalent (definitionally equal).
+- `Γ ⊢ τ₁ ≤ τ₂` — Type `τ₁` is a subtype of, or coercible to, type `τ₂`.
+- `Γ ⊢ σ` — Type scheme `σ` is well-formed under context `Γ`.
+
+===== Well-Formed Types 合式类型
+
+A type `τ` is well-formed under context `Γ` if all its free type variables are bound in `Γ` and all its constituent type constructors are in scope.
+
+```
+    x ∈ dom(Γ)
+  ─────────────  (WF-Var)
+    Γ ⊢ x
+
+    Γ ⊢ τ₁     Γ ⊢ τ₂
+  ─────────────────────  (WF-Pair)
+    Γ ⊢ (Pair τ₁ τ₂)
+
+    Γ ⊢ τ    n is a nat-lit   n ≥ 0
+  ─────────────────────────────────  (WF-Vector)
+        Γ ⊢ (Vector τ n)
+
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ   (n ≥ 0)
+  ───────────────────────────────────  (WF-Tuple)
+      Γ ⊢ (Tuple τ₁ ... τₙ)
+
+     Γ, α ⊢ τ
+  ───────────────  (WF-Forall)
+    Γ ⊢ (∀ α. τ)
+
+    Γ ⊢ τ₁    Γ ⊢ τ₂
+  ────────────────────  (WF-Fun-Pos)
+    Γ ⊢ (-> (τ₁ ... τₙ) τ_ret)
+
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ    Γ ⊢ τ_ret
+  ─────────────────────────────────────────  (WF-Fun-Named)
+    Γ ⊢ (-> {x₁ : τ₁, ..., xₙ : τₙ} τ_ret)
+
+    Δ ⊢ τ implements T
+  ──────────────────────  (WF-Dyn)
+    Γ ⊢ (dyn T)
+
+    Γ ⊢ τ    Σ ⊢ C is a class with fields (f₁ : τ₁, ..., fₙ : τₙ)
+  ──────────────────────────────────────────────────────────────  (WF-Class)
+    Γ ⊢ C
+
+    Σ(τ_generic) = type params α̅
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ
+  ────────────────────────────  (WF-Generic-Inst)
+    Γ ⊢ (τ_generic τ₁ ... τₙ)
+```
+
+===== Expression Typing 表达式类型推导
+
+====== Literals 字面量
+
+```
+  ──────────────────  (T-Integer)
+    Γ ⊢ n : Integer
+
+    n is a float-lit
+  ────────────────────  (T-Real)
+    Γ ⊢ n : Real
+
+  ────────────────────  (T-Bool-True)
+    Γ ⊢ #True : Boolean
+
+  ────────────────────  (T-Bool-False)
+    Γ ⊢ #False : Boolean
+
+    c is a char-lit
+  ────────────────────  (T-Character)
+    Γ ⊢ #\c : Character
+
+    s is a string-lit
+  ────────────────────  (T-String)
+    Γ ⊢ s : String
+
+  ────────────────  (T-Unit)
+    Γ ⊢ Unit : Unit
+
+    Γ expects a numeric type Num
+  ──────────────────────────────  (T-Zero)
+    Γ ⊢ Zero : Num
+```
+
+====== Variable Reference 变量引用
+
+```
+    Γ(x) = τ
+  ────────────  (T-Var)
+    Γ ⊢ x : τ
+
+    Γ(x) = σ     σ = ∀α̅. τ     β̅ fresh
+  ───────────────────────────────────────  (T-Var-Inst)
+    Γ ⊢ x : [α̅ ↦ β̅] τ
+```
+
+If a variable is bound to a polymorphic type scheme `σ`, the bound type variables `α̅` are instantiated with fresh type variables `β̅` at each reference site (let-polymorphism).
+
+====== Lambda Abstraction 函数抽象
+
+```
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ e_body : τ_ret
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ    Γ ⊢ τ_ret
+  ────────────────────────────────────────────  (T-Lambda-Pos)
+    Γ ⊢ (lambda (x₁ : τ₁ ... xₙ : τₙ) e_body)
+        : (-> (τ₁ ... τₙ) τ_ret)
+
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ e_body : τ_ret
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ    Γ ⊢ τ_ret
+  ────────────────────────────────────────────  (T-Lambda-Named)
+    Γ ⊢ (lambda {x₁ : τ₁, ..., xₙ : τₙ} e_body)
+        : (-> {x₁ : τ₁, ..., xₙ : τₙ} τ_ret)
+```
+
+If `#:returns` is declared, the body's inferred type must be equivalent to the declared return type:
+
+```
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ e_body : τ_body
+    Γ ⊢ τ_body ≡ τ_declared
+  ──────────────────────────────────────────────────  (T-Lambda-Ret)
+    Γ ⊢ (lambda (x₁ : τ₁ ...) #:returns τ_declared e_body)
+        : (-> (τ₁ ...) τ_declared)
+```
+
+A lambda with an empty parameter list and no return annotation has the type `(-> () Unit)`:
+
+```
+    Γ ⊢ e_body : τ_ret
+  ──────────────────────────────────  (T-Lambda-Nullary)
+    Γ ⊢ (lambda () e_body) : (-> () τ_ret)
+```
+
+A lambda with a rest parameter collects remaining arguments:
+
+```
+    Γ, x₁ : τ₁, ..., xₙ : τₙ, rest : (List τ_rest) ⊢ e_body : τ_ret
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ    Γ ⊢ τ_rest    Γ ⊢ τ_ret
+  ─────────────────────────────────────────────────────────────  (T-Lambda-Rest)
+    Γ ⊢ (lambda (x₁ : τ₁ ... xₙ : τₙ . rest) e_body)
+        : (-> (τ₁ ... τₙ ... τ_rest) τ_ret)
+```
+
+The `#:move` annotation on a `lambda` affects the ownership analysis (borrow checker) and does not change the type.
+
+====== Function Application 函数应用
+
+```
+    Γ ⊢ e_f : (-> (τ₁ ... τₙ) τ_ret)
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ : τₙ
+  ───────────────────────────────────────  (T-App-Pos)
+    Γ ⊢ (e_f e₁ ... eₙ) : τ_ret
+
+    Γ ⊢ e_f : (-> {x₁ : τ₁, ..., xₙ : τₙ} τ_ret)
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ : τₙ
+  ──────────────────────────────────────────────  (T-App-Named)
+    Γ ⊢ {e_f x₁ : e₁, ..., xₙ : eₙ} : τ_ret
+```
+
+Call-site modifiers `(move e)` and `(clone e)` affect only the ownership analysis, not the type:
+
+```
+    Γ ⊢ e : τ          Γ ⊢ e : τ
+  ────────────        ────────────
+  (move e) : τ        (clone e) : τ
+```
+
+`#:naming` (lazy evaluation) wraps the argument type in a thunk:
+
+```
+    Γ, param : (-> () τ) ⊢ e_body : τ_ret
+  ──────────────────────────────────────────  (T-Lambda-Naming)
+    Γ ⊢ (lambda (#:naming param) e_body)
+        : (-> (τ) τ_ret)
+    where the call site wraps the argument in an implicit thunk
+```
+
+====== Definition 定义
+
+```
+    Γ ⊢ e_val : τ     x ∉ dom(Γ)
+  ────────────────────────────────  (T-Define)
+    Γ ⊢ (define x e_val) : Unit
+    and Γ, x : τ for subsequent expressions
+
+    Γ ⊢ e_val : τ     Γ ⊢ τ_declared
+    x ∉ dom(Γ)        Γ ⊢ τ ≡ τ_declared
+  ─────────────────────────────────────────  (T-Define-Typed)
+    Γ ⊢ (define (x τ_declared) e_val) : Unit
+    and Γ, x : τ_declared for subsequent expressions
+```
+
+At the top level and within `lambda` bodies, `define` is ordered: each binding is visible to subsequent expressions.
+Within a module body, all `define` forms are mutually visible regardless of textual order (define does not carry sequential side effects in module context), but the typing rule `Γ, x : τ` still applies to the logical environment after the definition.
+
+====== Conditional 条件
+
+```
+    Γ ⊢ e_cond : Boolean
+    Γ ⊢ e_then : τ     Γ ⊢ e_else : τ
+  ─────────────────────────────────────  (T-If)
+    Γ ⊢ (if e_cond e_then e_else) : τ
+
+    For each i = 1...n:   Γ ⊢ e_condᵢ : Boolean    Γ ⊢ e_bodyᵢ : τ
+    Γ ⊢ e_else : τ
+  ───────────────────────────────────────────────────────────────  (T-Cond)
+    Γ ⊢ (cond (e_cond₁ e_body₁) ... (e_condₙ e_bodyₙ) (else e_else)) : τ
+
+    Γ ⊢ e_scrutinee : τ_key
+    For each i = 1...n:   Γ ⊢ e_keyᵢ : τ_key    Γ ⊢ e_bodyᵢ : τ
+    Γ ⊢ e_else : τ
+  ───────────────────────────────────────────────────────────────  (T-Case)
+    Γ ⊢ (case e_scrutinee ((e_key₁) e_body₁) ... ((e_keyₙ) e_bodyₙ) (else e_else)) : τ
+```
+
+====== Let Binding Family
+
+```
+    Γ ⊢ e₁ : τ₁    Γ, x₁ : τ₁ ⊢ e_body : τ
+  ───────────────────────────────────────────  (T-Let)
+    Γ ⊢ (let ((x₁ e₁)) e_body) : τ
+
+    Γ ⊢ e₁ : τ₁    Γ, x₁ : τ₁ ⊢ e₂ : τ₂    Γ, x₁ : τ₁, x₂ : τ₂ ⊢ e_body : τ
+  ────────────────────────────────────────────────────────────────────────────  (T-Let-Fwd)
+    Γ ⊢ (let:fwd ((x₁ e₁) (x₂ e₂)) e_body) : τ
+
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ e₁ : τ₁
+    ...
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ eₙ : τₙ
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ e_body : τ
+  ──────────────────────────────────────────────────  (T-Let-Rec)
+    Γ ⊢ (let:rec ((x₁ e₁) ... (xₙ eₙ)) e_body) : τ
+
+    Γ, x₁ : τ₁ ⊢ e₁ : τ₁
+    Γ, x₁ : τ₁, x₂ : τ₂ ⊢ e₂ : τ₂
+    ...
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ eₙ : τₙ
+    Γ, x₁ : τ₁, ..., xₙ : τₙ ⊢ e_body : τ
+  ──────────────────────────────────────────────────  (T-Let-Seq-Rec)
+    Γ ⊢ (let:seq:rec ((x₁ e₁) ... (xₙ eₙ)) e_body) : τ
+```
+
+In `let:fwd` and `let:seq:rec`, each binding can refer to previous bindings.
+In `let:rec` and `let:seq:rec`, bindings may be recursive (refer to themselves or bindings defined later).
+
+====== Sequence 序列
+
+```
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ₋₁ : τₙ₋₁    Γ ⊢ eₙ : τ
+  ───────────────────────────────────────────────────────  (T-Seq)
+    Γ ⊢ (sequence e₁ ... eₙ) : τ
+```
+
+The type of a sequence is the type of its last expression. In syntactic contexts such as a `lambda` body, multiple expressions are implicitly wrapped as a sequence — no explicit `sequence` keyword is needed.
+
+Another case of sequencing is the top-level of a file, where expressions are evaluated in order:
+
+```
+    For top-level expressions e₁ ... eₙ:
+      ∅ ⊢ e₁ : τ₁,   Γ₁ ⊢ e₂ : τ₂,   ...,   Γₙ₋₁ ⊢ eₙ : τₙ
+  ───────────────────────────────────────────────────────────  (T-Top-Level)
+    where Γ₁ = (x₁ : τ₁) for each (define x₁ e₁)
+```
+
+====== Quotation 引用
+
+```
+  ────────────────  (T-Quote-Symbol)
+    Γ ⊢ 's : Symbol
+
+    e is a self-evaluating datum
+  ───────────────────────────────  (T-Quote-Datum)
+    Γ ⊢ 'e : (QuoteType e)
+```
+
+`(QuoteType e)` yields the type of the quoted datum as a syntax-object type at compile time.
+
+====== Pair Construction and Access
+
+```
+    Γ ⊢ e_car : τ₁    Γ ⊢ e_cdr : τ₂
+  ────────────────────────────────────  (T-Cons)
+    Γ ⊢ (cons e_car e_cdr) : (Pair τ₁ τ₂)
+
+    Γ ⊢ e : (Pair τ₁ τ₂)
+  ───────────────────────  (T-Car)
+    Γ ⊢ (car e) : τ₁
+
+    Γ ⊢ e : (Pair τ₁ τ₂)
+  ───────────────────────  (T-Cdr)
+    Γ ⊢ (cdr e) : τ₂
+```
+
+The empty pair `(None . None)` has type `Pair::Empty`.
+For list construction, `(cons e₁ (cons e₂ ... (cons eₙ '())))` has type `(List τ)` when each `eᵢ : τ`.
+
+====== Vector Construction and Access
+
+```
+    Γ ⊢ e₁ : τ    ...    Γ ⊢ eₙ : τ
+  ─────────────────────────────────────  (T-Vector)
+    Γ ⊢ [e₁ ... eₙ] : (Vector τ n)
+    where n is the compile-time-known length
+
+    Γ ⊢ e_vec : (Vector τ n)    Γ ⊢ e_idx : (Int 64)
+  ───────────────────────────────────────────────────  (T-Vector-Index)
+    Γ ⊢ (index e_vec e_idx) : τ
+```
+
+When the index is a compile-time constant, the compiler can partially evaluate the access and emit a bounds check or omit it for in-bounds indices that are statically proven safe.
+
+====== Tuple Construction and Access
+
+```
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ : τₙ
+  ──────────────────────────────────────  (T-Tuple)
+    Γ ⊢ <e₁ ... eₙ> : (Tuple τ₁ ... τₙ)
+
+    Γ ⊢ e_tup : (Tuple τ₁ ... τᵢ ... τₙ)    i is a compile-time constant
+  ────────────────────────────────────────────────────────────────  (T-Tuple-Index)
+    Γ ⊢ (index e_tup i) : τᵢ
+    where 0 ≤ i < n
+```
+
+====== Assignment 赋值
+
+```
+    Γ ⊢ e_loc : τ     Γ ⊢ e_val : τ
+  ───────────────────────────────────  (T-Set!)
+    Γ ⊢ (set! e_loc e_val) : Unit
+```
+
+The location `e_loc` must be mutable — the binding must have been declared with `#:mut` (for variables) or the field must have been declared with `variable` (for class fields).
+An assignment to an immutable binding or a `constant` field is rejected by the type checker.
+
+====== Class Construction 类构造
+
+```
+    Σ(ClassName) = (class (define f₁ (constant τ₁)) ... (define fₙ (constant τₙ)))
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ : τₙ
+  ─────────────────────────────────────────  (T-New)
+    Γ ⊢ (ClassName e₁ ... eₙ) : ClassName
+```
+
+The order of constructor arguments matches the order of field definitions in the class body. All fields must be provided; there is no partial initialization.
+
+For a record class, the typing rule is identical — record classes are syntactic sugar over classes, and the constructor is auto-generated with the same field order:
+
+```
+    Σ(R) is a record with fields (f₁ : τ₁, ..., fₙ : τₙ)
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ : τₙ
+  ─────────────────────────────────────────  (T-Record-New)
+    Γ ⊢ (R e₁ ... eₙ) : R
+```
+
+====== Field and Property Access
+
+```
+    Γ ⊢ e_obj : ClassName
+    ClassName has field f : τ
+  ───────────────────────────────  (T-Field-Ref)
+    Γ ⊢ (ref e_obj 'f) : τ
+
+    Γ ⊢ e_obj : ClassName
+    ClassName has field f : τ
+  ───────────────────────────────  (T-Field-Direct)
+    Γ ⊢ (field e_obj 'f) : τ
+```
+
+`ref` dispatches through getter/setter methods when defined; `field` bypasses accessors and accesses the storage slot directly.
+Both are subject to accessibility checks (`:public`, `:internal`, `:class-internal`, `:private`).
+
+Dot-notation sugar:
+
+```
+    Γ ⊢ e_obj : ClassName    ClassName has field f : τ
+  ──────────────────────────────────────────────────────  (T-Dot)
+    Γ ⊢ e_obj.f : τ
+    (desugared to (ref e_obj 'f))
+```
+
+====== Method Access 方法访问
+
+```
+    Γ ⊢ e_obj : τ_obj
+    τ_obj has method m : (-> (τ_self τ₁ ... τₙ) τ_ret) in its method table
+  ──────────────────────────────────────────────────────────────────  (T-Method-Call)
+    Γ ⊢ (@{m e_obj} e₁ ... eₙ) : τ_ret
+
+    Γ ⊢ e_obj : τ_obj
+    τ_obj has method m : (-> (τ_self τ₁ ... τₙ) τ_ret) via trait T
+  ──────────────────────────────────────────────────────────────────  (T-Trait-Method-Call)
+    Γ ⊢ (@{m e_obj} e₁ ... eₙ) : τ_ret
+    (dispatch through T's vtable when e_obj : (dyn T))
+```
+
+====== Trait Object (Dynamic Dispatch)
+
+```
+    Δ ⊢ τ implements T
+  ──────────────────────────  (T-Coerce-Dyn)
+    Γ ⊢ (e :> (dyn T)) : (dyn T)    when Γ ⊢ e : τ
+
+    Γ ⊢ e : (dyn T)    T has method m : (-> (Self τ₁ ... τₙ) τ_ret)
+  ─────────────────────────────────────────────────────────────────  (T-Dyn-Call)
+    Γ ⊢ (@{m e} e₁ ... eₙ) : τ_ret
+```
+
+The coercion `e :> (dyn T)` is explicit — there is no implicit upcast from a concrete type to a trait object.
+
+====== Pattern Matching 模式匹配
+
+```
+    Γ ⊢ e_scrutinee : τ_scrut
+    For each clause i = 1...n:
+      Γ ⊢ pᵢ : τ_scrut ⇒ Γᵢ
+      Γ, Γᵢ ⊢ e_bodyᵢ : τ
+  ───────────────────────────────────────────────  (T-Match)
+    Γ ⊢ (match e_scrutinee (p₁ e_body₁) ... (pₙ e_bodyₙ)) : τ
+```
+
+The compiler verifies exhaustiveness: for sealed types, all constructors must be covered (either explicitly or via a wildcard). For non-sealed types, a wildcard or variable pattern must be present.
+
+```
+    Γ ⊢ e_scrutinee : τ_scrut
+    Γ ⊢ p : τ_scrut ⇒ Γ₁
+    Γ, Γ₁ ⊢ e_then : τ_res     Γ ⊢ e_else : τ_res
+  ─────────────────────────────────────────────────  (T-Try)
+    Γ ⊢ (try p e_scrutinee e_then e_else) : τ_res
+```
+
+====== Loop Expressions 循环表达式
+
+```
+    Γ ⊢ e_body : Unit
+  ────────────────────  (T-Loop)
+    Γ ⊢ (loop e_body) : Empty
+
+    Γ ⊢ e_cond : Boolean    Γ ⊢ e_body : Unit
+  ────────────────────────────────────────────  (T-While)
+    Γ ⊢ (while e_cond e_body) : Unit
+
+    Γ, name : (-> (τ₁ ... τₙ) τ_loop) ⊢ e_body : τ_loop
+  ──────────────────────────────────────────────────────  (T-For)
+    Γ ⊢ (for name ((x₁ τ₁) ... (xₙ τₙ)) e_body) : τ_loop
+
+    Γ ⊢ e_coll : (Collection τ_elem)    Γ, x : τ_elem ⊢ e_body : Unit
+  ──────────────────────────────────────────────────────────────────  (T-Foreach)
+    Γ ⊢ (foreach x e_coll e_body) : Unit
+```
+
+`loop` has type `Empty` because an infinite loop (with no `:break`) never completes normally.
+`for` is syntactic sugar for a named-let with tail-call optimization.
+
+====== Exception Handling 异常处理
+
+```
+    Γ ⊢ e_body : τ ! {Exception}
+    For each handler i = 1...n:
+      ExcTypeᵢ implements Exception
+      Γ, eᵢ : ExcTypeᵢ ⊢ e_handlerᵢ : τ
+  ─────────────────────────────────────────────  (T-Guard)
+    Γ ⊢ (guard ((ExcType₁ e₁) e_handler₁) ... e_body) : τ
+
+    Γ ⊢ e_exc : ExcType    ExcType implements Exception
+  ──────────────────────────────────────────────────────  (T-Raise)
+    Γ ⊢ (raise e_exc) : Empty ! {Exception}
+```
+
+`raise` has return type `Empty` (it never returns normally), allowing it to be used in any typed context.
+
+```
+    Γ ⊢ e_body : τ    Γ ⊢ e_cleanup : Unit
+  ──────────────────────────────────────────  (T-Unwind-Protect)
+    Γ ⊢ (unwind-protect e_body e_cleanup) : τ
+    (e_cleanup runs regardless of how e_body exits)
+```
+
+====== Continuation Expressions 续体表达式
+
+```
+    Γ, k : (Continuation τ) ⊢ e_body : τ
+  ─────────────────────────────────────────  (T-CallCC)
+    Γ ⊢ (call/cc (lambda (k) e_body)) : τ
+
+    Γ ⊢ e_body : τ
+  ───────────────────────────  (T-Reset)
+    Γ ⊢ (reset e_body) : τ
+
+    Γ, k : (DelimitedContinuation τ_shift τ_reset) ⊢ e_body : τ_reset
+  ──────────────────────────────────────────────────────────────────  (T-Shift)
+    Γ ⊢ (shift k e_body) : τ_reset
+    where τ_reset is the type of the innermost enclosing reset
+```
+
+====== Macro Expansion 宏展开
+
+Macros operate on syntax objects at compile time.
+The type checker verifies the result of macro expansion, not the macro invocation directly:
+
+```
+    macro M expands (e₁ ... eₙ) to e_expanded
+    Γ ⊢ e_expanded : τ
+  ────────────────────────────  (T-Macro)
+    Γ ⊢ (macro! M e₁ ... eₙ) : τ
+```
+
+If the expanded expression is ill-typed, the compiler reports the error at the macro call site, including the macro expansion trace.
+
+====== Compile-Time Expressions 编译时表达式
+
+Expressions annotated with `#:compile-time` are evaluated during compilation and must not depend on runtime values:
+
+```
+    Γ ⊢ e : τ    e is pure (no runtime effects)
+  ──────────────────────────────────────────────  (T-Comptime)
+    Γ ⊢ (#:compile-time e) : τ
+    (e is evaluated at compile time; its value replaces the expression)
+```
+
+===== Pattern Typing 模式的类型推导
+
+Patterns are typed against a scrutinee type and produce a typing context of variable bindings.
+
+```
+  ────────────────────  (P-Wildcard)
+    Γ ⊢ _ : τ ⇒ ∅
+
+    x ∉ dom(Γ)
+  ────────────────────  (P-Var)
+    Γ ⊢ x : τ ⇒ (x : τ)
+
+    lit has type τ_lit    Γ ⊢ τ_lit ≡ τ
+  ───────────────────────────────────────  (P-Lit)
+    Γ ⊢ lit : τ ⇒ ∅
+
+    Γ ⊢ p₁ : τ₁ ⇒ Γ₁    Γ ⊢ p₂ : τ₂ ⇒ Γ₂
+    dom(Γ₁) ∩ dom(Γ₂) = ∅
+  ───────────────────────────────────────────  (P-Cons)
+    Γ ⊢ (cons p₁ p₂) : (Pair τ₁ τ₂) ⇒ Γ₁ ∪ Γ₂
+
+    For each i = 1...n:
+      Γ ⊢ pᵢ : τᵢ ⇒ Γᵢ
+    dom(Γᵢ) pairwise disjoint
+  ───────────────────────────────────────────  (P-Tuple)
+    Γ ⊢ <p₁ ... pₙ> : (Tuple τ₁ ... τₙ) ⇒ Γ₁ ∪ ... ∪ Γₙ
+
+    For each i = 1...n:
+      Γ ⊢ pᵢ : τ ⇒ Γᵢ
+    dom(Γᵢ) pairwise disjoint
+  ──────────────────────────────────────  (P-Vector)
+    Γ ⊢ [p₁ ... pₙ] : (Vector τ n) ⇒ Γ₁ ∪ ... ∪ Γₙ
+
+    Γ ⊢ p : τ_declared ⇒ Γ₁    Γ ⊢ τ ≡ τ_declared
+  ─────────────────────────────────────────────────  (P-Typed)
+    Γ ⊢ (p : τ_declared) : τ_declared ⇒ Γ₁
+
+    Γ ⊢ p : τ ⇒ Γ₁    Γ, Γ₁ ⊢ e_guard : Boolean
+  ────────────────────────────────────────────────  (P-Guard)
+    Γ ⊢ (p #:when e_guard) : τ ⇒ Γ₁
+
+    Γ ⊢ p₁ : τ ⇒ Γ₁    Γ ⊢ p₂ : τ ⇒ Γ₂
+    dom(Γ₁) = dom(Γ₂)    (same set of bound variables)
+  ─────────────────────────────────────────  (P-Or)
+    Γ ⊢ (or p₁ p₂) : τ ⇒ Γ₁
+    (Γ₁ and Γ₂ must agree on types for each variable)
+
+    Γ ⊢ p : τ ⇒ Γ₁
+  ────────────────────────────  (P-As)
+    Γ ⊢ (p #:as x) : τ ⇒ Γ₁, x : τ
+```
+
+===== Subtyping and Coercion 子类型与强制转换
+
+Lilies has a Hindley-Milner type system without general subtyping, with one exception:
+
+```
+  ──────────────  (S-Empty)
+    Empty ≤ τ    for any type τ
+
+  ───────────  (S-Refl)
+    τ ≤ τ
+```
+
+The `Empty` type (bottom type) represents computations that never produce a value (infinite loops, panics, `raise`, `unreachable`). It can be used in any context expecting any type.
+
+No other implicit subtyping relation exists. In particular:
+- There is no implicit upcast from a concrete type to a trait — the coercion `e :> (dyn T)` must be explicit.
+- There is no numeric widening (`Int 32` to `Int 64`, `Int` to `Integer`, etc.) — these require explicit conversion.
+- There is no subtyping between classes, records, or sealed class variants.
+
+====== Explicit Coercion
+
+The type system supports the following explicit coercions:
+
+```
+    Γ ⊢ e : τ     Δ ⊢ τ implements T
+  ───────────────────────────────────  (T-Coerce-Dyn)
+    Γ ⊢ (e :> (dyn T)) : (dyn T)
+
+    Γ ⊢ e : τ₁    Γ ⊢ τ₁ ≡ τ₂
+  ────────────────────────────  (T-Coerce-Eq)
+    Γ ⊢ (e :> τ₂) : τ₂
+```
+
+===== Trait Resolution 特征决议
+
+Trait resolution determines whether a type implements a given trait.
+
+```
+    (implement τ (T)) is declared in scope
+  ────────────────────────────────────────  (TR-Direct)
+    Δ ⊢ τ implements T
+
+    (implement τ (T₁ ... Tₙ)) is declared in scope
+  ────────────────────────────────────────────────  (TR-Multiple)
+    Δ ⊢ τ implements Tᵢ    for each i
+
+    Δ ⊢ τ implements T
+    T #:requires (U₁ ... Uₙ)
+  ───────────────────────────────  (TR-Requires)
+    Δ ⊢ τ implements Uᵢ    for each i
+
+    τ has type parameters α̅
+    (implement (C α̅) (T)) is declared    [α̅ ↦ τ̅]
+  ────────────────────────────────────────────────  (TR-Generic)
+    Δ ⊢ (C τ̅) implements T
+
+    Δ ⊢ τ implements Container
+    Container has associated type Element := τ_elt
+  ──────────────────────────────────────────────  (TR-Associated)
+    (Container.Element)[τ ↦ Element] is τ_elt
+```
+
+Trait requirements form a directed acyclic graph — circular requirements are rejected at compile time.
+When a type implements multiple traits with conflicting methods, the programmer must provide an explicit disambiguation via `shadow`; otherwise the conflict is a compile-time error.
+
+===== Generic Type Instantiation 泛型实例化
+
+```
+    Σ(τ_gen) = type parameters (α₁ ... αₙ)
+    Γ ⊢ τ₁    ...    Γ ⊢ τₙ   (n type arguments)
+  ────────────────────────────────────────────  (T-Gen-Inst)
+    Γ ⊢ (τ_gen τ₁ ... τₙ) : type
+
+    τ_gen has parameter α with bound T
+    Γ ⊢ τ_arg    Δ ⊢ τ_arg implements T
+  ─────────────────────────────────────────  (T-Gen-Bound-Check)
+    (τ_gen τ_arg) is well-formed
+    (bound check: τ_arg must satisfy all trait bounds on α)
+```
+
+Monomorphization produces a specialized copy of the generic code for each unique set of type arguments at compile time. The type checker verifies bounds before monomorphization.
+
+===== Type Inference 类型推断
+
+Type inference in Lilies follows the Hindley-Milner algorithm W, extended with:
+- Trait constraints (similar to qualified types in Haskell)
+- Row polymorphism for field access (the set of accessible fields is inferred from usage)
+- Let-polymorphism (generalization at `define` and `let` bindings)
+
+====== Generalization and Instantiation
+
+```
+    Γ ⊢ e : τ     α̅ = ftv(τ) \ ftv(Γ)
+  ──────────────────────────────────────  (Gen)
+    Γ ⊢ e : ∀α̅. τ
+    (generalize over type variables not free in Γ)
+
+    Γ(x) = ∀α̅. τ     β̅ fresh
+  ────────────────────────────  (Inst)
+    Γ ⊢ x : [α̅ ↦ β̅] τ
+    (instantiate polymorphic scheme at each use site)
+```
+
+Generalization occurs at `define` and `let` bindings, giving them polymorphic types. Lambda-bound variables are not generalized (they have monomorphic types).
+
+====== Type Annotations
+
+```
+    Γ ⊢ e : τ_inferred    Γ ⊢ τ_declared
+    unify(τ_inferred, τ_declared) = success
+  ──────────────────────────────────────────  (Ann)
+    Γ ⊢ (e : τ_declared) : τ_declared
+
+    unify(τ_inferred, τ_declared) = failure
+  ──────────────────────────────────────────
+    Type error: expected τ_declared, found τ_inferred
+```
+
+Type annotations constrain inference. When an annotation is present, the inferred type must be unifiable with the declared type.
+
+====== Unification
+
+The unification algorithm handles:
+
+- **Type variables**: `unify(α, τ)` = `[α ↦ τ]` (occurs check enforced).
+- **Type constructors**: `unify((Pair τ₁ τ₂), (Pair σ₁ σ₂))` = `unify(τ₁, σ₁) ∪ unify(τ₂, σ₂)`.
+- **Function types**: structural unification of parameter lists and return types.
+- **Trait objects**: `unify((dyn T), (dyn U))` succeeds only if `T = U`; no implicit subtyping.
+- **Empty type**: `unify(Empty, τ)` always succeeds (Empty is the bottom type and unifies with everything).
+
+===== Effect Typing 效应类型
+
+Functions that perform effects carry effect information in the type system through the `! E` annotation in the judgment form. Effect checking is performed after type checking (the types are already known).
+
+```
+    effect E declares operation op : (-> (τ₁ ... τₙ) τ_ret)
+    Γ ⊢ e₁ : τ₁    ...    Γ ⊢ eₙ : τₙ
+  ────────────────────────────────────────────  (T-Perform)
+    Γ ⊢ (perform E:op e₁ ... eₙ) : τ_ret ! {E}
+
+    Γ ⊢ e_body : τ ! {E} ∪ F
+    handler_h covers effect E with resume type τ
+  ────────────────────────────────────────────────  (T-Handle)
+    Γ ⊢ (handle (E) #:handler handler_h e_body) : τ ! F
+
+    Γ ⊢ e_f : (-> (τ₁ ... τₙ) τ_ret) ! E_f
+    Γ ⊢ e₁ : τ₁ ! E₁    ...    Γ ⊢ eₙ : τₙ ! Eₙ
+  ────────────────────────────────────────────────  (T-App-Effect)
+    Γ ⊢ (e_f e₁ ... eₙ) : τ_ret ! E_f ∪ E₁ ∪ ... ∪ Eₙ
+```
+
+Effects are tracked in the function type: `(-> (τ₁ ... τₙ) τ_ret) ! {E₁, E₂}` denotes a function that may perform effects `E₁` and `E₂`.
+The `! {}` annotation is omitted for pure functions (the default).
+
+====== `async` / `await` Effect
+
+```
+    Γ ⊢ e_body : τ ! {Async}
+  ───────────────────────────────────────  (T-Async)
+    Γ ⊢ (async lambda (x₁ : τ₁ ...) e_body)
+        : (-> (τ₁ ...) (Future τ)) ! {}
+
+    Γ ⊢ e_future : (Future τ)
+  ──────────────────────────────  (T-Await)
+    Γ ⊢ (await e_future) : τ ! {Async}
+```
+
+The `Async` effect is handled by the async runtime; `await` may only appear inside an `async` lambda body.
+
+===== Module Typing 模块类型
+
+A module's type is structurally determined by its exported bindings.
+
+```
+    module M exports {x₁ : τ₁, ..., xₙ : τₙ}
+  ───────────────────────────────────────────────  (T-Module)
+    M : (Module (x₁ : τ₁, ..., xₙ : τₙ))
+
+    Γ ⊢ M : (Module (x₁ : τ₁, ..., xₙ : τₙ))
+  ──────────────────────────────────────────────  (T-Module-Access)
+    Γ ⊢ M:xᵢ : τᵢ
+
+    (require :module-name) resolves to module M
+    M : (Module (x₁ : τ₁, ..., xₙ : τₙ))
+  ───────────────────────────────────────────  (T-Require)
+    Γ ⊢ (require :module-name) : (Module (x₁ : τ₁, ..., xₙ : τₙ))
+
+    Γ ⊢ M : (Module (x₁ : τ₁, ..., xₙ : τₙ))
+    (:ns M) imports all xᵢ : τᵢ into Γ
+  ─────────────────────────────────────────  (T-Import-Ns)
+    Γ, x₁ : τ₁, ..., xₙ : τₙ for the importing scope
+```
+
+Module types are first-class at compile time — a module can be passed as an argument to a compile-time function and its type structure is statically known.
+
+===== Conditional Typing for Type Families 类型族的条件类型推导
+
+Type families allow type-level computation. When a type family is applied, the resulting type is determined by pattern matching on the input types:
+
+```
+    type-family F has clause: (pattern τ_pat => τ_body)
+    Γ ⊢ τ_arg ≡ τ_pat (under substitution σ)
+  ─────────────────────────────────────────────  (T-Type-Family)
+    F(τ_arg) ≡ σ(τ_body)
+```
+
+If no clause matches, the type-family application is ill-typed. Type families are evaluated at compile time and must be total (cover all possible input patterns) unless annotated with `#:partial`.
+
 === Value System 值系统
 
 Values of user-defined types are the core data abstraction in Lilies.
@@ -722,7 +1542,7 @@ And `define` syntax inside the class body used to declare fields `x` and `y` of 
 Symbols starts with `#:` are keywords annotations, for which pass some attributes when function or macro application.
 Another special keyword annotations are start with `#&`, for passing some attributes when function or macro definition.
 Most generic annotations are written as `#@[attributes]`, and is assigned to expressions.
-Later there will be a chapter describing all these annotations in detail.
+Annotations are described in detail in the Annotations and Annotation processing section.
 
 Full syntax of class definition is described as:
 ```lisp
@@ -1144,7 +1964,7 @@ If the operator is a procedure (lambda), the application proceeds by:
 
 ==== Calling Conventions
 
-Lilies follows a Rust-like argument-passing model. The parameter list itself does not specify calling conventions (unlike the previous `#:ref` / `#:in` / `#:val` annotations on parameters). Instead, how an argument is passed is determined at the call site:
+Lilies follows a Rust-like argument-passing model. Calling conventions are not specified in the parameter list. Instead, how an argument is passed is determined at the call site:
 
 - **Borrow** (default): The argument is evaluated and a shared reference is passed. The callee can read but not mutate the borrowed value. The caller retains ownership; the borrow lasts for the call duration. This is the default for all arguments and corresponds to Rust's `&` borrow.
   ```lisp
@@ -1297,7 +2117,7 @@ E.g., to index the element at position (1, 2) in a 4x4 matrix `mat`, we can writ
 
 In other case, something like jagged array can be implemented by using vector of vectors, which is also a vector.
 However, only vector slice is able to used as type argument for vector without really declare the length of a vector.
-It will never behave like a jagged array in C#.
+It will never behave like a jagged array in C\#.
 
 ==== Tuple
 
@@ -1646,7 +2466,7 @@ This destructures the tuple and binds `x` and `y` in a single step.
 ==== Built-in Annotations
 
 - `wip`: a simple annotation to indicate that the annotated code is still a work in progress and may not be complete or fully functional.
-- `deprecated`: a simple annotation to indicate that the annotated code is deprecated and should not be
+- `deprecated`: a simple annotation to indicate that the annotated code is deprecated and should not be used in new code.
 - `experimental`: a simple annotation to indicate that the annotated code is experimental and may be subject to change or removal in future versions.
 - `internal`: a simple annotation to indicate that the annotated code is intended for internal use only and should not be used by external code.
 
@@ -1654,7 +2474,7 @@ This destructures the tuple and binds `x` and `y` in a single step.
 
 Symbol generation is a compile-time metaprogramming mechanism that allows the creation of new symbols,
 expressions, and declarations based on existing code patterns. It is similar in spirit to KSP (Kotlin Symbol Processing)
-or Roslyn source generators for C#, adapted to the Lisp syntax model.
+or Roslyn source generators for C\#, adapted to the Lisp syntax model.
 
 A symbol generator is defined using the `generate` form, which specifies:
 1. A pattern that matches the declarations or expressions to be processed.
@@ -2305,19 +3125,19 @@ The Lilies compilation pipeline consists of the following phases:
 
 1. **Lexing**: Source text is tokenized into a stream of tokens (identifiers, literals, delimiters, keywords).
 2. **Parsing**: Tokens are parsed into syntax objects forming an abstract syntax tree (AST).
-   The parser produces syntax objects with source location annotations.
+  The parser produces syntax objects with source location annotations.
 3. **Macro Expansion**: Macros are expanded recursively. The expander walks the AST, expanding
-   macro forms and inserting the resulting syntax in place. Expansion continues until no macro forms remain.
+  macro forms and inserting the resulting syntax in place. Expansion continues until no macro forms remain.
 4. **Name Resolution**: All symbols are resolved to their definitions. The resolver builds a scope graph
-   and links each reference to its binding site. Unresolved references produce compile-time errors.
+  and links each reference to its binding site. Unresolved references produce compile-time errors.
 5. **Type Checking & Inference**: The type checker assigns types to every expression, verifies
-   type consistency, and infers types where annotations are omitted.
+  type consistency, and infers types where annotations are omitted.
 6. **Ownership Analysis**: The borrow checker verifies ownership rules: no use-after-move,
-   no dangling borrows, exclusive mutable references.
+  no dangling borrows, exclusive mutable references.
 7. **Optimization**: Middle-end optimizations: inlining, constant folding, dead code elimination,
-   closure conversion, and monomorphization of generic code.
+  closure conversion, and monomorphization of generic code.
 8. **Code Generation**: The IR is lowered to target code — either bytecode for the interpreter
-   or native code (via LLVM / Cranelift) for the compiler.
+  or native code (via LLVM / Cranelift) for the compiler.
 9. **Linking**: Object files and libraries are linked into the final executable.
 
 === Interpreter Mode
