@@ -8,4 +8,11 @@ tmp/*
 publish/*
 .cache/*
 .vscode/*
+
 nohup.out
+
+index.html
+*.pdf
+node_modules/
+package-lock.json
+package.json
