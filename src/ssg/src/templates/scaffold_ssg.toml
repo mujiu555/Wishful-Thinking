@@ -1,0 +1,11 @@
+# SSG configuration
+[site]
+title = "My Site"
+# base_url = "https://example.com"
+source_dir = "content"
+output_dir = "public"
+lib_dir = "lib/_lib.typ"
+
+[site.share]
+sider = false
+toc = true

@@ -247,59 +247,9 @@ fn build_tag_page(
 
 /// The outer HTML shell common to every listing page.
 fn page_shell(_config: &SiteConfig, title: &str, body: &str) -> String {
-    format!(
-        r#"<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
-<style>
-  :root {{
-    --text: #2d2d2d;
-    --muted: #888;
-    --accent: #7a5ea7;
-    --bg: #fff;
-    --border: #ddd;
-  }}
-  body {{
-    font-family: system-ui, sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--text);
-    background: var(--bg);
-    max-width: 40rem;
-    margin: 2rem auto;
-    padding: 0 1rem;
-  }}
-  h1 {{ font-size: 1.6rem; font-weight: 600; }}
-  a {{ color: var(--accent); text-decoration: none; }}
-  a:hover {{ text-decoration: underline; }}
-  .doc-list, .cat-list, .tag-list {{ list-style: none; padding: 0; }}
-  .doc-list li, .cat-list li {{ margin: 0.4rem 0; }}
-  .meta {{ font-size: 0.85rem; color: var(--muted); margin-left: 0.5rem; }}
-  .category {{ font-size: 0.8rem; background: #f0ecf7; color: var(--accent);
-               padding: 0.1rem 0.4rem; border-radius: 3px; }}
-  .tag {{ font-size: 0.8rem; background: #eee; color: #555;
-          padding: 0.1rem 0.4rem; border-radius: 3px; }}
-  .tags {{ margin-left: 0.3rem; }}
-  .count {{ color: var(--muted); font-style: italic; }}
-  nav {{ margin: 1rem 0; font-size: 0.9rem; }}
-  nav a {{ margin-right: 1rem; }}
-</style>
-</head>
-<body>
-<nav>
-  <a href="/index.html">Home</a>
-  <a href="/category/index.html">Categories</a>
-  <a href="/tag/index.html">Tags</a>
-</nav>
-{body}
-</body>
-</html>"#,
-        title = escape(title),
-        body = body,
-    )
+    include_str!("templates/page_shell.html")
+        .replace("__TITLE__", &escape(title))
+        .replace("__BODY__", body)
 }
 
 /// Link to a document's HTML page relative to the site root.

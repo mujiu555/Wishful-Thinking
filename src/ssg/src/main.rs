@@ -115,18 +115,7 @@ fn cmd_init(root: &PathBuf, name: Option<&str>) -> anyhow::Result<()> {
     // ssg.toml
     std::fs::write(
         proj_dir.join("ssg.toml"),
-        r#"# SSG configuration
-[site]
-title = "My Site"
-# base_url = "https://example.com"
-source_dir = "content"
-output_dir = "public"
-lib_dir = "lib/_lib.typ"
-
-[site.share]
-sider = false
-toc = true
-"#,
+        include_str!("templates/scaffold_ssg.toml"),
     )?;
 
     // Content directory with a sample document
@@ -134,34 +123,7 @@ toc = true
     std::fs::create_dir_all(&content_dir)?;
     std::fs::write(
         content_dir.join("index.typ"),
-        r#"#import "../lib/_lib.typ/meta.typ": meta
-#meta(
-  title: "Hello, World!",
-  author: ("Your Name",),
-  date: datetime(year: 2026, month: 6, day: 16),
-  keywords: ("hello",),
-  id: "hello-world",
-  parent_id: "hello-world",
-  description: [My first SSG page.],
-  category: "general",
-  tag: ("hello",),
-)
-
-= Hello, World!
-
-Welcome to your new static site, powered by Typst and SSG.
-
-This is a regular Typst document — headings, lists, *emphasis*, **bold**,
-code blocks, and everything else you'd expect.
-
-== Next Steps
-
-- Edit this file or add new `.typ` files in the `content/` directory.
-- Run `ssg build` to regenerate the HTML.
-- Run `ssg serve` to preview locally.
-
-Happy writing!
-"#,
+        include_str!("templates/scaffold_index.typ"),
     )?;
 
     // Create category registration file
@@ -171,7 +133,7 @@ Happy writing!
     // .gitignore
     std::fs::write(
         proj_dir.join(".gitignore"),
-        "public/\n.ssg/\n",
+        include_str!("templates/scaffold_gitignore"),
     )?;
 
     log::info!(
@@ -259,12 +221,8 @@ fn cmd_serve(root: &PathBuf, port: u16) -> anyhow::Result<()> {
                 let _ = request.respond(response);
             }
             Err(_) => {
-                let body = format!(
-                    "<!DOCTYPE html>\n\
-                     <html><head><title>404</title></head>\n\
-                     <body><h1>404 — Not Found</h1><p>{}</p></body></html>",
-                    escape_html(url_path)
-                );
+                let body = include_str!("templates/404.html")
+                    .replace("__URL_PATH__", &escape_html(url_path));
                 let header = tiny_http::Header::from_bytes(
                     "Content-Type".as_bytes(),
                     "text/html; charset=utf-8".as_bytes(),
