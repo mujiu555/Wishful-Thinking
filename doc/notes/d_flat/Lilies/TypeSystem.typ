@@ -176,6 +176,14 @@ Naming convention, method-name defined in the trait should be prefixed with a co
 
 ==== Parameterized Polymorphism
 
+We did a little change to the define form to support parameterized polymorphism,
+by write `(define (foo a) ...)` instead of `(define foo ...)`, where `a` is a type parameter.
+You can also write `(define (foo a b) ...)` to define a function with multiple type parameters.
+Zero type parameter is also supported, by write `(define (foo) ...)` instead of `(define foo ...)`.
+
+Sometimes you may need to specify the type of a parameterized polymorphic argument,
+`(define (foo (a #:type (Integer)) ...)` is then added to specify that the type parameter `a` is of type `Integer`.
+
 ===== Type Parameter
 
 ==== Row Polymorphism
@@ -209,6 +217,14 @@ e.g.,
 ==== Implementation with Internal Helpers
 
 ==== Implementation with Type Parameters
+
+e.g.,
+```txt
+(impl (foo a) ((trait-foo a))
+  (define :bar
+    (function ((x #:type a))
+      #:returns ((result #:type a)))))
+```
 
 === Access Control
 
