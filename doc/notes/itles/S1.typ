@@ -25,6 +25,7 @@ Logically.
 1. Give opintions
 2. reasons of two/ 1 reason and 1 example/ information
 
+1.
 Do you like travelling.
 #table(
   columns: 3,
@@ -48,7 +49,23 @@ I do not think that I'm a fan of travelling.
 
 2. Comparison
 
-- examples: what / where / how
-- experience: A whole story about your self. Have you ever...
+3. examples: what / where / how
+  e.g., What is your favorite movie?
+  1. there are/ i have a lot/ various/ a variety of/ numerous/ a few/ several...
+  2. most ....
+    - but my favorite xxx must be..
+    - however, xxx which i am really into is
+    - but my xxx i value is always...
+  3. reason, sample, info
+  4. less that favorite, but still like
+    coordinating conjunction: besides/ apart from/ also
+  e.g., how do you feel when people don't return things thy borrowed from you.
+  e.g., What type of cars do you like.
+
+4. experience: A whole story about your self. Have you ever...
+  1. Time: it was about/ roughly + <time> + when + <quest>
+    let me think....
+  2. Expand and explain why you do not have.
+
 
 === Part II
