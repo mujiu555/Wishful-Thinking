@@ -54,6 +54,10 @@ Symbol is a unique identifier that can be used to represent variables, functions
 
 === First-Class Types
 
+=== Higher-Rank Types
+
+=== Decision: No First-Class Types
+
 === First-Class Functions
 
 === Composite Types & User-Defined Types
@@ -176,13 +180,52 @@ Naming convention, method-name defined in the trait should be prefixed with a co
 
 ==== Parameterized Polymorphism
 
-We did a little change to the define form to support parameterized polymorphism,
+We did a little change to the define form to support parameterized polymorphism on types,
 by write `(define (foo a) ...)` instead of `(define foo ...)`, where `a` is a type parameter.
 You can also write `(define (foo a b) ...)` to define a function with multiple type parameters.
 Zero type parameter is also supported, by write `(define (foo) ...)` instead of `(define foo ...)`.
 
 Sometimes you may need to specify the type of a parameterized polymorphic argument,
-`(define (foo (a #:type (Integer)) ...)` is then added to specify that the type parameter `a` is of type `Integer`.
+`(define (foo (a : Functor) ...)` is then added to specify that the type parameter `a` must instance the `Functor` trait.
+For multiple type parameters, you can write `(define (foo (a : Functor) (b : Monad) ...)` to specify that the type parameter `a` must instance the `Functor` trait and the type parameter `b` must instance the `Monad` trait.
+Furthermore, if multiple constraints are needed for a type parameter,
+you can write `(define (foo (a : (Num Monad)) ...)` to specify that the type parameter `a` must instance both the `Num` and `Monad` traits.
+
+That is,
+e.g.,
+```txt
+(define (Too (a : Functor))
+  (Class)
+  (trait))
+```
+
+Then, by providing no type constraints for function's parameters, the function is polymorphic and can be used with any type.
+Likely,
+```txt
+(define id
+  (function (x) #:returns ((id #:type x)))
+  (lambda (x) x))
+```
+
+This split the semantics into two parts, the type universe and the value universe.
+
+---
+
+Or, should we abandon the HM type system and, adopt a more powerful type system, which may support higher-order polymorphism, dependent types, and type-level programming?
+Or even we can have first-class types?
+we can than define parameterized polymorphic in the way like
+```txt
+(define poly
+  (function ((x #:type (Type)))
+    #:returns ((result #:type (Type))))
+  (lambda (x)
+    (trait
+      (:foo (function ((x #:type x))
+        #:returns ((result #:type x)))))))
+```
+Powerful, but also more complex, reaches the turning incomplete point of the type system, and may be too much for a simple language.
+
+May we use it?
 
 ===== Type Parameter
 
