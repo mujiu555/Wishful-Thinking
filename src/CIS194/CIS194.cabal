@@ -70,7 +70,8 @@ executable CIS194
                       Fibonacci,
                       JoinList, Editor, Buffer, Sized, Scrabble,
                       Party, Employee,
-                      AParser
+                      AParser,
+                      SExpr
 
 
     -- LANGUAGE extensions used by modules in this package.
