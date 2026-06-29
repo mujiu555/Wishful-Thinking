@@ -151,6 +151,15 @@ If we choose to use the first way, then we can define a generic function like th
   (lambda (x) x))
 ```
 
+When use this generic function, we may specify the type parameter like this:
+```txt
+((foo (Integer)) 1)
+```
+Or, we can left it for auto type inference, like this:
+```txt
+(foo 1)
+```
+
 Otherwise if we have first-class type, we can have:
 ```txt
 (define foo
