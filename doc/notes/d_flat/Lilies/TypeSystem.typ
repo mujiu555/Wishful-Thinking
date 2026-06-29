@@ -109,9 +109,9 @@ e.g.,
 (define foo
   (Class)
   (trait
-    (:bar (function ((x #:type (Integer))
-                     (y #:type (Integer)))
-      #:returns ((result #:type (Integer)))))))
+    (:bar (function ((x : (Integer))
+                     (y : (Integer)))
+      : ((result : (Integer)))))))
 ```
 
 Naming convention, method-name defined in the trait should be prefixed with a colon, e.g. `:method-name`, to avoid name collision with other methods.
@@ -189,25 +189,35 @@ Sometimes you may need to specify the type of a parameterized polymorphic argume
 `(define (foo (a : Functor) ...)` is then added to specify that the type parameter `a` must instance the `Functor` trait.
 For multiple type parameters, you can write `(define (foo (a : Functor) (b : Monad) ...)` to specify that the type parameter `a` must instance the `Functor` trait and the type parameter `b` must instance the `Monad` trait.
 Furthermore, if multiple constraints are needed for a type parameter,
-you can write `(define (foo (a : (Num Monad)) ...)` to specify that the type parameter `a` must instance both the `Num` and `Monad` traits.
+you can write `(define (foo (a : Num Monad) ...)` to specify that the type parameter `a` must instance both the `Num` and `Monad` traits.
 
 That is,
 e.g.,
 ```txt
 (define (Too (a : Functor))
   (Class)
-  (trait))
+  (trait ...))
 ```
 
-Then, by providing no type constraints for function's parameters, the function is polymorphic and can be used with any type.
-Likely,
-```txt
-(define id
-  (function (x) #:returns ((id #:type x)))
-  (lambda (x) x))
-```
+`(Class)` annotates that `Too` is a typeclass, which is not belongs to value universe, but belongs to type universe.
 
 This split the semantics into two parts, the type universe and the value universe.
+
+P.S., Later in Macro system description, if we place `(Syntax)` in the place of `(Class)`, then `Too` is a syntax, which is a macro indeed then.
+
+The `(define (<name> <type-parameter-list>) <type> <val>)` form defines generic polymorphic types.
+It is adoptive to all the types no matter it is a first-class type or type kind or syntax.
+In traditional languages like Rust, it is
+```rs
+trait <T: Functor> Too {
+  ...
+}
+```
+Or in Haskell, it is
+```hs
+class Functor a => Too a where
+  ...
+```
 
 ---
 
@@ -216,12 +226,12 @@ Or even we can have first-class types?
 we can than define parameterized polymorphic in the way like
 ```txt
 (define poly
-  (function ((x #:type (Type)))
-    #:returns ((result #:type (Type))))
+  (function ((x : (Type)))
+    : ((result : (Type))))
   (lambda (x)
     (trait
-      (:foo (function ((x #:type x))
-        #:returns ((result #:type x)))))))
+      (:foo (function ((x : x))
+        : ((result : x)))))))
 ```
 Powerful, but also more complex, reaches the turning incomplete point of the type system, and may be too much for a simple language.
 
@@ -244,9 +254,9 @@ e.g.,
 ```txt
 (impl foo (trait-foo)
   (define :bar
-    (function ((x #:type (Integer))
-               (y #:type (Integer)))
-      #:returns ((result #:type (Integer))))
+    (function ((x : (Integer))
+               (y : (Integer)))
+      : ((result : (Integer))))
     (fn
       (lambda (x y) (+ x y)))))
 ```
@@ -268,6 +278,11 @@ e.g.,
     (function ((x #:type a))
       #:returns ((result #:type a)))))
 ```
+
+==== `Self` Type
+
+In the implementation of a type, there is a special kind of type called `Self`, it is a zero parameter generic type, which represents the type that is being implemented.
+You may access concrete implemented type by using `(Self)` as other parameterized generic type.
 
 === Access Control
 
