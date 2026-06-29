@@ -219,6 +219,18 @@ class Functor a => Too a where
   ...
 ```
 
+Define zero type parameter is also supported, by write `(define (foo) ...)` instead of `(define foo ...)`.
+However, since the type parameter list is empty, `(foo)` is kind of `*`, which always downgrade to `Type`,
+thus, it is not necessary to write `(define (foo) (Type) ...)` instead of `(define foo (Type) ...)`.
+
+P.S., Actually, `(Type)` here is also the case, for which brackets are not necessary, thus, `(define foo Type ...)` is also valid.
+Furthermore, the `(Integer)` used all around also has the same problem.
+
+If you define new type with no type parameter, but with a pair of brackets, the compiler should warn you that the brackets are redundant, and you can remove them.
+If you use new type or kind or other higher-rank type that are not type constructors, then the compiler should warn you that the brackets are redundant, and you can remove them.
+
+The definition for type classes is also the same.
+
 ---
 
 Or, should we abandon the HM type system and, adopt a more powerful type system, which may support higher-order polymorphism, dependent types, and type-level programming?
@@ -242,6 +254,20 @@ May we use it?
 ==== Row Polymorphism
 
 ==== High-order Polymorphism
+
+```txt
+(define (Applicative (f : Functor))
+  (Class)
+  (trait
+    ((:pure a)
+     (function ((x : a))
+      : ((result : (f a)))))
+    ((:ap a b)
+     (function ((f : (f (function ((x : a))
+                          : ((result : b)))))
+                (x : (f a)))
+      : ((result : (f b)))))))
+```
 
 === Implementation
 
