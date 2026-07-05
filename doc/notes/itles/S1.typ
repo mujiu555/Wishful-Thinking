@@ -69,3 +69,33 @@ I do not think that I'm a fan of travelling.
 
 
 === Part II
+
+== Writing: First
+
+Two kinds:
+-
+
+Marking criteria:
+- No personal opinions.
+- Categorize the Data and summary
+
+=== Figure, line chart
+
+Steps:
+1. rewrite the question: 1-2
+  - The line graph illustrates the changes in \<core objects> over the period from \<begin time>. to \<end time>
+  - The line graph compares the amount of xXXX produced \<...> using several different sources of power over a period of ... years.
+2. Overall trend: 1
+  - Overall, The overall trend:
+    - increase/ rise/ grow/climb; sharply rise, gradually increase
+    - fall, drop, decline, decrease; dramatically drop, slightly decline
+    - fluctuate, rise and fall
+    - remain stable, stay constant, level off
+    - reach a peak of, hit a low of
+  - At the beginning of the period, the figure stood at...
+  - Over the following years, the number increased steadily.
+  - By the end of the period, the data had reached its highest point
+3. Detailed data description:
+
+
+
