@@ -1,0 +1,33 @@
+cabal-version:       >=1.10
+name:                cis5520-basics
+version:             0.1.0.0
+synopsis:            Class materials from CIS 5520, UPenn
+description:         Course introduction: basics
+bug-reports:         cis5520@seas.upenn.edu
+license:             MIT
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library 
+  exposed-modules:     Basics
+  build-depends:         base  
+                       , HUnit 
+                       , filepath 
+                       , containers
+  ghc-options:         -Wno-type-defaults -fwarn-incomplete-patterns
+  default-language:
+    GHC2021
+  default-extensions:
+    -- GHC2024
+    DataKinds
+    DerivingStrategies
+    DisambiguateRecordFields
+    ExplicitNamespaces
+    GADTs
+    MonoLocalBinds
+    LambdaCase
+    RoleAnnotations    
+  
+
