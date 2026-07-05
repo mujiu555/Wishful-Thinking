@@ -1,0 +1,101 @@
+000
+CXUS51 KPHI 010815
+CF6PHL
+PRELIMINARY LOCAL CLIMATOLOGICAL DATA (WS FORM: F-6)
+
+                                          STATION:   PHILADELPHIA PA
+                                          MONTH:     JULY
+                                          YEAR:      2022
+                                          LATITUDE:   39 52 N
+                                          LONGITUDE:  75 15 W
+
+  TEMPERATURE IN F:       :PCPN:    SNOW:  WIND      :SUNSHINE: SKY     :PK WND
+================================================================================
+1   2   3   4   5  6A  6B    7    8   9   10  11  12  13   14  15   16   17  18
+                                     12Z  AVG MX 2MIN
+DY MAX MIN AVG DEP HDD CDD  WTR  SNW DPTH SPD SPD DIR MIN PSBL S-S WX    SPD DR
+================================================================================
+
+ 1  94  73  84   6   0  19    T  0.0    0 10.4 20 260   M    M   5        24 240
+ 2  94  75  85   7   0  20 0.02  0.0    0 11.5 18 250   M    M   8 3      23 250
+ 3  91  72  82   4   0  17 0.01  0.0    0  7.2 17  20   M    M   6 3      24 360
+ 4  88  68  78   0   0  13 0.00  0.0    0  7.6 14 260   M    M   5        21 360
+ 5  89  71  80   2   0  15 0.13  0.0    0  9.6 21 190   M    M   9        27 200
+ 6  90  75  83   5   0  18 0.01  0.0    0  8.1 16 330   M    M   9 1      20 320
+ 7  84  70  77  -1   0  12 1.37  0.0    0  7.3 15  80   M    M   9 1      18  80
+ 8  88  68  78  -1   0  13    T  0.0    0  6.0 14 230   M    M   7        22 240
+ 9  78  70  74  -5   0   9 0.02  0.0    0  3.6 14  80   M    M   9        19  40
+10  83  68  76  -3   0  11 0.00  0.0    0  5.7 16  50   M    M   5        20  40
+11  86  65  76  -3   0  11 0.00  0.0    0  6.8 14 190   M    M   1        21 190
+12  93  70  82   3   0  17    T  0.0    0 12.8 23 200   M    M   4 3      30 200
+13  91  73  82   3   0  17 0.00  0.0    0  6.9 16 250   M    M   7        20 260
+14  92  77  85   6   0  20 0.00  0.0    0  5.8 18 310   M    M   5        25 270
+15  90  73  82   3   0  17 0.00  0.0    0  6.7 15  90   M    M   5        18  80
+16  89  73  81   2   0  16 0.09  0.0    0  3.8 17 240   M    M   8        20 240
+17  87  72  80   1   0  15    T  0.0    0  3.9 14 240   M    M   9 3      19 200
+18  94  77  86   7   0  21 0.02  0.0    0 11.3 24 200   M    M   8 3      31 230
+19  93  76  85   6   0  20 0.00  0.0    0 10.3 20 280   M    M   5        30 280
+20  96  77  87   8   0  22 0.00  0.0    0  8.2 17 190   M    M   2        21 190
+21  97  79  88   9   0  23 0.00  0.0    0 11.7 21 260   M    M   4 3      27 200
+22  97  78  88   9   0  23 0.00  0.0    0  8.9 18 220   M    M   3        25 270
+23  98  79  89  10   0  24 0.00  0.0    0  8.1 15 220   M    M   4        20 230
+24  99  78  89  10   0  24 0.00  0.0    0 10.4 20 240   M    M   6        24 210
+25  92  81  87   8   0  22    T  0.0    0 13.3 29 250   M    M   7 3      34 250
+26  83  76  80   1   0  15    T  0.0    0  6.9 15  20   M    M   9        21 360
+27  89  75  82   3   0  17    T  0.0    0  6.3 15 260   M    M   8        22 210
+28  93  74  84   5   0  19 0.25  0.0    0  9.6 33 290   M    M   7 13     43 290
+29  87  75  81   2   0  16 0.10  0.0    0  6.2 16 240   M    M   8        21 230
+30  90  75  83   4   0  18 0.00  0.0    0  9.5 18 300   M    M   5        24 330
+31  92  72  82   4   0  17 0.18  0.0    0  6.1 16 230   M    M   8 1      21 230
+================================================================================
+SM 2807 2285         0 541  2.20  0.0    250.5          M      195
+================================================================================
+AV 90.5 73.7                               8.1 FASTST   M    M   6    MAX(MPH)
+                                 MISC ---->    33 290                 43 290
+================================================================================
+NOTES:
+# LAST OF SEVERAL OCCURRENCES
+
+COLUMN 17 PEAK WIND IN M.P.H.
+
+PRELIMINARY LOCAL CLIMATOLOGICAL DATA (WS FORM: F-6) , PAGE 2
+
+                                          STATION:   PHILADELPHIA PA
+                                          MONTH:     JULY
+                                          YEAR:      2022
+                                          LATITUDE:   39 52 N
+                                          LONGITUDE:  75 15 W
+
+[TEMPERATURE DATA]      [PRECIPITATION DATA]       SYMBOLS USED IN COLUMN 16
+
+AVERAGE MONTHLY: 82.1   TOTAL FOR MONTH:   2.20    1 = FOG OR MIST
+DPTR FM NORMAL:   3.4   DPTR FM NORMAL:   -2.18    2 = FOG REDUCING VISIBILITY
+HIGHEST:    99 ON 24    GRTST 24HR  1.37 ON  7- 7      TO 1/4 MILE OR LESS
+LOWEST:     65 ON 11                               3 = THUNDER
+                        SNOW, ICE PELLETS, HAIL    4 = ICE PELLETS
+                        TOTAL MONTH:   0.0 INCH    5 = HAIL
+                        GRTST 24HR  0.0            6 = FREEZING RAIN OR DRIZZLE
+                        GRTST DEPTH:  0            7 = DUSTSTORM OR SANDSTORM:
+                                                       VSBY 1/2 MILE OR LESS
+                                                   8 = SMOKE OR HAZE
+[NO. OF DAYS WITH]      [WEATHER - DAYS WITH]      9 = BLOWING SNOW
+                                                   X = TORNADO
+MAX 32 OR BELOW:   0    0.01 INCH OR MORE:  11
+MAX 90 OR ABOVE:  19    0.10 INCH OR MORE:   5
+MIN 32 OR BELOW:   0    0.50 INCH OR MORE:   1
+MIN  0 OR BELOW:   0    1.00 INCH OR MORE:   1
+
+[HDD (BASE 65) ]
+TOTAL THIS MO.     0    CLEAR  (SCALE 0-3)   2
+DPTR FM NORMAL     0    PTCLDY (SCALE 4-7)  22
+TOTAL FM JUL 1     0    CLOUDY (SCALE 8-10)  7
+DPTR FM NORMAL     0
+
+[CDD (BASE 65) ]
+TOTAL THIS MO.   541
+DPTR FM NORMAL   116    [PRESSURE DATA]
+TOTAL FM JAN 1   976    HIGHEST SLP 30.19 ON 31
+DPTR FM NORMAL   187    LOWEST  SLP 29.66 ON 21
+
+[REMARKS]
+#FINAL-07-22#
