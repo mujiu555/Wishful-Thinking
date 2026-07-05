@@ -15,6 +15,7 @@
 #embed("/doc/notes/Assembly/S1.typ")
 #embed("/doc/notes/Category/S1.typ")
 #embed("/doc/notes/CIS194/S1.typ")
+#embed("/doc/notes/CIS5520/index.typ")
 #embed("/doc/notes/CMU-15-462_662/S1.typ")
 #embed("/doc/notes/CMU-15-462_662/S2.typ")
 #embed("/doc/notes/CMU-15-462_662/S3.typ")
