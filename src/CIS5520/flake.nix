@@ -10,9 +10,6 @@
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
       "https://cache.nixos.org"
     ];
-    trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-    ];
   };
   outputs =
     inputs@{
@@ -56,16 +53,19 @@
             #   };
             # };
 
-            # devShell = {
-            #  # Enabled by default
-            #  enable = true;
-            #
-            #  # Programs you want to make available in the shell.
-            #  # Default programs can be disabled by setting to 'null'
-            #  tools = hp: { fourmolu = hp.fourmolu; ghcid = null; };
-            #
-            #  hlsCheck.enable = true;
-            # };
+            devShell = {
+              # Enabled by default
+              enable = true;
+
+              # Programs you want to make available in the shell.
+              # Default programs can be disabled by setting to 'null'
+              tools = hp: {
+                inherit (hp) fourmolu;
+                inherit (hp) stack;
+              };
+
+              hlsCheck.enable = true;
+            };
           };
 
           # haskell-flake doesn't set the default package, but you can do it here.
