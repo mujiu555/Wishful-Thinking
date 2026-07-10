@@ -12,13 +12,8 @@ import Prelude hiding (all, concat, reverse, takeWhile, zip, (++))
 -- False
 -- >>> abc False True True
 -- False
-abc x y z =
-  if x
-    then
-      if y
-        then True
-        else if (x && z) then True else False
-    else False
+abc :: Bool -> Bool -> Bool -> Bool
+abc x y z = x && (y || (x && z))
 
 -- >>> arithmetic ((1,2),3) ((4,5),6)
 -- (-3,6,-3)
@@ -46,23 +41,23 @@ arithmetic x1 x2 =
 
 -- >>> reverse [3,2,1]
 -- [1,2,3]
+reverse :: [a] -> [a]
 reverse l = reverseAux l []
   where
-    reverseAux l acc =
-      if null l
-        then acc
-        else reverseAux (tail l) (head l : acc)
+    reverseAux (x:xs) acc = reverseAux xs (x:acc)
+    reverseAux [] acc     = acc
 
 -- >>> zip "abc" [True,False,True]
 -- [('a',True),('b',False),('c',True)]
 -- >>> zip [1,2] "a"
 -- [(1,'a')]
+zip :: [a] -> [b] -> [(a, b)]
 zip xs ys = g 0 xs ys
   where
-    g n xs ys =
-      if n == length xs || n == length ys
+    g n lxs lys =
+      if n == length lxs || n == length lys
         then []
-        else (xs !! n, ys !! n) : g (n + 1) xs ys
+        else (lxs !! n, lys !! n) : g (n + 1) lxs lys
 
 --------------------------------------------------------------------------------
 -- Problem (List recursion)
@@ -76,7 +71,8 @@ zip xs ys = g 0 xs ys
 -- >>> minimumMaybe []
 -- Nothing
 minimumMaybe :: [Int] -> Maybe Int
-minimumMaybe = undefined
+minimumMaybe []      = Nothing
+minimumMaybe l       = Just (minimum l)
 
 -- | The 'startsWith' function takes two strings and returns 'True'
 -- iff the first is a prefix of the second.
@@ -88,7 +84,10 @@ minimumMaybe = undefined
 -- >>> "Helo" `startsWith` "Hello World!"
 -- False
 startsWith :: String -> String -> Bool
-startsWith = undefined
+startsWith [] []           = True
+startsWith _ []            = False
+startsWith [] _            = True
+startsWith (s: ss) (p: ps) = (s == p) && (startsWith ss ps)
 
 -- | The 'isSubsequenceOf' function takes two strings and returns 'True'
 -- when all characters in the first are contained within the second, in order.
@@ -102,7 +101,10 @@ startsWith = undefined
 -- >>> "Wello" `isSubsequenceOf` "Hello World!"
 -- False
 isSubsequenceOf :: String -> String -> Bool
-isSubsequenceOf = undefined
+isSubsequenceOf [] [] = True
+isSubsequenceOf _ []  = False
+isSubsequenceOf [] _  = True
+isSubsequenceOf (s: ss) (p: ps) = ((s == p) && (isSubsequenceOf ss ps)) || (isSubsequenceOf (s: ss) ps)
 
 -- | The 'countSub' function returns the number of (potentially overlapping)
 -- occurrences of a substring sub found in a string.
@@ -114,7 +116,9 @@ isSubsequenceOf = undefined
 -- >>> countSub "" "aaac"
 -- 5
 countSub :: String -> String -> Int
-countSub = undefined
+countSub s (p: ps)   = (if (startsWith s (p: ps)) then 1 else 0) + (countSub s ps)
+countSub [] [] = 1
+countSub _  [] = 0
 
 -- | The 'transpose' function transposes the rows and columns of its argument.
 -- If the inner lists are not all the same length, then the extra elements
@@ -133,7 +137,14 @@ countSub = undefined
 
 -- (WARNING: this one is tricky!)
 transpose :: [[a]] -> [[a]]
-transpose = undefined
+-- NOTE: Since the basic idea to solve this problem is construct new vector from each list's head.
+-- And zipWith will automatically ignore the longer part and !! construct new list according
+-- to the method provided
+-- then it is possible to extract all list's element using
+-- `zipWith (:) a (repeat [])`
+-- and, furhtermore, cols,
+-- `zipWith (:) a (zipWith (:) b (repeat []))`
+transpose = foldr (\x y -> zipWith (:) x y) (repeat [])
 
 --------------------------------------------------------------------------------
 -- Problem (Defining higher-order functions)
@@ -150,7 +161,8 @@ transpose = undefined
 -- >>> takeWhile (< 0) [1,2,3]
 -- []
 takeWhile :: (a -> Bool) -> [a] -> [a]
-takeWhile = undefined
+takeWhile _ []      = []
+takeWhile f (x: xs) = if (f x) then (x : takeWhile f xs) else (takeWhile f xs)
 
 -- | `find pred lst` returns the first element of the list that
 -- satisfies the predicate. Because no element may do so, the
@@ -161,7 +173,8 @@ takeWhile = undefined
 -- >>> find odd [0,2,4,6]
 -- Nothing
 find :: (a -> Bool) -> [a] -> Maybe a
-find = undefined
+find _ [] = Nothing
+find f (x: xs) = if (f x) then (Just x) else (find f xs)
 
 -- | `all pred lst` returns `False` if any element of `lst`
 -- fails to satisfy `pred` and `True` otherwise.
@@ -169,7 +182,8 @@ find = undefined
 -- >>> all odd [1,2,3]
 -- False
 all :: (a -> Bool) -> [a] -> Bool
-all = undefined
+all _ [] = True
+all f (x: xs) = (f x) && (all f xs)
 
 -- | `map2 f xs ys` returns the list obtained by applying `f` to
 -- to each pair of corresponding elements of `xs` and `ys`. If
@@ -184,7 +198,8 @@ all = undefined
 --
 -- NOTE: `map2` is called `zipWith` in the Prelude
 map2 :: (a -> b -> c) -> [a] -> [b] -> [c]
-map2 = undefined
+map2 f (x: xs) (y: ys) = (f x y) : (map2 f xs ys)
+map2 _ _ _             = []
 
 -- | Apply a partial function to all the elements of the list,
 -- keeping only valid outputs.
@@ -194,7 +209,11 @@ map2 = undefined
 --
 -- (where `root` is defined below.)
 mapMaybe :: (a -> Maybe b) -> [a] -> [b]
-mapMaybe = undefined
+mapMaybe f = foldr (\x y ->
+                      case (f x) of
+                        Nothing  -> y
+                        (Just v) -> (v : y))
+             []
 
 root :: Double -> Maybe Double
 root d = if d < 0.0 then Nothing else Just $ sqrt d
@@ -208,7 +227,7 @@ root d = if d < 0.0 then Nothing else Just $ sqrt d
 -- >>> concat [[1,2,3],[4,5,6],[7,8,9]]
 -- [1,2,3,4,5,6,7,8,9]
 concat :: [[a]] -> [a]
-concat = undefined
+concat = foldr (<>) []
 
 -- | The 'startsWithHO' function takes two strings and returns 'True'
 -- iff the first is a prefix of the second. This is the same as `startsWith` above
@@ -220,7 +239,16 @@ concat = undefined
 -- >>> "Hello" `startsWithHO` "Wello Horld!"
 -- False
 startsWithHO :: String -> String -> Bool
-startsWithHO = undefined
+startsWithHO pat s = foldr step base pat s
+  where
+    -- base case: pattern is empty, so every string has it as prefix
+    base = \_ -> True
+    -- step: for each character p in the pattern, build a function that
+    -- checks the remaining string t.
+    step p f = \t ->
+      case t of
+        []       -> False          -- pattern longer than string
+        (x : xs) -> p == x && f xs -- match head and continue with tail
 
 -- INTERLUDE: para
 
@@ -246,4 +274,7 @@ tails (x : xs) = (x : xs) : tails xs
 -- >>> countSubHO "" "aaac"
 -- 5
 countSubHO :: String -> String -> Int
-countSubHO = undefined
+countSubHO pat s = foldr (\x y -> (case (startsWithHO pat x) of
+                                       True -> 1
+                                       False -> 0
+                                    ) + y) 0 (tails s)
