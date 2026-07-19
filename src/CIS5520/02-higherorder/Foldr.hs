@@ -108,7 +108,7 @@ Now implement using foldr
 -- >>> all (>0) ([1 .. 20] :: [Int])
 -- True
 all :: (a -> Bool) -> [a] -> Bool
-all p = undefined
+all p = foldr (\x y -> (p x) && y) True
 
 {-
 And trace through an evaluation `all not [True,False]`:
@@ -138,7 +138,7 @@ Now implement using foldr
 -- >>> last ""
 -- Nothing
 last :: [a] -> Maybe a
-last = undefined
+last = foldr (\x y -> maybe (Just x) Just y) Nothing
 
 {-
 and trace through the evaluation `last [1,2]`
@@ -152,7 +152,7 @@ of the first list for which the input function returns `True`.
 -}
 
 filter :: (a -> Bool) -> [a] -> [a]
-filter p = undefined
+filter p = foldr (\x y -> if (p x) then x : y else y) []
 
 -- >>> filter (> 10) [1 .. 20]
 
@@ -182,7 +182,7 @@ Now rewrite this function using 'foldr'
 -}
 
 reverse :: [a] -> [a]
-reverse l = undefined
+reverse = foldl (flip (:)) []
 
 -- >>> reverse "abcd"
 -- "dcba"
@@ -221,7 +221,11 @@ Now rewrite using 'foldr'
 -}
 
 intersperse :: a -> [a] -> [a]
-intersperse = undefined
+intersperse s l =
+  foldr (\x y ->
+           case y of
+             [] -> [x]
+             _ -> x : (s: y)) [] l
 
 -- >>> intersperse ',' "abcde"
 -- "a,b,c,d,e"
@@ -262,8 +266,25 @@ You can see that `foldl1` is different than `foldr` by comparing the results on 
 But, you can also define `foldl` in terms of `foldr`. Give it a try.
 -}
 
+-- foldr :: (a -> b -> b) -> b -> [a] -> b
+-- foldr f z xs
+--   = f x1 (f x2 (f x3 ... (f xn z)))
+--   = (f1 . f2 . f3 . ... . fn) z
+-- foldl :: (b -> a -> b) -> b -> [a] -> b
+-- foldl f z xs
+--   = (f (f (f z x1) x2) ... xn)
+--   = z & ff1 & ff2 & ff3 & ... & ffn
+--   = ffn . ffn-1 . ... . ff1 z
+--   = (flip f xn . flip f xn-1 . ... . flip f x1) z
+-- =>
+-- f1 = f x1 = flip f xn = ffn
+-- =>
+--   = (flip (.) (flip f xn) (flip (.) (flip f xn-1) (flip ... (flip (.) (flip f x1) id)))) z
+--   = (foldr (flip (.)) id [flip f xn, flip f xn-1, ..., flip f x1]) z
+--   = (foldr (flip (.)) id (map f xs)) z
+
 foldl :: (b -> a -> b) -> b -> [a] -> b
-foldl f z xs = undefined
+foldl f z xs = (foldr (flip (.)) id (fmap (flip f) xs)) z
 
 -- >>> foldl (++) "x" ["1", "2", "3"]
 -- "x123"
