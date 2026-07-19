@@ -262,7 +262,7 @@ May we use it?
     ((:pure a)
      (function ((x : a))
       : ((result : (f a)))))
-    ((:ap a b)
+    ((:apply a b)
      (function ((f : (f (function ((x : a))
                           : ((result : b)))))
                 (x : (f a)))
@@ -272,19 +272,20 @@ May we use it?
 === Implementation
 
 ```txt
-(impl <type>
+(impl <trait>
   <definitions>)
 ```
 
 e.g.,
 ```txt
-(impl foo (trait-foo)
-  (define :bar
-    (function ((x : (Integer))
-               (y : (Integer)))
-      : ((result : (Integer))))
-    (fn
-      (lambda (x y) (+ x y)))))
+(define impl-foo
+  (impl (trait-foo foo)
+    (define :bar
+      (function ((:self)
+                 (y : (Integer)))
+        : ((result : (Integer))))
+      (fn
+        (lambda (:self y) (+ :self y))))))
 ```
 
 ==== Implementation without Traits
@@ -294,16 +295,6 @@ e.g.,
 ==== Implementation with Multiple Traits
 
 ==== Implementation with Internal Helpers
-
-==== Implementation with Type Parameters
-
-e.g.,
-```txt
-(impl (foo a) ((trait-foo a))
-  (define :bar
-    (function ((x #:type a))
-      #:returns ((result #:type a)))))
-```
 
 ==== `Self` Type
 
