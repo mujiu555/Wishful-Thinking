@@ -13,7 +13,7 @@
 
 ==== Change the value of a captured variable
 
-=== Currying
+=== Partial Evaluation & Currying
 
 === Lambda Expression
 
@@ -200,7 +200,95 @@ Otherwise if we have first-class type, we can have:
 
 ===== Unnamed Sequence
 
+The basic sequence execution form is `sequence`,
+which allows you to execute multiple expressions in order,
+and the returning value of the last expression will be the returning value of the whole sequence.
+
 ===== Named Sequence
+
+With `do` form, you can define a named sequence execution block,
+thus, you can use `:return` expression to return early from the sequence execution block.
+
+This could be a syntax sugar for immediately invoked lambda expression, but it is more readable and easier to use.
+
+===== Pipeline Sequence
+
+Just like the `&` in Haskell or the `|>` in F\#,
+the pipeline sequence form `then` allows you to pass the returning value of the previous expression as the first argument of the next expression.
+
+```txt
+(then <expression1>
+  <partial-expression1>
+  ...
+  <partial-expressionN>)
+```
+
+Partial-expression is any legal expression,
+the function or form invoked in the partial-expression must have at least one free parameter
+and will be filled with the returning value of the previous expression.
+If the expression have more returning values, then the returning values will be passed in order as 2nd, 3rd, ... arguments of the next expression.
+
+By contrast, if you want to pass the returning value as the last argument of the next expression, you can use `then:last` form.
+Most part are the same as `then` form,
+but the returning value of the previous expression will be passed as the last argument of the next expression.
+
+===== Named Pipeline Sequence
+
+`pipe` form is specially designed for named pipeline sequence execution block,
+it allows you to leave placeholder for the returning value of the previous expression in the next expression,
+
+Each partial-expression in the `pipe` form can have individual-counted placeholders.
+`:1`, `:2`, `:3`, ... will be replaced by the returning values of the previous expression in order.
+`:*` will be replaced by all returning values of the previous expression in order.
+
+This allows for flexible and powerful chaining of function calls,
+especially when dealing with functions that return multiple values.
+
+You can even handle expression with different number of returning values in the same `pipe` form.
+E.g.,
+```txt
+(pipe 1
+  (+ :1 1)       ;; this will return 2
+  (div :1 2)     ;; this will return quotient and remainder
+  (print :1 :2)) ;; return nothing
+```
+
+===== Conditional Pipeline Sequence
+
+Or, you can use `pass` form for customized handling of the returning values of the previous expression,
+
+```txt
+(pass <initial-expression>)
+  (<pattern1> <paritial-expression1>)
+  ...
+  (<patternN>))
+```
+
+If the pattern is match and the guard is satisfied, then the corresponding partial-expression will be executed, otherwise the next pattern will be checked.
+
+This means all returning value of the expressions must have same type.
+
+===== Chain Call Sequence
+
+Since we have "methods", and the syntax sugar for calling single method is not that convenient to use when we need to call multiple methods in a chain,
+thus we have `chain` form to allow you to call multiple methods in a chain.
+
+```txt
+(chain <object>
+  (<method-name1> <arg1> <arg2> ...)
+  ...
+  (<method-nameN> <arg1> <arg2> ...))
+```
+
+This can be replaced by forms described in the previous sections, but it is more readable and easier to use.
+
+E.g.,
+```txt
+(chain 1   ;; 1 is a instance implementing the `Number` trait
+  (add 1)
+  (mul 2)
+  (sub 3))
+```
 
 ==== Conditional Expression
 
@@ -231,14 +319,20 @@ Otherwise if we have first-class type, we can have:
   (:else <else-expression>))
 ```
 
+When we have a value, we can use switch expression to check if the value is equal to any of the expected values,
+it is a simplified version of case expression.
+
 ===== Case Expression
 
 ```txt
-(case <value>)
+(case <value>
   (<pattern> <then-expression>)
   ...
-  (:ignore <else-expression>))
+  (:otherwise <else-expression>))
 ```
+
+Case expression is a pattern-based conditional expression,
+if the value matches any of the expected patterns, it will execute the corresponding then-expression.
 
 ===== Decision: Switch Expression vs Case Expression
 
@@ -251,8 +345,10 @@ However, case expression is more powerful than switch expression,
 it is a pattern-based conditional expression, which means it can match the value with a pattern,
 extract the value from the pattern, and bind the extracted value to a variable.
 
+Remarkable, `case` is not that convenient to match multiple number of values.
+
 You may even use guard pattern in case expression to add more conditions to the pattern matching.
-The underline will represent the value to be matched.
+The underline `_` will represent the value to be matched.
 
 ===== Cond Expression
 
