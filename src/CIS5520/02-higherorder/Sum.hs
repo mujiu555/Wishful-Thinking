@@ -85,7 +85,10 @@ foldl f = go
     go acc (x : xs) = go (acc `f` x) xs
 
 foldlFlip :: (a -> b -> b) -> b -> [a] -> b
-foldlFlip f = undefined
+foldlFlip f = go
+  where
+    go acc [] = acc
+    go acc (x: xs) = go (x `f` acc) xs
 
 sum1' :: [Int] -> Int
 sum1' = foldr (+) 0
