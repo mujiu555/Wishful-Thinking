@@ -255,45 +255,10 @@ May we use it?
 
 ==== High-order Polymorphism
 
-```txt
-(define (Applicative (f : Functor))
-  (Class)
-  (trait
-    ((:pure a)
-     (function ((x : a))
-      : ((result : (f a)))))
-    ((:apply a b)
-     (function ((f : (f (function ((x : a))
-                          : ((result : b)))))
-                (x : (f a)))
-      : ((result : (f b)))))))
-```
-
 === Implementation
-
-```txt
-(impl <trait>
-  <definitions>)
-```
-
-e.g.,
-```txt
-(define impl-foo
-  (impl (trait-foo foo)
-    (define :bar
-      (function ((:self)
-                 (y : (Integer)))
-        : ((result : (Integer))))
-      (fn
-        (lambda (:self y) (+ :self y))))))
-```
-
 ==== Implementation without Traits
-
 ==== Implementation with Traits
-
 ==== Implementation with Multiple Traits
-
 ==== Implementation with Internal Helpers
 
 ==== `Self` Type
