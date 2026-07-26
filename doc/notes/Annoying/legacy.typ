@@ -1,30 +1,4 @@
-#import "/lib/_lib.typ/lib.typ": *
-
-#import "@preview/gentle-clues:1.2.0": *
-
-#meta(
-  title: [Not actually even a diary],
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
-  date: datetime(year: 2025, month: 12, day: 21, hour: 0, minute: 25, second: 0),
-  id: "E001",
-)
-
-#let chat(content, nickname: none, datetime: none) = {
-  let a = left
-  if nickname == none {
-    a = right
-    nickname = "Self"
-  }
-  [
-    #align(a, text(datetime, size: 9pt, fill: gray))
-    #clue(title: align(a, nickname))[
-      #align(a, content)
-    ]
-  ]
-}
-
-#let mujiu = link("https://github.com/mujiu555")[暮玖(mujiu555)]
-#let meowyou = link("https://github.com/mujiu555")[猫柚(Meow You)]
+#import "people.typ": chat, meowyou, mujiu
 
 == 2025-12-21 01:35: Nothing Special
 
@@ -713,3 +687,4 @@ Keep in mind that, even no one will ever care about you.
 == 2026-06-05
 
 我不知道, 也许吧, 如果可以喜欢的话.
+
