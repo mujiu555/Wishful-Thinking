@@ -1,0 +1,20 @@
+cabal-version:       >=1.10
+name:                cis5520-classes
+version:             0.1.0.0
+synopsis:            Class materials from CIS 5520, UPenn
+description:         Type classes
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:     Classes
+                     , IOExercise
+                     , MonoidFoldable
+  -- other-modules:
+  build-depends:       base >= 4.15, HUnit >= 1.6, filepath >= 1.4
+  default-language:    GHC2021
+  ghc-options:         -Wno-type-defaults -Wincomplete-patterns
+  default-extensions:
+    
