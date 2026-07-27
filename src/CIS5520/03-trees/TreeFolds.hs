@@ -106,7 +106,10 @@ have imported it above. So you can try this out even if you have not completed t
 -}
 
 infixOrder1 :: Tree a -> [a]
-infixOrder1 = undefined
+infixOrder1 t = DL.toList (go t)
+  where
+    go Empty          = DL.empty
+    go (Branch x l r) = (go l) `DL.append` (DL.singleton x) `DL.append` (go r)
 
 tinfixOrder1 :: Test
 tinfixOrder1 = "infixOrder1a" ~: infixOrder1 exTree ~?= [1, 2, 4, 5, 9, 7]
@@ -126,7 +129,7 @@ definitions in that file.
 -}
 
 infixOrder2 :: Tree Int -> [Int]
-infixOrder2 = undefined
+infixOrder2 = undefined -- NOTE: similar, not impl
 
 {-
 On my microbenchmark, this also sped up the traversal!
@@ -147,7 +150,10 @@ that we need for an infix traversal:
 -}
 
 foldrTree :: (a -> b -> b) -> b -> Tree a -> b
-foldrTree f b t = undefined
+foldrTree f b t = go t b
+  where
+    go Empty = id
+    go (Branch x l r) = go l . f x . go r
 
 {-
 >
@@ -185,7 +191,9 @@ folds over the tree in the opposite order.
 -}
 
 foldlTree :: (b -> a -> b) -> b -> Tree a -> b
-foldlTree = undefined
+foldlTree f b t = foldrTree step id t b
+  where
+    step x g acc = g (f acc x)
 
 revOrder :: Tree a -> [a]
 revOrder = foldlTree (flip (:)) []

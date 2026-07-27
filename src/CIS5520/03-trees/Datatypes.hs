@@ -100,7 +100,13 @@ will arrive by "two day shipping":
 -}
 
 twoBusinessDays :: Day -> Day
-twoBusinessDays d = undefined
+twoBusinessDays Monday    = Wednesday
+twoBusinessDays Tuesday   = Thursday
+twoBusinessDays Wednesday = Friday
+twoBusinessDays Thursday  = Monday
+twoBusinessDays Friday    = Tuesday
+twoBusinessDays Saturday  = Tuesday
+twoBusinessDays Sunday    = Tuesday
 
 {-
 Shapes
@@ -306,7 +312,7 @@ Now, rewrite this function using selectors `x` and `y`:
 -}
 
 distFromOrigin' :: Point -> Double
-distFromOrigin' p = undefined
+distFromOrigin' p = sqrt ((x p) * (x p) + (y p) * (y p))
 
 {-
 Which version is easier to read? Opinions differ.
@@ -402,7 +408,8 @@ of `head` is not partial like the one for regular lists.)
 -- >>> safeHead oneTwoThree
 -- 1
 safeHead :: IntListNE -> Int
-safeHead = undefined
+safeHead (ICons h _) = h
+safeHead (ISingle h) = h
 
 {-
 We can define functions by recursion on `IntListNE`s too, of course. Write a function
@@ -412,7 +419,8 @@ to calculate the sum of a non-empty list of integers.
 -- >>> sumOfIntListNE oneTwoThree
 -- 6
 sumOfIntListNE :: IntListNE -> Int
-sumOfIntListNE = undefined
+sumOfIntListNE (ICons h r) = h + sumOfIntListNE r
+sumOfIntListNE (ISingle h) = h
 
 {-
 Polymorphic Datatypes
@@ -449,7 +457,7 @@ justTrue :: Maybe Bool
 justTrue = Just True
 
 justThree :: Maybe Int
-justThree = undefined
+justThree = Just 3
 
 {-
 A number of other polymorphic datatypes appear in the standard
@@ -536,7 +544,8 @@ infixOrder (Branch x l r) = infixOrder l ++ [x] ++ infixOrder r
 -- [5,2,1,4,9,7]
 
 prefixOrder :: Tree a -> [a]
-prefixOrder = undefined
+prefixOrder Empty = []
+prefixOrder (Branch x l r) = x : (prefixOrder l) ++ (prefixOrder r)
 
 {-
 (NOTE: This is a simple way of defining a tree walk in Haskell, but it is not
@@ -549,7 +558,7 @@ higher-order patterns for trees!
 -}
 
 treeMap :: (a -> b) -> Tree a -> Tree b
-treeMap f Empty = Empty
+treeMap _ Empty = Empty
 treeMap f (Branch x l r) = Branch (f x) (treeMap f l) (treeMap f r)
 
 {-
