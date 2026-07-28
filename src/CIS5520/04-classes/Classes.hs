@@ -184,7 +184,10 @@ by using 'deriving' like we saw in [`Datatypes`](Datatypes.html)!)
 
 instance (Eq a) => Eq (Tree a) where
   (==) :: Tree a -> Tree a -> Bool
-  t1 == t2 = undefined
+  Empty == Empty = True
+  Empty == _ = False
+  _ == Empty = False
+  (Branch a l1 l2) == (Branch b r1 r2) = a == b && l1 == r1 && l2 == r2
 
 {-
 This code tells Haskell how to compare `Tree a`s for equality as long

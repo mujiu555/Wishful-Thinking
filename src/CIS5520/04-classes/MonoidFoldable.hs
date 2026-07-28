@@ -74,16 +74,17 @@ allT2 :: Test
 allT2 = getAnd (foldList (fmap And [True, False, True])) ~?= False
 
 instance Semigroup And where
-  (<>) = undefined
+  (<>) :: And -> And -> And
+  (<>) a b = And ((getAnd a) && (getAnd b))
 
 instance Monoid And where
-  mempty = undefined
+  mempty = And True
 
 instance Semigroup Or where
-  (<>) = undefined
+  (<>) a b = Or ((getOr a) || (getOr b))
 
 instance Monoid Or where
-  mempty = undefined
+  mempty = Or False
 
 {-
 Because `And` and `Or` wrap boolean values, we can be sure that our instances
@@ -147,13 +148,13 @@ Your job is to define these three related operations
 -}
 
 or :: (Foldable t) => t Bool -> Bool
-or = undefined
+or = getOr . foldMap Or
 
 all :: (Foldable t) => (a -> Bool) -> t a -> Bool
-all f = undefined
+all f = getAnd . foldMap (And . f)
 
 any :: (Foldable t) => (a -> Bool) -> t a -> Bool
-any f = undefined
+any f = getOr . foldMap (Or . f)
 
 {-
 so that the following tests pass
@@ -200,7 +201,8 @@ But, for practice, complete the instance using `foldMap`.
 -}
 
 instance Foldable Tree where
-  foldMap = undefined
+  foldMap _ Empty = mempty
+  foldMap f (Branch v l r) = foldMap f l <> foldMap f r <> f v
 
 {-
 With this instance, we can for example, verify that all of the sample strings
