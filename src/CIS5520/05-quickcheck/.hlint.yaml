@@ -1,0 +1,55 @@
+# AUTO GENERATED HLINT FILE
+
+- functions:
+  - {name: head, within: []}
+  - {name: tail, within: []}
+  - {name: (!!), within: []}
+  - {name: read, within: []}
+  - {name: maximum, within: []}
+  - {name: minimum, within: []}
+  - {name: (Data.Map.!), within: []}
+  - {name: Data.Maybe.fromJust, within: []}
+
+- ignore: {name: "Use null"}
+- ignore: {name: "Avoid lambda using `infix`"}
+- ignore: {name: "Avoid lambda"}
+- ignore: {name: "Eta reduce"}
+- ignore: {name: "Evaluate"}
+- ignore: {name: "Functor law"}
+- ignore: {name: "Monad law, left identity"}
+- ignore: {name: "Monad law, right identity"}
+- ignore: {name: "Monoid law, left identity"}
+- ignore: {name: "Move guards forward"}
+- ignore: {name: "Reduce duplication"}
+- ignore: {name: "Redundant id"}
+- ignore: {name: "Redundant lambda"}
+- ignore: {name: "Redundant return"}
+- ignore: {name: "Replace case with fromMaybe"}
+- ignore: {name: "Replace case with maybe"}
+- ignore: {name: "Use <$>"}
+- ignore: {name: "Use <&>"}
+- ignore: {name: "Use >=>"}
+- ignore: {name: "Use ||"}
+- ignore: {name: "Use $>"}
+- ignore: {name: "Use asum"}
+- ignore: {name: "Use concatMap"}
+- ignore: {name: "Use Control.Monad.void"}
+- ignore: {name: "Use first"}
+- ignore: {name: "Use fmap"}
+- ignore: {name: "Use foldl"}
+- ignore: {name: "Use foldMap"}
+- ignore: {name: "Use foldr"}
+- ignore: {name: "Use guards"}
+- ignore: {name: "Use head"}
+- ignore: {name: "Use lambda-case"}
+- ignore: {name: "Use list literal"}
+- ignore: {name: "Use map"}
+- ignore: {name: "Use mapM"}
+- ignore: {name: "Use mconcat"}
+- ignore: {name: "Use minimum"}
+- ignore: {name: "Use newtype instead of data"}
+- ignore: {name: "Use product"}
+- ignore: {name: "Use String"}
+- ignore: {name: "Use sum"}
+- ignore: {name: "Use tuple-section"}
+- ignore: {name: "Unused LANGUAGE pragma"}

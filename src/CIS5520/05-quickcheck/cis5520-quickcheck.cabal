@@ -1,0 +1,16 @@
+cabal-version:       >=1.10
+name:                cis5520-quickcheck
+version:             0.1.0.0
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:      QuickCheck
+                      , QuickList
+  build-depends:       base >= 4.15, QuickCheck, dlist
+  default-language:    GHC2021
+  ghc-options:         -Wno-type-defaults -Wincomplete-patterns
+  default-extensions:
+    
