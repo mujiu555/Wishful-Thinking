@@ -1,0 +1,20 @@
+cabal-version:       >=1.10
+name:                cis5520-parsers
+version:             0.1.0.0
+synopsis:            Applicative Parsing
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:     Parsers
+                     , ParserCombinators
+                     , Xml
+  build-depends:       base >= 4.15
+  default-language:    GHC2021
+  ghc-options:         -Wincomplete-patterns
+  -- these extensions are enabled for GHC2021, turning them on now for 
+  -- future compatibility
+  default-extensions:
+    
