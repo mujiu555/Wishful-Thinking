@@ -1,0 +1,5 @@
+resolver: lts-22.32
+packages:
+- .
+extra-deps: 
+ - orthotope-0.1.6.0@sha256:9613cbcb6ff90f326cf47270d466b1c75332a131fa3b66a3b1be9b1eff0e3131,3401
