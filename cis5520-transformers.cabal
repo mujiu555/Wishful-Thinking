@@ -1,0 +1,26 @@
+cabal-version:       >=1.10
+name:                cis5520-transformers
+version:             0.1.0.0
+-- synopsis:
+-- description:
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:     Transformers
+                     , State
+                     , MtlExample
+                     , LSyntax
+                     , TransformersExercise
+  build-depends:       HUnit >= 1.6
+                     , QuickCheck >= 2.14
+                     , base >= 4.14
+                     , containers >= 0.6
+                     , mtl >= 2.2
+                     , pretty >= 1.1
+  default-language:    GHC2021
+  ghc-options:        -Wno-missing-signatures -Wtype-defaults -Wincomplete-patterns -Wno-noncanonical-monad-instances
+  default-extensions:
+  

@@ -1,0 +1,25 @@
+# AUTO GENERATED HLINT FILE
+
+- functions:
+  - {name: head, within: []}
+  - {name: tail, within: []}
+  - {name: (!!), within: []}
+  - {name: read, within: []}
+  - {name: maximum, within: []}
+  - {name: minimum, within: []}
+  - {name: (Data.Map.!), within: []}
+  - {name: Data.Maybe.fromJust, within: []}
+
+- ignore: {name: "Replace case with fromMaybe"}
+- ignore: {name: "Use >=>"}
+- ignore: {name: "Use asum"}
+- ignore: {name: "Use Control.Monad.void"}
+- ignore: {name: "Use head"}
+- ignore: {name: "Use minimum"}
+- ignore: {name: "Unused LANGUAGE pragma"}
+- ignore: {name: "Use record patterns"}
+- ignore: {name: "Replace case with fromMaybe"}
+- ignore: {name: "Eta reduce"}
+- ignore: {name: "Use lambda-case"}
+- ignore: {name: "Use tuple-section"}
+
