@@ -1,0 +1,17 @@
+cabal-version:       >=1.10
+
+name:                cis5520-persistent
+version:             0.1.0.0
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:     RedBlack
+  build-depends:       base >= 4.15
+                     , QuickCheck >= 2.14
+                     , containers
+  default-language:    GHC2021
+  default-extensions:
+   
