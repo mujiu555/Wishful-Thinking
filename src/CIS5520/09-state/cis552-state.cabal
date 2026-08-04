@@ -1,0 +1,25 @@
+cabal-version:       >=1.10
+name:                cis552-state
+version:             0.1.0.0
+synopsis:            State Monad
+homepage:            https://www.cis.upenn.edu/~cis552/current/index.html
+license:             OtherLicense
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:     State
+                     , StateMonad
+                     , RandomGen
+                     , Graph
+  build-depends:       base >= 4.14
+                     , HUnit >= 1.6
+                     , QuickCheck >= 2.14
+                     , containers >= 0.6
+                     , random >= 1.2
+                     , mtl >= 2.2.2
+  default-language:    GHC2021
+  ghc-options:         -Wincomplete-patterns -Wno-missing-signatures -Wno-noncanonical-monad-instances
+  default-extensions:  
