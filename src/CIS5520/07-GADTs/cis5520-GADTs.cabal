@@ -1,0 +1,32 @@
+cabal-version:       >=1.10
+name:                cis5520-GADTs
+version:             0.1.0.0
+synopsis:            GADT examples
+homepage:            https://www.cis.upenn.edu/~cis552/current/index.html
+license:             OtherLicense
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:     GADTs
+                     , RedBlackGADT0
+                     , RedBlackGADT1
+                     , RedBlackGADT2
+                     , RedBlackGADT3
+  build-depends:       base >= 4.15
+                     , HUnit >= 1.6
+                     , QuickCheck >= 2.14
+                     , ghc-typelits-knownnat
+                     , ghc-typelits-natnormalise
+                     , singletons
+                     , singletons-base
+                     , array
+                     , pretty
+                     , orthotope
+  default-language:    GHC2021
+  ghc-options:       -Wincomplete-patterns -Wno-orphans -Wno-unticked-promoted-constructors
+  default-extensions:
+    NoStarIsType
+

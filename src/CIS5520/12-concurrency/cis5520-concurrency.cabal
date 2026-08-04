@@ -1,0 +1,25 @@
+cabal-version:       >=1.10
+
+name:                cis5520-concurrency
+version:             0.1.0.0
+license-file:        LICENSE
+maintainer:          sweirich@seas.upenn.edu
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+
+library
+  exposed-modules:     Concurrency
+                     , Client
+                     , ConcurrencyTransformer
+
+  build-depends:       base >=4.15
+                     , HUnit >= 1.6
+                     , network >= 3.1
+                     , mtl >= 2.2.2
+                     , containers >= 0.6
+                     
+  default-language:  GHC2021
+  ghc-options:       -Wno-unused-matches -Wno-noncanonical-monad-instances
+  default-extensions:
+    

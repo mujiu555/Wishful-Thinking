@@ -1,4 +1,5 @@
 #import "people.typ": chat, meowqi, meowyou, mujiu, youzhi
+#import "/lib/_lib.typ/lib.typ": *
 
 == July 2026
 
@@ -50,4 +51,20 @@
 
 #chat(datetime: [2026-07-29 01:26])[
   焦虑
+]
+
+#chat(datetime: [2026-07-29 01:29])[
+  我需要, ... 学会如何放弃.
+]
+
+#chat(datetime: [2026-08-04 21:26])[
+  尝试了一些guix system, 果然还是nixos好用啊.
+  linux-libre内核一堆小问题.
+
+  呜呜呜, 可是我喜欢的那位孩子, 她心情很差, 但是我没有办法去安慰她....
+
+  我学长天天诋毁我, 说我20句话必提一次某某某某(x)
+  我有那么纯情吗(雾)
+
+  草了我简直是神经病.
 ]
