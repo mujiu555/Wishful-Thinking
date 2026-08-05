@@ -287,9 +287,7 @@ Then implement your definition so that you get the following behavior:
 
 instance Arbitrary SmallNonNegInt where
   arbitrary = SmallNonNegInt <$> chooseInt (0, 1000)
-  shrink = fmap SmallNonNegInt <$> shrink . getSmallNonNegInt
-    where
-      getSmallNonNegInt (SmallNonNegInt i) = i
+  shrink (SmallNonNegInt i) = SmallNonNegInt <$> shrink i
 
 {-
 Now, use this type to define your property specifying `replicate`.
