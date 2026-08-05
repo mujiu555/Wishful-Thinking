@@ -177,8 +177,10 @@ implementation of `minimum` that doesn't satisfy your property.
 -}
 
 prop_minimum :: Ord a => ([a] -> a) -> [a] -> Property
-prop_minimum minimum' a =
-  not (null a) ==> minimum a == minimum' a
+prop_minimum minimum' xs =
+  not (null xs) ==>
+    let m = minimum' xs
+    in m `elem` xs .&&. all (m <=) xs
 
 {-
 Also define a buggy implementation that can be identified by your property.
