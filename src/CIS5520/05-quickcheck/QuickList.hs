@@ -176,15 +176,18 @@ implementation of `minimum` that doesn't satisfy your property.
 (Don't forget to fill in the type signature for `prop_minimum`!)
 -}
 
-prop_minimum :: Ord a => ([a] -> a) -> Undefined
-prop_minimum minimum' = undefined
+prop_minimum :: Ord a => ([a] -> a) -> [a] -> Property
+prop_minimum minimum' xs =
+  not (null xs) ==>
+    let m = minimum' xs
+    in m `elem` xs .&&. all (m <=) xs
 
 {-
 Also define a buggy implementation that can be identified by your property.
 -}
 
 minimumBug :: Ord a => [a] -> a
-minimumBug = undefined
+minimumBug (x: xs) = x
 
 {-
 Be careful when testing your code with ghci. Make sure that you provide
@@ -283,18 +286,22 @@ Then implement your definition so that you get the following behavior:
 -}
 
 instance Arbitrary SmallNonNegInt where
-  arbitrary = undefined
-  shrink = undefined
+  arbitrary = SmallNonNegInt <$> chooseInt (0, 1000)
+  shrink (SmallNonNegInt i) = SmallNonNegInt <$> shrink i
 
 {-
 Now, use this type to define your property specifying `replicate`.
 -}
 
-prop_replicate :: (Int -> a -> [a]) -> Undefined
-prop_replicate replicate' = undefined
+prop_replicate :: Eq a => (Int -> a -> [a]) -> SmallNonNegInt -> a -> Bool
+prop_replicate replicate' (SmallNonNegInt i) a = (length rep == i) && allright rep
+  where
+    rep              = (replicate' i a)
+    allright (x: xs) = x == a && allright xs
+    allright []      = True
 
 replicateBug :: Int -> a -> [a]
-replicateBug = undefined
+replicateBug i a = [a]
 
 {-
 -- Part c
@@ -307,14 +314,18 @@ in the result is non-empty and contains only equal elements".  Also
 write a buggy version of `group` that violates both of them.
 -}
 
-prop_group_1 :: Eq a => ([a] -> [[a]]) -> Undefined
-prop_group_1 group' = undefined
+prop_group_1 :: Eq a => ([a] -> [[a]]) -> [a] -> Bool
+prop_group_1 group' a = concat (group' a) == a
 
-prop_group_2 :: Eq a => ([a] -> [[a]]) -> Undefined
-prop_group_2 group' = undefined
+prop_group_2 :: Eq a => ([a] -> [[a]]) -> [a] -> Bool
+prop_group_2 group' a = all val (group' a)
+  where
+    val (x: y: xs) = x == y && val (y: xs)
+    val (_: [])    = True
+    val []         = False
 
 groupBug :: Eq a => [a] -> [[a]]
-groupBug = undefined
+groupBug _ = [[]]
 
 {-
 -- Part d
@@ -324,17 +335,17 @@ Write two interesting properties about
 Write two different buggy versions, one which violates each property.
 -}
 
-prop_reverse_1 :: ([a] -> [a]) -> Undefined
-prop_reverse_1 reverse' = undefined
+prop_reverse_1 :: Eq a => ([a] -> [a]) -> [a] -> Bool
+prop_reverse_1 reverse' a = List.foldl' (flip (:)) [] a == reverse' a
 
-prop_reverse_2 :: ([a] -> [a]) -> Undefined
-prop_reverse_2 reverse' = undefined
+prop_reverse_2 :: Eq a => ([a] -> [a]) -> [a] -> Bool
+prop_reverse_2 reverse' a = a == (reverse' (reverse' a))
 
 reverseBug_1 :: [a] -> [a]
-reverseBug_1 = undefined
+reverseBug_1 = id
 
 reverseBug_2 :: [a] -> [a]
-reverseBug_2 = undefined
+reverseBug_2 = drop 1
 
 {-
 Once you've written all of these, evaluating `main` in GHCi should
