@@ -805,7 +805,7 @@ Use the operators above to define generators. Make sure that you test them out
 -}
 
 genBool :: Gen Bool
-genBool = QC.choose (True, False)
+genBool = QC.elements [True, False]
 
 -- >>> QC.sample' genBool
 
@@ -831,11 +831,14 @@ genMaybe :: Gen a -> Gen (Maybe a)
 genMaybe ga = (arbitrary :: Gen Bool) >>= 
    \b -> if b then fmap Just ga  else return Nothing
 
+genMaybe' :: Gen a -> Gen (Maybe a)
 genMaybe' ga = (arbitrary :: Gen Bool) >>= 
    \b -> if b then ga >>= \a -> return (Just a)  else return Nothing
 
+genMaybe'' :: Gen a -> Gen (Maybe a)
 genMaybe'' ga = fmap Just ga
 
+genMaybe''' :: Gen a -> Gen (Maybe a)
 genMaybe''' ga = QC.frequency [(1, return Nothing), (7, Just <$> ga)]
 
 -- >>> QC.sample' (genMaybe''' (arbitrary :: Gen Int))
