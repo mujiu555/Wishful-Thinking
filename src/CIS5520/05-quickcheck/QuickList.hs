@@ -338,7 +338,7 @@ Write two different buggy versions, one which violates each property.
 -}
 
 prop_reverse_1 :: Eq a => ([a] -> [a]) -> [a] -> Bool
-prop_reverse_1 reverse' a = (reverse a) == (reverse' a)
+prop_reverse_1 reverse' a = foldl' (flip (:)) [] a == (reverse' a)
 
 prop_reverse_2 :: Eq a => ([a] -> [a]) -> [a] -> Bool
 prop_reverse_2 reverse' a = a == (reverse' (reverse' a))
