@@ -53,6 +53,7 @@ Root: /                         ; Project root
 +- doc/                         ; documentation & copyright information
 |  +- licenses/                 ; when adopting other library, place license here
 |  +- root/                     ; detailed README for each subproject
+|  +- notes/                    ; notes not about to be published
 |  +- LICENSE                   ; copy of LICENSE adopted by the project
 |  +- LICENSE.apache            ; copy of original LICENSE
 |  +- README                    ; README for directory `doc`
@@ -61,7 +62,6 @@ Root: /                         ; Project root
 |  +- README.release.md         ; semantic versioning 
 +- inc/                         ; public header
 +- lib/                         ; public library, installed from bin
-+- notes/                       ; notes not about to be published
 +- publish/                     ; generated site
 +- root/                        ; Site root
 |  +- lib/                      ;
@@ -106,38 +106,47 @@ So, it will be nice to have a configured Emacs.
 
 - Applied Computer Science
   - Computer Graphic
-    - [ ] CMU-15-462\_662
-    - [ ] FreeGLUT
+    - [-] CMU-15-462\_662
+    - [-] FreeGLUT
   - Operating System
   - Compiler Principle
 - Theoretical Computer Science
   - [ ] ITTCS
-  - [ ] SICP
+  - [X] SICP
   - [ ] HTDP
-  - [ ] MIT-18.404j
+  - [X] MIT-18.404j
   - Theory of Computation
-    - [ ] MIT-6.004
+    - [X] MIT-6.004
   - Pgrogramming Paradigm
-    - [ ] Stanford-CS107
+    - [X] Stanford-CS107
   - Type Theory
     - Type System
+      - TaPL: Type and Programming Languages
+      - PFPL: Practical Foundations for Programming Languages
   - Programming Language Theory
   - Program Theory
   - Lambda Calculus
 - Software Engineering
-  - [ ] Missing-Semester
-  - [ ] tools\_maps
+  - [X] Missing-Semester
+  - [-] tools\_maps
   - [ ] buildYOLisp
   - [ ] Craft Interpreter
-  - [ ] c
+  - [X] c
   - [ ] hecto
   - [ ] d\_flat
+    - Lilies: General purpose programming language based on S-Expression,
+      act as an IR for d\_flat system.
+    - Margarita: Higher layer programming language based on M-Expression
+    - Editor:
+    - Library: Including one for standard library as a
+      general purpose programming language and
+      one for text processing and mark up language.
   - [ ] leetcode
 - Mathematics
   - DiscreteMathematics
     - [ ] MIT-6.042j
   - Category Theory
-- [ ] HowToSpeak
+- [X] HowToSpeak
 
 ## Related Efforts
 
