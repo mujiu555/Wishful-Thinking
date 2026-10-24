@@ -14,7 +14,7 @@
 
 === Vector Calculus
 
-Much of mordern graphics formulated in terms of 
+Much of mordern graphics formulated in terms of
 partial differential equations.
 
 === Euclidean Norm
@@ -35,7 +35,7 @@ In $RR^3$ Space:
 Inner Product: notion of alignment.
 For n-dimensional vectors,
 Euclidean inner product:
-$angle.l arrow(u), arrow(v) angle.r := |arrow(u)| |arrow(v)| cos(theta)$
+$chevron.l arrow(u), arrow(v) chevron.r := |arrow(u)| |arrow(v)| cos(theta)$
 
 For orthonormal Cartesian coordinates,
 Dot product:
@@ -54,21 +54,22 @@ Normal Vector: some vector vertical (perpendicular) to a plant,
 for which two non-orthonormal vectors can define a plant.
 
 $
-sqrt(det(arrow(u), arrow(v), arrow(u) times arrow(v))) =
-|arrow(u)| |arrow(v)| sin(theta)
+  sqrt(det(arrow(u), arrow(v), arrow(u) times arrow(v))) =
+  |arrow(u)| |arrow(v)| sin(theta)
 $
 
 $
-arrow(u) times arrow(v) :=
-det mat(
-  arrow(i), arrow(j), arrow(k);
-  u_1,      u_2,      u_3;
-  v_1,      v_2,      v_3;
-)
-== mat(
-  u_2 v_3 - u_3 v_2;
-  u_3 v_1 - u_1 v_3;
-  u_1 v_2 - u_2 v_1)
+  arrow(u) times arrow(v) :=
+  det mat(
+    arrow(i), arrow(j), arrow(k);
+    u_1, u_2, u_3;
+    v_1, v_2, v_3;
+  )
+  == mat(
+    u_2 v_3 - u_3 v_2;
+    u_3 v_1 - u_1 v_3;
+    u_1 v_2 - u_2 v_1
+  )
 $
 
 === Quarter Rotation
@@ -80,38 +81,38 @@ Cross product with a unit vector N is equivalent to a quarter-rotation in the pl
 === Matrix Representation of Dot Product
 
 $
-arrow(u) dot arrow(v)
-== arrow(u)^T arrow(v)
-== mat(u_1, ..., u_n) mat(u_1; ...; u_n)
-== sum_(i=1)^n u_i v_i
+  arrow(u) dot arrow(v)
+  == arrow(u)^T arrow(v)
+  == mat(u_1, ..., u_n) mat(u_1; ...; u_n)
+  == sum_(i=1)^n u_i v_i
 $
 
 === Matrix Representation of Cross Product
 
 $
-arrow(u):=(u_1, u_2, u_3)
-=> hat(arrow(u))
-:= det mat(0, -u_3, u_2; u_3, 0, -u_1; -u_2, u_1, 0)
+  arrow(u):=(u_1, u_2, u_3)
+  => hat(arrow(u))
+  := det mat(0, -u_3, u_2; u_3, 0, -u_1; -u_2, u_1, 0)
 $
 
 Also, $arrow(u) times arrow(v) = - arrow(v) times arrow(u)$
 
 === Determinant
 
-$det(arrow(u),arrow(v),arrow(w))$ encodes signed volume of
+$det(arrow(u), arrow(v), arrow(w))$ encodes signed volume of
 parallelepiped with edge vectors $arrow(u), arrow(v), arrow(w)$.
 
 $
-M = mat(a, b, ..., c; d, ..., ..., ...; ..., ..., ..., g; h, ..., i, j)
-=>
-det M
-== a det M_(1,1) + b det M_(1,2) + ... + c det M_(1,c)
-== ...
+  M = mat(a, b, ..., c; d, ..., ..., ...; ..., ..., ..., g; h, ..., i, j)
+  =>
+  det M
+  == a det M_(1,1) + b det M_(1,2) + ... + c det M_(1,c)
+  == ...
 $
 
 $M_(m,n)$ is sub-matrix discard the row and column of m,n.
 
-$det(u,v,w)=(u times v) dot w = (v times w) dot u = (w times u) dot v$
+$det(u, v, w)=(u times v) dot w = (v times w) dot u = (w times u) dot v$
 
 PS. Order of product can't be switched.
 
@@ -122,17 +123,17 @@ PS. Order of product can't be switched.
 Jacobi identity for cross product:
 
 $
-arrow(u) times (arrow(v) times arrow(w)) +
-arrow(v) times (arrow(w) times arrow(u)) +
-arrow(w) times (arrow(u) times arrow(v)) =
-0
+  arrow(u) times (arrow(v) times arrow(w)) +
+  arrow(v) times (arrow(w) times arrow(u)) +
+  arrow(w) times (arrow(u) times arrow(v)) =
+  0
 $
 
 Lagrange's identity:
 
 $
-arrow(u) times (arrow(v) times arrow(w)) =
-arrow(v) (arrow(u) dot arrow(w)) - arrow(w) (arrow(u) dot arrow(v))
+  arrow(u) times (arrow(v) times arrow(w)) =
+  arrow(v) (arrow(u) dot arrow(w)) - arrow(w) (arrow(u) dot arrow(v))
 $
 
 === Differential Operators
@@ -149,15 +150,11 @@ i.e. Gradient or slope.
 
 For a function $f(x):R->R$
 
-Thus: $
-f'(x_0) := lim_(epsilon->0) (f(x_0 + epsilon) - f(x_0)) / epsilon.
-$
+Thus: $ f'(x_0) := lim_(epsilon->0) (f(x_0 + epsilon) - f(x_0)) / epsilon. $
 
-Thus: $
-f^+(x_0) := lim_(epsilon->0^+) (f(x_0 + epsilon) - f(x_0)) / epsilon,
+Thus: $ f^+(x_0) := lim_(epsilon->0^+) (f(x_0 + epsilon) - f(x_0)) / epsilon, $
 $
-$
-f^-(x_0) := lim_(epsilon->0^-) (f(x_0) - f(x_0 - epsilon)) / epsilon.
+  f^-(x_0) := lim_(epsilon->0^-) (f(x_0) - f(x_0 - epsilon)) / epsilon.
 $
 When meets singular at $x_0$, $f(x)$ is non-differentiable at $x_0$.
 Aka. When $f^+(x_0) == f^-(x_0)$ at $x_0$, it is differentiable.
@@ -193,12 +190,13 @@ PS. "Nabla" for $gradient$
 
 List of partial derivatives.
 
-$ gradient f = mat(
-  (partial f) / (partial x_1);
-  (partial f) / (partial x_2);
-  ...;                    
-  (partial f) / (partial x_n)
-)
+$
+  gradient f = mat(
+    (partial f) / (partial x_1);
+    (partial f) / (partial x_2);
+    ...;
+    (partial f) / (partial x_n)
+  )
 $
 
 Problems:
@@ -209,26 +207,26 @@ Problems:
 E.g. For function $f(x): x_1^2 + x_2^2$, exists:
 $(partial f) / (partial x_1) = (partial) / (partial x_1) x_1^2 + (partial) / (partial x_1) x_2^2 = 2 x_1$,
 $(partial f) / (partial x_2) = (partial) / (partial x_2) x_1^2 + (partial) / (partial x_2) x_2^2 = 2 x_2$,
-Thus, $gradient f(arrow(x)) = mat(2 x_1 ; 2 x_2) = 2 arrow(x)$
+Thus, $gradient f(arrow(x)) = mat(2 x_1; 2 x_2) = 2 arrow(x)$
 
 === Gradient as Best Linear Approximation
 
 For point $x_0$, gradient is the vector $gradient f(x_0)$ that leads to the best possible approximation.
 
 $
-f(x) approx f(x_0) + gradient f(x_0) dot (x - x_0)
+  f(x) approx f(x_0) + gradient f(x_0) dot (x - x_0)
 $
 
 PS. Let $z = f(x, y)$, and $P(x_0, y_0, z_0)$ be a point in the surface.
 $
-d z =
-z - z_0 =
-f_x(x_0, y_0)(x - x_0) + f_y(x_0, y_0)(y - y_0) =
-f_x(x_0, y_0)d x + f_y(x_0, y_0) d y
+  d z =
+  z - z_0 =
+  f_x(x_0, y_0)(x - x_0) + f_y(x_0, y_0)(y - y_0) =
+  f_x(x_0, y_0)d x + f_y(x_0, y_0) d y
 $
 $
-=>
-d z = d f(x, y) = f_x(x, y) d x + f_y(x, y) d y= gradient f dot angle.l d x, d y angle.r
+  =>
+  d z = d f(x, y) = f_x(x, y) d x + f_y(x, y) d y= gradient f dot chevron.l d x, d y chevron.r
 $
 
 === Gradient takes uphill
@@ -237,7 +235,7 @@ Direction of steepset ascent.
 
 === Gradient and Directional Derivative
 
-$ angle.l gradient f(x), arrow(u) angle.r = D_arrow(u) f (arrow(x)) $
+$ chevron.l gradient f(x), arrow(u) chevron.r = D_arrow(u) f (arrow(x)) $
 
 E.g. $f:=arrow(u)^T arrow(v)$, i.e. $f(arrow(v)) = f$,
 then it has $gradient_arrow(u) f = arrow(v)$
@@ -245,10 +243,10 @@ then it has $gradient_arrow(u) f = arrow(v)$
 === Gradient for a function: $LL^2$ Gradient
 
 Given a function $F(f)$ that accept a function.
-$ angle.l.double gradient F, u angle.r.double = D_u F $
+$ chevron.l.double gradient F, u chevron.r.double = D_u F $
 $ D_u F(f) = lim_(epsilon->0) (F(f + epsilon u) - F(f)) / epsilon $
 
-E.g. $F(f) := angle.l.double f, g angle.r.double$; for $ f,g: [0,1]->R$.
+E.g. $F(f) := chevron.l.double f, g chevron.r.double$; for $f,g: [0,1]->R$.
 The gradient is $gradient_f F = g$
 
 Proof required....
@@ -264,14 +262,14 @@ Assign a vector to each point.
 Divergence:
 how much a field shrinking/expanding.
 $ gradient dot X $
-Given $gradient = angle.l (partial) / (partial u_1), ..., (partial) / (partial u_n) angle.r$,
-and, $X(arrow(u)) = angle.l X_1 (arrow(u)), ..., X_n (arrow(u)) angle.r$,
+Given $gradient = chevron.l (partial) / (partial u_1), ..., (partial) / (partial u_n) chevron.r$,
+and, $X(arrow(u)) = chevron.l X_1 (arrow(u)), ..., X_n (arrow(u)) chevron.r$,
 then, $gradient dot X = sum_(i=1)^n (partial) / (partial u_i) X_i arrow(u)$
 
 Curl:
 how much is field spinning.
 $ gradient times X $
-Still, $gradient = angle.l (partial) / (partial u_1), ..., (partial) / (partial u_3) angle.r$, and $X(arrow(u)) = angle.l X_1(arrow(u)), ..., X_3(arrow(u)) angle.r$,
+Still, $gradient = chevron.l (partial) / (partial u_1), ..., (partial) / (partial u_3) chevron.r$, and $X(arrow(u)) = chevron.l X_1(arrow(u)), ..., X_3(arrow(u)) chevron.r$,
 then, ...
 Furthermore, curl(2D) is just determinant of which k is all 0.
 
@@ -295,7 +293,7 @@ Maps a scalar function to another scalar function: linearly.
 - $gradient^2$ for Hessian
 - sum of 2nd partial derivatives $Delta f := sum_(i=1)^n partial^2 / (partial x_1^2)$
 - gradient of Dirichlet energy $Delta f := - gradient_f (1/2 ||gradient f||^2)$
-- analogy: graph Laplacian: grid, graph, 
+- analogy: graph Laplacian: grid, graph,
 
 Basic definition: $Delta f := sum_i (partial^2 f) / (partial x_i^2)$
 
@@ -314,19 +312,22 @@ i.e. Gradient of the gradient of a function
 
 $ (gradient^2 f) arrow(u) := D_arrow(u) (gradient f) $
 
-For a function $f(x): RR^n -> RR$, 
-$ gradient^2 f :=
-mat(
-  (partial^2 f) / (partial x_1 partial x_1), dots, (partial^2 f) / (partial x_1 partial x_n);
-  dots.v, dots.down, dots.v;
-  (partial^2 f) / (partial x_n partial x_1), dots, (partial^2 f) / (partial x_n partial x_n);
-)
+For a function $f(x): RR^n -> RR$,
+$
+  gradient^2 f :=
+  mat(
+    (partial^2 f) / (partial x_1 partial x_1), dots, (partial^2 f) / (partial x_1 partial x_n);
+    dots.v, dots.down, dots.v;
+    (partial^2 f) / (partial x_n partial x_1), dots, (partial^2 f) / (partial x_n partial x_n);
+  )
 $
 a matrix and each entry are partial directive for f along two coordinate direction.
 The Hessian matrix always symmetric.
 
 2nd-order approximation of any smooth multivariable function $f(x)$ around some point $x_0$:
-$ f(arrow(x)) approx f(arrow(x)_0) + gradient f(arrow(x)_0) dot (arrow(x) - arrow(x)_0) + (gradient^2 f(x_0)(arrow(x) - arrow(x)_0) dot (arrow(x) - arrow(x)_0)) / 2 $
+$
+  f(arrow(x)) approx f(arrow(x)_0) + gradient f(arrow(x)_0) dot (arrow(x) - arrow(x)_0) + (gradient^2 f(x_0)(arrow(x) - arrow(x)_0) dot (arrow(x) - arrow(x)_0)) / 2
+$
 Likely, $c in RR, arrow(b) in RR^n, Mu in RR^(n times n)$,
 then,
 $ f(arrow(u)) approx 1/2 arrow(u)^T Alpha arrow(u) + arrow(b)^T arrow(u) + c, arrow(u) := arrow(x) - arrow(x)_0 $
