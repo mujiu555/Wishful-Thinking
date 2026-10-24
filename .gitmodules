@@ -1,0 +1,4 @@
+[submodule "lib/typst-mode"]
+	path = lib/typst-mode
+	url = https://github.com/mujiu555/typst-mode.git
+	branch = feat/share

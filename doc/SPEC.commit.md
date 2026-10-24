@@ -125,6 +125,8 @@ Section starts with a title line, starting with a type of the section of changes
 The title line is suffixed with a colon `:`, followed by zero or more item lines.
 A short description of the section can be provided in the title line after the colon.
 
+description may be wrapped by `[` and `]`.
+
 The type of the section can be one of the followings:
 
 Code changes:

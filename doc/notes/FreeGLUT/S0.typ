@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [计图入门之FreeGLUT (0)],
   date: datetime(year: 2025, month: 10, day: 4, hour: 22, minute: 1, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "freeglut-s0",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 == 计图入门之FreeGLUT (0)
 

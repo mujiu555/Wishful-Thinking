@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [Types and Programming Lnaguages (Solution Set)],
   date: datetime(year: 2026, month: 3, day: 9, hour: 0, minute: 21, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "tapl-e1",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 
 == Chapter III: Untyped Calculation Expressions

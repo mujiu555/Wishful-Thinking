@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [How To Speak],
   date: datetime(year: 2025, month: 10, day: 14, hour: 3, minute: 28, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "how-to-speak-s1",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 == How To Speak
 

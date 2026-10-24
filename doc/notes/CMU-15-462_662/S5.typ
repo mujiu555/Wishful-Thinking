@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [CMU 15-464/662: Spatial Transformation],
   date: datetime(year: 2025, month: 10, day: 16, hour: 13, minute: 51, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "cmu-15464-s5",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 == CMU 15-464/662
 

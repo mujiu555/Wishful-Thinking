@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [CIS 5520: Advanced Programming],
   date: datetime(year: 2026, month: 7, day: 5, hour: 23, minute: 0, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "cis5520",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 == Introduction
 

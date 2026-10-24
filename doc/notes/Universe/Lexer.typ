@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [Lexer: A Lexer Combinator for D Flat System],
   date: datetime(year: 2026, month: 2, day: 17, hour: 3, minute: 54, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "dflat-lexer",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 == Basic Functionalities
 

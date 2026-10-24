@@ -1,14 +1,14 @@
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
   title: [The Missing Semester of Computer Education],
   date: datetime(year: 2025, month: 12, day: 18, hour: 21, minute: 24, second: 0),
-  author: link("https://github.com/mujiu555")[GitHub\@mujiu555],
+  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "missing-semester-s1",
   parent_id: "index",
 )
 
-#mkheader()
+#mkheading()
 
 == Section I
 

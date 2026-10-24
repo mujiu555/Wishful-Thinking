@@ -1,5 +1,5 @@
 #import "people.typ": chat, meowqi, meowyou, mujiu, youzhi
-#import "/lib/_lib.typ/lib.typ": *
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta
 
 == July 2026
 
