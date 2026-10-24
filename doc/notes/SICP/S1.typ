@@ -1,5 +1,4 @@
 /// TAG: programming paradigm, scheme
-#import "@preview/zh-kit:0.1.0": *
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
@@ -11,8 +10,6 @@
 )
 
 #mkheading()
-
-#show: doc => setup-base-fonts(doc)
 
 #quote[
   Computer science is not about computers, any more than astronomy is about telescopes, or biology about microscopes.

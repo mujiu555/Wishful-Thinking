@@ -1,5 +1,4 @@
 /// TAG: c, programming theory, computation theory
-#import "@preview/zh-kit:0.1.0": *
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
@@ -15,8 +14,6 @@
 #show raw: set text(font: (
   (name: "FiraCode Nerd Font Mono", covers: "latin-in-cjk"),
 ))
-
-#show: doc => setup-base-fonts(doc)
 
 == Section I: C Programming Language
 

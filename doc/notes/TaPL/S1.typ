@@ -1,7 +1,7 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
-  title: [Types and Programming Lnaguages],
+  title: [Types and Programming Languages],
   date: datetime(year: 2026, month: 2, day: 13, hour: 23, minute: 45, second: 0),
   authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
   id: "tapl-s1",

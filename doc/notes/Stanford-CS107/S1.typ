@@ -1,5 +1,4 @@
 /// TAG: c, programming paradigm, computer architecture
-#import "@preview/zh-kit:0.1.0": *
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
@@ -11,8 +10,6 @@
 )
 
 #mkheading()
-
-#show: doc => setup-base-fonts(doc)
 
 == Data Types and Conversion
 

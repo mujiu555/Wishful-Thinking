@@ -1,4 +1,3 @@
-#import "@preview/zh-kit:0.1.0": *
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 
 #meta(
@@ -11,7 +10,6 @@
 
 #mkheading()
 
-#show: doc => setup-base-fonts(doc)
 #set par(first-line-indent: 0em)
 
 #show raw: set text(font: (
