@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [CMU 15-462/662: Linear Algebra in Computer Graphics],
   date: datetime(year: 2025, month: 9, day: 27, hour: 22, minute: 56, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cmu-15462-s2",
   parent_id: "index",
 )

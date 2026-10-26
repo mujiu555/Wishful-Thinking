@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [CAN 201 Computer Network],
   date: datetime(year: 2025, month: 11, day: 14, hour: 0, minute: 57, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "can201",
   parent_id: "index",
 )

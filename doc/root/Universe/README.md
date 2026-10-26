@@ -1,4 +1,4 @@
-# D Flat
+# Universe
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![conventional commit compliant](https://img.shields.io/badge/git%20commit-conventional%20commit-brightgreen.svg?style=flat-square)](https://www.conventionalcommits.org/en/v1.0.0/#specification)
@@ -6,27 +6,16 @@
 
 [TOC]
 
-A S-Expression based Language.
+The collection of my models.
+Waiting for formal verification.
 
 ## Background
 
 ## Install
 
-This is just an idea for now.
-
-And it is not well designed yet.
-
 ## Usage
 
-No executable file available.
-
 ## Related Efforts
-
-This is a toy language.
-
-But I don't think I can put it together with other's.
-
-After all, this project has even no prototype.
 
 ## Maintainers
 

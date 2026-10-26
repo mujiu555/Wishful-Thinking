@@ -1,6 +1,7 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": embed, meta, mkcover, mkheading, template
 #show: template
 #import "tags.typ": topics
+#import "aut.typ": mujiu
 
 #show raw: set text(
   font: "Maple Mono NF",
@@ -21,13 +22,11 @@
   title: [GitHub\@Mujiu555's page],
   id: "index",
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
-  authors: ((link("https://github.com/mujiu555")[GitHub\@mujiu555]),),
+  authors: (mujiu,),
   tags: (topics.at("index"),),
 )
 
 #mkcover()
-
-#mkheading()
 
 #embed(include "/doc/notes/about.typ")
 #embed(include "/doc/notes/contents.typ")
@@ -67,3 +66,5 @@
 #embed(include "/doc/notes/xjtlu-cheatsheet/CAN201.typ")
 #embed(include "/doc/notes/xjtlu-cheatsheet/CPT205-FreeGLUT.typ")
 #embed(include "/doc/notes/xjtlu-cheatsheet/CPT205.typ")
+
+#embed(include "/doc/notes/idx.typ")

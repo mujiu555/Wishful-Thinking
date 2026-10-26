@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [计图入门之FreeGLUT (0)],
   date: datetime(year: 2025, month: 10, day: 4, hour: 22, minute: 1, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "freeglut-s0",
   parent_id: "index",
 )

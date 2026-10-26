@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [CIS 194: Introduction to Haskell],
   date: datetime(year: 2026, month: 3, day: 14, hour: 22, minute: 8, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cis194-s1",
   parent_id: "index",
 )

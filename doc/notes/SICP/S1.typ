@@ -1,10 +1,11 @@
 /// TAG: programming paradigm, scheme
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [MIT 6.001: Structure and Interpretation of Computer Programs (SICP)],
   date: datetime(year: 2025, month: 12, day: 17, hour: 15, minute: 56, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "sicp-s1",
   parent_id: "index",
 )

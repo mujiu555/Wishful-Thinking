@@ -2,6 +2,7 @@
 
 // Former categories are ordinary tags; no separate category registry.
 #let registered = (tag.register)(
+  "topics:root",
   "index",
   "about",
   "programming-languages",

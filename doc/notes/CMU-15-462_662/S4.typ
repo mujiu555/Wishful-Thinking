@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [CMU 15-462/662: Drawing a Triangle],
   date: datetime(year: 2025, month: 10, day: 7, hour: 3, minute: 14, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cmu-15462-s4",
   parent_id: "index",
 )

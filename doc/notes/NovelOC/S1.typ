@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [World Beyond Times],
   date: datetime(year: 2025, month: 10, day: 28, hour: 2, minute: 7, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "noveloc-s1",
   parent_id: "index",
 )

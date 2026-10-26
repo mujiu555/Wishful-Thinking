@@ -1,9 +1,10 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "../aut.typ": mujiu
 
 #meta(
   title: [Lycoris Radiata --- The Grammar of Authorization: A Composable Model for Access Control Systems],
   date: datetime(year: 2025, month: 8, day: 21, hour: 4, minute: 18, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "dflat-lycoris radiata",
   parent_id: "index",
   abstract: "",

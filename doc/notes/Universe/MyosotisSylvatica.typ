@@ -1,10 +1,11 @@
 
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta
+#import "../aut.typ": mujiu
 
 #meta(
   title: [Myosotis Sylvatica --- Resource-Oriented File Systems: A Compositional Model for Naming, Entries, and Resource Access],
   date: datetime(year: 2026, month: 10, day: 19, hour: 0, minute: 0, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "dflat-myosotis sylvatica",
   parent_id: "index",
   abstract: "",
