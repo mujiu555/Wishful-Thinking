@@ -1,6 +1,7 @@
 
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [Assembly, Constitution Principle of Computer, Computer Organization and Architecture and Operating System (Section I)],
@@ -8,6 +9,7 @@
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   authors: (mujiu,),
   parent_id: "index",
+  tags: (topics.children.se.tag,),
 )
 
 #mkheading()

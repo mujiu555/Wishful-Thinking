@@ -1,6 +1,7 @@
 /// TAG: c, programming theory, computation theory
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [From The C Programming Language To Theoretical Computer Science (Section II)],
@@ -8,6 +9,7 @@
   authors: (mujiu,),
   id: "c-s2",
   parent_id: "index",
+  tags: (topics.children.se.children.pl.tag,),
 )
 
 #mkheading()

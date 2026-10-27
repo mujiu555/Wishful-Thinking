@@ -81,10 +81,10 @@ NOTE:
   - `#false`        : False the literal
 + Character:
   Unicode characters represented directly, by named escapes, or by Unicode escapes
-  - `#\'<char>`     : Character, `<char>` can be any single Unicode Character, parse only once, even space
+  - `#\'<char>`     : Character, `<char>` can be any single Unicode scalar value, parse only once, even space
   - `#\<name>`      : Character Escape
   - `#\u{<unicode>}`: Unicode
-+ String: An immutable sequence of bytes, conventionally encoded as UTF-8.
++ String: An immutable sequence of bytes, encoded as UTF-8.
   - `"<str>"`       : String with escape
   - `r"<str>"`      : Raw String without escape
 + Symbol:
@@ -199,15 +199,21 @@ It is a special form because it do not necessarily follow the evaluation rules f
 
 Application is the process of applying an operator to operands.
 
-Lilies supports two modes of application:
-- *Entire-expression application*:
-  The complete application expression, including the operator itself, is passed as a single argument.
-  The callee is responsible for parsing and interpreting the expression.
-- *Parameter-wise application*:
-  Arguments are supplied individually according to the operator's parameter signature.
+Lilies supports two modes of application, determined by the operator's signature and corresponding parameter form:
+
+- *Parameter-wise application:*
+  The operator receives its operands individually, according to its parameter signature.
+  The operator itself is not supplied as an argument.
+- *Entire-expression application:*
+  The operator receives the complete application expression as a single argument,
+  including the operator itself and all operands.
+
+These two modes correspond to different parameter forms of `lambda` and different signature forms.
+The parameter form of a lambda must agree with its declared signature.
 
 ```lisp
-(lambda <param> <body>)                             ; Lambda                      Expression
+(lambda <ids> <body>)                            ; Lambda                      Expression
+(lambda (<id>...) <body>)                        ; Lambda                      Expression
 ;; NOTE: Unlike the lambda appearing in macros, a runtime lambda that wants to
 ;;   use the matcher form must be able to express the whole call expression,
 ;;   which contains the function itself.  Doing so constructs a type for that
@@ -215,7 +221,7 @@ Lilies supports two modes of application:
 ;;   Lilies requires recursive type definitions to satisfy a positivity restriction.
 ;;   Consequently, a recursive function signature that places its own type in a negative position is rejected.
 ;;   The lambda in macros, by contrast, only receives the expression itself.
-(forall (<id>...) <body>)                           ; Typed                       Constructor,
+(forall (<id>...) <body>)                        ; Typed                       Constructor,
 ;; NOTE: Although a matcher is syntactically permitted in this parameter
 ;;   position, the current type system does not support matching an
 ;;   entire type-level expression in this manner.
@@ -227,10 +233,20 @@ Lilies supports two modes of application:
 ;;   are specified in the type system chapter.
 ```
 
-Both functions and macros support the same application mechanism.
-However, entire-expression application of an ordinary function cannot pass type checking
-because the required function signature introduces recursion in a negative type position.
-Macros are permitted to use either mode.
+Both functions and macros support the same application syntax and parameter-binding mechanism.
+However, they operate on different representations at different compilation stages.
+
+For ordinary runtime functions,
+entire-expression application requires a type capable of representing the complete application,
+including the function value itself.
+Such a signature introduces a recursive occurrence of the function's type in an argument position,
+which violates Lilies' recursive-type positivity restriction.
+
+Consequently, although entire-expression application is syntactically supported for runtime functions,
+such definitions cannot pass type checking under the current type system.
+
+Macros are not subject to this particular restriction because
+their complete applications are represented as syntax objects rather than runtime function values.
 
 The following examples illustrate application syntax;
 their typing rules are presented in later sections.
@@ -271,16 +287,73 @@ When we calling functions, they are provided with arguments as:
 (when #true (id 'sym)) ; provide when with (#syn (cons 'when (cons #true (cons (cons 'id (cons ''sym '())) '()))))
 ```
 
-All required arguments must be supplied in a single application;
-implicit partial application is not supported.
 
-Whenever argument evaluation is required, expressions are evaluated from left to right.
+All required arguments must be supplied in a single application.
+Implicit partial application is not supported.
 
-An application is invalid if its arguments do not satisfy the operator's parameter signature.
+Whenever evaluation of operands is required, operands are evaluated from left to right.
+
+An application is invalid if its arguments do not satisfy the operator's declared signature.
 
 === Variables, Bindings, Signatures and Definitions
-==== Variable
+
+To represent the computation process, the language choose to allowing users to binding a name and a value,
+the name that can be used for referring value (and memory) and the binding relation is called variable.
+
+There are two ways to create such definition.
+- Lambda Parameter - Application Argument Provider
+- Definition
+
+==== Variable and Lexical Scope
+
+Generally, if you have defined a variable, then its value will never changed within its scope.
+Thus you can treat it directly as the value itself.
+
+The language adopt a name resolving method called lexical scope.
+That is, any function or something similar will only be able to capture free variables from its definition environment,
+so, prevent program from variable occasionally capturing.
+
+Traditionally, Lisp System use dynamic scope,
+even scheme, the first dialect to adopt lexical scope, provides dynamic-let (parameterized).
+However, this might make whole system impure.
+
 ===== `lambda` Parameter
+
+A lambda expression creates a function and specifies how the arguments of an application are bound.
+
+Lilies provides two parameter forms:
+
+```lisp
+(lambda (<param>...) <body>)  ; Parameter-list form
+(lambda <param> <body>)       ; Parameter-matcher form
+```
+
+- *Parameter-list form*:
+  The parameter-list form binds each supplied operand to its corresponding parameter.
+  The operator itself is not bound as a parameter.
+  This form requires a parameter-list signature using `:Self`.
+- *Parameter-matcher form*:
+  The parameter-matcher form binds the complete application to a single parameter.
+  The bound application includes the operator itself and all operands.
+  This form requires an entire-expression signature.
+
+For example, given an application:
+```lisp
+(foo x y)
+```
+the parameter-matcher form receives the complete application:
+```lisp
+(foo x y)
+```
+It does not receive merely the operand list:
+```lisp
+(x y)
+```
+
+The representation and interpretation of the received application depend on the compilation stage and the category of the operator.
+
+In particular, macro applications are represented using syntax objects.
+
 ==== Signature
 
 A signature describes the type of an entity and the requirements imposed on its components.
@@ -291,14 +364,106 @@ They produce types, and their results may be used wherever a type is expected.
 Lilies provides signature constructors for functions, macros, type constructors, type classes, and modules.
 Although these signatures describe different categories of entities, they participate in the same type system.
 
+===== Function and Macro Signatures
+
+Functions and macros support two signature forms:
+
 ```lisp
-(function <param> <return>)                          ; Function                    Signature
-(macro <param> <syntax>)                             ; Macro                       Signature
-(type <param> <type-sig>)                            ; Type Constructor            Signature
-(class <param> <type-sig>)                           ; Type Class                  Signature
-(module <param> <module-sig>)                        ; Module                      Signature
+(function (:Self <param>...) <return>)               ; Function                    Signature
+(function <application-type> <return>)               ; Function                    Signature
+(macro (:Self <param>...) <return>)                  ; Macro                       Signature
+(macro <application-type> <return>)                  ; Macro                       Signature
+```
+
+The two forms correspond to the two application modes.
+
+- *Parameter-list Signature*:
+  In the parameter-list form, `:Self` is a special syntactic marker denoting the operator position of an application.
+  It does not introduce a parameter, a type variable, or a recursive reference to the operator's type.
+  Each `<param>` specifies the type of one operand, in application order.
+  The operator itself is not passed to the lambda as an argument.
+- *Entire-expression signature*:
+  In the entire-expression form, `<application-type>` specifies the type of the complete application supplied to the lambda.
+  The complete application includes the operator itself and all operands.
+  Unlike the parameter-list form, this signature must account for the operator as part of the received application.
+
+The signature form determines which lambda parameter form is valid.
+A parameter-list signature corresponds to `(lambda (:Self <param>...) <body>)`,
+while an entire-expression signature corresponds to `(lambda <params> <body>)`.
+
+E.g.,
+```lisp
+(define sum-of-two-integer
+  (function (:Self #int #int) #int)
+  (lambda (a b) (+ a b)))
+
+(define cond
+  (macro (#syn sexp) (#syn sexp))
+  (lambda ctx
+    (case (:else)
+      ((list _ (case body) . rest)
+       #(syn `(if ,case ,body ,(cond rest))))
+      ((list _ (:else body))
+       #(syn body))
+      (:else (error)))))
+;; list is a variant constructor of sexp
+;; list is a wrap of cons
+```
+
+===== Parameterized Type Constructor
+
+```lisp
+(type (:Self <type>...) <type-sig>)                           ; Type Constructor            Signature
+(class (:Self <type>...) <type-sig>)                          ; Type Class                  Signature
+```
+
+Types and Classes can be constructed in same way.
+This is a method to implement parameterized polymorphism.
+They can accept parameter list only.
+
+===== Module
+
+```lisp
+(module (:Self <type>...) <module-sig>)                       ; Module                      Signature
+```
+
+Module is used to create parameterized module type.
+But actually, you can use `type` to create same one.
+
+===== Type-Class, Super Type and Constraint
+
+```lisp
 (constraint (<type-class-constraint>...) <body>)     ; Type                        Constraint
 (include (<super-class-constraint>...) <body>)       ; Super                       Constraint
+;; Constraint looks like (<Type Class> <type>...)
+```
+
+Constraint and Include, are some kind of special.
+Though they marks the type of accepted type as well, they are only meaningful for type-class dictionaries.
+
+```lisp
+(define Monad
+  (class (:Self (type (:Self *) *)) *)
+  (lambda (m)
+    (record
+      (:include (Applicative m))
+      (: >>= (forall (x y) (function (:Self (m x) (function (:Self x) (m y))) (m y)))))))
+;; Assume Applicative is defined before
+
+(define foo
+  (forall (a)
+    (constraint ((Sum a))
+      (function (:Self a a) a)))
+  (lambda (dict)
+    (lambda (x y)
+      ((invoke dict sum) x y))))
+
+(define monad
+  (include ((Applicative Maybe)) (Monad Maybe))
+  (lambda (cst)
+    (record
+      (: return (invoke cst pure))
+      (: >>= (lambda (a b) ...)))))
 ```
 
 ==== Binding

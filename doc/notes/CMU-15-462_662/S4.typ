@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [CMU 15-462/662: Drawing a Triangle],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "cmu-15462-s4",
   parent_id: "index",
+  tags: (topics.children.se.children.graphic.tag,),
 )
 
 #mkheading()
@@ -17,7 +19,7 @@
 
 Two major techniques for getting stuff on the screen:
 
-Rasterization: 
+Rasterization:
 - for each primitive (triangle), which pixels light up?
 - fast
 - harder to photorealism
@@ -133,12 +135,12 @@ When there exists sharp edge, to add higher and higher infinite series of
 frequencies, till it eventually approximate looks like a piecewise constant function.
 分段函数
 
-When there exists a disconnected in image, like sharp edge, the input 
+When there exists a disconnected in image, like sharp edge, the input
 have infinite frequencies.
 
 Also, ideal reconstruct filter is imparactical
 for efficient implementations.
-For n samples in image, for each samples must calculate the contribution to 
+For n samples in image, for each samples must calculate the contribution to
 other samples, using sinc filter.
 The $O(n^2)$ algorithm too expansive.
 
@@ -162,7 +164,7 @@ From sampling value, to the coarsely value,
 so that it can be drawn in the screen.
 
 - Sampling in a very high frequency, ->
-- Dense sampling of reconstructed signal, -> 
+- Dense sampling of reconstructed signal, ->
 - reconstruct into coarsely value
 
 So that, for a pixel:

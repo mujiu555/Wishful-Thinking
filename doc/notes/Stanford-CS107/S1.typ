@@ -1,6 +1,7 @@
 /// TAG: c, programming paradigm, computer architecture
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [Stanford CS107: Programming Paradigm],
@@ -8,6 +9,7 @@
   authors: (mujiu,),
   id: "stanford-cs107-s1",
   parent_id: "index",
+  tags: (topics.children.cs.children.plt.tag,),
 )
 
 #mkheading()

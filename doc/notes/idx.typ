@@ -1,5 +1,3 @@
-#import "tags.typ": registered
+#import "tags.typ": topics
 
-#context for t in registered {
-  ((t.name): (t.get-doc)())
-}
+#context topics

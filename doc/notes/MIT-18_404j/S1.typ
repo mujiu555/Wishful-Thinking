@@ -8,6 +8,7 @@
 
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [MIT 18.404j Theory of Computation (junior)],
@@ -15,6 +16,7 @@
   authors: (mujiu,),
   id: "mit-18404j-s1",
   parent_id: "index",
+  tags: (topics.children.mathematics.children.computation-t.tag,),
 )
 
 #mkheading()

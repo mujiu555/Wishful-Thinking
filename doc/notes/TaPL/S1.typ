@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [Types and Programming Languages],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "tapl-s1",
   parent_id: "index",
+  tags: (topics.children.cs.children.tt.tag,),
 )
 
 #mkheading()

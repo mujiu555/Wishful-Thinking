@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [CMU 15-464/662: Spatial Transformation],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "cmu-15464-s5",
   parent_id: "index",
+  tags: (topics.children.se.children.graphic.tag,),
 )
 
 #mkheading()

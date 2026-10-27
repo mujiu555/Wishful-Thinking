@@ -8,6 +8,7 @@
 
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [MIT 6.042 Mathematics in Computer Science (junior)],
@@ -15,6 +16,7 @@
   authors: (mujiu,),
   id: "mit-6042j-s1",
   parent_id: "index",
+  tags: (topics.children.mathematics.children.discrete-m.tag,),
 )
 
 #mkheading()

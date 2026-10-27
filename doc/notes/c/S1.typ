@@ -1,6 +1,7 @@
 /// TAG: c, programming theory, computation theory
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [#"From The C Programming Language To Theoretical Computer Science (Section I)"],
@@ -8,7 +9,9 @@
   authors: (mujiu,),
   id: "c-s1",
   parent_id: "index",
+  tags: (topics.children.se.children.pl.tag,),
 )
+tags: (topics.)
 
 #mkheading()
 
@@ -2634,4 +2637,5 @@ Continuous Passing Style (CPS) is a style of programming where control is passed
 
 == Variable Length Array
 
+== ASCII, EBCDIC, Unicode/UCS-II= ASCII, EBCDIC, Unicode/UCS-II
 == ASCII, EBCDIC, Unicode/UCS-II

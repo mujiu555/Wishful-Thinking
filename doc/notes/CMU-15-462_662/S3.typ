@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [CMU 15-462/662: Vector Calculus],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "cmu-15462-s3",
   parent_id: "index",
+  tags: (topics.children.se.children.graphic.tag,),
 )
 
 #mkheading()

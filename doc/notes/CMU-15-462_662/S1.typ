@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [CMU 15-462/662 Computer Graphic],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "cmu-15462-s1",
   parent_id: "index",
+  tags: (topics.children.se.children.graphic.tag,),
 )
 
 #mkheading()
@@ -106,13 +108,13 @@ The process turning high-level object that continuous into a discrete represente
 + All pixels intersected by the line:
 + Diamond rule: turn a pixel if and only if the line passes through
   the diamond created by connect midpoint of each edges
-+ the algorithm may be seen as good enough if it can 
++ the algorithm may be seen as good enough if it can
   match the requirement, and maybe there exists many many other ways.
 
 How to implement the algorithm: diamond rule:
 
 + check every single pixel in the image
-+ incremental line rasterization: 
++ incremental line rasterization:
   - Assume two integer endpoints: $(u_1,v_1)$, $(u_2,v_2)$
   - the slop of the line: s = $(v_2-v_1)/(u_2-u_1)$
   - assume $u_1 < u_2$ , $v_1 < v_2$, and 0 < 1 < 1

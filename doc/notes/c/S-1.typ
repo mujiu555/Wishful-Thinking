@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [From The C Programming Language To Theoretical Computer Science (Section -1)],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "c-s-1",
   parent_id: "index",
+  tags: (topics.children.se.children.pl.tag,),
 )
 
 #mkheading()

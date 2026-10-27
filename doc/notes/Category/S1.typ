@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [[Bartosz Milewski] Category theory for programmers (Part I)],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "category-s1",
   parent_id: "index",
+  tags: (topics.children.mathematics.children.category-t.tag,),
 )
 
 #mkheading()

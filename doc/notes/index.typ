@@ -23,7 +23,7 @@
   id: "index",
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   authors: (mujiu,),
-  tags: (topics.at("index"),),
+  tags: (topics.children.index.tag,),
 )
 
 #mkcover()

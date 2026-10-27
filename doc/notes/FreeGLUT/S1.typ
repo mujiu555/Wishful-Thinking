@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [计图入门之FreeGLUT (1)],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "freeglut-s1",
   parent_id: "index",
+  tags: (topics.children.se.children.graphic.tag,),
 )
 
 #mkheading()
@@ -20,7 +22,7 @@
 
 本文为计图入门的第一篇, 主要以介绍 `FreeGLUT` 为主.
 
-前文 #link("./S0.typ")["计图入门之FreeGLUT(0)"] .
+前文 "计图入门之FreeGLUT(0)" .
 
 ==== Background
 

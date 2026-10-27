@@ -1,5 +1,6 @@
 #import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
 #import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
 #meta(
   title: [CIS 5520: Advanced Programming],
@@ -7,6 +8,7 @@
   authors: (mujiu,),
   id: "cis5520",
   parent_id: "index",
+  tags: (topics.children.se.children.pl.tag,),
 )
 
 #mkheading()
