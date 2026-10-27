@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.pl.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Chapter I: Overview
 
@@ -60,3 +60,4 @@ Though reference counting is easier way to implement memory management, it somet
 To have our language have the OOP features, there are two approaches:
 - Class-based:
 - Prototype-based:
+]

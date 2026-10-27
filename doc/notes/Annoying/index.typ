@@ -1,5 +1,5 @@
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, embed
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": embed, meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -11,5 +11,9 @@
 
 #import "people.typ": chat, meowqi, meowyou, mujiu, youzhi
 
-#embed(include "/doc/notes/Annoying/legacy.typ")
-#embed(include "/doc/notes/Annoying/Y26M7.typ")
+#mkdoc[
+  #embed(include "legacy.typ")
+  #embed(include "Y26M7.typ")
+  #embed(include "Y26M9.typ")
+]
+

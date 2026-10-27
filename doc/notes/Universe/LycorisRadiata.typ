@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -10,7 +10,7 @@
   abstract: "",
 )
 
-#mkheading()
+#mkdoc[
 
 == Introduction
 
@@ -118,3 +118,4 @@
 === Performance and Complexity
 
 == Conclusion
+]

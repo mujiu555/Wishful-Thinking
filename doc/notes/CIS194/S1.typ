@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.pl.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Haskell Basics
 
@@ -668,3 +668,4 @@ m1 >> m2 = m1 >>= \_ -> m2
 ```
 which is just ignore returning value of m1 version of `(>>=)`
 
+]

@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.graphic.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == 计图入门之FreeGLUT (0)
 
@@ -160,3 +160,4 @@ end)
 
 再把上述两个文件丢到 src 文件夹里面去,
 用 xmake b 和xmake r编译运行一下, 验证项目配置是否正常 即可.
+]

@@ -1,6 +1,6 @@
 
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -11,7 +11,7 @@
   parent_id: "index",
 )
 
-#mkheading()
+#mkdoc[
 
 == The game proposal
 
@@ -26,3 +26,4 @@
 7. 姐妹先看见字条, 然后字条随风而舞, 镜头跟随, 最后回到"妹妹尸体"手中, 妹妹尸体, 快速逆向站起, 逆向前行, 从死变活
 8. 血液回到逆向妹妹身体, 恍惚, 摇头, 倒退 (开枪)
 9. 敌人从死到生, 开枪, 逆向站起, 被击中, 移动
+]

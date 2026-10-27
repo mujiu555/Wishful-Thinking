@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.pl.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Introduction
 
@@ -70,3 +70,4 @@ Lists, `[a]` is a type that can either be `[]` or `a : [a]`.
 Strings, syntactic sugar for `[Char]`, which is a list of characters.
 
 
+]

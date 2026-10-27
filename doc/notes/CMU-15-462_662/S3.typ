@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.graphic.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == CMU 15-462/662
 
@@ -335,3 +335,4 @@ Likely, $c in RR, arrow(b) in RR^n, Mu in RR^(n times n)$,
 then,
 $ f(arrow(u)) approx 1/2 arrow(u)^T Alpha arrow(u) + arrow(b)^T arrow(u) + c, arrow(u) := arrow(x) - arrow(x)_0 $
 The way to do directive on expression involve matrix.
+]

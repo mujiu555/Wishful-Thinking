@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -9,7 +9,7 @@
   parent_id: "index",
 )
 
-#mkheading()
+#mkdoc[
 
 
 == Chapter III: Untyped Calculation Expressions
@@ -136,3 +136,4 @@ $ (t_2 -> t'_2) / ("if" t_1 "then" t_2 "else" t_3 -> "if" t_1 "then" t'_2 "else"
 Which of the theorems remain valid?
 
 
+]

@@ -1,5 +1,5 @@
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -10,6 +10,8 @@
   parent_id: "index",
   abstract: "",
 )
+
+#mkdoc[
 
 == Introduction
 
@@ -61,3 +63,5 @@ Just like hard link, but, not only tags can be hard linked, metadata, block devi
 === System architecture
 
 ==
+
+]

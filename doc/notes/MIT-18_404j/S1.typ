@@ -6,7 +6,7 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -19,7 +19,7 @@
   tags: (topics.children.mathematics.children.computation-t.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Applications
 
@@ -653,3 +653,4 @@ Proof need to be done on both PDA can be converted to CFG and CFG can be convert
 
 Proof:
 
+]

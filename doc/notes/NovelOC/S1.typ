@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -9,7 +9,7 @@
   parent_id: "index",
 )
 
-#mkheading()
+#mkdoc[
 
 == World Beyond Times
 
@@ -22,3 +22,4 @@
 "天上曾有九颗太阳".
 故事里面是这样说的.
 
+]

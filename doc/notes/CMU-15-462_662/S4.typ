@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.graphic.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == CMU 15-462/662
 
@@ -203,3 +203,4 @@ Traversal a large blocks, intersect the triangle.
 
 Check if the Triangle intersect with large Three Blocks.
 And split it into smaller blocks till all small blocks reaches pixel size.
+]

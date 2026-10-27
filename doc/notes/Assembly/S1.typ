@@ -1,5 +1,5 @@
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -12,7 +12,7 @@
   tags: (topics.children.se.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Assembly, Constitution Principle of Computer, Computer Organization and Architecture and Operating System
 
@@ -509,3 +509,4 @@ Those general purpose registers can be divide, and used as smaller registers.
 ==== Labels
 
 ==== Macro
+]

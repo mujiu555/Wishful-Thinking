@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.writing.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == How To Speak
 
@@ -178,3 +178,4 @@
 表明激励, 和致敬.
 
 
+]

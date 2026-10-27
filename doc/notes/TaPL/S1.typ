@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.cs.children.tt.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Chapter III: Untyped Calculation Expressions
 
@@ -291,3 +291,4 @@ let rec isval t = match t with
   | t when isnumericval t -> true
   | _ -> false
 ```
+]

@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": embed, meta, mkheading, render-index
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": embed, meta, mkdoc
 #import "aut.typ": mujiu
 
 #meta(
@@ -8,7 +8,8 @@
   id: "contents",
 )
 
-#mkheading()
+#mkdoc[
+  #outline(depth: 2)
+]
 
-#outline(depth: 2)
 

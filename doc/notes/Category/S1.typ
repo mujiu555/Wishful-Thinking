@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.mathematics.children.category-t.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 Why category theory is important?
 - Functional programming: Functors,
@@ -42,3 +42,4 @@ what ever you do in logic, you can do the same way in type theory, and vice vers
 Finally, we can find those area, category theory, type theory, logic and so on, they are all the same.
 
 
+]

@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -9,7 +9,7 @@
   parent_id: "index",
 )
 
-#mkheading()
+#mkdoc[
 
 #set par(first-line-indent: 0em)
 
@@ -253,3 +253,4 @@ Specify field-of-view angle (fov which is a matrix) in
 the y-direction, aspect ratio of the near and far
 planes; it is less often used than `glFrustum()`
 
+]

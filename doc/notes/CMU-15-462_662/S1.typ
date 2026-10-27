@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -11,7 +11,7 @@
   tags: (topics.children.se.children.graphic.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == CMU 15-462/662 Computer Graphic
 
@@ -124,3 +124,4 @@ How to implement the algorithm: diamond rule:
   + draw the point at (u, round(v))
   + until reach the end of line
 
+]

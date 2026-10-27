@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -9,7 +9,7 @@
   parent_id: "index",
 )
 
-#mkheading()
+#mkdoc[
 
 == 母亲
 
@@ -44,3 +44,4 @@
 
 举天平束棍公正独权.
 
+]

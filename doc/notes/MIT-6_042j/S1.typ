@@ -6,7 +6,7 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
@@ -19,7 +19,7 @@
   tags: (topics.children.mathematics.children.discrete-m.tag,),
 )
 
-#mkheading()
+#mkdoc[
 
 == Section I:
 
@@ -36,3 +36,4 @@ Def: A proposition is a statement that is either true or false.
 
 Ex., 1 + 4 = 5
 ex., $forall n in n, n^2 + n + 41 "is a prime number"$
+]

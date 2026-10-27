@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
 #import "../aut.typ": mujiu
 
 #meta(
@@ -9,7 +9,7 @@
   parent_id: "index",
 )
 
-#mkheading()
+#mkdoc[
 
 == Basic Functionalities
 
@@ -45,3 +45,4 @@ and traversed in a breadth-first manner,
 each time the lexer combinator find a way is possible to match the input string, it will add the next possible nodes to the dequeue,
 and continue to traverse the virtual tree until it finds a match or exhausts all possibilities.
 When a NFA graph inner as condition meet, every possible path of it is returned and attached to the outer traversal dequeue.
+]
