@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": tag
+#import "@local/tysty:0.1.0": tag
 
 // Former categories are ordinary tags; no separate category registry.
 #let topics = (tag.register)(

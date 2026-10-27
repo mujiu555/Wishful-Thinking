@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": embed, meta, mkdoc
+#import "@local/tysty:0.1.0": embed, meta, mkdoc
 #import "aut.typ": mujiu
 
 #meta(

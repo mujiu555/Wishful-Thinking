@@ -1,4 +1,4 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": author
+#import "@local/tysty:0.1.0": author
 
 #let mujiu = (author.new)(
   name: "GitHub@mujiu555",

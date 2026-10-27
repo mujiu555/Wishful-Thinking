@@ -6,7 +6,7 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkdoc
+#import "@local/tysty:0.1.0": meta, mkdoc
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
