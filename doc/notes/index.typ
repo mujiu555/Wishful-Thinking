@@ -62,7 +62,6 @@
 #(include "/doc/notes/Universe/LiliumCandidum.typ")
 #(include "/doc/notes/Universe/Margarita.typ")
 #(include "/doc/notes/Universe/StandardLibrary.typ")
-#(include "/doc/notes/itles/S1.typ")
 #(include "/doc/notes/xjtlu-cheatsheet/CAN201.typ")
 #(include "/doc/notes/xjtlu-cheatsheet/CPT205-FreeGLUT.typ")
 #(include "/doc/notes/xjtlu-cheatsheet/CPT205.typ")

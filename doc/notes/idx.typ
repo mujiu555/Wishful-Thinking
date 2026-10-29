@@ -1,3 +1,3 @@
 #import "tags.typ": topics
 
-#context topics
+#context (topics.tag.fields)()
