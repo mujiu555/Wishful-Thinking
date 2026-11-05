@@ -6,20 +6,18 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [MIT 6.042 Mathematics in Computer Science (junior)],
   date: datetime(year: 2026, month: 2, day: 20, hour: 0, minute: 0, second: 0),
   authors: (mujiu,),
   id: "mit-6042j-s1",
-  parent_id: "index",
+  parent-id: "index",
   tags: (topics.children.mathematics.children.discrete-m.tag,),
-)
-
-#mkdoc[
+)[
 
 == Section I:
 

@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [Crafting Interpreters],
   date: datetime(year: 2026, month: 2, day: 12, hour: 20, minute: 5, second: 0),
   authors: (mujiu,),
   id: "crafting-interpreters-s1",
-  parent_id: "index",
+  parent-id: "index",
   tags: (topics.children.se.children.pl.tag,),
-)
-
-#mkdoc[
+)[
 
 == Chapter I: Overview
 

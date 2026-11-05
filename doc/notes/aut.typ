@@ -1,4 +1,4 @@
-#import "@local/tysty:0.1.0": author
+#import "@preview/tysty:0.1.0": author
 
 #let mujiu = (author.new)(
   name: "GitHub@mujiu555",

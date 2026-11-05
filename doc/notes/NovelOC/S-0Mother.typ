@@ -1,15 +1,13 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [母亲],
   date: datetime(year: 2025, month: 12, day: 17, hour: 15, minute: 34, second: 0),
   authors: (mujiu,),
   id: "noveloc-s-0mother",
-  parent_id: "index",
-)
-
-#mkdoc[
+  parent-id: "index",
+)[
 
 == 母亲
 

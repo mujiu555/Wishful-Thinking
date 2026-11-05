@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [How To Speak],
   date: datetime(year: 2025, month: 10, day: 14, hour: 3, minute: 28, second: 0),
   authors: (mujiu,),
   id: "how-to-speak-s1",
-  parent_id: "index",
+  parent-id: "index",
   tags: (topics.children.writing.tag,),
-)
-
-#mkdoc[
+)[
 
 == How To Speak
 

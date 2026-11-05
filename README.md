@@ -89,16 +89,16 @@ Root: src/<name>
 
 ## Usage
 
-The Typst notes use the locally installed `tysty` Typst package
-(`@local/tysty:0.1.0`).
+The Typst notes use the published `tysty` Typst package
+(`@preview/tysty:0.1.0`).
 
 ```sh
 
 typst compile --root . doc/notes/index.typ /tmp/wishful-thinking.pdf
 ```
 
-Notes import `@local/tysty:0.1.0`, define author records in
-`doc/notes/aut.typ`, and wrap document bodies with `mkdoc[...]`. Notes are
+Notes import `@preview/tysty:0.1.0`, define author records in
+`doc/notes/aut.typ`, and combine metadata and document bodies with `entry(...)[...]`. Notes are
 embedded with `embed(include "path.typ")`. Former categories are regular tags
 defined in `doc/notes/tags.typ`. References use global `mkindex(label, content)`
 and `lookup(label, content)` calls.

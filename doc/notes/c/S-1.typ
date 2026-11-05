@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [From The C Programming Language To Theoretical Computer Science (Section -1)],
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   authors: (mujiu,),
   id: "c-s-1",
-  parent_id: "index",
+  parent-id: "c-series",
   tags: (topics.children.se.children.pl.tag,),
-)
-
-#mkdoc[
+)[
 
 == From The C Programming Language to Theoretical Computer Science
 

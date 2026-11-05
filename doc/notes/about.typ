@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "aut.typ": mujiu
 #import "tags.typ": topics
 
-#meta(
+#entry(
   title: [About],
   id: "about",
-  parent_id: "index",
+  parent-id: "index",
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   authors: (mujiu,),
   tags: (topics.children.about.tag,),
-)
-
-#mkdoc[
+)[
   == "Hello, world!"
 
   This is my personal page hosted on GitHub pages, powered by myself.

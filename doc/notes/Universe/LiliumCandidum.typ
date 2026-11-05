@@ -1,28 +1,26 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry, num
 #import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [Lilium Candidum --- The Algebra of Abstraction: A Language of Types, Syntax, and Continuations],
   date: datetime(year: 2025, month: 8, day: 21, hour: 4, minute: 18, second: 0),
   authors: (mujiu,),
-  id: "dflat-lilies",
-  parent_id: "index",
+  id: "universe-lilies",
+  parent-id: "universe-index",
   abstract: "
 The language Lilium Candidum (Lilies) is designed to be a staged, statically typed language of bindings, abstractions, applications, and contexts, in which represent functional programming using at least as much primitives.
   ",
-)
-
-#mkdoc[
-
-  == Introduction
+)[
+  #show: num.with(pattern: "1.")
+  = Introduction
 
   // TODO: finish introduction
 
-  == Overview of the Language
+  = Overview of the Language
 
   // TODO: intro for overview
 
-  === Types and Values
+  == Types and Values
 
   Programs operate on values.
   Every value has a type.
@@ -32,7 +30,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Detailed descriptions of types in Lilies are provided in later chapters.
   This section does not specify the detailed semantics of these types and their instances.
 
-  ==== Primitive Types and Literal Forms
+  === Primitive Types and Literal Forms
 
   Primitive types are types whose values admit literal representations in the surface syntax.
   Such literals may occur in different compilation stages, subject to the interpretation rules of each stage.
@@ -111,7 +109,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     Such data may be produced by quotation, contained in syntax objects,
     or returned by functions.
 
-  ==== Compound Types
+  === Compound Types
 
   Value types described in this section can be interpreted in runtime or compile-time computation.
 
@@ -124,7 +122,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     They are explicitly passed to functions.
   - Module Packs (Records): Modules are first-class values
 
-  ==== Compile-Time only Entities
+  === Compile-Time only Entities
 
   Compile-time entities participate in compilation, expansion, or type checking,
   but are not ordinary runtime values in the current language design.
@@ -135,7 +133,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     They support type-level abstraction and application but are not ordinary runtime values.
   + Syntax Objects: Syntax objects are structured representations of program syntax that preserve lexical context and binding information
 
-  === Expressions, Forms and Application
+  == Expressions, Forms and Application
 
   Expressions are syntactic constructs that are evaluated to produce values.
 
@@ -195,7 +193,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Quote (`(quote ...)`) is a form, just like regular functions, a form occupies the first expression.
   It is a special form because it do not necessarily follow the evaluation rules functions follows --- it will not evaluate sub-expressions.
 
-  ==== Application
+  === Application
 
   Application is the process of applying an operator to operands.
 
@@ -265,15 +263,15 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
         (:else
          (error "")))))
 
-  ;; INVALID: rejected by the recursive type restriction.
-  ;;(define id
-  ;;  (forall (a)
-  ;;    (mu (lambda (L)
-  ;;      (function (:Self (tuple L a)) a))))
-  ;;  (lambda f
-  ;;    (case f ()
-  ;;      ((_ a) a)
-  ;;      (:else (error "")))))
+  ;; NOTE: INVALID: rejected by the recursive type restriction.
+  ;; (define id
+  ;;   (forall (a)
+  ;;     (mu (lambda (L)
+  ;;       (function (:Self (tuple L a)) a))))
+  ;;   (lambda f
+  ;;     (case f ()
+  ;;       ((_ a) a)
+  ;;       (:else (error "")))))
   ;; This construction is syntactically valid, but, actually, will cannot pass the type check, so, type level recursive will not allowed,
   ;; you can try to letting function to accept function invoke expression itself, but it will never pass the compilication
   ```
@@ -295,7 +293,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   An application is invalid if its arguments do not satisfy the operator's declared signature.
 
-  === Variables, Bindings, Signatures and Definitions
+  == Variables, Bindings, Signatures and Definitions
 
   To represent the computation process, the language choose to allowing users to binding a name and a value,
   the name that can be used for referring value (and memory) and the binding relation is called variable.
@@ -304,7 +302,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   - Lambda Parameter - Application Argument Provider
   - Definition
 
-  ==== Variable and Lexical Scope
+  === Variable and Lexical Scope
 
   Generally, if you have defined a variable, then its value will never changed within its scope.
   Thus you can treat it directly as the value itself.
@@ -317,7 +315,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   even scheme, the first dialect to adopt lexical scope, provides dynamic-let (parameterized).
   However, this might make whole system impure.
 
-  ===== `lambda` Parameter
+  ==== `lambda` Parameter
 
   A lambda expression creates a function and specifies how the arguments of an application are bound.
 
@@ -354,7 +352,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   In particular, macro applications are represented using syntax objects.
 
-  ==== Signature
+  === Signature
 
   A signature describes the type of an entity and the requirements imposed on its components.
 
@@ -364,7 +362,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Lilies provides signature constructors for functions, macros, type constructors, type classes, and modules.
   Although these signatures describe different categories of entities, they participate in the same type system.
 
-  ===== Function and Macro Signatures
+  ==== Function and Macro Signatures
 
   Functions and macros support two signature forms:
 
@@ -410,7 +408,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ;; list is a wrap of cons
   ```
 
-  ===== Parameterized Type Constructor
+  ==== Parameterized Type Constructor
 
   ```lisp
   (type (:Self <type>...) <type-sig>)                           ; Type Constructor            Signature
@@ -421,7 +419,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   This is a method to implement parameterized polymorphism.
   They can accept parameter list only.
 
-  ===== Module
+  ==== Module
 
   ```lisp
   (module (:Self <type>...) <module-sig>)                       ; Module                      Signature
@@ -430,7 +428,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Module is used to create parameterized module type.
   But actually, you can use `type` to create same one.
 
-  ===== Type-Class, Super Type and Constraint
+  ==== Type-Class, Super Type and Constraint
 
   ```lisp
   (constraint (<type-class-constraint>...) <body>)     ; Type                        Constraint
@@ -466,14 +464,48 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
         (: >>= (lambda (a b) ...)))))
   ```
 
-  ==== Binding
-  ===== `define`
+  === Binding
+
+  Lilies provides two fundamental ways to introduce bindings:
+
+  - *Lambda Parameters*:
+    Bind arguments supplied by an application to the parameters of a lambda expression.
+  - *Definitions*:
+    Introduce named entities within a scope.
+
+  The `let` form provides a convenient way to introduce local bindings.
+  It is equivalent to an immediately applied lambda expression.
+
+  ==== `define`
+
+  A `define` form introduces a named binding within the enclosing scope.
 
   ```lisp
   (define <name> <type> <value>)
   ```
 
-  ===== `let` Family
+  - `<name>` is the identifier being defined.
+  - `<type>` specifies the declared type of the binding.
+  - `<value>` provides the entity associated with the identifier.
+
+  The defined entity must satisfy its declared type.
+  Once defined, the identifier may be used to refer to the associated entity within its scope.
+
+  For example:
+  ```lisp
+  (define answer #int 42)
+
+  (define add
+    (function (:Self #int #int) #int)
+    (lambda (a b) (+ a b)))
+  ```
+  Definitions may introduce both runtime values and compile-time entities, such as types and macros.
+
+  Definition can visit all names within same scope, but it cannot invoke values before they are initialized.
+
+  ==== `let` Family
+
+  A `let` form introduces local bindings that are accessible within its body.
 
   ```lisp
   (let ((: <name> <type> <val>)...) <body>)
@@ -482,81 +514,403 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   (let:seqrec ((: <name> <type> <val>)...) <body>)
   ```
 
-  === Functions, Macros and Lambda
-  ==== `function`
-  ==== `macro`
-  ==== `lambda`
-  ==== Parameter
-  ===== List
-  ===== Matcher
+  - `let` binds values with their name before enter its body
+  - `let:seq` binds values sequentially
+  - `let:rec` allows mutual recursion
+  - `let:seqrec` binds values sequentially, with still allow for mutual recursion
 
-  === Syntactic Type, Literal, Datum Value and Semantic Interpretation
-  ==== S-Expression
-  An S-expression is the syntactic type used to represent the structural form of Lilies programs.
-  ==== Literal
-  ==== Syntax Objects
+  == Functions, Macros and Lambda
 
-  === Records, Enumerations, Tuples and Algebraic Data Types
-  ==== Product Type
-  ==== Sum Type
-  ==== `record`
-  ===== `:include`
-  ==== `tuple`
-  ==== `enum`
-  ==== `#type` and `*`
+  Functions are first-class values representing computations parameterized by arguments.
 
-  === Polymorphism
-  ==== `forall`
-  ==== `type`
-  ==== `constraint`
-  ==== `include`
+  A function may be passed as an argument to another function, returned as a result, or stored in a data structure.
 
-  === Type Classes
-  ==== `class`
+  Every function has a function type, described by a `function` signature.
+  Function signatures specify the accepted arguments and the result type, as described in the *Signatures* section.
 
-  === Conditional Expression
-  ==== "`if` then else"
-  ==== `when`, `unless` the Macro
-  ==== `cond`, `switch` the Macro
-  ==== `loop` the Macro
-  ==== `while`, `until` the Macro
-  ==== `for` the Named Let
-  ==== `foreach` the Map
-  ==== `:break`
-  ==== `:continue`
+  Functions are constructed by evaluating lambda expressions.
 
-  === Pattern Match
-  ==== `match`
-  ==== `case`
-  ==== Literal
-  ==== `:or`
-  ==== `:and`
-  ==== `:as`
-  ==== Pattern Variable
-  ==== Wildcard
-  ==== `:else`
-  ==== "Ctor" Extraction
-  ==== `:guard`
+  === Function Values
 
-  === Delimited Continuations
-  ==== `reset`
-  ==== `shift`
+  A function value is conceptually a closure consisting of a lambda expression and the lexical bindings required by its body.
 
-  === $"System" F_omega^mu$
+  The environment captured by a function is determined by the lexical scope in which its lambda expression is evaluated,
+  rather than the environment from which the function is subsequently called.
 
-  ==== Type Universe
+  The physical representation of a function value and its captured environment is implementation-dependent.
 
-  === Module Packs
-  ==== `module` and records
-  ==== `provide`
-  ==== `require`
-  ==== `export`
-  ==== `import`
+  For example:
+  ```lisp
+  (define make-adder
+    (function
+      (:Self #int)
+      (function (:Self #int) #int))
+    (lambda (x)
+      (lambda (y)
+        (+ x y))))
+  ```
+  The inner function refers to `x`, which is bound in the enclosing function.
 
-  === Top-Level Program
+  When the inner lambda is evaluated, the resulting function retains access to that binding.
 
-  === Summary
-  ==== `forall`, `lambda`  and Arrow Expression
-  ==== `function`, `macro`, `type`, `class`, `module` and Arrow Expression
-  ==== `Constraint` and `Include`
+  === Function Application
+
+  A function application invokes a function with the supplied arguments.
+
+  The function expression is evaluated to obtain a function value.
+  Its operands are then evaluated from left to right, and their resulting values are bound according to the function's parameter form.
+
+  The body is evaluated in the function's lexical environment extended with those parameter bindings.
+
+  The result of the body becomes the result of the application.
+
+  All required arguments must be provided in a single application. Lilies does not support implicit partial application.
+
+  For example:
+  ```lisp
+  (define add
+    (function (:Self #int #int) #int)
+    (lambda (x y)
+      (+ x y)))
+
+  (add 10 20)
+  ```
+  The application evaluates to `30`.
+
+  An application is well-typed only if the supplied arguments satisfy the function's signature.
+
+  === Higher-Order Functions
+
+  Functions are first-class values and therefore may be supplied to or returned from other functions.
+
+  A function that accepts or returns another function is called a higher-order function.
+
+  For example:
+  ```lisp
+  (define apply-twice
+    (function
+      (:Self
+        (function (:Self #int) #int)
+        #int)
+      #int)
+    (lambda (f x)
+      (f (f x))))
+  ```
+  Higher-order functions follow the same binding, application, and evaluation rules as other functions.
+
+  === Polymorphic Functions
+
+  A function may have a universally quantified type.
+
+  Such a function can be instantiated at different types according to its signature.
+  ```lisp
+  (define id
+    (forall (a)
+      (function (:Self a) a))
+    (lambda (x) x))
+  ```
+  Polymorphic functions are first-class values. They may be passed to other functions, returned as results,
+  or stored in data structures without necessarily losing their polymorphic types.
+
+  The rules for type abstraction, instantiation, and checking are specified in the type system chapter.
+
+  === Macros
+
+  Macros are compile-time functions whose results are interpreted as program syntax.
+
+  When a macro is applied, its body is evaluated at compile time.
+  The resulting syntax object replaces the original macro application.
+
+  Macro expansion is hygienic:
+  the lexical context and binding identities preserved by syntax objects are respected during expansion,
+  preventing accidental identifier capture.
+
+  The resulting syntax is recursively expanded and processed according to the syntactic context of the original application.
+
+  Macro expansion continues until the expression contains no further macro applications requiring expansion.
+
+  === Lambda Expressions
+
+  A lambda expression constructs a function value.
+
+  The parameter form of a lambda determines how arguments are bound when the resulting function is applied,
+  as described in the *Lambda Parameter* section.
+
+  A lambda expression is checked against its expected function signature.
+  The signature provides the types of its parameters and the expected result type of its body.
+
+  Evaluating a lambda expression produces a function value without evaluating its body.
+  The body is evaluated when the resulting function is applied.
+
+  === Lexical Closures
+
+  A function value is a lexical closure consisting conceptually of
+  a lambda expression and the lexical environment required to evaluate its body.
+
+  A closure preserves the bindings of free variables from the environment in which the lambda expression is evaluated.
+
+  These bindings remain accessible when the closure is applied,
+  independently of the environment from which it is called.
+
+  For example:
+  ```lisp
+  (define make-adder
+    (function
+      (:Self #int)
+      (function (:Self #int) #int))
+    (lambda (x)
+      (lambda (y)
+        (+ x y))))
+  ```
+  The inner lambda refers to `x`, which is bound by the enclosing lambda.
+  The resulting closure preserves this binding even after the enclosing application has completed.
+
+  The physical representation of a closure and its captured environment is implementation-dependent.
+
+  == Syntactic Type, Literal, Datum Value and Semantic Interpretation
+
+  Lilies distinguishes the syntactic representation of programs
+  from the values and meanings obtained through their interpretation.
+
+  An S-expression describes the structural form of syntax.
+  A datum is an S-expression interpreted as data.
+  A syntax object represents program syntax together with lexical information
+  required for binding resolution and hygienic macro expansion.
+
+  The same syntactic structure may admit different interpretations depending on its context.
+
+  === S-Expression
+
+  An S-expression (`sexpr`) is the syntactic type used to represent the structural form of Lilies programs.
+
+  The set of S-expressions is defined inductively:
+  ```text
+  <sexpr>
+  ::= <atom>
+    | ()
+    | (<sexpr> . <sexpr>)
+    | <sequence>
+
+  <atom>
+  ::= <integer>
+    | <rational>
+    | <real>
+    | <boolean>
+    | <character>
+    | <string>
+    | <symbol>
+    | <syntax-symbol>
+
+  <sequence>
+  ::= {sexpr}
+  ```
+
+  Here, `<atom>` denotes an atomic syntactic form corresponding to one of the primitive literal categories defined earlier.
+  The empty list `()` and pairs are the fundamental compound structures of S-expressions.
+
+  A proper list is a finite sequence of pairs terminated by the empty list.
+  List notation is an abbreviation for nested pairs:
+  ```lisp
+  (a b c)
+  ```
+  is structurally equivalent to:
+  ```lisp
+  (a . (b . (c . ())))
+  ```
+
+  An improper list is a sequence of pairs whose final `cdr` is not the empty list.
+  For example:
+  ```lisp
+  (a b . c)
+  ```
+  is structurally equivalent to:
+  ```lisp
+  (a . (b . c))
+  ```
+
+  Every atom, the empty list, and every pair whose components are S-expressions is itself an S-expression.
+
+  This definition specifies only the syntactic structure of S-expressions.
+  Their interpretation as expressions, datum values, or syntax objects is defined separately.
+
+  === Literal
+
+  A literal is a syntactic form that denotes a value according to the interpretation rules of its context.
+
+  Lilies provides literal forms for primitive values, as described in the "Primitive Types" section.
+
+  For example:
+
+  ```lisp
+  42
+  #true
+  "hello"
+  #\a
+  ```
+
+  A literal form is distinct from the value it denotes. For example, `42` is a syntactic representation of an integer value, not the value itself.
+
+  Literal forms may occur as components of larger S-expressions without being independently evaluated.
+
+  === Datum Values
+
+  A datum is a value obtained by interpreting an S-expression as data rather than as a program expression.
+
+  The `quote` form provides this interpretation without evaluating its operand.
+
+  Datum values preserve the structure of the represented S-expression,
+  but not the lexical context or binding identities associated with program syntax.
+
+  Datum values are first-class values.
+  They may be passed to functions, returned from functions, and stored in data structures.
+
+  Consequently, datum values alone are insufficient to preserve binding relationships during hygienic macro expansion.
+
+  === Syntax Objects
+
+  A syntax object is an S-expression variant that associates an S-expression with lexical context information
+  required for lexical binding resolution and hygienic macro expansion.
+  Syntax objects are represented by the `synobj` variant of the S-expression type:
+  ```text
+  data <sexp>
+   = ...
+   | synobj <context> <sexp>
+  ```
+
+  The `synobj` variant consists of two components:
+  - *Context:* The lexical context associated with the wrapped S-expression.
+  - *S-expression:* The syntactic content to which the context is associated.
+
+  Since the wrapped content is itself an S-expression, syntax objects may be nested and may occur as components of other S-expressions.
+
+  ==== Lexical Context
+
+  A lexical context contains information used to determine the binding identities of identifiers during compilation and macro expansion.
+
+  A symbol may occur as an ordinary symbolic value or as an identifier in program syntax.
+  An identifier is a symbol interpreted with associated lexical context, rather than a separate primitive S-expression variant.
+
+  The textual name of a symbol alone does not determine the binding to which an identifier refers.
+  Symbols with the same name may refer to different bindings when associated with different lexical contexts.
+
+  The lexical context associated with one part of an S-expression does not require every component of the same expression to have identical binding information.
+
+  ==== Recursive Structure
+
+  Because `synobj` is an S-expression variant, its structure is recursive.
+  A syntax object may wrap an atomic S-expression, a compound S-expression, or another syntax object.
+  Different components of a compound S-expression may carry different lexical contexts,
+  allowing syntax originating from distinct lexical environments to be represented within a single structure.
+
+  Nested syntax objects retain their contextual information.
+  The interpretation of nested lexical contexts, including their interaction during identifier resolution,
+  is specified by the lexical context and macro expansion rules.
+
+  ==== Syntax Objects and Datum Values
+
+  S-expressions may be interpreted as program syntax or as datum values, according to their interpretation context.
+
+  A syntax object preserves the lexical information associated with program syntax.
+  An ordinary datum does not preserve this information.
+
+  Converting syntax into a datum removes the contextual information used for binding resolution, while retaining the underlying S-expression content.
+
+  The conversion from a datum to syntax requires the provision or establishment of suitable lexical context information.
+  Such conversion does not recover lexical information previously discarded.
+
+  === Semantic Interpretation
+
+  Semantic interpretation assigns meaning to a syntactic representation according to its interpretation context.
+
+  Lilies distinguishes the interpretation of expressions, datum values, and syntax objects.
+
+  - *Expression interpretation* interprets syntax as a program expression according to the language's binding, typing, and evaluation rules.
+  - *Datum interpretation* interprets an S-expression as structured data without evaluating it as an application or other executable expression.
+  - *Syntax interpretation* interprets syntax objects according to their lexical context and compilation stage, preserving binding identities during macro expansion.
+
+  For example:
+
+  ```lisp
+  (+ 1 2)
+  ```
+
+  As an expression, the application evaluates to `3`.
+
+  ```lisp
+  '(+ 1 2)
+  ```
+
+  As quoted data, the S-expression denotes a list and is not evaluated as an application.
+
+  A syntax object representing `(+ 1 2)` retains the lexical binding information associated with the identifier `+` and its other syntactic components.
+
+  Consequently, two syntactically identical S-expressions do not necessarily represent the same program when their associated lexical contexts differ.
+
+  Macro expansion transforms syntax objects into syntax objects. The resulting syntax is subsequently interpreted according to the surrounding program context.
+
+  The details of expression evaluation, macro expansion, and type checking are specified in their respective sections.
+
+  == Records, Enumerations, Tuples and Algebraic Data Types
+  === Product Type
+  === Sum Type
+  === `record`
+  ==== `:include`
+  === `tuple`
+  === `enum`
+  === `#type` and `*`
+
+  == Polymorphism
+  === `forall`
+  === `type`
+  === `constraint`
+  === `include`
+
+  == Type Classes
+  === `class`
+
+  == Conditional Expression and Loops
+  === "`if` then else"
+  === `when`, `unless` the Macro
+  === `cond`, `switch` the Macro
+  === `loop` the Macro
+  === `while`, `until` the Macro
+  === `for` the Named Let
+  === `foreach` the Map
+  === `:break`
+  === `:continue`
+
+  == Pattern Match
+  === `match`
+  === `case`
+  === Literal
+  === `:or`
+  === `:and`
+  === `:as`
+  === Pattern Variable
+  === Wildcard
+  === `:else`
+  === "Ctor" Extraction
+  === `:guard`
+
+  == Delimited Continuations
+  === `reset`
+  === `shift`
+
+  == $"System" F_omega^mu$
+
+  === Type Universe
+
+  == Module Packs
+  === `module` and records
+  === `provide`
+  === `require`
+  === `export`
+  === `import`
+
+  == Top-Level Program
+
+  == Summary
+  === `forall`, `lambda`  and Arrow Expression
+  === `function`, `macro`, `type`, `class`, `module` and Arrow Expression
+  === `Constraint` and `Include`
 ]

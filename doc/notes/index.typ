@@ -1,7 +1,7 @@
-#import "@local/tysty:0.1.0": embed, meta, mkcover, mkdoc, template
-#show: template
+#import "@preview/tysty:0.1.0": backlinks, embed, entry, lookup, mkcover, mkoutline, num, set-base, template
 #import "tags.typ": topics
 #import "aut.typ": mujiu
+#show: template
 
 #show raw: set text(
   font: "Maple Mono NF",
@@ -18,53 +18,38 @@
   ),
 )
 
-#meta(
+#set-base("file:///home/dot/prj/proj.txt/Wishful-Thinking/doc/notes/")
+
+#entry(
+  cover: true,
   title: [GitHub\@Mujiu555's page],
   id: "index",
+  file-path: "index.typ",
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   authors: (mujiu,),
   tags: (topics.children.index.tag,),
-)
+)[
+  #mkoutline()
+]
 
-#mkcover()
+#embed(include "/doc/notes/about.typ")
 
-#(include "/doc/notes/about.typ")
-#(include "/doc/notes/contents.typ")
+#embed(include "/doc/notes/Assembly/S1.typ")
+#embed(include "/doc/notes/Category/S1.typ")
+#embed(include "/doc/notes/CIS194/S1.typ")
+#embed(include "/doc/notes/CIS5520/index.typ")
+#embed(include "/doc/notes/CMU-15-462_662/index.typ")
+#embed(include "/doc/notes/CraftingInterpreters/S1.typ")
+#embed(include "/doc/notes/FreeGLUT/index.typ")
+#embed(include "/doc/notes/HowToSpeak/S1.typ")
+#embed(include "/doc/notes/Missing-Semester/S1.typ")
+#embed(include "/doc/notes/MIT-18_404j/S1.typ")
+#embed(include "/doc/notes/MIT-6_042j/S1.typ")
+#embed(include "/doc/notes/SICP/S1.typ")
+#embed(include "/doc/notes/Stanford-CS107/S1.typ")
+#embed(include "/doc/notes/TaPL/index.typ")
+#embed(include "/doc/notes/c/index.typ")
+#embed(include "/doc/notes/Universe/index.typ")
+#embed(include "/doc/notes/xjtlu-cheatsheet/index.typ")
 
-#(include "/doc/notes/Assembly/S1.typ")
-#(include "/doc/notes/Category/S1.typ")
-#(include "/doc/notes/CIS194/S1.typ")
-#(include "/doc/notes/CIS5520/index.typ")
-#(include "/doc/notes/CMU-15-462_662/S1.typ")
-#(include "/doc/notes/CMU-15-462_662/S2.typ")
-#(include "/doc/notes/CMU-15-462_662/S3.typ")
-#(include "/doc/notes/CMU-15-462_662/S4.typ")
-#(include "/doc/notes/CMU-15-462_662/S5.typ")
-#(include "/doc/notes/CraftingInterpreters/S1.typ")
-#(include "/doc/notes/FreeGLUT/S0.typ")
-#(include "/doc/notes/FreeGLUT/S1.typ")
-#(include "/doc/notes/HowToSpeak/S1.typ")
-#(include "/doc/notes/Missing-Semester/S1.typ")
-#(include "/doc/notes/MIT-18_404j/S1.typ")
-#(include "/doc/notes/MIT-6_042j/S1.typ")
-#(include "/doc/notes/SICP/S1.typ")
-#(include "/doc/notes/Stanford-CS107/S1.typ")
-#(include "/doc/notes/TaPL/E1.typ")
-#(include "/doc/notes/TaPL/S1.typ")
-#(include "/doc/notes/c/S-1.typ")
-#(include "/doc/notes/c/S1.typ")
-#(include "/doc/notes/c/S2.typ")
-#(include "/doc/notes/Universe/Compiler.typ")
-#(include "/doc/notes/Universe/D_Flat.typ")
-#(include "/doc/notes/Universe/Editor&IDE.typ")
-#(include "/doc/notes/Universe/Lambda.typ")
-#(include "/doc/notes/Universe/Lexer.typ")
-#(include "/doc/notes/Universe/LiliumCandidum.typ")
-#(include "/doc/notes/Universe/Margarita.typ")
-#(include "/doc/notes/Universe/StandardLibrary.typ")
-#(include "/doc/notes/xjtlu-cheatsheet/CAN201.typ")
-#(include "/doc/notes/xjtlu-cheatsheet/CPT205-FreeGLUT.typ")
-#(include "/doc/notes/xjtlu-cheatsheet/CPT205.typ")
-
-#(include "/doc/notes/idx.typ")
-
+#embed(include "/doc/notes/idx.typ")

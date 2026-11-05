@@ -1,4 +1,4 @@
-#import "@local/tysty:0.1.0": tag
+#import "@preview/tysty:0.1.0": tag
 
 // Former categories are ordinary tags; no separate category registry.
 #let topics = (tag.register)(

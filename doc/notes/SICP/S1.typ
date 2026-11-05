@@ -1,18 +1,16 @@
 /// TAG: programming paradigm, scheme
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [MIT 6.001: Structure and Interpretation of Computer Programs (SICP)],
   date: datetime(year: 2025, month: 12, day: 17, hour: 15, minute: 56, second: 0),
   authors: (mujiu,),
   id: "sicp-s1",
-  parent_id: "index",
+  parent-id: "index",
   tags: (topics.children.cs.children.plt.tag,),
-)
-
-#mkdoc[
+)[
 
 #quote[
   Computer science is not about computers, any more than astronomy is about telescopes, or biology about microscopes.

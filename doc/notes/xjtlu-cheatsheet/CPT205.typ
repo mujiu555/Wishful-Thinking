@@ -1,15 +1,13 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [CPT205 Computer Graphics],
   date: datetime(year: 2025, month: 11, day: 19, hour: 3, minute: 6, second: 0),
   authors: (mujiu,),
   id: "cpt205",
-  parent_id: "index",
-)
-
-#mkdoc[
+  parent-id: "xjtlu-cheatsheets",
+)[
 
 #set par(first-line-indent: 0em)
 

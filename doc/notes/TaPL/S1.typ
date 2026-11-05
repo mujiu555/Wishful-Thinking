@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [Types and Programming Languages],
   date: datetime(year: 2026, month: 2, day: 13, hour: 23, minute: 45, second: 0),
   authors: (mujiu,),
   id: "tapl-s1",
-  parent_id: "index",
+  parent-id: "tapl",
   tags: (topics.children.cs.children.tt.tag,),
-)
-
-#mkdoc[
+)[
 
 == Chapter III: Untyped Calculation Expressions
 

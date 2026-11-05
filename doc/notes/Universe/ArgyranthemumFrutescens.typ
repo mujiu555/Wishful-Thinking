@@ -1,26 +1,24 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry, num
 #import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [Argyranthemum frutescens --- The Calculus of Syntax: A Language of Surface Composition, Compilation, and Semantics],
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
   authors: (mujiu,),
   id: "dflat-margarita",
-  parent_id: "index",
+  parent-id: "universe-index",
   abstract: "
   The language Argyranthemum frutescens (Margarita), aiming programming language oriented programming.
   Invastigate the basic of composition functionalities requirement that must be provided by other languages.
   ",
-)
+)[
+  #show: num.with(pattern: "1.")
+  = Abstract
 
-#mkdoc[
+  = Introduction
 
-  == Abstract
+  == Background
 
-  == Introduction
-
-  === Background
-
-  === Guiding Principle
+  == Guiding Principle
 
 ]

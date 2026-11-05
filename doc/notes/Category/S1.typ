@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [[Bartosz Milewski] Category theory for programmers (Part I)],
   date: datetime(year: 2026, month: 4, day: 19, hour: 21, minute: 27, second: 0),
   authors: (mujiu,),
   id: "category-s1",
-  parent_id: "index",
+  parent-id: "index",
   tags: (topics.children.mathematics.children.category-t.tag,),
-)
-
-#mkdoc[
+)[
 
 Why category theory is important?
 - Functional programming: Functors,

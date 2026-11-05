@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [CMU 15-462/662: Vector Calculus],
   date: datetime(year: 2025, month: 10, day: 2, hour: 18, minute: 37, second: 0),
   authors: (mujiu,),
   id: "cmu-15462-s3",
-  parent_id: "index",
+  parent-id: "cmu-15462",
   tags: (topics.children.se.children.graphic.tag,),
-)
-
-#mkdoc[
+)[
 
 == CMU 15-462/662
 

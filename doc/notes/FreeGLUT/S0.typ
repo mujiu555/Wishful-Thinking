@@ -1,17 +1,15 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 #import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [计图入门之FreeGLUT (0)],
   date: datetime(year: 2025, month: 10, day: 4, hour: 22, minute: 1, second: 0),
   authors: (mujiu,),
   id: "freeglut-s0",
-  parent_id: "index",
+  parent-id: "freeglut",
   tags: (topics.children.se.children.graphic.tag,),
-)
-
-#mkdoc[
+)[
 
 == 计图入门之FreeGLUT (0)
 

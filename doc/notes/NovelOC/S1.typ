@@ -1,15 +1,13 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [World Beyond Times],
   date: datetime(year: 2025, month: 10, day: 28, hour: 2, minute: 7, second: 0),
   authors: (mujiu,),
   id: "noveloc-s1",
-  parent_id: "index",
-)
-
-#mkdoc[
+  parent-id: "index",
+)[
 
 == World Beyond Times
 

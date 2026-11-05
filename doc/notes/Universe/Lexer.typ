@@ -1,15 +1,13 @@
-#import "@local/tysty:0.1.0": meta, mkdoc
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [Lexer: A Lexer Combinator for D Flat System],
   date: datetime(year: 2026, month: 2, day: 17, hour: 3, minute: 54, second: 0),
   authors: (mujiu,),
   id: "dflat-lexer",
-  parent_id: "index",
-)
-
-#mkdoc[
+  parent-id: "universe-index",
+)[
 
 == Basic Functionalities
 
