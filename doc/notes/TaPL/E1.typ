@@ -1,14 +1,13 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [Types and Programming Languages (Solution Set)],
   date: datetime(year: 2026, month: 3, day: 9, hour: 0, minute: 21, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "tapl-e1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "tapl",
+)[
 
 
 == Chapter III: Untyped Calculation Expressions
@@ -135,3 +134,4 @@ $ (t_2 -> t'_2) / ("if" t_1 "then" t_2 "else" t_3 -> "if" t_1 "then" t'_2 "else"
 Which of the theorems remain valid?
 
 
+]

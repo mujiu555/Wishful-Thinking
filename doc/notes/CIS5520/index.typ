@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [CIS 5520: Advanced Programming],
   date: datetime(year: 2026, month: 7, day: 5, hour: 23, minute: 0, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cis5520",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.se.children.pl.tag,),
+)[
 
 == Introduction
 
@@ -67,3 +68,4 @@ Lists, `[a]` is a type that can either be `[]` or `a : [a]`.
 Strings, syntactic sugar for `[Char]`, which is a list of characters.
 
 
+]

@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [计图入门之FreeGLUT (1)],
   date: datetime(year: 2025, month: 10, day: 4, hour: 22, minute: 3, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "freeglut-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "freeglut",
+  tags: (topics.children.se.children.graphic.tag,),
+)[
 
 == 计图入门之FreeGLUT (1)
 
@@ -19,7 +20,7 @@
 
 本文为计图入门的第一篇, 主要以介绍 `FreeGLUT` 为主.
 
-前文 #link("./S0.typ")["计图入门之FreeGLUT(0)"] .
+前文 "计图入门之FreeGLUT(0)" .
 
 ==== Background
 
@@ -172,3 +173,4 @@ OpenGL为这一步提供了很多灵活的操作空间.
 剪辑空间很有趣, 但是不方便.
 对于每个顶点, 这个空间的边界都是不同的, 这让三角形的可视化更加困难.
 于是, 剪辑空间会被变换到一个更加合理的坐标空间: 正规化设备坐标.
+]

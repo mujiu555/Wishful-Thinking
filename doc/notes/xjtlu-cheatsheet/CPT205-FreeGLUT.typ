@@ -1,14 +1,13 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [CPT205 FreeGLUT Programming],
   date: datetime(year: 2025, month: 12, day: 15, hour: 20, minute: 28, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cpt205-freeglut",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "xjtlu-cheatsheets",
+)[
 
 #set par(first-line-indent: 0em)
 
@@ -252,3 +251,4 @@ Specify field-of-view angle (fov which is a matrix) in
 the y-direction, aspect ratio of the near and far
 planes; it is less often used than `glFrustum()`
 
+]

@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [CMU 15-462/662: Linear Algebra in Computer Graphics],
   date: datetime(year: 2025, month: 9, day: 27, hour: 22, minute: 56, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cmu-15462-s2",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "cmu-15462",
+  tags: (topics.children.se.children.graphic.tag,),
+)[
 
 == CMU 15-462/662
 
@@ -210,3 +211,4 @@ Review:
 === Uniqueness, existence of Solutions
 
 === Matrices in Linear Algebra
+]

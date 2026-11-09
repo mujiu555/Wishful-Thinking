@@ -1,24 +1,25 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [计图入门之FreeGLUT (0)],
   date: datetime(year: 2025, month: 10, day: 4, hour: 22, minute: 1, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "freeglut-s0",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "freeglut",
+  tags: (topics.children.se.children.graphic.tag,),
+)[
 
 == 计图入门之FreeGLUT (0)
 
 === 导言
 
-计算机图形学, 
+计算机图形学,
 传统应用计算机科学里面重要的一部分
-(为什么要强调应用计算机科学呢, 因为我更喜欢理论计算机科学, 
+(为什么要强调应用计算机科学呢, 因为我更喜欢理论计算机科学,
 就是PLT什么的东西 ... ),
-在现代生活的方方面面都起到了至关重要 (indispensable) 的作用 
+在现代生活的方方面面都起到了至关重要 (indispensable) 的作用
 (好吧什么玩意都是至关重要, 但是谁会关心呢).
 所以总之先开一篇. 不过基本没有什么参考价值啦, 相当于是个blog了.
 
@@ -46,10 +47,10 @@ IDE是NeoVim,
 
 因为不是常规的开发方式, 所以需要自己配置一下环境.
 
-首先是一个经典的MinGW环境, 因为要用到里面的 mingw32-make, 
+首先是一个经典的MinGW环境, 因为要用到里面的 mingw32-make,
 所以如果能找到一个能用的make也是不用下MinGW的一大堆的.
 
-首先到 
+首先到
 #link("https://github.com/mstorsjo/llvm-mingw")[LLVM-MinGW GitHub 仓库]
 处下载一个最新的发行版, 解压了然后给他添加到PATH里面.
 
@@ -74,7 +75,7 @@ IDE是NeoVim,
 
 写个简单的程序验证一下:
 
-```c 
+```c
 // constants.h
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
@@ -87,7 +88,7 @@ IDE是NeoVim,
 #endif // !__CONSTANTS_H__
 ```
 
-```c 
+```c
 // main.c
 #include "constants.h"
 #include <GL/freeglut.h>
@@ -119,7 +120,7 @@ int main(int argc, char *argv[], char *env[]) {
 }
 ```
 
-然后用 ```bash clang -l freeglut -l opengl32 -l glu32 main.c``` 编译一下 , 
+然后用 ```bash clang -l freeglut -l opengl32 -l glu32 main.c``` 编译一下 ,
 如果没有出现链接错误, 且程序可以正常显示, 就是环境配置完成.
 
 === 初始化项目
@@ -129,8 +130,8 @@ int main(int argc, char *argv[], char *env[]) {
 
 所以我用xmake.
 
-那为什么不用CMake呢? CMake老是折腾不来工具链和动态库链接. 
-虽然FreeGLUT是可以直接用`cmake include`的来着, 不过还是太麻烦了, 
+那为什么不用CMake呢? CMake老是折腾不来工具链和动态库链接.
+虽然FreeGLUT是可以直接用`cmake include`的来着, 不过还是太麻烦了,
 折腾半天搞不好.
 
 依旧是找个喜欢的位置, 然后 `xmake create -l c -t console`
@@ -152,8 +153,9 @@ end)
 
 最后
 ```bash git init && git add . && git commit -m "init: initialize repository"```
-一下, 
+一下,
 项目初始化就基本完成了.
 
 再把上述两个文件丢到 src 文件夹里面去,
 用 xmake b 和xmake r编译运行一下, 验证项目配置是否正常 即可.
+]

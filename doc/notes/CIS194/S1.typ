@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [CIS 194: Introduction to Haskell],
   date: datetime(year: 2026, month: 3, day: 14, hour: 22, minute: 8, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cis194-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.se.children.pl.tag,),
+)[
 
 == Haskell Basics
 
@@ -665,3 +666,4 @@ m1 >> m2 = m1 >>= \_ -> m2
 ```
 which is just ignore returning value of m1 version of `(>>=)`
 
+]

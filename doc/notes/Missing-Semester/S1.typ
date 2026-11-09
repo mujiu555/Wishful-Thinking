@@ -1,14 +1,13 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [The Missing Semester of Computer Education],
   date: datetime(year: 2025, month: 12, day: 18, hour: 21, minute: 24, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "missing-semester-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+)[
 
 == Section I
 
@@ -289,3 +288,4 @@ run commands in background
 === Interactive Notepad Programming
 
 === GitHub
+]

@@ -1,15 +1,16 @@
 /// TAG: c, programming paradigm, computer architecture
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [Stanford CS107: Programming Paradigm],
   date: datetime(year: 2025, month: 12, day: 17, hour: 15, minute: 56, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "stanford-cs107-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.cs.children.plt.tag,),
+)[
 
 == Data Types and Conversion
 
@@ -751,3 +752,4 @@ The way Haskell define classes is using type-classes.
 
 
 
+]

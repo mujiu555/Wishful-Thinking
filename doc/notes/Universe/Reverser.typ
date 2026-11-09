@@ -1,16 +1,15 @@
 
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [Margarita: Language as extension for Lilies in M-Expression],
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "dflat-reverser",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "universe-index",
+)[
 
 == The game proposal
 
@@ -25,3 +24,4 @@
 7. 姐妹先看见字条, 然后字条随风而舞, 镜头跟随, 最后回到"妹妹尸体"手中, 妹妹尸体, 快速逆向站起, 逆向前行, 从死变活
 8. 血液回到逆向妹妹身体, 恍惚, 摇头, 倒退 (开枪)
 9. 敌人从死到生, 开枪, 逆向站起, 被击中, 移动
+]

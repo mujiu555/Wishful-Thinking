@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [[Bartosz Milewski] Category theory for programmers (Part I)],
   date: datetime(year: 2026, month: 4, day: 19, hour: 21, minute: 27, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "category-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.mathematics.children.category-t.tag,),
+)[
 
 Why category theory is important?
 - Functional programming: Functors,
@@ -39,3 +40,4 @@ what ever you do in logic, you can do the same way in type theory, and vice vers
 Finally, we can find those area, category theory, type theory, logic and so on, they are all the same.
 
 
+]

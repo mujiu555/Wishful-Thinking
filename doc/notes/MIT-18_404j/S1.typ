@@ -6,17 +6,18 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [MIT 18.404j Theory of Computation (junior)],
   date: datetime(year: 2025, month: 12, day: 18, hour: 21, minute: 24, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "mit-18404j-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.mathematics.children.computation-t.tag,),
+)[
 
 == Applications
 
@@ -650,3 +651,4 @@ Proof need to be done on both PDA can be converted to CFG and CFG can be convert
 
 Proof:
 
+]

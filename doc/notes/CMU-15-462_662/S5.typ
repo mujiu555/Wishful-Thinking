@@ -1,160 +1,162 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [CMU 15-464/662: Spatial Transformation],
   date: datetime(year: 2025, month: 10, day: 16, hour: 13, minute: 51, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "cmu-15464-s5",
-  parent_id: "index",
-)
+  parent-id: "cmu-15462",
+  tags: (topics.children.se.children.graphic.tag,),
+)[
 
-#mkheading()
+  == CMU 15-464/662
 
-== CMU 15-464/662
+  #set math.mat(delim: "[")
+  #set math.vec(delim: "[")
 
-#set math.mat(delim: "[")
-#set math.vec(delim: "[")
+  Apply Transform of object on space.
 
-Apply Transform of object on space.
+  === Spatial Transformation
 
-=== Spatial Transformation
+  Basically any function that assigns each point a new location:
+  $ f: RR^n -> RR^n $
 
-Basically any function that assigns each point a new location:
-$ f: RR^n -> RR^n $
+  Rotation, Scaling, etc. encoded by linear maps.
 
-Rotation, Scaling, etc. encoded by linear maps.
+  Used to:
+  - position/ deform objects,
+  - moving camera
+  - ...
 
-Used to:
-- position/ deform objects,
-- moving camera
-- ...
+  === Linear Maps
 
-=== Linear Maps
+  Geometrically, maps lines to lines, and preserves the origin.
 
-Geometrically, maps lines to lines, and preserves the origin.
+  Algebraically, preserves vector space operations (only for addition & scaling).
 
-Algebraically, preserves vector space operations (only for addition & scaling).
+  - Cheap to apply
+  - Easy to solve
+  - Composition of linear transformations is linear
+  - product many matrics in a singe matrix
+  - use uniform representation of transformations
+  - simple for hardware
 
-- Cheap to apply
-- Easy to solve
-- Composition of linear transformations is linear
-- product many matrics in a singe matrix
-- use uniform representation of transformations
-- simple for hardware
+  === Types of transformations
 
-=== Types of transformations
+  - translation: Moving form one to another place
+  - scaling: Resize the object
+  - Rotation:
+  - shear
 
-- translation: Moving form one to another place
-- scaling: Resize the object
-- Rotation:
-- shear
+  The Transformation is not defined by the formula, but the invariants it preserved.
+  What quantity remains fixed before and after the Transformation.
 
-The Transformation is not defined by the formula, but the invariants it preserved.
-What quantity remains fixed before and after the Transformation.
+  #table(
+    columns: 3,
+    stroke: none,
+    table.hline(),
+    table.header([Transformation], [invariants], [algebraic description]),
+    table.hline(stroke: 0.5pt),
+    [linear], [straight lines / origin], $f(a arrow(x) + arrow(y)) = a f (arrow(x)) + f(arrow(y))$,
+    [translation], [differences between pair of points], $f(arrow(x)-arrow(y)) = arrow(x) - arrow(y)$,
+    [scaling], [lines through origin / direction vector], $f(arrow(x)) / (|f(arrow(x))|) = arrow(x) / (|arrow(x)|)$,
+    [Rotation],
+    [origin / distances between points / orientation],
+    $|f(arrow(x)) - f(arrow(y)) = |arrow(x) - arrow(y)|, det(f) > 0$,
+    table.hline(),
+  )
 
-#table(
-  columns: 3,
-  stroke: none,
-  table.hline(),
-  table.header([Transformation], [invariants], [algebraic description]),
-  table.hline(stroke: 0.5pt),
-  [linear], [straight lines / origin], $f(a arrow(x) + arrow(y)) = a f (arrow(x)) + f(arrow(y))$,
-  [translation], [differences between pair of points], $f(arrow(x)-arrow(y)) = arrow(x) - arrow(y)$,
-  [scaling], [lines through origin / direction vector], $f(arrow(x)) / (|f(arrow(x))|) = arrow(x) / (|arrow(x)|)$,
-  [Rotation],
-  [origin / distances between points / orientation],
-  $|f(arrow(x)) - f(arrow(y)) = |arrow(x) - arrow(y)|, det(f) > 0$,
-  table.hline(),
-)
+  === Rotation
 
-=== Rotation
+  - Keeps origin fixed
+  - Preserves distances
+  - preserves orientation
 
-- Keeps origin fixed
-- Preserves distances
-- preserves orientation
+  ==== 2D Rotation
 
-==== 2D Rotation
+  2d rotation by an angle $theta$ maps each point $arrow(x)$ to a point
+  $f_theta(arrow(x))$ on the circle of radius $|arrow(x)|$
 
-2d rotation by an angle $theta$ maps each point $arrow(x)$ to a point
-$f_theta(arrow(x))$ on the circle of radius $|arrow(x)|$
+  $ arrow(x) = chevron.l x_1, x_2 chevron.r = x_1 chevron.l 1, 0 chevron.r + x_2 chevron.l 0, 1 chevron.r $
+  So, as rotation on basic vectors are linear,
+  $ f(arrow(x)) = x_1 chevron.l cos(theta), sin(theta) chevron.r + x_2 chevron.l -sin(theta), cos(theta) chevron.r $
 
-$ arrow(x) = chevron.l x_1, x_2 chevron.r = x_1 chevron.l 1, 0 chevron.r + x_2 chevron.l 0, 1 chevron.r $
-So, as rotation on basic vectors are linear,
-$ f(arrow(x)) = x_1 chevron.l cos(theta), sin(theta) chevron.r + x_2 chevron.l -sin(theta), cos(theta) chevron.r $
+  ==== 3D Rotation
 
-==== 3D Rotation
+  Concerning rotate only around one axis.
+  Just apply the same transformation of $x_1$, $x_2$, and keep $x_3$ fixed.
 
-Concerning rotate only around one axis.
-Just apply the same transformation of $x_1$, $x_2$, and keep $x_3$ fixed.
+  ==== Transpose as Inverse
 
-==== Transpose as Inverse
+  Original matrix represents a object in 3d:
+  $
+    R = mat(|, |, |; e_1, e_2, e_3; |, |, |) = mat(1, 0, 0; 0, 1, 0; 0, 0, 1)
+  $
+  Thus,
+  $
+    R_T = mat(-, e_1^T, -; -, e_2^T, -; -, e_3^T, -;) = mat(1, 0, 0; 0, 1, 0; 0, 0, 1)\
+    R^T R = mat(1, 0, 0; 0, 1, 0; 0, 0, 1) = I
+  $
 
-Original matrix represents a object in 3d:
-$
-  R = mat(|, |, |; e_1, e_2, e_3; |, |, |) = mat(1, 0, 0; 0, 1, 0; 0, 0, 1)
-$
-Thus,
-$
-  R_T = mat(-, e_1^T, -; -, e_2^T, -; -, e_3^T, -;) = mat(1, 0, 0; 0, 1, 0; 0, 0, 1)\
-  R^T R = mat(1, 0, 0; 0, 1, 0; 0, 0, 1) = I
-$
+  ==== Orthogonal Transformation
 
-==== Orthogonal Transformation
+  Transformation that preserves distances and the origin
 
-Transformation that preserves distances and the origin
+  Represented by matrix, $Q^T Q = I$
+  - Rotations additionally preserve orientation: $det(q) > 0$
+  - Reflection reverse orientation: $det(q) < 0$
 
-Represented by matrix, $Q^T Q = I$
-- Rotations additionally preserve orientation: $det(q) > 0$
-- Reflection reverse orientation: $det(q) < 0$
+  ==== Scaling
 
-==== Scaling
+  Each vector $arrow(u)$ gets mapped to a scalar multiple.
 
-Each vector $arrow(u)$ gets mapped to a scalar multiple.
+  Preserves the direction of all vectors
 
-Preserves the direction of all vectors
+  Build a diagonal matrix D, with a along the diagonal:
+  $
+    mat(a, 0, 0; 0, a, 0; 0, 0, a) vec(u_1, u_2, u_3) = vec(a u_1, a u_2, a u_3)
+  $
 
-Build a diagonal matrix D, with a along the diagonal:
-$
-  mat(a, 0, 0; 0, a, 0; 0, 0, a) vec(u_1, u_2, u_3) = vec(a u_1, a u_2, a u_3)
-$
+  It is also possible to own a none-uniformed scaling.
 
-It is also possible to own a none-uniformed scaling.
+  To scratch a object, transpose it into $R$,
+  and do scaling,
+  finally multiple $R&T$ to get back into original axis:
+  $f(x,y,z) = R^T D R arrow(x)$
 
-To scratch a object, transpose it into $R$,
-and do scaling,
-finally multiple $R&T$ to get back into original axis:
-$f(x,y,z) = R^T D R arrow(x)$
+  $
+    A:= R^T D R
+  $
 
-$
-  A:= R^T D R
-$
+  ==== Spectral Theorem
 
-==== Spectral Theorem
+  Symmetric matrix $A = A^T$ has:
+  - orthonormal eigenvectors $e_1, ..., e_n in RR^n$,
+  - Real eigenvalues $lambda_1, ... lambda_n in RR$.
 
-Symmetric matrix $A = A^T$ has:
-- orthonormal eigenvectors $e_1, ..., e_n in RR^n$,
-- Real eigenvalues $lambda_1, ... lambda_n in RR$.
+  Then,
+  $A e_i = lambda_i e_i$
+  for A is Symmetric and diagonal matrix.
 
-Then,
-$A e_i = lambda_i e_i$
-for A is Symmetric and diagonal matrix.
+  Also, $A R = R D$, when
+  $ R = [e_1 ... e_n] , D = mat(lambda_1, , ; , dots.down, ; , , lambda_n) $
 
-Also, $A R = R D$, when
-$ R = [e_1 ... e_n] , D = mat(lambda_1, , ; , dots.down, ; , , lambda_n) $
+  Every symmetric matrix performs a non-uniform scaling along some set of orthogonal axes.
 
-Every symmetric matrix performs a non-uniform scaling along some set of orthogonal axes.
+  === Shear
 
-=== Shear
+  Displaces each point x in a direction $arrow(u)$ according to its distance
+  (which is $arrow(x)$) along a fixed vector $arrow(v)$:
+  $ f_(arrow(u), arrow(v)) = arrow(x) + chevron.l arrow(v), arrow(x) chevron.r arrow(u) $
 
-Displaces each point x in a direction $arrow(u)$ according to its distance
-(which is $arrow(x)$) along a fixed vector $arrow(v)$:
-$ f_(arrow(u), arrow(v)) = arrow(x) + chevron.l arrow(v), arrow(x) chevron.r arrow(u) $
+  The more x align with v, the more it moves.
+  $
+    f_(arrow(u), arrow(v)) =
+    arrow(x) + chevron.l arrow(v), arrow(x) chevron.r arrow(u) =
+    I arrow(x) +
+    A_(arrow(u), arrow(v))
+  $
 
-The more x align with v, the more it moves.
-$
-  f_(arrow(u), arrow(v)) =
-  arrow(x) + chevron.l arrow(v), arrow(x) chevron.r arrow(u) =
-  I arrow(x) +
-  A_(arrow(u), arrow(v))
-$
-
+]

@@ -1,14 +1,13 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [World Beyond Times],
   date: datetime(year: 2025, month: 10, day: 28, hour: 2, minute: 7, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "noveloc-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+)[
 
 == World Beyond Times
 
@@ -21,3 +20,4 @@
 "天上曾有九颗太阳".
 故事里面是这样说的.
 
+]

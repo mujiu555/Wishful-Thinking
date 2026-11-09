@@ -1,14 +1,13 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
 
-#meta(
+#entry(
   title: [Lexer: A Lexer Combinator for D Flat System],
   date: datetime(year: 2026, month: 2, day: 17, hour: 3, minute: 54, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "dflat-lexer",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "universe-index",
+)[
 
 == Basic Functionalities
 
@@ -44,3 +43,4 @@ and traversed in a breadth-first manner,
 each time the lexer combinator find a way is possible to match the input string, it will add the next possible nodes to the dequeue,
 and continue to traverse the virtual tree until it finds a match or exhausts all possibilities.
 When a NFA graph inner as condition meet, every possible path of it is returned and attached to the outer traversal dequeue.
+]

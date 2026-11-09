@@ -1,15 +1,16 @@
 /// TAG: c, programming theory, computation theory
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [From The C Programming Language To Theoretical Computer Science (Section II)],
   date: datetime(year: 2025, month: 12, day: 14, hour: 23, minute: 46, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "c-s2",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "c-series",
+  tags: (topics.children.se.children.pl.tag,),
+)[
 
 == From the C programming language to Theoretical Computer Science
 
@@ -54,3 +55,4 @@
 === Formal Verification
 
 === ...
+]

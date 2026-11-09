@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [Types and Programming Languages],
   date: datetime(year: 2026, month: 2, day: 13, hour: 23, minute: 45, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "tapl-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "tapl",
+  tags: (topics.children.cs.children.tt.tag,),
+)[
 
 == Chapter III: Untyped Calculation Expressions
 
@@ -288,3 +289,4 @@ let rec isval t = match t with
   | t when isnumericval t -> true
   | _ -> false
 ```
+]

@@ -6,17 +6,18 @@
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
 #import "@preview/tablex:0.0.9": *
 
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [MIT 6.042 Mathematics in Computer Science (junior)],
   date: datetime(year: 2026, month: 2, day: 20, hour: 0, minute: 0, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "mit-6042j-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.mathematics.children.discrete-m.tag,),
+)[
 
 == Section I:
 
@@ -33,3 +34,4 @@ Def: A proposition is a statement that is either true or false.
 
 Ex., 1 + 4 = 5
 ex., $forall n in n, n^2 + n + 41 "is a prime number"$
+]

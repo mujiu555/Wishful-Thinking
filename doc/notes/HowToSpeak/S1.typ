@@ -1,14 +1,15 @@
-#import "/lib/typst-mode/lib/_lib.typ/lib.typ": meta, mkheading
+#import "@preview/tysty:0.1.0": entry
+#import "../aut.typ": mujiu
+#import "../tags.typ": topics
 
-#meta(
+#entry(
   title: [How To Speak],
   date: datetime(year: 2025, month: 10, day: 14, hour: 3, minute: 28, second: 0),
-  authors: (link("https://github.com/mujiu555")[GitHub\@mujiu555],),
+  authors: (mujiu,),
   id: "how-to-speak-s1",
-  parent_id: "index",
-)
-
-#mkheading()
+  parent-id: "index",
+  tags: (topics.children.writing.tag,),
+)[
 
 == How To Speak
 
@@ -162,7 +163,7 @@
 总结, 不合适, 在前面的演讲内容中, 已经多次出现主要内容, 重复的总结并无意义.
 
 可以是 "贡献",
-我为演讲介绍了什么, 
+我为演讲介绍了什么,
 我做出了什么工作.
 
 如何告知听众演讲已经结束.
@@ -175,3 +176,4 @@
 表明激励, 和致敬.
 
 
+]
