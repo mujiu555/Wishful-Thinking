@@ -11,8 +11,9 @@ publish/*
 
 nohup.out
 
-index.html
+*.html
 *.pdf
 node_modules/
 package-lock.json
 package.json
+dist/

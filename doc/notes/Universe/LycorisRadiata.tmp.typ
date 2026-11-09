@@ -241,6 +241,67 @@ It is responsible for authorization decisions, not for enforcing resource operat
 `fetch` is a special privileged api that allow to fetch privilege instance without even need privilege check.
 `save`, however, need to be checked.
 
+
+- Privilege Handler Check
+
+  *Role*: Enforce authorization requirements on protected operations.
+
+  *Mechanism*:
+  Each protected operation specifies the privileges required for its execution.
+  The module checks whether these requirements are satisfied
+  using the authorization results provided by the configured privilege handler.
+  Multiple requirements can be composed to support operations
+  involving multiple resources or nested authorization checks.
+
+- Privilege Handler Computation and Policy Engine
+
+  *Role*:
+  Determine effective privileges and authorization decisions
+  according to the configured policy mechanisms.
+
+  *Mechanism*:
+  The module evaluates authorization policies using relevant
+  subject, resource, and contextual information.
+
+  Different policy mechanisms, such as ACL, RBAC, and ABAC,
+  may be independently specified and combined through
+  explicit policy orchestration rules.
+
+- Privilege Handler Transfer
+
+  *Role*:
+  Support controlled delegation and transfer of authority
+  between authorization subjects.
+
+  *Mechanism*:
+  The module defines operations for transferring, delegating,
+  or restricting authority between subjects.
+  The resulting authority is constrained by the privileges
+  of the source subject and the applicable transfer policies.
+
+- Privilege Rules Fetch
+
+  *Role*: Obtain the authorization rules applicable
+  to a particular subject, resource, or operation.
+
+  *Mechanism*:
+  The module retrieves relevant authorization rules
+  from the underlying authorization state.
+  Different rule selection and retrieval strategies
+  can be defined independently of the mechanisms
+  used to evaluate those rules.
+
+- Privilege States
+
+  *Role*: Represent and maintain the authorization state
+  used by the authorization mechanisms.
+
+  *Mechanism*:
+  The module maintains information such as privilege assignments,
+  resource relationships, role memberships, and security attributes.
+  It provides a common abstraction for accessing and modifying
+  authorization state independently of its concrete representation.
+
 *Scoped Authorization Invalidation*:
 
 Privilege-restricting state transitions must prevent authorization evidence whose authority is invalidated

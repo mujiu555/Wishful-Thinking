@@ -6,7 +6,7 @@
   date: datetime(year: 2025, month: 8, day: 21, hour: 4, minute: 18, second: 0),
   authors: (mujiu,),
   id: "universe-lilies",
-  parent-id: "universe-index",
+  //parent-id: "universe-index",
   abstract: "
 The language Lilium Candidum (Lilies) is designed to be a staged, statically typed language of bindings, abstractions, applications, and contexts, in which represent functional programming using at least as much primitives.
   ",
@@ -104,8 +104,6 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     - `()`: Denotes Nil when interpreted as an S-expression value.
     - `(<car> . <cdr>)`: A pair in S-expression data.
     - `(<sexp>...)`: A list in S-expression data.
-    In expression position, an unquoted `()` evaluates to Unit.
-    When `()` is represented as S-expression data, it denotes Nil.
     Such data may be produced by quotation, contained in syntax objects,
     or returned by functions.
 
@@ -117,6 +115,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   - Records:   Record values are instances of user defined nominal product types
   - Tuples (Number Indexed Records): Tuples are product types
   - Enumerations: Enumerations values are tagged variants of user defined nominal sum types
+  + Never: Impossible value
   - Type-Class Dictionaries (Records):
     Type-class dictionaries are ordinary record values that provide implementations of a type-class interface.
     They are explicitly passed to functions.
@@ -124,14 +123,14 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   === Compile-Time only Entities
 
-  Compile-time entities participate in compilation, expansion, or type checking,
-  but are not ordinary runtime values in the current language design.
+  Compile-time entities participate in compilation, expansion, or type checking.
 
   + Macros: Macros are compile-time functions
   + Types and Type Constructors:
     Types and type constructors are compile-time entities classified by kinds.
     They support type-level abstraction and application but are not ordinary runtime values.
-  + Syntax Objects: Syntax objects are structured representations of program syntax that preserve lexical context and binding information
+  + Syntax Objects: Syntax objects are structured representations of
+    program syntax that preserve lexical context and binding information
 
   == Expressions, Forms and Application
 
@@ -783,29 +782,6 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   Since the wrapped content is itself an S-expression, syntax objects may be nested and may occur as components of other S-expressions.
 
-  ==== Lexical Context
-
-  A lexical context contains information used to determine the binding identities of identifiers during compilation and macro expansion.
-
-  A symbol may occur as an ordinary symbolic value or as an identifier in program syntax.
-  An identifier is a symbol interpreted with associated lexical context, rather than a separate primitive S-expression variant.
-
-  The textual name of a symbol alone does not determine the binding to which an identifier refers.
-  Symbols with the same name may refer to different bindings when associated with different lexical contexts.
-
-  The lexical context associated with one part of an S-expression does not require every component of the same expression to have identical binding information.
-
-  ==== Recursive Structure
-
-  Because `synobj` is an S-expression variant, its structure is recursive.
-  A syntax object may wrap an atomic S-expression, a compound S-expression, or another syntax object.
-  Different components of a compound S-expression may carry different lexical contexts,
-  allowing syntax originating from distinct lexical environments to be represented within a single structure.
-
-  Nested syntax objects retain their contextual information.
-  The interpretation of nested lexical contexts, including their interaction during identifier resolution,
-  is specified by the lexical context and macro expansion rules.
-
   ==== Syntax Objects and Datum Values
 
   S-expressions may be interpreted as program syntax or as datum values, according to their interpretation context.
@@ -813,53 +789,254 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   A syntax object preserves the lexical information associated with program syntax.
   An ordinary datum does not preserve this information.
 
-  Converting syntax into a datum removes the contextual information used for binding resolution, while retaining the underlying S-expression content.
+  Converting syntax into a datum removes the contextual information used for binding resolution,
+  while retaining the underlying S-expression content.
 
   The conversion from a datum to syntax requires the provision or establishment of suitable lexical context information.
   Such conversion does not recover lexical information previously discarded.
 
-  === Semantic Interpretation
-
-  Semantic interpretation assigns meaning to a syntactic representation according to its interpretation context.
-
-  Lilies distinguishes the interpretation of expressions, datum values, and syntax objects.
-
-  - *Expression interpretation* interprets syntax as a program expression according to the language's binding, typing, and evaluation rules.
-  - *Datum interpretation* interprets an S-expression as structured data without evaluating it as an application or other executable expression.
-  - *Syntax interpretation* interprets syntax objects according to their lexical context and compilation stage, preserving binding identities during macro expansion.
-
-  For example:
-
-  ```lisp
-  (+ 1 2)
-  ```
-
-  As an expression, the application evaluates to `3`.
-
-  ```lisp
-  '(+ 1 2)
-  ```
-
-  As quoted data, the S-expression denotes a list and is not evaluated as an application.
-
-  A syntax object representing `(+ 1 2)` retains the lexical binding information associated with the identifier `+` and its other syntactic components.
-
-  Consequently, two syntactically identical S-expressions do not necessarily represent the same program when their associated lexical contexts differ.
-
-  Macro expansion transforms syntax objects into syntax objects. The resulting syntax is subsequently interpreted according to the surrounding program context.
-
-  The details of expression evaluation, macro expansion, and type checking are specified in their respective sections.
-
   == Records, Enumerations, Tuples and Algebraic Data Types
+
+  An algebraic data type is a type constructed by combining other types using two fundamental operations:
+  - Product types (AND): A value contains multiple components simultaneously.
+  - Sum types (OR): A value is one of several possible alternatives.
+
   === Product Type
+
+  A product type combines multiple types into a single type.
+  Each value contains one component of each constituent type.
+
+  For types $A$ and $B$, their product is written as:
+
+  $ A times B $
+
+  A value of $A times B$ contains both a value of type $A$ and a value of type $B$.
+
+  In Lilies, records and tuples are product types.
+  Records identify components by name, while tuples identify them by position.
+
   === Sum Type
+
+  A sum type combines multiple types as alternatives.
+  Each value belongs to exactly one alternative.
+
+  For types $A$ and $B$, their sum is written as:
+  $ A + B $
+  A value of $A + B$ contains either a value of type $A$ or a value of type $B$,
+  together with a tag identifying the chosen alternative.
+
+  In Lilies, enumerations are sum types.
+  Each enumeration defines named variants that may carry associated data.
+
   === `record`
-  ==== `:include`
+
+  ==== Type Construction
+
+  In type construction, `record` defines a nominal product type consisting of named fields.
+
+  Each field specifies a name and a type.
+  A value of the resulting record type must provide a value for every required field.
+
+  ```lisp
+  <record>
+    ::= (record {naming binding})
+
+  <naming binding>
+    ::= (: <name> <type>)
+
+  <name>
+    ::= <sym>
+  <type>
+    ::= <sexpr>
+  ```
+  You may use record to define unit as:
+  ```lisp
+  (define unit * (record))
+  ```
+  This is a type that have only one instance.
+
+  Record types are nominally distinguished,
+  even when they contain identical field definitions.
+
+  ==== Instance Construction
+
+  In instance construction, `record` creates a record value from named field values.
+
+  Each field associates a name with an expression.
+  The expressions are evaluated to obtain the corresponding field values.
+
+  ```lisp
+  <record>
+    ::= (record {naming binding})
+
+  <naming binding>
+    ::= (: <name> <val>)
+
+  <name>
+    ::= <sym>
+  <val>
+    ::= <sexpr>
+  ```
+  Mostly same as type construction, the only difference is
+  that it can only accept evaluated values in the place where previously to be type instance.
+  ```lisp
+  (define foo
+    (record (: bar #int))
+    (record (: bar 10)))
+  ```
+  It is possible to define instance without even actually define a type instance.
+  However, since the type is nominal, it will not be able to distinct and evaluate it in later program.
+
+  The resulting value must satisfy the expected record type.
+
+  === `:include`
+
+  ==== Type Construction
+
+  In record type construction, `:include` incorporates the fields of
+  another record type into the type being defined.
+
+  The included fields become part of the resulting record type,
+  retaining their names and types.
+
+  ```lisp
+  <:include>
+    ::= (:include <type>)
+
+  <type>
+    ::= <sexpr>
+  ```
+
+  The resulting record type retains its own nominal identity.
+
+  ==== Instance Construction
+
+  In record instance construction, `:include` incorporates the fields of
+  an existing record value into the record being constructed.
+
+  ```lisp
+  <:include>
+    ::= (:include <val>)
+
+  <val>
+    ::= <sexpr>
+  ```
+
+  The included fields retain their names and values and
+  must satisfy the corresponding fields of the resulting record type.
+
   === `tuple`
+
+  ==== Type Construction
+
+  In type construction, `tuple` defines a product type consisting of
+  an ordered sequence of component types.
+
+  Tuples are simply numeric named records.
+  As a convenient method to define a product type
+  with sequence of different type.
+
+  ```lisp
+  <tuple>
+    ::= (tuple {type})
+
+  <type>
+    ::= <sexpr>
+  ```
+
+  The number, order, and types of the components determine
+  the structure of the tuple type.
+
+  ==== Instance Construction
+
+  In instance construction, `tuple` creates a tuple value from
+  an ordered sequence of expressions.
+
+  ```lisp
+  <tuple>
+    ::= (tuple {val})
+
+  <val>
+    ::= <sexpr>
+  ```
+
+  Each expression provides the value of the component at
+  its corresponding position.
+
+  The number and types of the resulting components must satisfy
+  the expected tuple type.
+
   === `enum`
+
+  ==== Type Construction
+
+  In type construction, `enum` defines a nominal sum type
+  consisting of named variants.
+
+  Each variant has a distinct name and may specify
+  associated component types.
+
+  ```lisp
+  <enum>
+    ::= (enum {naming binding})
+
+  <naming binding>
+    ::= (: <name> <type>)
+
+  <name>
+    ::= <sym>
+  <type>
+    ::= <sexpr>
+  ```
+  It is possible to define enumerator without any variant,
+  but it meaning nothing.
+
+  Since it is not possible to construct an enumerator instance without any variant.
+  Bottom type never can be defined as:
+  ```lisp
+  (define never * (enum))
+  ```
+
+  A variant with type unit represents a single alternative without additional data.
+
+  ==== Instance Construction
+
+  In instance construction, `enum` creates a value of an enumeration type by
+  selecting one of its variants.
+
+  ```lisp
+  <enum>
+    ::= (enum <naming binding>)
+
+  <naming binding>
+    ::= (: <name> <val>)
+
+  <name>
+    ::= <sym>
+  <val>
+    ::= <sexpr>
+  ```
+
+  The selected variant determines the tag of
+  the resulting value and the types of any associated components.
+
+  The supplied component values must satisfy the definition of the selected variant.
+
   === `#type` and `*`
 
+  `#type` is the type signature.
+  It labels a type with level.
+
+  Commonly, we defines `*` as `(define * (#type 2) (#type 1))`.
+
+  === Nested Instance Construction
+
+  For nested instance construction, we follow the rules:
+  - expressions in the position of value, must have same type as signature declared.
+  - value construction may have same layout of type definition.
+
   == Polymorphism
+
   === `forall`
   === `type`
   === `constraint`
