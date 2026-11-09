@@ -1,4 +1,4 @@
-#import "@preview/tysty:0.1.0": entry, num
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 
 #entry(
@@ -11,7 +11,6 @@
 The language Lilium Candidum (Lilies) is designed to be a staged, statically typed language of bindings, abstractions, applications, and contexts, in which represent functional programming using at least as much primitives.
   ",
 )[
-  #show: num.with(pattern: "1.")
   = Introduction
 
   // TODO: finish introduction

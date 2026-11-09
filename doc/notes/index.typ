@@ -1,4 +1,4 @@
-#import "@preview/tysty:0.1.0": backlinks, embed, entry, lookup, mkcover, mkoutline, num, set-base, template
+#import "@preview/tysty:0.1.0": backlinks, embed, entry, lookup, mkcover, mkoutline, set-base, template
 #import "tags.typ": topics
 #import "aut.typ": mujiu
 #show: template
