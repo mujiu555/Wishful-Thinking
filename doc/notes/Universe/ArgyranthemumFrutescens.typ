@@ -1,4 +1,4 @@
-#import "@preview/tysty:0.1.0": entry, num
+#import "@preview/tysty:0.1.0": entry
 #import "../aut.typ": mujiu
 
 #entry(
@@ -12,7 +12,10 @@
   Invastigate the basic of composition functionalities requirement that must be provided by other languages.
   ",
 )[
+  <<<<<<< HEAD
   #show: num.with(pattern: "1.")
+  =======
+  >>>>>>> main
   = Abstract
 
   = Introduction
