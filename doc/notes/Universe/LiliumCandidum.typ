@@ -1459,11 +1459,56 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   === Type Universe
 
   == Module Packs
+
   === `module` and records
+
+  Define a module constructor.
+  Module is a record that contains all required variables.
+
+  ```lisp
+  (module (:Self {inputs}) <module>)
+  ```
+
   === `provide`
+
+  Export a module as `<name>`, together with its signature.
+
+  This sentence must be placed at the top-level of a compile unit.
+
+  ```lisp
+  (provide <name> <module> <module-sig>)
+  ```
+
   === `require`
+
+  Import a module, and returns its value directly.
+
+  ```lisp
+  (require <name>)
+  ```
+
   === `export`
+
+  Fetch the signature of some module.
+
+  Used when importing a module.
+
+  ```lisp
+  (export <identifier>)
+  ```
+
+  E.g.,
+  ```lisp
+  (define module-foo (export foo) (require foo))
+  ```
+
   === `import`
+
+  Expand names within a module into the environment.
+
+  ```lisp
+  (import <module>)
+  ```
 
   == Top-Level Program
 
