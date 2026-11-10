@@ -9,8 +9,6 @@
   abstract: "
   ",
 )[
-  #show: num.with(pattern: "1.")
-
   = The Grammar of Authorization: A Composable Abstraction for Authorization Systems
 
   == Background

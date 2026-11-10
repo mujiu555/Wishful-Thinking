@@ -8,7 +8,7 @@
   id: "universe-index",
   parent-id: "index",
 )[
-  #render-children[Index]
+  #render-children()
 ]
 
 #embed(include "LiliumCandidum.typ")

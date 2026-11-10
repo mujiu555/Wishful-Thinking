@@ -10,7 +10,7 @@
   authors: (mujiu,),
   tags: (topics.children.se.children.pl.tag,),
 )[
-  #render-children[c]
+  #render-children()
 ]
 
 #embed(include "S-1.typ")

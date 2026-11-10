@@ -12,10 +12,6 @@
   Invastigate the basic of composition functionalities requirement that must be provided by other languages.
   ",
 )[
-  <<<<<<< HEAD
-  #show: num.with(pattern: "1.")
-  =======
-  >>>>>>> main
   = Abstract
 
   = Introduction

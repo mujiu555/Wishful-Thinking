@@ -11,10 +11,6 @@
 The language Lilium Candidum (Lilies) is designed to be a staged, statically typed language of bindings, abstractions, applications, and contexts, in which represent functional programming using at least as much primitives.
   ",
 )[
-  <<<<<<< HEAD
-  #show: num.with(pattern: "1.")
-  =======
-  >>>>>>> main
   = Introduction
 
   // TODO: finish introduction
@@ -127,6 +123,9 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   === Compile-Time only Entities
 
   Compile-time entities participate in compilation, expansion, or type checking.
+
+  Compile-time only Entities do not necessarily means they do not have runtime value.
+  It just means that they can only take effect in Compile-time.
 
   + Macros: Macros are compile-time functions
   + Types and Type Constructors:
@@ -1038,46 +1037,398 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   - expressions in the position of value, must have same type as signature declared.
   - value construction may have same layout of type definition.
 
+
   == Polymorphism
 
-  === `forall`
-  === `type`
-  === `constraint`
-  === `include`
+  Polymorphism allows an entity to be used at multiple types
+  while preserving the relationships between its inputs and outputs.
+
+  Lilies supports parametric polymorphism through universal
+  quantification, parameterized type construction through
+  type-level functions, and constrained polymorphism through
+  type-class dictionaries.
+
+  === Universal Quantification: `forall`
+
+  The `forall` form introduces universally quantified type
+  variables within a type expression.
+
+  ```lisp
+  (forall (<id>...) <type>)
+  ```
+
+  Each identifier denotes a type variable bound within `<type>`.
+
+  A universally quantified type represents a family of types
+  obtained by substituting suitable types for its bound variables.
+
+  For example:
+
+  ```lisp
+  (define id
+    (forall (a)
+      (function (:Self a) a))
+    (lambda (x) x))
+  ```
+
+  The type variable `a` represents an arbitrary type.
+
+  The function `id` accepts a value of type `a` and returns
+  a value of the same type.
+
+  A polymorphic function is checked under the assumption that
+  its quantified variables are abstract types. Its implementation
+  must therefore be valid independently of any particular
+  instantiation of those variables.
+
+  Polymorphic function values are first-class and may be passed
+  as arguments, returned from functions, and stored in data
+  structures while retaining their polymorphic types.
+
+  The precise rules for type instantiation are defined by
+  the type system.
+
+  === Parameterized Type Constructors: `type`
+
+  A type constructor is a compile-time entity that accepts
+  types as arguments and produces a type.
+
+  ```lisp
+  (type (:Self <type>...) <type-sig>)
+  ```
+
+  A type constructor may be defined using a lambda expression
+  whose parameters represent its type arguments.
+
+  For example:
+
+  ```lisp
+  (define Box
+    (type (:Self *) *)
+    (lambda (a)
+      (record
+        (: value a))))
+  ```
+
+  Here, `Box` accepts a type and constructs a record type
+  containing a field of that type.
+
+  Applications such as `(Box #int)` denote constructed types.
+
+  Type constructors differ from universally quantified types:
+  a type constructor computes a type from type arguments,
+  whereas a universally quantified type describes an entity
+  that can be instantiated at different types.
+
+  Types and type constructors are compile-time entities.
+
+  === Constrained Polymorphism: `constraint`
+
+  Parametric polymorphism alone does not provide operations
+  specific to an arbitrary type.
+
+  Constrained polymorphism allows a polymorphic entity to
+  require particular type-class implementations.
+
+  ```lisp
+  (constraint (<type-class-constraint>...) <type>)
+  ```
+
+  Each type-class constraint specifies a required implementation
+  for the corresponding type arguments.
+
+  For example:
+
+  ```lisp
+  (forall (a)
+    (constraint ((Sum a))
+      (function (:Self a a) a)))
+  ```
+
+  This describes a function that accepts two values of the same
+  type `a` and returns a value of type `a`, provided that
+  an implementation of `Sum` exists for `a`.
+
+  Type-class dictionaries are ordinary record values containing
+  the operations required by their corresponding interfaces.
+
+  Constrained polymorphic functions obtain their required
+  operations through dictionary arguments.
+
+  The mechanism for resolving constraints and supplying
+  dictionaries is specified separately from universal
+  quantification.
 
   == Type Classes
+
+  Type classes describe interfaces parameterized by types.
+
   === `class`
 
+  The `class` signature constructor defines a parameterized type-class interface.
+  ```lisp
+  (class (:Self <type>...) <type-sig>)
+  ```
+  Like `type`, a type class accepts type parameters and
+  uses a lambda expression to construct the corresponding interface.
+
+  The interface is represented by a record type specifying
+  the operations required of its dictionaries.
+
+  === `include`
+
+  The `include` form specifies superclass constraints associated
+  with a type-class dictionary.
+
+  ```lisp
+  (include (<super-class-constraint>...) <body>)
+  ```
+
+  Like `constraint`, `include` introduces an additional lambda layer
+  that receives the required type-class dictionaries as arguments.
+  The supplied dictionaries are bound to the parameters of this outer lambda,
+  whose body constructs the resulting dictionary.
+
+  The `include` form is meaningful specifically in
+  the context of type-class dictionaries.
+
   == Conditional Expression and Loops
+
+  Conditional expressions select computations according to conditions,
+  while loops provide convenient forms for expressing repeated computation.
+
   === "`if` then else"
+
+  The `if` expression evaluates a condition and selects one of two branches
+  according to its Boolean value.
+  ```lisp
+  (if <cond> <then> <else>)
+  ```
+  Only the selected branch is evaluated, and its result becomes the result
+  of the conditional expression.
+
   === `when`, `unless` the Macro
+
+  The `when` and `unless` macros provide conditional execution
+  without requiring an explicit alternative branch.
+
+  ```lisp
+  (when <cond> <then>)
+
+  (unless <cond> <else>)
+  ```
+  - `when` executes its body when the condition is true.
+  - `unless` executes its body when the condition is false.
+
   === `cond`, `switch` the Macro
+
+  The `cond` and `switch` macros provide convenient forms
+  for selecting among multiple branches.
+
+  ```lisp
+  <cond>
+    ::= (cond {cond form})
+  <switch>
+    ::= (switch {switch form})
+
+  <cond form>
+    ::= (<guard> <body>)
+  <switch form>
+    ::= (<keys> <body>)
+
+  <keys>
+    ::= ({literals})
+  <guard>
+    ::= <sexpr>
+  <body>
+    ::= <sexpr>
+  ```
+
+  - `cond` selects a branch according to a sequence of conditions.
+  - `switch` selects a branch by comparing an expression against alternatives.
+
   === `loop` the Macro
+
+  Loop form is a convenient way to define infinite loop.
+
+  ```lisp
+  <loop>
+    ::= (loop <label> <body>)
+
+  <label>
+    ::= <identifier>
+  <body>
+    ::= <sexpr>
+  ```
+
   === `while`, `until` the Macro
+
+  The `while` and `until` macros provide condition-controlled iteration.
+
+  ```lisp
+  (while <label> <cond> <body>)
+  (until <label> <cond> <body>)
+  ```
+
+  - `while` repeats while its condition is true.
+  - `until` repeats until its condition becomes true.
+
   === `for` the Named Let
+
+  The `for` provides iteration through a named `let`,
+  expressing repetition using recursive bindings.
+
+  ```lisp
+  <for>
+    ::= (for <name> ({bindings}) <body>)
+
+  <name>
+    ::= <identifier>
+  <bindings>
+    ::= (: <name> <type> <val>)
+  <body>
+    ::= <sexpr>
+  ```
+
   === `foreach` the Map
+
+  The `foreach` macro provides iteration over elements.
+
+  ```lisp
+  (foreach <label> ({bindings}) <body>)
+
+  <label>
+    ::= <identifier>
+  <bindings>
+    ::= (<name> <val>)
+  <body>
+    ::= <sexpr>
+  ```
+
   === `:break`
+
+  The `:break` form terminates the enclosing loop.
+
+  ```lisp
+  (:break <label> <val>)
+  ```
+
+  Return from loop and returns some value.
+
   === `:continue`
 
+  The `:continue` form skips the remaining computation
+  of the current iteration and proceeds to the next iteration.
+
   == Pattern Match
+
+  Pattern matching selects a branch by matching a scrutinee
+  against a sequence of patterns.
+
+  Each pattern is associated with a body.
+  The body of the selected branch provides the result
+  of the pattern-matching expression.
+
   === `match`
+
+  The `match` form compares a scrutinee against a sequence
+  of patterns and evaluates the body of the matching branch.
+
+
+  ```lisp
+  <match>
+    ::= (match <scrutinee> {patterns})
+
+  <patterns>
+    ::= (<pattern> <body>)
+  ```
+
   === `case`
+
+  The `case` form provides pattern matching with an additional
+  list of literals used in interpreting its patterns.
+
+  ```lisp
+  <case>
+    ::= (case <scrutinee> ({literal}) {patterns})
+
+  <patterns>
+    ::= (<pattern> <body>)
+  ```
+
+  When parsing syntax objects (S-Expressions),
+  literal list can be used for preventing symbols
+  from being recognized as identifiers, pattern variable or construction pattern.
+
   === Literal
+
+  A literal pattern matches a value corresponding to
+  the specified literal.
+
+  Literal patterns do not introduce bindings.
+
   === `:or`
+
+  The `:or` pattern combines multiple alternative patterns.
+
+  The pattern succeeds when at least one of its
+  component patterns matches the scrutinee.
+
   === `:and`
+
+  The `:and` pattern combines multiple patterns
+  that must all match the same scrutinee.
+
+  The pattern succeeds only when every component pattern matches.
+
   === `:as`
+
+  The `:as` pattern associates a name with the value
+  matched by another pattern.
+
+  It allows the matched value to be referenced as a whole,
+  while still matching its components.
+
   === Pattern Variable
+
+  A pattern variable matches a value and binds it to an identifier.
+
+  The bound identifier may be referenced within the body
+  of the corresponding branch.
+
   === Wildcard
+
+  A wildcard pattern matches any value without introducing
+  a binding.
+
+  It is used when the matched value does not need to be referenced.
+
   === `:else`
+
+  The `:else` pattern provides a fallback branch
+  when no preceding pattern matches.
+
   === "Ctor" Extraction
+
+  A constructor pattern matches a value constructed by
+  a particular constructor.
+
+  It may contain subpatterns that match and extract
+  the components associated with that constructor.
+
   === `:guard`
+
+  The `:guard` pattern introduces an additional condition
+  that must be satisfied for a pattern to match.
+
+  The guard condition is evaluated only after
+  the associated pattern has matched successfully.
 
   == Delimited Continuations
   === `reset`
   === `shift`
 
   == $"System" F_omega^mu$
-
   === Type Universe
 
   == Module Packs
