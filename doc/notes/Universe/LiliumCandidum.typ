@@ -1440,6 +1440,32 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   A constructor pattern matches a value constructed by
   a particular constructor.
 
+  Its type is determined by the type of scrutinee.
+
+  ```lisp
+  <constructor expression>
+    ::= (record {field bindings})
+      | (tuple {variables})
+      | (enum <variant bindings>)
+  ```
+
+  E.g.,
+  ```lisp
+  (define list
+    (type (:Self *) *)
+    (lambda (a)
+      (mu (lambda (L)
+        (enum
+          (: cons (tuple a L))
+          (: nil unit))))))
+
+  (define val (list #int) (enum (: nil ())))
+
+  (match val
+    ((enum (: cons (tuple a l))) 'cons-branch)
+    ((enum (: nil ())) 'nil-branch))
+  ```
+
   It may contain subpatterns that match and extract
   the components associated with that constructor.
 
