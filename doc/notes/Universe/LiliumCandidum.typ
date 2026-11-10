@@ -1460,6 +1460,18 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   == Module Packs
 
+  Module is a way to organize code.
+
+  The name of module is resolved relative to the path.
+  If it cannot find module within current work folder relative to source file,
+  it will try to fetch module in library paths.
+
+  A module can be exported by a single source file.
+  Or a folder that contains `init` file, that exported modules.
+
+  Name of the module is encouraged to be same as file name or folder name.
+  However it is not necessarily to be same as them.
+
   === `module` and records
 
   Define a module constructor.
