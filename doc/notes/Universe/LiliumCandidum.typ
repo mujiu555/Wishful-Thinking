@@ -1024,6 +1024,33 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   The supplied component values must satisfy the definition of the selected variant.
 
+  === `union`
+
+  ==== Type Construction
+
+  `union` constructs an anonymous sum type from a collection of constituent types.
+
+  A value inhabits a union type if it inhabits at least one of its constituent types.
+
+  ```lisp
+  <union>
+    ::= (union {type})
+
+  <type>
+    ::= <sexpr>
+  ```
+  ==== Instance Construction
+
+  A `union` value contains a single value belonging to one of the constituent types.
+
+  ```lisp
+  <union>
+    ::= (union <val>)
+
+  <val>
+    ::= <sexpr>
+  ```
+
   === `#type` and `*`
 
   `#type` is the type signature.
