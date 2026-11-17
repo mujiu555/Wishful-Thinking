@@ -60,31 +60,33 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     - `\<short-name>`: C-Style escape, e.g., `\r` for return, `\n` for newline (linefeed)
     - `\u{<unicode>}`: unicode code point, decoded into utf-8 automatically
 
-  + Integer: Signed Integers
+  + Integer: Signed Integers `#int`
     - `[sign]<int>`   : Decimal
     - `[sign]0o<oct>` : Octal
     - `[sign]0x<hex>` : Hexadecimal
     - `[sign]0b<bin>` : Binary
-  + Rational:
+  + Rational: `#rat`
+
     Exact rational numbers represented by a numerator and a nonzero denominator.
     A rational literal always denotes a value of type Rational,
     even when its mathematical value is an integer.
     - `[sign]<n>/<m>` : Rational
-  + Real: Arbitrary-precision decimal floating-point numbers
+  + Real: Arbitrary-precision decimal floating-point numbers `#real`
     - `[sign]<n>.<m>` : Float
     - `[sign]<base>e[sign]<exp>`: Scientific/ Standard
-  + Boolean: Sum type of `true` and `false`
+  + Boolean: Sum type of `true` and `false`, namely `#bool`
     - `#true`         : True the literal
     - `#false`        : False the literal
-  + Character:
+  + Character: `#char`
+
     Unicode characters represented directly, by named escapes, or by Unicode escapes
     - `#\'<char>`     : Character, `<char>` can be any single Unicode scalar value, parse only once, even space
     - `#\<name>`      : Character Escape
     - `#\u{<unicode>}`: Unicode
-  + String: An immutable sequence of bytes, encoded as UTF-8.
+  + String: An immutable sequence of bytes, encoded as UTF-8. `#str`
     - `"<str>"`       : String with escape
     - `r"<str>"`      : Raw String without escape
-  + Symbol:
+  + Symbol: `#sym`
     Symbols are names represented by character sequences.
     Depending on syntactic context, a symbol may occur as an identifier or denote a symbolic value.
     Identifiers additionally carry binding-related information through their associated syntax objects.
@@ -95,9 +97,9 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     Compile-time only constant, indicates named argument.
     Syntax symbols are compared by name.
     - `#:<sym>`       : Symbol, two syntax symbol with same name are same
-  + Unit: Absence of meaningful information.
+  + Unit: Absence of meaningful information. `#unit`
     - `()`: Denotes Unit when used as an unquoted expression.
-  + Pair, Nil, and S-expression:
+  + Pair, Nil, and S-expression: `#cons`
     S-expressions are structured data consisting of atomic values and pairs.
     Pairs and Nil form the structure of S-expression lists.
     - `()`: Denotes Nil when interpreted as an S-expression value.
@@ -220,16 +222,6 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ;;   Lilies requires recursive type definitions to satisfy a positivity restriction.
   ;;   Consequently, a recursive function signature that places its own type in a negative position is rejected.
   ;;   The lambda in macros, by contrast, only receives the expression itself.
-  (forall (<id>...) <body>)                        ; Typed                       Constructor,
-  ;; NOTE: Although a matcher is syntactically permitted in this parameter
-  ;;   position, the current type system does not support matching an
-  ;;   entire type-level expression in this manner.
-  ;;
-  ;;   Supporting this operation would require additional rules for
-  ;;   type-level representation, universe levels, and binding.
-  ;;
-  ;;   Lilies intentionally excludes this form. The precise restrictions
-  ;;   are specified in the type system chapter.
   ```
 
   Both functions and macros support the same application syntax and parameter-binding mechanism.
@@ -252,7 +244,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ```lisp
   (define id
     (forall (a)
-      (function (:Self a) a))
+      (fun (a) a))
     (lambda (i) i))
 
   (define when
@@ -268,7 +260,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ;; (define id
   ;;   (forall (a)
   ;;     (mu (lambda (L)
-  ;;       (function (:Self (tuple L a)) a))))
+  ;;       (fun ((tuple L a)) a))))
   ;;   (lambda f
   ;;     (case f ()
   ;;       ((_ a) a)
@@ -330,7 +322,6 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   - *Parameter-list form*:
     The parameter-list form binds each supplied operand to its corresponding parameter.
     The operator itself is not bound as a parameter.
-    This form requires a parameter-list signature using `:Self`.
   - *Parameter-matcher form*:
     The parameter-matcher form binds the complete application to a single parameter.
     The bound application includes the operator itself and all operands.
@@ -368,17 +359,14 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Functions and macros support two signature forms:
 
   ```lisp
-  (function (:Self <param>...) <return>)               ; Function                    Signature
-  (function <application-type> <return>)               ; Function                    Signature
-  (macro (:Self <param>...) <return>)                  ; Macro                       Signature
-  (macro <application-type> <return>)                  ; Macro                       Signature
+  (fun (<param>...) <return>)                          ; Function                    Signature
+  (macro (<param>...) <return>)                        ; Macro                       Signature
+  (macro* <application-type> <return>)                 ; Macro                       Signature
   ```
 
   The two forms correspond to the two application modes.
 
   - *Parameter-list Signature*:
-    In the parameter-list form, `:Self` is a special syntactic marker denoting the operator position of an application.
-    It does not introduce a parameter, a type variable, or a recursive reference to the operator's type.
     Each `<param>` specifies the type of one operand, in application order.
     The operator itself is not passed to the lambda as an argument.
   - *Entire-expression signature*:
@@ -387,17 +375,17 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
     Unlike the parameter-list form, this signature must account for the operator as part of the received application.
 
   The signature form determines which lambda parameter form is valid.
-  A parameter-list signature corresponds to `(lambda (:Self <param>...) <body>)`,
+  A parameter-list signature corresponds to `(lambda (<param>...) <body>)`,
   while an entire-expression signature corresponds to `(lambda <params> <body>)`.
 
   E.g.,
   ```lisp
   (define sum-of-two-integer
-    (function (:Self #int #int) #int)
+    (fun (#int #int) #int)
     (lambda (a b) (+ a b)))
 
   (define cond
-    (macro (#syn sexp) (#syn sexp))
+    (macro* (#syn sexp) (#syn sexp))
     (lambda ctx
       (case (:else)
         ((list _ (case body) . rest)
@@ -412,8 +400,8 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ==== Parameterized Type Constructor
 
   ```lisp
-  (type (:Self <type>...) <type-sig>)                           ; Type Constructor            Signature
-  (class (:Self <type>...) <type-sig>)                          ; Type Class                  Signature
+  (type (<type>...) <type-sig>)                           ; Type Constructor            Signature
+  (class (<type>...) <type-sig>)                          ; Type Class                  Signature
   ```
 
   Types and Classes can be constructed in same way.
@@ -423,7 +411,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ==== Module
 
   ```lisp
-  (module (:Self <type>...) <module-sig>)                       ; Module                      Signature
+  (module (<type>...) <module-sig>)                       ; Module                      Signature
   ```
 
   Module is used to create parameterized module type.
@@ -442,17 +430,17 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   ```lisp
   (define Monad
-    (class (:Self (type (:Self *) *)) *)
+    (class ((type (*) *)) *)
     (lambda (m)
       (record
         (:include (Applicative m))
-        (: >>= (forall (x y) (function (:Self (m x) (function (:Self x) (m y))) (m y)))))))
+        (: >>= (forall (x y) (fun ((m x) (fun (x) (m y))) (m y)))))))
   ;; Assume Applicative is defined before
 
   (define foo
     (forall (a)
       (constraint ((Sum a))
-        (function (:Self a a) a)))
+        (fun (a a) a)))
     (lambda (dict)
       (lambda (x y)
         ((invoke dict sum) x y))))
@@ -497,7 +485,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   (define answer #int 42)
 
   (define add
-    (function (:Self #int #int) #int)
+    (fun (#int #int) #int)
     (lambda (a b) (+ a b)))
   ```
   Definitions may introduce both runtime values and compile-time entities, such as types and macros.
@@ -543,9 +531,8 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   For example:
   ```lisp
   (define make-adder
-    (function
-      (:Self #int)
-      (function (:Self #int) #int))
+    (fun (#int)
+      (fun (#int) #int))
     (lambda (x)
       (lambda (y)
         (+ x y))))
@@ -570,7 +557,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   For example:
   ```lisp
   (define add
-    (function (:Self #int #int) #int)
+    (fun (#int #int) #int)
     (lambda (x y)
       (+ x y)))
 
@@ -589,11 +576,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   For example:
   ```lisp
   (define apply-twice
-    (function
-      (:Self
-        (function (:Self #int) #int)
-        #int)
-      #int)
+    (fun ((fun (#int) #int) #int) #int)
     (lambda (f x)
       (f (f x))))
   ```
@@ -607,7 +590,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ```lisp
   (define id
     (forall (a)
-      (function (:Self a) a))
+      (fun (a) a))
     (lambda (x) x))
   ```
   Polymorphic functions are first-class values. They may be passed to other functions, returned as results,
@@ -656,9 +639,8 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   For example:
   ```lisp
   (define make-adder
-    (function
-      (:Self #int)
-      (function (:Self #int) #int))
+    (fun (#int)
+      (fun (#int) #int))
     (lambda (x)
       (lambda (y)
         (+ x y))))
@@ -755,17 +737,10 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   === Datum Values
 
-  A datum is a value obtained by interpreting an S-expression as data rather than as a program expression.
-
-  The `quote` form provides this interpretation without evaluating its operand.
-
-  Datum values preserve the structure of the represented S-expression,
-  but not the lexical context or binding identities associated with program syntax.
-
-  Datum values are first-class values.
+  A datum is a value obtained by interpreting an S-expression as data
+  rather than as a program expression.
+  Each datum value is able to be represented in literal form.
   They may be passed to functions, returned from functions, and stored in data structures.
-
-  Consequently, datum values alone are insufficient to preserve binding relationships during hygienic macro expansion.
 
   === Syntax Objects
 
@@ -853,7 +828,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ```
   You may use record to define unit as:
   ```lisp
-  (define unit * (record))
+  (define #unit * (record))
   ```
   This is a type that have only one instance.
 
@@ -996,7 +971,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Since it is not possible to construct an enumerator instance without any variant.
   Bottom type never can be defined as:
   ```lisp
-  (define never * (enum))
+  (define #never * (enum))
   ```
 
   A variant with type unit represents a single alternative without additional data.
@@ -1081,7 +1056,16 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   variables within a type expression.
 
   ```lisp
-  (forall (<id>...) <type>)
+  (forall (<id>...) <body>)                        ; Type                        Former,
+  ;; NOTE: Although a matcher is syntactically permitted in this parameter
+  ;;   position, the current type system does not support matching an
+  ;;   entire type-level expression in this manner.
+  ;;
+  ;;   Supporting this operation would require additional rules for
+  ;;   type-level representation, universe levels, and binding.
+  ;;
+  ;;   Lilies intentionally excludes this form. The precise restrictions
+  ;;   are specified in the type system chapter.
   ```
 
   Each identifier denotes a type variable bound within `<type>`.
@@ -1094,7 +1078,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ```lisp
   (define id
     (forall (a)
-      (function (:Self a) a))
+      (fun (a) a))
     (lambda (x) x))
   ```
 
@@ -1121,7 +1105,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   types as arguments and produces a type.
 
   ```lisp
-  (type (:Self <type>...) <type-sig>)
+  (type (<type>...) <type-sig>)
   ```
 
   A type constructor may be defined using a lambda expression
@@ -1131,7 +1115,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   ```lisp
   (define Box
-    (type (:Self *) *)
+    (type (*) *)
     (lambda (a)
       (record
         (: value a))))
@@ -1169,7 +1153,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   ```lisp
   (forall (a)
     (constraint ((Sum a))
-      (function (:Self a a) a)))
+      (fun (a a) a)))
   ```
 
   This describes a function that accepts two values of the same
@@ -1194,7 +1178,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
 
   The `class` signature constructor defines a parameterized type-class interface.
   ```lisp
-  (class (:Self <type>...) <type-sig>)
+  (class (<type>...) <type-sig>)
   ```
   Like `type`, a type class accepts type parameters and
   uses a lambda expression to construct the corresponding interface.
@@ -1452,12 +1436,12 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   E.g.,
   ```lisp
   (define list
-    (type (:Self *) *)
+    (type (*) *)
     (lambda (a)
       (mu (lambda (L)
         (enum
           (: cons (tuple a L))
-          (: nil unit))))))
+          (: nil #unit))))))
 
   (define val (list #int) (enum (: nil ())))
 
@@ -1504,7 +1488,7 @@ The language Lilium Candidum (Lilies) is designed to be a staged, statically typ
   Module is a record that contains all required variables.
 
   ```lisp
-  (module (:Self {inputs}) <module>)
+  (module ({inputs}) <module>)
   ```
 
   === `provide`
