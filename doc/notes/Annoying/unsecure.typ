@@ -1,0 +1,96 @@
+#import "@preview/tysty:0.1.0": backlinks, embed, entry, lookup, mkcover, mkoutline, num, set-base, template
+#import "../tags.typ": topics
+#import "../aut.typ": mujiu
+#show: template
+
+#show raw: set text(
+  font: "Maple Mono NF",
+  size: 9pt,
+)
+
+#set text(
+  lang: "zh",
+  region: "cn",
+  size: 10.5pt,
+  font: (
+    (name: "Libertinus Serif", covers: "latin-in-cjk"),
+    "Source Han Serif SC",
+  ),
+)
+
+#set-base("file:///home/dot/prj/proj.txt/Wishful-Thinking/doc/notes/")
+
+#entry(
+  cover: true,
+  title: [List Of IDK],
+  id: "index",
+  file-path: "index.typ",
+  date: datetime(year: 2026, month: 11, day: 16, hour: 0, minute: 0, second: 0),
+  authors: (mujiu,),
+  tags: (topics.children.about.tag,),
+)[
+  #show: num.with(
+    pattern: "1.",
+  )
+
+  = 手抖
+  时间: 初三开始: 每次考试手抖, 写不了字
+  频率: 现在是每天
+
+  = 心悸
+  时间: 大学开始比较明显
+  频率: 不知道, 最近的是, 11月17日, 上完课找朋友(陪护), 次近的是, 11月17日, 凌晨, 伴随突发耳鸣, 视线模糊, 再近是, 10月16日, 丢钥匙, 10月30日
+
+  = 焦虑
+  长期焦虑, 不知道时间, 注意不到, 但是意识到以后会格外焦虑, 主要是因为知道在焦虑什么就会更焦虑
+
+  = 自杀欲望
+  频率: 7月出成绩挂一科, 10月16丢钥匙, 10月30日, 发现自己写的代码有bug
+
+  = 喘不上气
+  每天
+
+  = 入睡抽动
+  每周一两次, 腿抽抽, 手指抽抽,
+
+  = 报复性熬夜
+  作息正常(前一天晚上12点睡, 早上9点醒)也熬, 一般会熬到第二天4-6点
+
+  正常可以睡眠时间达到12h+, 但是一般在6h-8h之间; 少数时候能睡到10h, 但是会格外困倦
+  一旦清醒就睡不着, 除非连续三天以上睡眠少于4h
+
+  2-4点睡11点醒或者, 11:30-12点睡, 9点醒
+
+  容易惊醒,
+
+  = 难工作, 但是工作时间长
+  很难进入工作状态, 也就是, 宁愿发呆也不动手
+  但是一旦选择了开始工作, 会连续工作8-18h, 且不吃饭
+  且会多日亢奋, 直到完成某项任务, 工作期间, 无倦意, 但是, 休息时极其困倦而无法入眠
+
+  = 易愧疚/负罪/回避/焦虑
+  敏感, 行为错误会导致, 和人说话会导致, 关系超过陌生人会导致, 上课会导致, 意识到自己不得不去医院会导致,
+  工作错误格外导致
+
+  = 孤独感
+
+  = 社交焦虑
+
+  = 性别焦虑
+  1. 往往会对成年男性称呼有异样感, 其他称呼(成年女性(无侮辱意味), 中性称呼, 职位称呼), 均可
+  2. 时常意识不到或因意识到自己是男生而感到疑惑, 因他人对我的称呼为男性而有时候意识不到在叫我
+  3. 无变性意愿
+  4. 无女性认同, 可以试试
+  5. 生理男, 心理不知道, 社会随便
+
+  = 容易兴奋
+  莫名其妙极其开心, 往往带有对于某些事物的极端憎恶
+
+  = 年龄错位感
+  成年但是行为不够成熟,
+  往往有人认为我成熟, 可靠, 温柔?
+
+
+
+]
+
